@@ -1,0 +1,18 @@
+Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
+Warning: -t,--timeout is deprecated! Use --timeout-* options instead
+Using grid catalog type: UNKNOWN
+Using grid catalog : (null)
+VO name: cms
+Checksum type: None
+Destination SE type: SRMv2
+Destination SRM Request Token: put:1855681
+Source URL: file:/data5/condor_local/execute/dir_4168/glide_y2Wpr0/execute/dir_9120/job_input/gjet_ht600toInf_merged_ntuple_8.root
+File size: 211027510
+Source URL for copy: file:/data5/condor_local/execute/dir_4168/glide_y2Wpr0/execute/dir_9120/job_input/gjet_ht600toInf_merged_ntuple_8.root
+Destination URL: gsiftp://cabinet-8-8-3.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_gjet_ht600toInf/gjet_ht600toInf_merged_ntuple_8.root
+# streams: 1
+            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    401.64 KB/sec avg    401.64 KB/sec inst     22020096 bytes   5892.27 KB/sec avg  18618.18 KB/sec inst     55574528 bytes  11672.58 KB/sec avg  32768.00 KB/sec inst     81788928 bytes  14137.81 KB/sec avg  25600.00 KB/sec inst    103809024 bytes  15245.59 KB/sec avg  21504.00 KB/sec inst    127926272 bytes  16331.46 KB/sec avg  23552.00 KB/sec inst    147849216 bytes  16692.70 KB/sec avg  19456.00 KB/sec inst    164626432 bytes  16489.82 KB/sec avg  14894.55 KB/sec inst    178257920 bytes  16044.93 KB/sec avg  12101.82 KB/sec inst    187695104 bytes  15468.63 KB/sec avg   9216.00 KB/sec inst    198180864 bytes  15061.72 KB/sec avg  10240.00 KB/sec inst    208666624 bytes  14713.57 KB/sec avg  10240.00 KB/sec inst    208666624 bytes  14713.57 KB/sec avg  10240.00 KB/sec inst
+Transfer took 15010 ms
+rm: cannot remove directory: `.'

@@ -1,0 +1,28 @@
+Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:uint_eventMaker_evtrun_CMS2.obj, entry:77179, badread=0, nerrors=1, basketnumber=88
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:uint_eventMaker_evtlumiBlock_CMS2.obj, entry:77179, badread=0, nerrors=2, basketnumber=88
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:uint_eventMaker_evtevent_CMS2.obj, entry:77179, badread=0, nerrors=3, basketnumber=88
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:uint_vertexMaker_evtnvtxs_CMS2.obj, entry:77179, badread=0, nerrors=4, basketnumber=88
+Warning in <TBasket::ReadBasketBuffers>: basket: has fNevBuf=0 but fEntryOffset=0, pos=2701864955, len=4186, fNbytes=0, fObjlen=0, trying to repair
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:ints_vertexMaker_vtxsisFake_CMS2.obj, entry:77179, badread=0, nerrors=5, basketnumber=96
+Warning in <TBasket::ReadBasketBuffers>: basket: has fNevBuf=0 but fEntryOffset=0, pos=2701132931, len=26941, fNbytes=0, fObjlen=0, trying to repair
+Error in <TBranchElement::GetBasket>: File: /hadoop/cms/store/group/snt/phys14_old/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/V07-02-02//merged_ntuple_78.root at byte:0, branch:ints_genMaker_genpsstatus_CMS2.obj, entry:77179, badread=0, nerrors=6, basketnumber=127
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  vector::_M_range_check
+Warning: -t,--timeout is deprecated! Use --timeout-* options instead
+Using grid catalog type: UNKNOWN
+Using grid catalog : (null)
+VO name: cms
+Checksum type: None
+Destination SE type: SRMv2
+Destination SRM Request Token: put:1858187
+Source URL: file:/data10/condor_local/execute/dir_31510/glide_xMrcRT/execute/dir_14348/job_input/ttall_msdecays_merged_ntuple_78.root
+File size: 25681073
+Source URL for copy: file:/data10/condor_local/execute/dir_31510/glide_xMrcRT/execute/dir_14348/job_input/ttall_msdecays_merged_ntuple_78.root
+Destination URL: gsiftp://cabinet-8-8-5.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_ttall_msdecays/ttall_msdecays_merged_ntuple_78.root
+# streams: 1
+            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    339.33 KB/sec avg    339.33 KB/sec inst     11534336 bytes   2803.60 KB/sec avg  10240.00 KB/sec inst     17825792 bytes   3213.18 KB/sec avg   4388.57 KB/sec inst     23068672 bytes   3510.30 KB/sec avg   5120.00 KB/sec inst     23068672 bytes   3510.30 KB/sec avg   5120.00 KB/sec inst     23068672 bytes   3510.30 KB/sec avg   5120.00 KB/sec inst     23068672 bytes   3510.30 KB/sec avg   5120.00 KB/sec inst
+Transfer took 10080 ms
+rm: cannot remove directory: `.'

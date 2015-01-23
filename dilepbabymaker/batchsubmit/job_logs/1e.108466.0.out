@@ -1,0 +1,255 @@
+[wrapper] FILEID    =  merged_ntuple_1
+[wrapper] FILE      =  /hadoop/cms/store/group/snt/phys14_old/SMS-T1qqqq_2J_mGl-1000_mLSP-800_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-02//merged_ntuple_1.root
+[wrapper] COPYDIR   =  /hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_T1qqqq_1000_800
+[wrapper] setting env
+
+[wrapper] printing env
+G4LEVELGAMMADATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4PhotonEvaporation/2.3/data/PhotonEvaporation2.3
+SRT_G4LEVELGAMMADATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4PhotonEvaporation/2.3/data/PhotonEvaporation2.3
+GLIDEIN_SEs=bsrm-1.t2.ucsd.edu,bsrm-3.t2.ucsd.edu
+GLIDEIN_ResourceName=UCSDT2
+CMSSW_RELEASE_BASE=
+SCRAMRT_SET=CMSSW:CMSSW_7_0_6_patch1:slc6_amd64_gcc481:V2_2_6_pre3:SRT_
+MANPATH=/code/osgcode/cmssoft/cms/share/man:
+_CONDOR_JOB_PIDS=
+CMSSW_FWLITE_INCLUDE_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/hepmc/2.06.07/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/boost/1.51.0-cms/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/clhep/2.1.3.1-cms/include
+GRIDMAP=/data3/condor_local/execute/dir_3886/glide_whn19R/grid-mapfile
+COMPILER_RUNTIME_OBJECTS=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1
+SRT_MALLOC_CONF_SCRAMRTDEL=lg_chunk:18,lg_dirty_mult:4
+GLIDEIN_REQUIRE_GLEXEC_USE=False
+OSG_GLEXEC_LOCATION=/usr/sbin/glexec
+ROOT_INCLUDE_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/src
+_CONDOR_ANCESTOR_18647=18661:1421969904:40029766
+PDFPATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/share
+DBSCMD_HOME=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI
+SRT_TNS_ADMIN_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/oracle-env/29/etc
+JOBSTATUS=/data3/condor_local/execute/dir_3886/wlcg-rmjf-job-status
+CHANGED_X509=/osgusers/13/cp0027/.globus/cp0027/.globus/job/osg-gw-6/16434074444667419561.7675377755575303354/x509_user_proxy
+LHAPATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf/5.8.5-cms/share/lhapdf/PDFsets
+TMPDIR=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+GLOBUS_LOCATION=/usr
+PERL5LIB=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/perl5
+SRT_PDFPATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/share
+GLIDECLIENT_Signature=4346a53563d47cfcc6e99ecc8b608b1f177e9d2b
+CMSSW_DATA_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms
+CVSROOT=:gserver:cmssw.cvs.cern.ch:/local/reps/CMSSW
+GLOBUS_GASS_CACHE_DEFAULT=/osgusers/13/cp0027/.globus/.gass_cache
+CMSSW_GIT_HASH=CMSSW_7_0_6_patch1
+_CONDOR_SCRATCH_DIR=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+QTDIR=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1
+OLDPWD=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/src
+G4NEUTRONXSDATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4NEUTRONXS/1.2/data/G4NEUTRONXS1.2
+QTINC=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1/include
+SRT_COMPILER_RUNTIME_OBJECTS_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1
+SCRAM_ARCH=slc6_amd64_gcc481
+X509_CERT_DIR=/etc/grid-security/certificates/
+OSG_WN_TMP=$_CONDOR_SCRATCH_DIR
+GIT_SSL_CAINFO=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/ssl/certs/ca-bundle.crt
+DBS_CLIENT_CONFIG=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI/dbs.config
+SRT_ROOT_INCLUDE_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/src
+G4LEDATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4EMLOW/6.32/data/G4EMLOW6.32
+OSG_JOB_CONTACT=osg-gw-6.t2.ucsd.edu/jobmanager-condor
+OSG_SQUID_LOCATION=cvmfs-1.t2.ucsd.edu:3128
+GLIDEIN_REQUIRE_VOMS=False
+OSG_SITE_WRITE=srm://bsrm-1.t2.ucsd.edu:8443/srm/v2/server?SFN=/hadoop/oppo/
+SHERPA_INCLUDE_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/include/SHERPA-MC
+LD_LIBRARY_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/llvm/3.3-cms3/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/lib:/usr/lib
+TEMP=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+CONDOR_PARENT_ID=cabinet-1-1-17:20071:1421969956
+SRT_CMSSW_RELEASE_BASE_SCRAMRTDEL=
+SRT_RIVET_ANALYSIS_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/lib
+GLIDEIN_Entry_Name=CMS_T2_US_UCSD_gw6
+SRT_CMSSW_VERSION_SCRAMRTDEL=CMSSW_7_0_6_patch1
+GLIDEIN_Name=gfactory_instance
+VALGRIND_LIB=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/valgrind/3.9.0/lib/valgrind
+SRT_CMSSW_GIT_HASH_SCRAMRTDEL=CMSSW_7_0_6_patch1
+SRT_ROOTSYS_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/
+G4NEUTRONHPDATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4NDL/4.2/data/G4NDL4.2
+SRT_QTINC_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1/include
+G4RADIOACTIVEDATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4RadioactiveDecay/3.6/data/RadioactiveDecay3.6
+ROOFITSYS=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/roofit/5.34.09-cms11/
+SRT_ROOFITSYS_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/roofit/5.34.09-cms11/
+SRT_G4RADIOACTIVEDATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4RadioactiveDecay/3.6/data/RadioactiveDecay3.6
+SRT_CLHEP_PARAM_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/clhep/2.1.3.1-cms
+GLIDEIN_Entry_Signature=0cfcc43954fc8efb9f88b1973a562f523753e716
+OSG_SITE_READ=srm://bsrm-1.t2.ucsd.edu:8443/srm/v2/server?SFN=/hadoop/oppo/
+CONDOR_PROCD_ADDRESS_BASE=/data3/condor_local/execute/dir_3886/glide_whn19R/log/procd_address
+SRT_SHERPA_INCLUDE_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/include/SHERPA-MC
+SRT_PERL5LIB_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/perl5
+GLIDECLIENT_Name=CMST2UCSD-v2_0.UCSDUsers
+GLIDEIN_Site=UCSD
+TNS_ADMIN=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/oracle-env/29/etc
+SRT_HEPPDT_PARAM_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/heppdt/3.03.00
+PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/llvm/3.3-cms3/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/bin:/cvmfs/cms.cern.ch/common:/cvmfs/cms.cern.ch/bin:/sbin:/usr/sbin:/bin:/usr/bin
+SRT_DBS_CLIENT_CONFIG_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI/dbs.config
+SRT_CMSSW_SEARCH_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/src:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/data
+SRT_GIT_SSL_CAINFO_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/ssl/certs/ca-bundle.crt
+HOLD_GRACE_TIME=0
+CMS_PATH=/code/osgcode/cmssoft/cms
+MY_INITIAL_DIR=$_CONDOR_SCRATCH_DIR
+SRT_PATH_SCRAMRT=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/llvm/3.3-cms3/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/bin
+OSG_DATA=UNAVAILABLE
+CONDOR_CONFIG=/data3/condor_local/execute/dir_3886/glide_whn19R/condor_config
+RIVET_ANALYSIS_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/lib
+SRT_LOCALRT_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1
+SRT_CMSSW_BASE_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1
+SRT_LANG_SCRAMRT=C
+OSG_APP=/code/osgcode
+PWD=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+X509_USER_CERT=/data3/condor_local/execute/dir_3886/glide_whn19R/hostcert.pem
+SRT_QTDIR_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1
+JOBFEATURES=/data3/condor_local/execute/dir_3886/wlcg-mjf-job-features
+_CONDOR_WRAPPER_ERROR_FILE=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071/.job_wrapper_failure
+LANG=C
+GLOBUS_REMOTE_IO_URL=/osgusers/13/cp0027/.globus/cp0027/.globus/job/osg-gw-6/16434074444667419561.7675377755575303354/remote_io_file
+GLIDEIN_Country=US
+SRT_G4NEUTRONHPDATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4NDL/4.2/data/G4NDL4.2
+GLIDEIN_Gatekeeper=osg-gw-6.t2.ucsd.edu:2119/jobmanager-condor
+GLIDEIN_GlobusRSL=(queue=default)(jobtype=single)
+SRT_SHERPA_SHARE_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/share/SHERPA-MC
+_CONDOR_SLOT=
+CASCADE_PDFPATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cascade/2.2.04-cms/share
+SRT_LHAPATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf/5.8.5-cms/share/lhapdf/PDFsets
+SRT_CASCADE_PDFPATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cascade/2.2.04-cms/share
+OSG_GRID=/etc/osg/wn-client/
+GLIDEIN_Tmp_Dir=/data3/condor_local/execute/dir_3886/glide_whn19R/tmp
+G4SAIDXSDATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4SAIDDATA/1.1/data/G4SAIDDATA1.1
+GIT_TEMPLATE_DIR=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/git-core/templates
+SRT_DBSCMD_HOME_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI
+GLIDEIN_Factory=SDSC
+GLIDEIN_Proxy_URL=None
+GLIDEIN_GridType=gt5
+SRT_CMSSW_FWLITE_INCLUDE_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/hepmc/2.06.07/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/boost/1.51.0-cms/include:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/clhep/2.1.3.1-cms/include
+GLIDECLIENT_Group=UCSDUsers
+ROOTSYS=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/
+SRT_PYTHIA8DATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pythia8/175/xmldoc
+SRT_HERWIGPATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/herwigpp/2.5.0-cms/share/Herwig++
+_CONDOR_ANCESTOR_20071=20093:1421969957:3532632345
+OSG_HOSTNAME=osg-gw-6.t2.ucsd.edu
+SRT_QTLIB_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1/lib
+_CONDOR_EXECUTE=/data3/condor_local/execute/dir_3886/glide_whn19R/execute
+PREEMPT_GRACE_TIME=10000000
+GLIDEIN_Expose_Grid_Env=True
+SHLVL=4
+HOME=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+GLIDECLIENT_Group_Signature=2ce3e62fa3b8f32835c1b9457604eb91f2960480
+CMSSW_SEARCH_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/src:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/data
+GLOBUS_TCP_PORT_RANGE=1024,65535
+OSG_STORAGE_ELEMENT=True
+_CONDOR_MACHINE_AD=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071/.machine.ad
+MACHINEFEATURES=/var/run/wlcg-mjf-host-features
+GSI_AUTHZ_CONF=/dev/null
+X509_USER_PROXY=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071/x509up_u31113
+GENREFLEX=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/bin/genreflex
+SRT_G4LEDATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4EMLOW/6.32/data/G4EMLOW6.32
+SRT_GENREFLEX_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/bin/genreflex
+MALLOC_CONF=lg_chunk:18,lg_dirty_mult:4
+GLIDEIN_Signature=d08ef2cd89205249fd4b6f65fa48f9c044c6098f
+GLIDEIN_CMSSite=T2_US_UCSD
+SRT_CMSSW_DATA_PATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms
+OSG_DEFAULT_SE=bsrm-1.t2.ucsd.edu
+GLIDEIN_Schedd=schedd_glideins3@gfactory-1.t2.ucsd.edu
+SCRATCH_DIRECTORY=$_CONDOR_SCRATCH_DIR
+PYTHONPATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/python:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/coral/CORAL_2_3_21-cms21/slc6_amd64_gcc481/python:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/coral/CORAL_2_3_21-cms21/slc6_amd64_gcc481/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pyqt/4.8.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-scipy/0.8.0-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-matplotlib/1.2.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/python-ldap/2.4.10-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sip/4.11.2-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-sqlalchemy/0.8.2-cms2/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-pycurl/7.19.0-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-python-dateutil/1.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-numpy/1.6.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-lint/0.25.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-ipython/0.10-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-cx-oracle/5.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-cjson/1.0.5-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/frontier_client/2.8.8-cms2/python/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/das-client/1.11.7-cms/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cython/0.19.1/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pyminuit2/0.0.1-cms15/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-pygithub/1.23.0/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/professor/1.0.0-cms15/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cvs2git/5419-cms/lib
+HEPPDT_PARAM_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/heppdt/3.03.00
+SRT_LD_LIBRARY_PATH_SCRAMRT=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/external/slc6_amd64_gcc481/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/llvm/3.3-cms3/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/gcc/4.8.1/lib
+GLIDEIN_Glexec_Use=NEVER
+LOGNAME=cp0027
+TMP=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+QTLIB=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/qt/4.8.1/lib
+GLOBUS_TCP_SOURCE_RANGE=10000,65535
+GLIDEIN_Monitoring_Enabled=False
+OSG_SITE_NAME=UCSDT2-C
+GLIDEIN_ClusterId=2633903
+GLIDEIN_ProcId=2
+FRONTIER_CLIENT=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/frontier_client/2.8.8-cms2/
+SRT_G4NEUTRONXSDATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4NEUTRONXS/1.2/data/G4NEUTRONXS1.2
+CLHEP_PARAM_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/clhep/2.1.3.1-cms
+_CONDOR_JOB_AD=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071/.job.ad
+HERWIGPATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/herwigpp/2.5.0-cms/share/Herwig++
+PYTHIA8DATA=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pythia8/175/xmldoc
+SRT_FRONTIER_CLIENT_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/frontier_client/2.8.8-cms2/
+SRT_GIT_TEMPLATE_DIR_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/share/git-core/templates
+SRT_G4SAIDXSDATA_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/geant4-G4SAIDDATA/1.1/data/G4SAIDDATA1.1
+CMSSW_VERSION=CMSSW_7_0_6_patch1
+GLIDEIN_LOCAL_TMP_DIR=/tmp/glide_cuser3_LpxIYq
+SHERPA_SHARE_PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sherpa/1.4.2-cms/share/SHERPA-MC
+SRT_PYTHONPATH_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/python:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/bin/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw/CMSSW_7_0_6/lib/slc6_amd64_gcc481:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/coral/CORAL_2_3_21-cms21/slc6_amd64_gcc481/python:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/coral/CORAL_2_3_21-cms21/slc6_amd64_gcc481/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pyqt/4.8.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-scipy/0.8.0-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-matplotlib/1.2.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/python-ldap/2.4.10-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/sip/4.11.2-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-sqlalchemy/0.8.2-cms2/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-pycurl/7.19.0-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-python-dateutil/1.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-numpy/1.6.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-lint/0.25.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-ipython/0.10-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-cx-oracle/5.1-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-cjson/1.0.5-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/frontier_client/2.8.8-cms2/python/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/das-client/1.11.7-cms/bin:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cython/0.19.1/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/rivet/1.8.2-cms/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/pyminuit2/0.0.1-cms15/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/py2-pygithub/1.23.0/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/professor/1.0.0-cms15/lib/python2.7/site-packages:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/lcg/root/5.34.10-cms7/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/dbs-client/DBS_2_1_9-cms/lib/DBSAPI:/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/cvs2git/5419-cms/lib
+_CONDOR_ANCESTOR_18661=20071:1421969956:411015654
+GLOBUS_GRAM_JOB_CONTACT=https://osg-gw-6.t2.ucsd.edu:46774/16434074444667419561/7675377755575303354/
+_CONDOR_JOB_IWD=/data3/condor_local/execute/dir_3886/glide_whn19R/execute/dir_20071
+X509_USER_KEY=/data3/condor_local/execute/dir_3886/glide_whn19R/hostkey.pem
+LOCALRT=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1
+CMSSW_BASE=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/CMSSW_7_0_6_patch1
+SRT_VALGRIND_LIB_SCRAMRTDEL=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/valgrind/3.9.0/lib/valgrind
+CONDOR_PROCD_ADDRESS=/data3/condor_local/execute/dir_3886/glide_whn19R/log/procd_address
+_=/usr/bin/printenv
+[wrapper] extracting input sandbox
+[wrapper] input contents are
+.
+..
+jetCorrections
+libBabymakerMT2CORE.so
+libMiniFWLite.so
+libScanChain.so
+processBaby.C
+[wrapper] directory contents are
+jetCorrections
+libBabymakerMT2CORE.so
+libMiniFWLite.so
+libScanChain.so
+processBaby.C
+[wrapper] running
+
+{
+gROOT->ProcessLine(".L processBaby.C");
+processBaby("merged_ntuple_1", "/hadoop/cms/store/group/snt/phys14_old/SMS-T1qqqq_2J_mGl-1000_mLSP-800_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-02//merged_ntuple_1.root");
+}
+
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/10    29 August 2013   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/10 (heads/v5-34-00-patches@v5-34-09-278-gdd55a0f, Jun 20 2014, 19:20:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing runme.C...
+
+[1mMiniFWLite v02-YY-ZZ -- A FORTRAN++ data analysis framework developed by TaS[0m
+                        http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/JRibnik/CMS2
+
+Main /hadoop/cms/store/group/snt/phys14_old/SMS-T1qqqq_2J_mGl-1000_mLSP-800_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-02//merged_ntuple_1.root exists: use it. Loaded 1 files
+sample is T1qqqq_merged_ntuple_1
+Running on 96681 events
+running on file: /hadoop/cms/store/group/snt/phys14_old/SMS-T1qqqq_2J_mGl-1000_mLSP-800_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-02//merged_ntuple_1.root
+sampleID: WARNING: sample not recognized!  /hadoop/cms/store/group/snt/phys14_old/SMS-T1qqqq_2J_mGl-1000_mLSP-800_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-02//merged_ntuple_1.root
+Processed 96681 events
+0 duplicate events were skipped.
+
+96681 Events Processed
+------------------------------
+CPU  Time:	34.7 s
+Real Time:	75.3 s
+
+[wrapper] output is
+T1qqqq_merged_ntuple_1.root
+jetCorrections
+libBabymakerMT2CORE.so
+libMiniFWLite.so
+libScanChain.so
+processBaby.C
+runme.C
+[wrapper] copying file
+[wrapper] OUTPUT =  T1qqqq_merged_ntuple_1.root
+[wrapper] cleaning up
+[wrapper] cleaned up

@@ -1,0 +1,18 @@
+Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
+Warning: -t,--timeout is deprecated! Use --timeout-* options instead
+Using grid catalog type: UNKNOWN
+Using grid catalog : (null)
+VO name: cms
+Checksum type: None
+Destination SE type: SRMv2
+Destination SRM Request Token: put:1854409
+Source URL: file:/data1/condor_local/execute/dir_8611/glide_hCR8dn/execute/dir_21195/job_input/dyjetsll_ht400to600_merged_ntuple_9.root
+File size: 121161562
+Source URL for copy: file:/data1/condor_local/execute/dir_8611/glide_hCR8dn/execute/dir_21195/job_input/dyjetsll_ht400to600_merged_ntuple_9.root
+Destination URL: gsiftp://cabinet-8-8-3.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_dyjetsll_ht400to600/dyjetsll_ht400to600_merged_ntuple_9.root
+# streams: 1
+            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    376.71 KB/sec avg    376.71 KB/sec inst     12582912 bytes   3304.73 KB/sec avg  11264.00 KB/sec inst     25165824 bytes   5100.55 KB/sec avg  11170.91 KB/sec inst     40894464 bytes   6747.88 KB/sec avg  13963.64 KB/sec inst     50331648 bytes   7104.63 KB/sec avg   9216.00 KB/sec inst     50331648 bytes   7104.63 KB/sec avg   9216.00 KB/sec inst     65011712 bytes   7917.88 KB/sec avg  13032.73 KB/sec inst     79691776 bytes   8629.56 KB/sec avg  14336.00 KB/sec inst     95420416 bytes   9301.38 KB/sec avg  15360.00 KB/sec inst    110100480 bytes   9758.31 KB/sec avg  14336.00 KB/sec inst    121161562 bytes   9845.14 KB/sec avg  10801.84 KB/sec inst    121161562 bytes   9845.14 KB/sec avg  10801.84 KB/sec inst    121161562 bytes   9845.14 KB/sec avg  10801.84 KB/sec inst
+Transfer took 15020 ms
+rm: cannot remove directory: `.'

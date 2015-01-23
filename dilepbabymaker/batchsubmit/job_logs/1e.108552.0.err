@@ -1,0 +1,18 @@
+Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
+Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
+Warning: -t,--timeout is deprecated! Use --timeout-* options instead
+Using grid catalog type: UNKNOWN
+Using grid catalog : (null)
+VO name: cms
+Checksum type: None
+Destination SE type: SRMv2
+Destination SRM Request Token: put:1854170
+Source URL: file:/data4/condor_local/execute/dir_12453/glide_ygjg6B/execute/dir_28330/job_input/dyjetsll_ht400to600_merged_ntuple_17.root
+File size: 91072941
+Source URL for copy: file:/data4/condor_local/execute/dir_12453/glide_ygjg6B/execute/dir_28330/job_input/dyjetsll_ht400to600_merged_ntuple_17.root
+Destination URL: gsiftp://cabinet-8-8-4.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_dyjetsll_ht400to600/dyjetsll_ht400to600_merged_ntuple_17.root
+# streams: 1
+            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    472.07 KB/sec avg    472.07 KB/sec inst     23068672 bytes   6891.09 KB/sec avg  19549.09 KB/sec inst     46137344 bytes  10553.85 KB/sec avg  22528.00 KB/sec inst     75497472 bytes  13992.39 KB/sec avg  28672.00 KB/sec inst     75497472 bytes  13992.39 KB/sec avg  28672.00 KB/sec inst     75497472 bytes  13992.39 KB/sec avg  28672.00 KB/sec inst
+Transfer took 8040 ms
+rm: cannot remove directory: `.'
