@@ -1,33 +1,0 @@
-Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
-Warning: -t,--timeout is deprecated! Use --timeout-* options instead
-Using grid catalog type: UNKNOWN
-Using grid catalog : (null)
-VO name: cms
-Checksum type: None
-Destination SE type: SRMv2
-Destination SRM Request Token: put:1855881
-Source URL: file:/data1/condor_local/execute/dir_124534/glide_OyYgcQ/execute/dir_147631/job_input/gjet_ht600toInf_merged_ntuple_5.root
-File size: 241188433
-Source URL for copy: file:/data1/condor_local/execute/dir_124534/glide_OyYgcQ/execute/dir_147631/job_input/gjet_ht600toInf_merged_ntuple_5.root
-Destination URL: gsiftp://cabinet-8-8-3.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_gjet_ht600toInf/gjet_ht600toInf_merged_ntuple_5.root
-# streams: 1
-            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst
-            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst
-      1048576 bytes    626.15 KB/sec avg    626.15 KB/sec inst
-     38797312 bytes  13851.06 KB/sec avg  33512.73 KB/sec inst
-     67108864 bytes  17544.63 KB/sec avg  27648.00 KB/sec inst
-     93323264 bytes  19245.73 KB/sec avg  25600.00 KB/sec inst
-    115343360 bytes  19302.92 KB/sec avg  19549.09 KB/sec inst
-    133169152 bytes  19025.70 KB/sec avg  17408.00 KB/sec inst
-    153092096 bytes  19080.62 KB/sec avg  19456.00 KB/sec inst
-    175112192 bytes  19138.29 KB/sec avg  19549.09 KB/sec inst
-    192937984 bytes  18964.13 KB/sec avg  17408.00 KB/sec inst
-    213909504 bytes  19102.75 KB/sec avg  20480.00 KB/sec inst
-    213909504 bytes  19102.75 KB/sec avg  20480.00 KB/sec inst
-    234881024 bytes  19218.14 KB/sec avg  20480.00 KB/sec inst
-    234881024 bytes  19218.14 KB/sec avg  20480.00 KB/sec inst
-
-Transfer took 14020 ms
-rm: cannot remove directory: `.'

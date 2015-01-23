@@ -1,18 +1,0 @@
-Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
-Warning: -t,--timeout is deprecated! Use --timeout-* options instead
-Using grid catalog type: UNKNOWN
-Using grid catalog : (null)
-VO name: cms
-Checksum type: None
-Destination SE type: SRMv2
-Destination SRM Request Token: put:1854688
-Source URL: file:/data8/condor_local/execute/dir_18313/glide_PJBrSG/execute/dir_2983/job_input/dyjetsll_ht600toInf_merged_ntuple_11.root
-File size: 121683997
-Source URL for copy: file:/data8/condor_local/execute/dir_18313/glide_PJBrSG/execute/dir_2983/job_input/dyjetsll_ht600toInf_merged_ntuple_11.root
-Destination URL: gsiftp://cabinet-8-8-2.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_dyjetsll_ht600toInf/dyjetsll_ht600toInf_merged_ntuple_11.root
-# streams: 1
-            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    416.12 KB/sec avg    416.12 KB/sec inst     13631488 bytes   3846.51 KB/sec avg  12288.00 KB/sec inst     32505856 bytes   7116.21 KB/sec avg  18432.00 KB/sec inst     56623104 bytes  10125.99 KB/sec avg  23552.00 KB/sec inst     68157440 bytes  10145.10 KB/sec avg  10240.00 KB/sec inst     76546048 bytes   9757.73 KB/sec avg   7447.27 KB/sec inst     81788928 bytes   9116.98 KB/sec avg   4654.55 KB/sec inst     85983232 bytes   8515.33 KB/sec avg   3723.64 KB/sec inst     92274688 bytes   8297.00 KB/sec avg   6144.00 KB/sec inst     97517568 bytes   7962.01 KB/sec avg   4654.54 KB/sec inst     97517568 bytes   7962.01 KB/sec avg   4654.54 KB/sec inst     97517568 bytes   7962.01 KB/sec avg   4654.54 KB/sec inst     99614720 bytes   6918.53 KB/sec avg    975.24 KB/sec inst     99614720 bytes   6918.53 KB/sec avg    975.24 KB/sec inst
-Transfer took 16010 ms
-rm: cannot remove directory: `.'

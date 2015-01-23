@@ -1,18 +1,0 @@
-Warning in <TClass::TClass>: no dictionary for class edm::WrapperBase is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<unsigned char> > is available
-Warning in <TClass::TClass>: no dictionary for class edm::Wrapper<vector<ULong64_t> > is available
-Warning: -t,--timeout is deprecated! Use --timeout-* options instead
-Using grid catalog type: UNKNOWN
-Using grid catalog : (null)
-VO name: cms
-Checksum type: None
-Destination SE type: SRMv2
-Destination SRM Request Token: put:1857947
-Source URL: file:/data3/condor_local/execute/dir_20077/glide_xlCTYs/execute/dir_22585/job_input/ttall_msdecays_merged_ntuple_35.root
-File size: 30975304
-Source URL for copy: file:/data3/condor_local/execute/dir_20077/glide_xlCTYs/execute/dir_22585/job_input/ttall_msdecays_merged_ntuple_35.root
-Destination URL: gsiftp://cabinet-8-8-5.t2.ucsd.edu:2811//hadoop/cms/store/user/cwelke/dilepbabies/V00-00-00_ttall_msdecays/ttall_msdecays_merged_ntuple_35.root
-# streams: 1
-            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst            0 bytes      0.00 KB/sec avg      0.00 KB/sec inst      1048576 bytes    256.96 KB/sec avg    256.96 KB/sec inst     13631488 bytes   2670.40 KB/sec avg  12288.00 KB/sec inst     20971520 bytes   3311.23 KB/sec avg   5973.33 KB/sec inst     29360128 bytes   3935.75 KB/sec avg   7447.27 KB/sec inst     29360128 bytes   3935.75 KB/sec avg   7447.27 KB/sec inst     29360128 bytes   3935.75 KB/sec avg   7447.27 KB/sec inst
-Transfer took 10030 ms
-rm: cannot remove directory: `.'
