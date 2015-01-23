@@ -403,10 +403,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       }
 
 	  // Implement OS dilepton minimum requirement
-	  bool isDilepEvent = true;
-	  if (nlep < 2){
-		isDilepEvent = false;
-		//require at least 2 good leptons or 1 good photon
+	  bool isOSDilepEvent = true;
+	  if( nlep < 2 ){//require min 2 leps
+		if( lep_charge.at(0)*lep_charge.at(1) > 0 ){//require OS
+		  isOSDilepEvent = false;
+		}
 	  }else{
 		if      (  abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11 ){ diltype = 0;// ee event
 		}else if(  abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13 ){ diltype = 1;// mm event
@@ -486,7 +487,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       }
 	
 	  // add selections to keep only events with photons and Z(ll)
-	  if( ngamma < 1 && !isDilepEvent) continue;
+	  if( ngamma < 1 && !isOSDilepEvent) continue;
 
 	  // Add kinematic variables related to leps here
 	  if( lep_p4.size() > 1 ){
