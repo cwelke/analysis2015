@@ -85,6 +85,8 @@ class babyMaker {
   Float_t         met_genPt;
   Float_t         met_genPhi;
 
+  Float_t         sumet_raw;
+
 //----- MET FILTERS
   Int_t           Flag_EcalDeadCellTriggerPrimitiveFilter;
   Int_t           Flag_trkPOG_manystripclus53X;

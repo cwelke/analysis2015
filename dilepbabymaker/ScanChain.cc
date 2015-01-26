@@ -15,7 +15,7 @@
 #include "../MT2CORE/CMS2.h"
 #include "../MT2CORE/tools.h"
 #include "../MT2CORE/selections.h"
-#include "../MT2CORE/OSSelections.h"
+// #include "../MT2CORE/OSSelections.h"
 #include "../MT2CORE/hemJet.h"
 #include "../MT2CORE/sampleID.h"
 #include "../MT2CORE/genUtils.h"
@@ -138,6 +138,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       met_phi = cms2.evt_pfmetPhi();
       met_genPt  = cms2.gen_met();
       met_genPhi = cms2.gen_metPhi();
+
+      met_rawPt  = cms2.evt_pfmet_raw();
+      met_rawPhi = cms2.evt_pfmetPhi_raw();
+      sumet_raw  = cms2.evt_pfsumet_raw();
 
       // MET FILTERS
       Flag_EcalDeadCellTriggerPrimitiveFilter       = cms2.filt_ecalTP();
@@ -405,20 +409,22 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  // Implement OS dilepton minimum requirement
 	  bool isOSDilepEvent = true;
 	  if( nlep < 2 ){//require min 2 leps
+		isOSDilepEvent = false;
+	  }else{
 		if( lep_charge.at(0)*lep_charge.at(1) > 0 ){//require OS
 		  isOSDilepEvent = false;
+		}else{
+		  if      (  abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11 ){ diltype = 0;// ee event
+		  }else if(  abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13 ){ diltype = 1;// mm event
+		  }else if( (abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 13) ||
+					(abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 11) ){ diltype = 2;// em event
+		  }else {
+			cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
+			exit(0);
+		  }
+		  dilmass = (lep_p4.at(0)+lep_p4.at(1)).mass();
+		  dilpt   = (lep_p4.at(0)+lep_p4.at(1)).pt();
 		}
-	  }else{
-		if      (  abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11 ){ diltype = 0;// ee event
-		}else if(  abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13 ){ diltype = 1;// mm event
-		}else if( (abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 13) ||
-				  (abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 11) ){ diltype = 2;// em event
-		}else {
-		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
-		  exit(0);
-		}
-		dilmass = (lep_p4.at(0)+lep_p4.at(1)).mass();
-		dilpt   = (lep_p4.at(0)+lep_p4.at(1)).pt();
 	  }
         
       if (verbose) cout << "before photons" << endl;
@@ -447,7 +453,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		gamma_neuHadIso    .push_back(photons_neutralHadronIso().at(iGamma));
 		gamma_phIso        .push_back(photons_photonIso().at(iGamma));
 		gamma_r9           .push_back(photons_full5x5_r9().at(iGamma));
-		gamma_hOverE       .push_back(photons_full5x5_hOverEtowBC().at(iGamma));
+		// gamma_hOverE       .push_back(photons_full5x5_hOverEtowBC().at(iGamma));
 		gamma_idCutBased   .push_back(isTightPhoton(iGamma) ? 1 : 0); 
 		if(gamma_pt[ngamma] > 20) nGammas20++;
 	
@@ -818,6 +824,9 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("met_caloPhi", &met_caloPhi );
   BabyTree_->Branch("met_genPt",  &met_genPt );
   BabyTree_->Branch("met_genPhi", &met_genPhi );
+
+  BabyTree_->Branch("sumet_raw", &sumet_raw );
+  
   BabyTree_->Branch("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter );
   BabyTree_->Branch("Flag_trkPOG_manystripclus53X", &Flag_trkPOG_manystripclus53X );
   BabyTree_->Branch("Flag_ecalLaserCorrFilter", &Flag_ecalLaserCorrFilter );
@@ -997,6 +1006,9 @@ void babyMaker::InitBabyNtuple () {
   met_caloPhi = -999.0;
   met_genPt = -999.0;
   met_genPhi = -999.0;
+
+  sumet_raw = -999.0;
+
   Flag_EcalDeadCellTriggerPrimitiveFilter = -999;
   Flag_trkPOG_manystripclus53X = -999;
   Flag_ecalLaserCorrFilter = -999;
