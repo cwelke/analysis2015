@@ -453,7 +453,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		gamma_neuHadIso    .push_back(photons_neutralHadronIso().at(iGamma));
 		gamma_phIso        .push_back(photons_photonIso().at(iGamma));
 		gamma_r9           .push_back(photons_full5x5_r9().at(iGamma));
-		// gamma_hOverE       .push_back(photons_full5x5_hOverEtowBC().at(iGamma));
+		gamma_hOverE       .push_back(photons_full5x5_hOverEtowBC().at(iGamma));
 		gamma_idCutBased   .push_back(isTightPhoton(iGamma) ? 1 : 0); 
 		if(gamma_pt[ngamma] > 20) nGammas20++;
 	
