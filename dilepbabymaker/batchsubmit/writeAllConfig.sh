@@ -4,7 +4,7 @@
 # All MT2 related datasets available on hadoop
 #
 
-TAG="V00-00-05"
+TAG="V00-00-06"
 
 #
 # DATA

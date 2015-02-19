@@ -7,7 +7,7 @@
 
 #include "scanChain.h"
 
-#include <iostream>
+#include <iostrem>
 #endif
 
 void loadChain( TChain *ch, const std::string& base )
