@@ -22,8 +22,8 @@ class babyMaker {
 
   babyMaker() {};
   ~babyMaker() {
-    delete BabyFile_;
-    delete BabyTree_;
+    if (BabyFile_) delete BabyFile_;
+    if (BabyTree_) delete BabyTree_;
   };
 
   void ScanChain(TChain*, std::string = "testSample");
@@ -66,15 +66,22 @@ class babyMaker {
   Int_t           nGammas20;
 
   Int_t           njets;
-  Int_t           njets40;
   Float_t         ht;
-  Float_t         ht40;
+  Int_t           njets_eta30;
+  Float_t         ht_eta30;
+
+  Int_t           hyp_type; // 0 = ee; 1 = mm; 2 = em; 2 = me
+  Int_t           evt_type; // 0 = OS; 1 = SS; 2 = photon+jets
+  Float_t         dilmass;
+  Float_t         dilpt;
+
+  Float_t         matched_neutralemf; // neutral em fraction for jet closest to photon within dR = .1
+  Bool_t          elveto; // Reject photons which have electron of pT > 10 GeV within dR < 0.2
 
   // update
   Float_t         mt2;
   Float_t         mt2j;
-  Float_t         mt2j40;
-  // Float_t         mt2_gen;
+  Float_t         mt2j_eta30;
 
   Float_t         met_pt;
   Float_t         met_phi;
@@ -112,11 +119,6 @@ class babyMaker {
   Int_t           HLT_DoubleMu;   
   Int_t           HLT_Photons;   
 
-  // OS dilep variables
-  Float_t      dilmass;
-  Float_t      dilpt;
-  Int_t        diltype; 
-  
   //----- LEPTONS
   Int_t           nlep;
   vector <LorentzVector> lep_p4;
@@ -220,8 +222,8 @@ class babyMaker {
 //----- JETS
   Int_t           njet;
   vector <LorentzVector>   jet_p4;
-  vector <LorentzVector>   jet30_p4;
-  vector <LorentzVector>   jet40_p4;
+  vector <LorentzVector>   jets_p4;
+  vector <LorentzVector>   jets_eta30_p4;
   vector <Float_t>         jet_pt          ;   //[njet]
   vector <Float_t>         jet_eta         ;   //[njet]
   vector <Float_t>         jet_phi         ;   //[njet]

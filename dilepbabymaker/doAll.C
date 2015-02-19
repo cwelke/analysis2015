@@ -1,8 +1,10 @@
 {
 
   gSystem->Load("libMiniFWLite.so");
-  gSystem->Load("libBabymakerMT2CORE.so");
+  gSystem->Load("libBabymakerCORE.so");
+  gSystem->Load("libBabymakerTools.so");
   gSystem->Load("libScanChain.so");
+
 
   TChain *ch = new TChain("Events"); 
  
@@ -21,5 +23,5 @@
   //ch->Add("/home/users/jgran/CMSSW_7_0_6_patch1/src/CMS2/NtupleMaker/ntuple_first1000.root");
 
   babyMaker *looper = new babyMaker();
-  looper->ScanChain(ch, "sntMT2Baby"); 
+  looper->ScanChain(ch, "ZMETBaby"); 
 }
