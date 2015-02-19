@@ -4,7 +4,7 @@
 # All MT2 related datasets available on hadoop
 #
 
-TAG="V00-00-01"
+TAG="V00-00-05"
 
 #
 # DATA
@@ -15,24 +15,18 @@ TAG="V00-00-01"
 #
 
 ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TT_Tune4C_13TeV-pythia8-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                      ${TAG}_ttall
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_ttall_msdecays
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_ttall_msdecays
 
 #
-# ALTERNATIVE TTBAR
+# DY+JETS
 #
 
-#
-# W+JETS
-#
-
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_13TeV-madgraph-pythia8-tauola/V07-02-05                                              ${TAG}_wjets_lnu
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht100to200
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht200to400
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht400to600
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht600toinf
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WToENu_Tune4C_13TeV-pythia8_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                     ${TAG}_wjets_enu
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WToMuNu_Tune4C_13TeV-pythia8_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/CMS3_v07-02-03               ${TAG}_wjets_mnu
-
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_13TeV-madgraph-pythia8_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03                   ${TAG}_dyjetsll_m50inc
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht100to200
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht200to400
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht400to600
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht600toinf
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToMuMu_PtZ-180_M-50_13TeV-madgraph_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v3/V07-02-03             ${TAG}_dyjetsmm_ptz180
 
 #
 # SINGLE TOP
@@ -46,18 +40,6 @@ TAG="V00-00-01"
 ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03        ${TAG}_t_bartw
 
 #
-# DY+JETS
-#
-
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_13TeV-madgraph-pythia8_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03                   ${TAG}_dyjetsll_m50inc
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht100to200
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht200to400
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht400to600
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_dyjetsll_ht600toinf
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/DYJetsToMuMu_PtZ-180_M-50_13TeV-madgraph_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v3/V07-02-03             ${TAG}_dyjetsmm_ptz180
-
-
-#
 # GAMMA + JETS
 #
 
@@ -68,13 +50,29 @@ TAG="V00-00-01"
 ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03      ${TAG}_gjet_ht600toinf
 
 #
-# Z INVISIBLE
+# ALTERNATIVE TTBAR
 #
 
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_zinv_ht100to200
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_zinv_ht200to400
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v2/V07-02-03 ${TAG}_zinv_ht400to600
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_zinv_ht600toinf
+#
+# W+JETS
+#
+
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_13TeV-madgraph-pythia8-tauola/V07-02-05                                              ${TAG}_wjets_lnu
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht100to200
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht200to400
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht400to600
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_wjets_ht600toinf
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WToENu_Tune4C_13TeV-pythia8_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                     ${TAG}_wjets_enu
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WToMuNu_Tune4C_13TeV-pythia8_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/CMS3_v07-02-03               ${TAG}_wjets_mnu
+
+# #
+# # Z INVISIBLE
+# #
+
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_zinv_ht100to200
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_zinv_ht200to400
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v2/V07-02-03 ${TAG}_zinv_ht400to600
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZJetsToNuNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03 ${TAG}_zinv_ht600toinf
 
 #
 # DIBOSON
