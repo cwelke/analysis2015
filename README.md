@@ -12,9 +12,15 @@ When you checkout the repository, you need to make sure the CMS2 header files in
 Repo Usage:
 
 git clone git@github.com:cwelke/analysis2015.git
+
 cd analysis2015
+
 git clone git@github.com:cmstas/Software.git
+
 git clone git@github.com:cmstas/Tools.git
+
 git clone git@github.com:cmstas/CORE.git
+
 cd dilepbabymaker
+
 make -j25
