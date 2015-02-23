@@ -4,7 +4,7 @@
 # All MT2 related datasets available on hadoop
 #
 
-TAG="V00-00-06"
+TAG="V00-00-07"
 
 #
 # DATA
@@ -14,8 +14,8 @@ TAG="V00-00-06"
 # TTBAR
 #
 
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TT_Tune4C_13TeV-pythia8-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                      ${TAG}_ttall
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_ttall_msdecays
+# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TT_Tune4C_13TeV-pythia8-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                      ${TAG}_ttall
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-06 ${TAG}_ttall_msdecays
 
 #
 # DY+JETS

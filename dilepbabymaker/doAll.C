@@ -18,10 +18,11 @@
 
   // ch->Add("/hadoop/cms/store/group/snt/phys14/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03/merged_ntuple_1.root");
 
-  ch->Add("/nfs-7/userdata/cwelke/CMS3_testing/phys14/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03/./merged_ntuple_1.root");
-
+  // ch->Add("/nfs-7/userdata/cwelke/CMS3_testing/phys14/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03/./merged_ntuple_1.root");
+  ch->Add("/nfs-7/userdata/cwelke/CMS3_testing/phys14/merged_ntuple_17.root");
+  
   //ch->Add("/home/users/jgran/CMSSW_7_0_6_patch1/src/CMS2/NtupleMaker/ntuple_first1000.root");
 
   babyMaker *looper = new babyMaker();
-  looper->ScanChain(ch, "ZMETBaby"); 
+  looper->ScanChain(ch, "ZMETBaby_dyj"); 
 }

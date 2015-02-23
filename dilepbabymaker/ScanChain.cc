@@ -1206,7 +1206,7 @@ void babyMaker::FillBabyNtuple(){
 
 void babyMaker::CloseBabyNtuple(){
   BabyFile_->cd();
-  // BabyTree_->Write();
+  BabyTree_->Write();
   BabyFile_->Close();
   return;
 }
