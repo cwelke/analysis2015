@@ -7,7 +7,7 @@
 
 #include "scanChain.h"
 
-#include <iostream>
+#include <iostrem>
 #endif
 
 void loadChain( TChain *ch, const std::string& base )
@@ -40,7 +40,7 @@ void processBaby( TString outfileid = "tt_test", TString infile = "/hadoop/cms/s
   // choose version, output will be written to output/[version]
   //---------------------------------------------------------------
   
-  // Load Everything -- do we need these?
+// Load Everything -- do we need these?
   gSystem->Load("libTree.so");
   gSystem->Load("libPhysics.so");
   gSystem->Load("libEG.so");
@@ -51,9 +51,10 @@ void processBaby( TString outfileid = "tt_test", TString infile = "/hadoop/cms/s
 
   // these libraries should be in babymaker dir after build
   gSystem->Load("libMiniFWLite.so");
-  gSystem->Load("libBabymakerMT2CORE.so");
+  gSystem->Load("libBabymakerCORE.so");
+  gSystem->Load("libBabymakerTools.so");
   gSystem->Load("libScanChain.so");
-
+  
   TChain *chain = new TChain("Events");
   loadChain(chain, infile.Data());
 

@@ -12,14 +12,18 @@ SOURCES = ScanChain.cc
 OBJECTS = $(SOURCES:.cc=.o) LinkDef_out.o
 LIB = libScanChain.so
 
-CORESOURCES = $(wildcard ../MT2CORE/*.cc) $(wildcard ../MT2CORE/MT2/*.cc) $(wildcard ../MT2CORE/Plotting/*.cc)
+CORESOURCES = $(wildcard ../CORE/*.cc)
 COREOBJECTS = $(CORESOURCES:.cc=.o) 
-CORELIB = libBabymakerMT2CORE.so
+CORELIB = libBabymakerCORE.so
+
+TOOLSSOURCES = $(wildcard ../Tools/*.cc) $(wildcard ../Tools/MT2/*.cc)
+TOOLSOBJECTS = $(TOOLSSOURCES:.cc=.o) 
+TOOLSLIB = libBabymakerTools.so
 
 #FWLIB = libMiniFWLite.so
-FWLIB = ../Tools/MiniFWLite/libMiniFWLite.so
+FWLIB = ../Software/MiniFWLite/libMiniFWLite.so
 
-LIBS = $(LIB) $(CORELIB) $(FWLIB) 
+LIBS = $(LIB) $(CORELIB) $(TOOLSLIB) $(FWLIB) 
 
 .PHONY: all help compile clean cms2env
 
@@ -33,9 +37,13 @@ $(CORELIB):	$(COREOBJECTS)
 	echo "Linking $(CORELIB)"; \
 	$(LINKER) $(LINKERFLAGS) -shared $(COREOBJECTS) -o $@
 
+$(TOOLSLIB):	$(TOOLSOBJECTS) 
+	echo "Linking $(TOOLSLIB)"; \
+	$(LINKER) $(LINKERFLAGS) -shared $(TOOLSOBJECTS) -o $@
+
 $(FWLIB):
 	echo "making MiniFWLite"; \
-        cd ../Tools/MiniFWLite; \
+        cd ../Software/MiniFWLite; \
         $(MAKE) -f Makefile; cd -; \
 	cp $(FWLIB) .;
 
@@ -62,20 +70,18 @@ all:	$(LIBS)
 .PHONY: clean
 clean:  
 	rm -v -f \
-        ../MT2CORE/*.o \
-        ../MT2CORE/*.d \
-        ../MT2CORE/*.so \
-        ../MT2CORE/MT2/*.o \
-        ../MT2CORE/MT2/*.d \
-        ../MT2CORE/MT2/*.so \
-        ../MT2CORE/Plotting/*.o \
-        ../MT2CORE/Plotting/*.d \
-        ../MT2CORE/Plotting/*.so \
+        ../CORE/*.o \
+        ../CORE/*.d \
+        ../CORE/*.so \
         ../Tools/*.o \
-	../Tools/*.d \
-        ../Tools/MiniFWLite/*.o \
-	../Tools/MiniFWLite/*.d \
-        $(CORELIB) $(LIB) $(FWLIB) \
+		../Tools/*.d \
+        ../Tools/*.so \
+        ../Tools/MT2/*.o \
+		../Tools/MT2/*.d \
+        ../Tools/MT2/*.so \
+        ../Software/MiniFWLite/*.o \
+		../Software/MiniFWLite/*.d \
+        $(CORELIB) $(TOOLSLIB) $(MT2CORELIB) $(LIB) $(FWLIB) \
         LinkDef_out.cxx  LinkDef_out.h \
         *.o *.d *.so; echo "Done"
 
@@ -83,4 +89,3 @@ test:
 	@echo $(INCLUDE)
 
 -include $(LIBDIR)/LinkDef_out.d
-

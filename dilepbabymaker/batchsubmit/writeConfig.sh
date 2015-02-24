@@ -5,15 +5,18 @@ do echo "No Proxy found issuing \"voms-proxy-init -voms cms\""
    voms-proxy-init -hours 168 -voms cms
 done
 
-#UNIVERSE="grid"
-UNIVERSE="vanilla"
+UNIVERSE="grid"
+#UNIVERSE="vanilla"
 EXE="wrapper.sh"
 INPUT="wrapper.sh, job_input/input.tar.gz"
-SITE="UCSD"
+# can add other US sites here if desired
+SITE="T2_US_UCSD"
 SUBMITLOGDIR="${PWD}/submit_logs"
 JOBLOGDIR="${PWD}/job_logs"
 PROXY=$(voms-proxy-info -path)
 USERNAME=$(whoami)
+
+othersites="T2_US_UCSD"
 
 LOGDIR=${PWD}/submit_logs
 OUTDIR=${PWD}/job_logs  
@@ -59,13 +62,16 @@ fi
 #
    
 #Grid_Resource=gt2 osg-gw-6.t2.ucsd.edu:2119/jobmanager-condor
+Grid_Resource="condor cmssubmit-r1.t2.ucsd.edu glidein-collector.t2.ucsd.edu"
 echo "
-universe=${UNIVERSE}
+Universe=${UNIVERSE}
+Grid_Resource=${Grid_Resource}
 when_to_transfer_output = ON_EXIT
 #the actual executable to run is not transfered by its name.
 #In fact, some sites may do weird things like renaming it and such.
 transfer_input_files=${INPUT}
 +DESIRED_Sites=\"${SITE}\"
++remote_DESIRED_Sites=\"${othersites}\" 
 +Owner = undefined
 log=${LOG}
 output=${OUT}
