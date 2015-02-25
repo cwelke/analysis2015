@@ -88,43 +88,7 @@ void photonLooper::ScanChain ( TChain * chain , const string iter , const string
 	  //~-~-~-~-~-~-~-~~-//
 	  //trigger variables//
 	  //~-~-~-~-~-~-~-~-~//
-
 	  
-	  //~-~-~-~-~-~-~-~-//
-      // event selection// 
-	  //~-~-~-~-~-~-~-~-//
-
-	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
-	  if( zmet.njets()                       < 2     ) continue; // >=2 jets
-	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
-	  // if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
-	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
-	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
-      if( acos( cos( zmet.gamma_phi().at(0)			 
-					 - zmet.met_rawPhi() ) ) < 0.14  ) continue; // kill photons aligned with MET
-	  if( zmet.elveto()                              ) continue; // veto pixel match
-	  if( zmet.ht()                          < 100.0 ) continue; // remove events with low HT for now
-	  
-
-      // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning
-      // if( templates.maxleppt() > 20.0 )                                     continue; // veto leptons pt > 20 GeV
-      // // if( bveto && templates.nbm() > 0 )                                    continue; // apply medium csv b-veto 
-      // // if( bveto && templates.nbl() < 2 )                                    continue; // apply medium csv b-veto 
-      // // if( bveto && templates.nbl() > 0 )                                    continue; // apply loose csv b-veto 
-
-      // if( isdata && !(templates.csc()==0 && 
-	  // 				  templates.hbhe()==1 && 
-	  // 				  templates.hcallaser()==1 && 
-	  // 				  templates.ecallaser()==1 && 
-	  // 				  templates.ecaltp()==1 && 
-	  // 				  templates.trkfail()==1 && 
-	  // 				  templates.eebadsc()==1 && 
-	  // 				  templates.hbhenew()==1) )                             continue; // MET filters
-	  // // if( isdata && (h20 < 1 && h30 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
-	  // if( isdata && (h20 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
-	  
-      ++npass;
-
 	  //-~-~-~-~-~-~-~-~-~-~-~-//
 	  //Deal with event weights//
 	  //-~-~-~-~-~-~-~-~-~-~-~-//
@@ -139,6 +103,37 @@ void photonLooper::ScanChain ( TChain * chain , const string iter , const string
 	  vtxweight = h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));
 	  if( usevtxweight ) weight *= vtxweight;
 
+	  //~-~-~-~-~-~-~-~-//
+      // event selection// 
+	  //~-~-~-~-~-~-~-~-//
+
+	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
+	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
+	  // if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
+	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
+	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
+      if( acos( cos( zmet.gamma_phi().at(0)			 
+					 - zmet.met_rawPhi() ) ) < 0.14  ) continue; // kill photons aligned with MET
+	  if( zmet.elveto()                              ) continue; // veto pixel match
+	  // if( zmet.ht()                          < 100.0 ) continue; // remove events with low HT for now
+	  	  
+	  fillHist( "njets", "2jets", zmet.njets()         , weight );
+	  if( zmet.njets()                       < 2     ) continue; // >=2 jets
+
+
+      // if( isdata && !(templates.csc()==0 && 
+	  // 				  templates.hbhe()==1 && 
+	  // 				  templates.hcallaser()==1 && 
+	  // 				  templates.ecallaser()==1 && 
+	  // 				  templates.ecaltp()==1 && 
+	  // 				  templates.trkfail()==1 && 
+	  // 				  templates.eebadsc()==1 && 
+	  // 				  templates.hbhenew()==1) )                             continue; // MET filters
+	  // // if( isdata && (h20 < 1 && h30 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
+	  // if( isdata && (h20 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
+	  
+      ++npass;
+
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
@@ -147,7 +142,6 @@ void photonLooper::ScanChain ( TChain * chain , const string iter , const string
 	  fillHist( "met"  , "2jets", zmet.met_rawPt()     , weight );
 	  fillHist( "t1met", "2jets", zmet.met_pt()        , weight );
 	  fillHist( "ht"   , "2jets", zmet.ht()            , weight );
-	  fillHist( "njets", "2jets", zmet.njets()         , weight );
 
 	  
 	  // }else{
@@ -228,8 +222,8 @@ void photonLooper::bookHistos(){
 	}
   }
 
-  
-  bookHist("h_templ_met", "h_templ_met", 500,0,500);
+  // example of booking a single hist  
+  // bookHist("h_templ_met", "h_templ_met", 500,0,500);
 
   return;
 }
@@ -282,12 +276,10 @@ void photonLooper::setSample( string samplename ){
 
 string photonLooper::getSample( string samplename ){
   string sample = "";
-  if     ( TString(samplename).Contains("ht100to200") ) sample = "gjets_ht100";
-  else if( TString(samplename).Contains("ht200to400") ) sample = "gjets_ht200";
-  else if( TString(samplename).Contains("ht400to600") ) sample = "gjets_ht400";
-  else if( TString(samplename).Contains("ht600toinf") ) sample = "gjets_ht600";
-  else{
-	cout<<"Sample: "<<samplename<<" not found!"<<endl;
-  }
+  if( TString(samplename).Contains("ht100") ) sample = "gjets_ht100";
+  if( TString(samplename).Contains("ht200") ) sample = "gjets_ht200";
+  if( TString(samplename).Contains("ht400") ) sample = "gjets_ht400";
+  if( TString(samplename).Contains("ht600") ) sample = "gjets_ht600";
+  if( sample == "" ) cout<<"Sample: "<<samplename<<" not found!"<<endl;
   return sample;
 }

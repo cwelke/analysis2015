@@ -200,7 +200,7 @@ void METTemplates::FillTemplate( std::map<std::string, TH1F*> &methists, int nje
   catch ( exception &e )
 	{
 	  std::cout<<Form("Cannot find hist: %s", histname.c_str() )<<std::endl<<"Exiting."<<std::endl;
-	  exit(1);
+	  // exit(1);
 	}  
 }
 
@@ -258,7 +258,7 @@ TH1F* METTemplates::pickTemplate( std::map<std::string, TH1F*> &methists, int nj
   catch ( exception &e )
 	{
 	  std::cout<<Form("Cannot find hist: %s", histname.c_str() )<<std::endl<<"Exiting."<<std::endl;
-	  exit(1);
+	  // exit(1);
 	}  
   return NULL;
 }
