@@ -109,7 +109,6 @@ void photonLooper::ScanChain ( TChain * chain , const string iter , const string
 
 	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
 	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
-	  // if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
 	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
 	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
       if( acos( cos( zmet.gamma_phi().at(0)			 
@@ -141,6 +140,7 @@ void photonLooper::ScanChain ( TChain * chain , const string iter , const string
 	  fillHist( "pt"   , "2jets", zmet.gamma_pt().at(0), weight );
 	  fillHist( "met"  , "2jets", zmet.met_rawPt()     , weight );
 	  fillHist( "t1met", "2jets", zmet.met_pt()        , weight );
+	  if( zmet.gamma_pt().at(0)              < 100   ) continue; // for now, require photon pt > 50 GeV
 	  fillHist( "ht"   , "2jets", zmet.ht()            , weight );
 
 	  
