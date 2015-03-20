@@ -22,6 +22,7 @@
 using namespace std;
 
 const bool debug = false;
+const bool doReweighting = true;
 
 makePhotonTemplates::makePhotonTemplates()
 {
@@ -95,13 +96,13 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
 	  if( zmet.njets()                       < 2     ) continue; // >=2 jets
 	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
-	  if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
+	  // if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
 	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
 	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
       if( acos( cos( zmet.gamma_phi().at(0)			 
 					 - zmet.met_rawPhi() ) ) < 0.14  ) continue; // kill photons aligned with MET
 	  if( zmet.elveto()                              ) continue; // veto pixel match
-	  if( zmet.ht()                          < 100.0 ) continue; // remove events with low HT for now
+	  if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
 	  
 
       // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning
@@ -134,7 +135,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  }
 	  	 
 	  float vtxweight = 1.0;
-	  vtxweight = h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));
+	  if( doReweighting ) vtxweight = h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));
 
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
