@@ -33,28 +33,28 @@ int getVtxWeights()
   // h_num->Sumw2();
   h_den->Sumw2();
   
-  TCut dilep    ("nlep  > 1 ");
+  TCut dilep    ("nlep  > 1 && dilmass > 81 && dilmass < 101");
   TCut dilpt50  ("dilpt > 50");
   TCut gteq2jets("njets > 1 ");
   TCut pt2525   ("lep_pt[0] > 25 && lep_pt[1] > 25");  
   TCut ht100    ("ht > 100");  
+  TCut ht240    ("ht > 240");  
   TCut llonly   ("hyp_type==0||hyp_type==1");  
 
   TCut photon   ("ngamma  > 0");
-  TCut pt22     ("gamma_pt[0]        > 50 ");
+  TCut pt22     ("gamma_pt[0]        > 22 ");
   TCut hoe      ("gamma_hOverE[0]    < 0.1");
   TCut emf      ("matched_neutralemf > 0.7");
   TCut elveto   ("!elveto"                 );
   
   TCut selection;
-  selection = photon+gteq2jets+pt22+ht100+hoe+emf;
+  selection = photon+gteq2jets+pt22+ht240+hoe+emf;
   selection += elveto;
   
   cout<<"Getting photon+jets events."<<endl;
   ch_gjets->Draw("min(nVert, 49.5)>>h_den", selection);
 	
-  selection = dilep+gteq2jets+pt2525+ht100;
-  selection += dilpt50;
+  selection = dilep+gteq2jets+pt2525+ht240;
   selection += llonly;
   
   cout<<"Getting Z+jets events."<<endl;
