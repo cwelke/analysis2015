@@ -26,7 +26,7 @@ void runTemplateLooper( std::string selection = "" ){
 
   if ( sample == "All_MC" ){
 
-	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_m50inc*.root");
+	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_m50inc*.root");
 	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht100to200*.root");
 	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht200to400*.root");
 	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht400to600*.root");

@@ -84,11 +84,11 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //Stitch DY samples//
 	  //~-~-~-~-~-~-~-~-~//
 
-	  if( TString(currentFile->GetTitle()).Contains("m50inc") ){
-		if( zmet.ht() > 100 ) continue;
-	  }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
-		if( zmet.ht() < 100 ) continue;
-	  }
+	  // if( TString(currentFile->GetTitle()).Contains("m50inc") ){
+	  // 	if( zmet.ht() > 100 ) continue;
+	  // }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
+	  // 	if( zmet.ht() < 100 ) continue;
+	  // }
 	
 	  
 	  //~-~-~-~-~-~-~-~~-//
@@ -100,15 +100,16 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
 
-	  if( zmet.nlep()                        < 2    ) continue; // require at least 2 good leptons
-	  if( zmet.njets()                       < 2    ) continue; // >=2 jets
-	  if( zmet.lep_pt().at(0)                < 25   ) continue; // leading lep pT > 25 GeV
-	  if( zmet.lep_pt().at(1)                < 25   ) continue; // tailing lep pT > 25 GeV
-	  if( !(zmet.hyp_type() == 0 ||
-			zmet.hyp_type() == 1 ||
-			zmet.hyp_type() == 2 )                  ) continue; // require explicit dilepton event
-	  if( zmet.ht()                          < 100  ) continue; // HT > 100
-	  if( zmet.dilpt()                       < 50   ) continue; // for now, require 50 GeV dil Z pT cut
+	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
+	  if( zmet.njets()                       < 2         ) continue; // >=2 jets
+	  if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
+	  if( zmet.lep_pt().at(1)                < 25        ) continue; // tailing lep pT > 25 GeV
+	  if( !(zmet.hyp_type() == 0 ||					     
+			zmet.hyp_type() == 1 ||					     
+			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
+	  if( zmet.ht()                          < 240       ) continue; // HT > 100
+	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
+	  // if( zmet.dilpt()                       < 50   ) continue; // for now, require 50 GeV dil Z pT cut
 
       // if( isdata && !(templates.csc()==0 && 
 	  // 				  templates.hbhe()==1 && 
@@ -139,6 +140,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 	  if( zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ){
 		currentMETTemplate = mettemplates.pickTemplate( mettemplate_hists, zmet.njets(), zmet.ht(), zmet.dilpt() );
+		mettemplates.countTemplate( zmet.njets(), zmet.ht(), zmet.dilpt(), weight );
 		// currentMETTemplate->Scale(weight);
 		try
 		  {
@@ -173,7 +175,9 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   cout << npass << " events passing selection" << endl;
 
   mettemplates.NormalizeTemplates(mettemplate_hists);
+  mettemplates.correctBinUncertainty( mettemplate_hists, event_hists.at("h_templ_met") );
 
+  
   if (nEventsChain != nEventsTotal)
     std::cout << "ERROR: number of events from files is not equal to total number of events" << std::endl;
   
