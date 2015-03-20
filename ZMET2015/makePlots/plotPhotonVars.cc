@@ -23,54 +23,11 @@ void plotPhotonVars()
   filename = "../output/photon/V00-00-00/All_MC_photon_hists.root";
   std::cout<<"Reading hists from file: "<<filename<<endl;
 
-  makeAndSavePlot( "pt"   , "2jets", 10, true );
-  makeAndSavePlot( "ht"   , "2jets", 25, true );
-  makeAndSavePlot( "met"  , "2jets", 10, true );
-  makeAndSavePlot( "t1met", "2jets", 10, true );
+  makeAndSavePlot( "pt"   , "2jets", 5, true );
+  makeAndSavePlot( "ht"   , "2jets", 10, true );
+  makeAndSavePlot( "met"  , "2jets", 5, true );
+  makeAndSavePlot( "t1met", "2jets", 5, true );
   makeAndSavePlot( "njets", "2jets", 1, true );
-
-  // infile->cd();
-  // TIter iKey(infile->GetListOfKeys());
-  // TKey* key=0;
-  // while((key=(TKey*)iKey())) {
-  // 	TH1* hist=(TH1*)key->ReadObjectAny(TH1::Class());
-  // 	string histname = hist->GetName();
-  // 	// cout<<"Name:  "<<TString(hist->GetName())<<endl;
-  // 	string histtitle = hist->GetTitle();
-  // 	// cout<<"Title: "<<TString(hist->GetTitle())<<endl;
-
-  // 	c1->cd();
-  // 	c1->SetLogy(true);
-  // 	hist->Rebin(rebin);
-  //   double entries = hist->GetEntries();
-  // 	hist->GetXaxis()->SetTitle(Form("E_{T}^{miss}; %i entries",(int)entries));
-  // 	hist->GetYaxis()->SetTitle(Form("Normalized Entries/%i GeV",rebin));
-  // 	hist->GetYaxis()->SetRangeUser(1e-6,1);
-  // 	hist->Draw("histe1");
-
-  // 	string outfile = outputdir+histtitle+".png";	
-  // 	c1->SaveAs(outfile.c_str());
-  //   // outfile = outputdir+histtitle+".ps";
-  // 	// c1->SaveAs(outfile.c_str());
-	
-  // }
-// h_incl_ht_2jets
-// h_incl_njets_2jets
-
-  // std::map<std::string, TH1F*> m_met_2jets;
-  // addHistToMap( "h_incl_met_2jets" , m_met_2jets, infile );
-  // addHistToMap( "h_ht100_met_2jets", m_met_2jets, infile );
-  // addHistToMap( "h_ht200_met_2jets", m_met_2jets, infile );
-  // addHistToMap( "h_ht400_met_2jets", m_met_2jets, infile );
-  // addHistToMap( "h_ht600_met_2jets", m_met_2jets, infile );
-
-  // std::map<std::string, TH1F*> m_t1met_2jets;
-  // addHistToMap( "h_incl_t1met_2jets" , m_t1met_2jets, infile );
-  // addHistToMap( "h_ht100_t1met_2jets", m_t1met_2jets, infile );
-  // addHistToMap( "h_ht200_t1met_2jets", m_t1met_2jets, infile );
-  // addHistToMap( "h_ht400_t1met_2jets", m_t1met_2jets, infile );
-  // addHistToMap( "h_ht600_t1met_2jets", m_t1met_2jets, infile );
-
 
   return;
 }
