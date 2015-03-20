@@ -3,6 +3,7 @@
 #include <map>
 
 #include "TH1.h"
+#include "TMath.h"
 #include "TH1F.h"
 #include "TFile.h"
 #include "TCollection.h"
@@ -19,6 +20,31 @@ METTemplates::METTemplates()
   photon_ptcuts.clear();
   photon_njetcuts.clear();
   photon_htcuts.clear();
+  met_counts.clear();
+
+
+  setBins();
+  size_t njetcuts = photon_njetcuts.size();  
+  size_t nhtcuts  = photon_htcuts  .size();  
+  size_t nptcuts  = photon_ptcuts  .size();  
+  for(  size_t njets_ind = 0; njets_ind < njetcuts; njets_ind++ ){
+	for(   size_t ht_ind = 0;    ht_ind <  nhtcuts;    ht_ind++ ){
+	  for( size_t pt_ind = 0;    pt_ind <  nptcuts;    pt_ind++ ){
+		string counts = Form("ncount_%i_%i_%i"
+							 , static_cast<int>(njets_ind)
+							 , static_cast<int>(ht_ind)
+							 , static_cast<int>(pt_ind)
+							 );
+		cout<<"methistname: "<<counts<<endl;
+		met_counts.insert( pair<std::string,double>( counts.c_str(), 0.0) );
+	  }
+	}
+  }
+  photon_ptcuts.clear();
+  photon_njetcuts.clear();
+  photon_htcuts.clear();
+  // exit(3);
+
 }
 
 METTemplates::~METTemplates()
@@ -26,11 +52,11 @@ METTemplates::~METTemplates()
   photon_ptcuts.clear();
   photon_njetcuts.clear();
   photon_htcuts.clear();
+  met_counts.clear();
 }
 
 void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
 {
-
   size_t njetcuts = photon_njetcuts.size();  
   size_t nhtcuts  = photon_htcuts  .size();  
   size_t nptcuts  = photon_ptcuts  .size();  
@@ -53,58 +79,33 @@ void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
 	  }
 	}
   }
-
-  // need to add these to the photon looper to make them decoupled from the templates class
-		// methists.insert ( pair<std::string,TH1F*>("photon_pt", new TH1F("photon_pt", "", 1000.0, 0, 1000.0)));
-		// methists.at("photon_pt")->Sumw2();	  
-		// methists.insert ( pair<std::string,TH1F*>("ht", new TH1F("ht", "", 1000.0, 0, 1000.0)));
-		// methists.at("ht")->Sumw2();	  
-		// methists.insert ( pair<std::string,TH1F*>("met", new TH1F("met", "", 400.0, 0, 400.0)));
-		// methists.at("met")->Sumw2();	  
-
-		// methists.insert ( pair<std::string,TH1F*>("photon_pt_ht100", new TH1F("photon_pt_ht100", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("photon_pt_ht200", new TH1F("photon_pt_ht200", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("photon_pt_ht400", new TH1F("photon_pt_ht400", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("photon_pt_ht600", new TH1F("photon_pt_ht600", "", 1000.0, 0, 1000.0)));
-		// methists.at("photon_pt_ht100")->Sumw2();	  
-		// methists.at("photon_pt_ht200")->Sumw2();	  
-		// methists.at("photon_pt_ht400")->Sumw2();	  
-		// methists.at("photon_pt_ht600")->Sumw2();	  
-
-		// methists.insert ( pair<std::string,TH1F*>("ht_ht100", new TH1F("ht_ht100", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("ht_ht200", new TH1F("ht_ht200", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("ht_ht400", new TH1F("ht_ht400", "", 1000.0, 0, 1000.0)));
-		// methists.insert ( pair<std::string,TH1F*>("ht_ht600", new TH1F("ht_ht600", "", 1000.0, 0, 1000.0)));
-		// methists.at("ht_ht100")->Sumw2();	  
-		// methists.at("ht_ht200")->Sumw2();	  
-		// methists.at("ht_ht400")->Sumw2();	  
-		// methists.at("ht_ht600")->Sumw2();	  
-
-		// methists.insert ( pair<std::string,TH1F*>("met_ht100", new TH1F("met_ht100", "", 400.0, 0, 400.0)));
-		// methists.insert ( pair<std::string,TH1F*>("met_ht200", new TH1F("met_ht200", "", 400.0, 0, 400.0)));
-		// methists.insert ( pair<std::string,TH1F*>("met_ht400", new TH1F("met_ht400", "", 400.0, 0, 400.0)));
-		// methists.insert ( pair<std::string,TH1F*>("met_ht600", new TH1F("met_ht600", "", 400.0, 0, 400.0)));
-		// methists.at("met_ht100")->Sumw2();	  
-		// methists.at("met_ht200")->Sumw2();	  
-		// methists.at("met_ht400")->Sumw2();	  
-		// methists.at("met_ht600")->Sumw2();	  
-
+  return;
 }
 
 void METTemplates::setBins()
 {
 
   //set photon pT cuts
-  photon_ptcuts.push_back(22);
-  photon_ptcuts.push_back(30);
-  photon_ptcuts.push_back(36);
+  // photon_ptcuts.push_back(25);
+  // photon_ptcuts.push_back(30);
+  // photon_ptcuts.push_back(36);
+  // photon_ptcuts.push_back(50);
+  // photon_ptcuts.push_back(75);
+  // photon_ptcuts.push_back(90);
+  // photon_ptcuts.push_back(120);
+  // photon_ptcuts.push_back(165);
+  // photon_ptcuts.push_back(200);
+  // photon_ptcuts.push_back(250);
+
   photon_ptcuts.push_back(50);
-  photon_ptcuts.push_back(75);
-  photon_ptcuts.push_back(90);
-  photon_ptcuts.push_back(120);
-  photon_ptcuts.push_back(165);
+  photon_ptcuts.push_back(100);
+  // photon_ptcuts.push_back(120);
+  photon_ptcuts.push_back(150);
   photon_ptcuts.push_back(200);
-  photon_ptcuts.push_back(250);
+  photon_ptcuts.push_back(400);
+  photon_ptcuts.push_back(600);
+  // photon_ptcuts.push_back(600);
+  photon_ptcuts.push_back(800);
 
   //set photon njets cuts
   photon_njetcuts.push_back(2);
@@ -120,7 +121,14 @@ void METTemplates::setBins()
   photon_htcuts.push_back(280);
   photon_htcuts.push_back(320);
   photon_htcuts.push_back(360);
-  photon_htcuts.push_back(400);
+  // photon_htcuts.push_back(400);
+  // photon_htcuts.push_back(500);
+  // photon_htcuts.push_back(600);
+  // photon_htcuts.push_back(750);
+  photon_htcuts.push_back(1000);
+  photon_htcuts.push_back(1500);
+  photon_htcuts.push_back(2000);
+  // photon_htcuts.push_back(2500);
 
 }
 
@@ -208,6 +216,7 @@ void METTemplates::NormalizeTemplates( std::map<std::string, TH1F*> &methists )
 {
   for (std::map<std::string, TH1F*>::iterator itr = methists.begin(); itr != methists.end(); itr++){
 	if( itr->second->GetEntries() > 0 ){
+	  // cout<<itr->first<<endl;
 	  itr->second->Scale(1.0/itr->second->GetSumOfWeights());
 	}
   }
@@ -266,5 +275,57 @@ TH1F* METTemplates::pickTemplate( std::map<std::string, TH1F*> &methists, int nj
 void METTemplates::normalizeTemplate( TH1F * &current_template )
 {
   current_template->Scale(1.0/current_template->GetSumOfWeights());
+  return;
+}
+
+
+void METTemplates::countTemplate( int njets, float ht, float pt, double weight ){
+  int njets_ind = static_cast<int>(getNjetsBin(njets));
+  int ht_ind    = static_cast<int>(getHTBin(ht));
+  int pt_ind    = static_cast<int>(getpTBin(pt));
+  met_counts.at(Form("ncount_%i_%i_%i",njets_ind,ht_ind,pt_ind)) += weight;
+  return;
+}
+
+void METTemplates::correctBinUncertainty( std::map<std::string, TH1F*> &methists, TH1F * &h_mettotal ){
+  string histname = "";
+  size_t njetcuts = photon_njetcuts.size();  
+  size_t nhtcuts  = photon_htcuts  .size();  
+  size_t nptcuts  = photon_ptcuts  .size();  
+  for( int bin_ind = 0; bin_ind < h_mettotal->GetNbinsX() + 1; bin_ind++ ){
+	//loop over all MET bins
+    double corrected_unc = 0.0;
+	//get corrected uncertainty with sqrt(N)*bin_unc
+	for(  size_t njets_ind = 0; njets_ind < njetcuts; njets_ind++ ){
+	  for(   size_t ht_ind = 0;    ht_ind <  nhtcuts;    ht_ind++ ){
+		for( size_t pt_ind = 0;    pt_ind <  nptcuts;    pt_ind++ ){
+		  histname = Form("h_template_njetsind_%i_htind_%i_ptind_%i"
+						  , static_cast<int>(njets_ind)
+						  , static_cast<int>(ht_ind)
+						  , static_cast<int>(pt_ind) );
+		  try
+			{
+			  // cout<<met_counts.at(Form("ncount_%i_%i_%i"
+			  // 						   , static_cast<int>(njets_ind)
+			  // 						   , static_cast<int>(ht_ind)
+			  // 						   , static_cast<int>(pt_ind)
+			  // 						   ))<<endl;
+			  corrected_unc += pow( methists.at(histname.c_str())->GetBinError(bin_ind)*met_counts.at(Form("ncount_%i_%i_%i"
+																										   , static_cast<int>(njets_ind)
+																										   , static_cast<int>(ht_ind)
+																										   , static_cast<int>(pt_ind)
+																										   )),2);
+			}
+		  catch ( exception &e )
+			{
+			  // cout<<"Histname: "<<histname<<endl;
+			  // exit(2);
+			}
+		}
+	  }
+	}
+	// cout<<"Uncertainty: "<<sqrt(corrected_unc)<<endl;
+	h_mettotal->SetBinError(bin_ind,sqrt(corrected_unc));
+  }
   return;
 }
