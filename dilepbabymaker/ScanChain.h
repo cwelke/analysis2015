@@ -67,6 +67,7 @@ class babyMaker {
 
   Int_t           njets;
   Float_t         ht;
+  Float_t         gen_ht;
   Int_t           njets_eta30;
   Float_t         ht_eta30;
 

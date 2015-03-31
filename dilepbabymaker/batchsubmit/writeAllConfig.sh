@@ -4,7 +4,7 @@
 # All MT2 related datasets available on hadoop
 #
 
-TAG="V00-00-07"
+TAG="V00-00-09"
 
 #
 # DATA
@@ -15,7 +15,7 @@ TAG="V00-00-07"
 #
 
 # ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TT_Tune4C_13TeV-pythia8-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v1/V07-02-03                      ${TAG}_ttall
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-06 ${TAG}_ttall_msdecays
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08 ${TAG}_ttall_msdecays
 
 #
 # DY+JETS
@@ -78,7 +78,7 @@ TAG="V00-00-07"
 # DIBOSON
 #
 
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WZJetsTo3LNu_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05 ${TAG}_wz_3lnu
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/WZJetsTo3LNu_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08 ${TAG}_wz_3lnu
 ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/ZZTo4L_Tune4C_13TeV-powheg-pythia8_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-03        ${TAG}_zz_4l
 
 #
@@ -89,8 +89,8 @@ TAG="V00-00-07"
 # TTV
 #
 
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTWJets_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05           ${TAG}_ttw
-./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTZJets_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-05           ${TAG}_ttz
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTWJets_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08           ${TAG}_ttw
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTZJets_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08           ${TAG}_ttz
 ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/TTbarH_M-125_13TeV_amcatnlo-pythia8-tauola_Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v2/V07-02-03 ${TAG}_tth
 
 #

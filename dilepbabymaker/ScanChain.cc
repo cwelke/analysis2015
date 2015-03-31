@@ -185,6 +185,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       ngenLep        = 0;
       ngenTau        = 0;
       ngenLepFromTau = 0;
+      gen_ht         = 0;
+
       for(unsigned int iGen = 0; iGen < cms3.genps_p4().size(); iGen++){
         genPart_pt       .push_back( cms3.genps_p4()              .at(iGen).pt());
         genPart_eta      .push_back( cms3.genps_p4()              .at(iGen).eta());
@@ -196,6 +198,14 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		genPart_motherId .push_back( cms3.genps_id_simplemother() .at(iGen));
 		genPart_grandmaId.push_back( cms3.genps_id_simplegrandma().at(iGen));
         ngenPart++;
+
+		//calculate gen_ht for stitching purposes
+		if((abs(cms3.genps_id().at(iGen)) <  6 || // quarks
+			abs(cms3.genps_id().at(iGen)) == 21)  // gluons
+		   && (cms3.genps_status().at(iGen) == 22 || // something to do with "status 3"
+			   cms3.genps_status().at(iGen) == 23)){
+		  gen_ht += cms3.genps_p4()              .at(iGen).pt();
+		}
 
 		// save lepton info
 		int pdgId = abs(cms3.genps_id().at(iGen));
@@ -842,6 +852,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
 
   BabyTree_->Branch("njets", &njets );
   BabyTree_->Branch("ht", &ht );
+  BabyTree_->Branch("gen_ht", &gen_ht );
   BabyTree_->Branch("njets_eta30", &njets_eta30 );
   BabyTree_->Branch("ht_eta30", &ht_eta30 );
 
@@ -1035,8 +1046,9 @@ void babyMaker::InitBabyNtuple () {
   nTaus20 = -999;
   nGammas20 = -999;
 
-  njets = -999;
-  ht    = -999.0;
+  njets  = -999;
+  ht     = -999.0;
+  gen_ht = -999.0;
  
   njets_eta30 = -999;
   ht_eta30    = -999.0;
