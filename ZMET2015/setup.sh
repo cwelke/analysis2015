@@ -1,3 +1,8 @@
+#! /bin/bash
 
+source settings.sh
 
-ln -s /nfs-7/userdata/cwelke/output
+link_output
+create_analysis_output
+create_photon_output
+create_plot_output

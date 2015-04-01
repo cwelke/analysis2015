@@ -19,10 +19,10 @@ double getBinomialError( const double num, const double deno ){
   return error;  
 }
 
-void compareMET()
+void compareMET( std::string iter = "")
 {
 
-  std::string filename = "../output/V00-00-00/All_MC_hists.root";
+  std::string filename = Form("../output/%s/All_MC_hists.root", iter.c_str() );
   TFile *infile = new TFile(filename.c_str());
 
   TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_2jets")->Clone("h_zll");
@@ -190,8 +190,8 @@ void compareMET()
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
-  c1->SaveAs("../output/ZMET2015/V00-00-00/plots/Closure/h_met_closure.png");
-  c1->SaveAs("../output/ZMET2015/V00-00-00/plots/Closure/h_met_closure.pdf");
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.png", iter.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.pdf", iter.c_str() ));
   
   return;
 }

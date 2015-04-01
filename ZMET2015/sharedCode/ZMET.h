@@ -12,7 +12,7 @@
 #include <vector> 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
-// #define PARANOIA
+#define PARANOIA
 
 using namespace std; 
 class ZMET {
@@ -67,6 +67,9 @@ protected:
 	float	ht_;
 	TBranch *ht_branch;
 	bool ht_isLoaded;
+	float	gen_ht_;
+	TBranch *gen_ht_branch;
+	bool gen_ht_isLoaded;
 	int	njets_eta30_;
 	TBranch *njets_eta30_branch;
 	bool njets_eta30_isLoaded;
@@ -606,6 +609,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("ht") != 0) {
 		ht_branch = tree->GetBranch("ht");
 		if (ht_branch) {ht_branch->SetAddress(&ht_);}
+	}
+	gen_ht_branch = 0;
+	if (tree->GetBranch("gen_ht") != 0) {
+		gen_ht_branch = tree->GetBranch("gen_ht");
+		if (gen_ht_branch) {gen_ht_branch->SetAddress(&gen_ht_);}
 	}
 	njets_eta30_branch = 0;
 	if (tree->GetBranch("njets_eta30") != 0) {
@@ -1324,6 +1332,7 @@ void GetEntry(unsigned int idx)
 		rho25_isLoaded = false;
 		njets_isLoaded = false;
 		ht_isLoaded = false;
+		gen_ht_isLoaded = false;
 		njets_eta30_isLoaded = false;
 		ht_eta30_isLoaded = false;
 		mt2_isLoaded = false;
@@ -1489,6 +1498,7 @@ void LoadAllBranches()
 	if (rho25_branch != 0) rho25();
 	if (njets_branch != 0) njets();
 	if (ht_branch != 0) ht();
+	if (gen_ht_branch != 0) gen_ht();
 	if (njets_eta30_branch != 0) njets_eta30();
 	if (ht_eta30_branch != 0) ht_eta30();
 	if (mt2_branch != 0) mt2();
@@ -1874,6 +1884,21 @@ void LoadAllBranches()
 			ht_isLoaded = true;
 		}
 		return ht_;
+	}
+	float &gen_ht()
+	{
+		if (not gen_ht_isLoaded) {
+			if (gen_ht_branch != 0) {
+				gen_ht_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_ht_branch does not exist!\n");
+				exit(1);
+			}
+			gen_ht_isLoaded = true;
+		}
+		return gen_ht_;
 	}
 	int &njets_eta30()
 	{
@@ -2565,7 +2590,7 @@ void LoadAllBranches()
 		}
 		return nlep_;
 	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4()
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4()
 	{
 		if (not lep_p4_isLoaded) {
 			if (lep_p4_branch != 0) {
@@ -2588,7 +2613,7 @@ void LoadAllBranches()
 		}
 		return *lep_p4_;
 	}
-	const vector<float> &lep_pt()
+	vector<float> &lep_pt()
 	{
 		if (not lep_pt_isLoaded) {
 			if (lep_pt_branch != 0) {
@@ -2609,7 +2634,7 @@ void LoadAllBranches()
 		}
 		return *lep_pt_;
 	}
-	const vector<float> &lep_eta()
+	vector<float> &lep_eta()
 	{
 		if (not lep_eta_isLoaded) {
 			if (lep_eta_branch != 0) {
@@ -2630,7 +2655,7 @@ void LoadAllBranches()
 		}
 		return *lep_eta_;
 	}
-	const vector<float> &lep_phi()
+	vector<float> &lep_phi()
 	{
 		if (not lep_phi_isLoaded) {
 			if (lep_phi_branch != 0) {
@@ -2651,7 +2676,7 @@ void LoadAllBranches()
 		}
 		return *lep_phi_;
 	}
-	const vector<float> &lep_mass()
+	vector<float> &lep_mass()
 	{
 		if (not lep_mass_isLoaded) {
 			if (lep_mass_branch != 0) {
@@ -2672,7 +2697,7 @@ void LoadAllBranches()
 		}
 		return *lep_mass_;
 	}
-	const vector<int> &lep_charge()
+	vector<int> &lep_charge()
 	{
 		if (not lep_charge_isLoaded) {
 			if (lep_charge_branch != 0) {
@@ -2687,7 +2712,7 @@ void LoadAllBranches()
 		}
 		return *lep_charge_;
 	}
-	const vector<int> &lep_pdgId()
+	vector<int> &lep_pdgId()
 	{
 		if (not lep_pdgId_isLoaded) {
 			if (lep_pdgId_branch != 0) {
@@ -2702,7 +2727,7 @@ void LoadAllBranches()
 		}
 		return *lep_pdgId_;
 	}
-	const vector<float> &lep_dxy()
+	vector<float> &lep_dxy()
 	{
 		if (not lep_dxy_isLoaded) {
 			if (lep_dxy_branch != 0) {
@@ -2723,7 +2748,7 @@ void LoadAllBranches()
 		}
 		return *lep_dxy_;
 	}
-	const vector<float> &lep_dz()
+	vector<float> &lep_dz()
 	{
 		if (not lep_dz_isLoaded) {
 			if (lep_dz_branch != 0) {
@@ -2744,7 +2769,7 @@ void LoadAllBranches()
 		}
 		return *lep_dz_;
 	}
-	const vector<int> &lep_tightId()
+	vector<int> &lep_tightId()
 	{
 		if (not lep_tightId_isLoaded) {
 			if (lep_tightId_branch != 0) {
@@ -2759,7 +2784,7 @@ void LoadAllBranches()
 		}
 		return *lep_tightId_;
 	}
-	const vector<float> &lep_relIso03()
+	vector<float> &lep_relIso03()
 	{
 		if (not lep_relIso03_isLoaded) {
 			if (lep_relIso03_branch != 0) {
@@ -2780,7 +2805,7 @@ void LoadAllBranches()
 		}
 		return *lep_relIso03_;
 	}
-	const vector<float> &lep_relIso04()
+	vector<float> &lep_relIso04()
 	{
 		if (not lep_relIso04_isLoaded) {
 			if (lep_relIso04_branch != 0) {
@@ -2801,7 +2826,7 @@ void LoadAllBranches()
 		}
 		return *lep_relIso04_;
 	}
-	const vector<int> &lep_mcMatchId()
+	vector<int> &lep_mcMatchId()
 	{
 		if (not lep_mcMatchId_isLoaded) {
 			if (lep_mcMatchId_branch != 0) {
@@ -2816,7 +2841,7 @@ void LoadAllBranches()
 		}
 		return *lep_mcMatchId_;
 	}
-	const vector<int> &lep_lostHits()
+	vector<int> &lep_lostHits()
 	{
 		if (not lep_lostHits_isLoaded) {
 			if (lep_lostHits_branch != 0) {
@@ -2831,7 +2856,7 @@ void LoadAllBranches()
 		}
 		return *lep_lostHits_;
 	}
-	const vector<int> &lep_convVeto()
+	vector<int> &lep_convVeto()
 	{
 		if (not lep_convVeto_isLoaded) {
 			if (lep_convVeto_branch != 0) {
@@ -2846,7 +2871,7 @@ void LoadAllBranches()
 		}
 		return *lep_convVeto_;
 	}
-	const vector<int> &lep_tightCharge()
+	vector<int> &lep_tightCharge()
 	{
 		if (not lep_tightCharge_isLoaded) {
 			if (lep_tightCharge_branch != 0) {
@@ -2876,7 +2901,7 @@ void LoadAllBranches()
 		}
 		return ntau_;
 	}
-	const vector<float> &tau_pt()
+	vector<float> &tau_pt()
 	{
 		if (not tau_pt_isLoaded) {
 			if (tau_pt_branch != 0) {
@@ -2897,7 +2922,7 @@ void LoadAllBranches()
 		}
 		return *tau_pt_;
 	}
-	const vector<float> &tau_eta()
+	vector<float> &tau_eta()
 	{
 		if (not tau_eta_isLoaded) {
 			if (tau_eta_branch != 0) {
@@ -2918,7 +2943,7 @@ void LoadAllBranches()
 		}
 		return *tau_eta_;
 	}
-	const vector<float> &tau_phi()
+	vector<float> &tau_phi()
 	{
 		if (not tau_phi_isLoaded) {
 			if (tau_phi_branch != 0) {
@@ -2939,7 +2964,7 @@ void LoadAllBranches()
 		}
 		return *tau_phi_;
 	}
-	const vector<float> &tau_mass()
+	vector<float> &tau_mass()
 	{
 		if (not tau_mass_isLoaded) {
 			if (tau_mass_branch != 0) {
@@ -2960,7 +2985,7 @@ void LoadAllBranches()
 		}
 		return *tau_mass_;
 	}
-	const vector<int> &tau_charge()
+	vector<int> &tau_charge()
 	{
 		if (not tau_charge_isLoaded) {
 			if (tau_charge_branch != 0) {
@@ -2975,7 +3000,7 @@ void LoadAllBranches()
 		}
 		return *tau_charge_;
 	}
-	const vector<float> &tau_dxy()
+	vector<float> &tau_dxy()
 	{
 		if (not tau_dxy_isLoaded) {
 			if (tau_dxy_branch != 0) {
@@ -2996,7 +3021,7 @@ void LoadAllBranches()
 		}
 		return *tau_dxy_;
 	}
-	const vector<float> &tau_dz()
+	vector<float> &tau_dz()
 	{
 		if (not tau_dz_isLoaded) {
 			if (tau_dz_branch != 0) {
@@ -3017,7 +3042,7 @@ void LoadAllBranches()
 		}
 		return *tau_dz_;
 	}
-	const vector<int> &tau_idCI3hit()
+	vector<int> &tau_idCI3hit()
 	{
 		if (not tau_idCI3hit_isLoaded) {
 			if (tau_idCI3hit_branch != 0) {
@@ -3032,7 +3057,7 @@ void LoadAllBranches()
 		}
 		return *tau_idCI3hit_;
 	}
-	const vector<float> &tau_isoCI3hit()
+	vector<float> &tau_isoCI3hit()
 	{
 		if (not tau_isoCI3hit_isLoaded) {
 			if (tau_isoCI3hit_branch != 0) {
@@ -3068,7 +3093,7 @@ void LoadAllBranches()
 		}
 		return ngamma_;
 	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gamma_p4()
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gamma_p4()
 	{
 		if (not gamma_p4_isLoaded) {
 			if (gamma_p4_branch != 0) {
@@ -3091,7 +3116,7 @@ void LoadAllBranches()
 		}
 		return *gamma_p4_;
 	}
-	const vector<float> &gamma_pt()
+	vector<float> &gamma_pt()
 	{
 		if (not gamma_pt_isLoaded) {
 			if (gamma_pt_branch != 0) {
@@ -3112,7 +3137,7 @@ void LoadAllBranches()
 		}
 		return *gamma_pt_;
 	}
-	const vector<float> &gamma_eta()
+	vector<float> &gamma_eta()
 	{
 		if (not gamma_eta_isLoaded) {
 			if (gamma_eta_branch != 0) {
@@ -3133,7 +3158,7 @@ void LoadAllBranches()
 		}
 		return *gamma_eta_;
 	}
-	const vector<float> &gamma_phi()
+	vector<float> &gamma_phi()
 	{
 		if (not gamma_phi_isLoaded) {
 			if (gamma_phi_branch != 0) {
@@ -3154,7 +3179,7 @@ void LoadAllBranches()
 		}
 		return *gamma_phi_;
 	}
-	const vector<float> &gamma_mass()
+	vector<float> &gamma_mass()
 	{
 		if (not gamma_mass_isLoaded) {
 			if (gamma_mass_branch != 0) {
@@ -3175,7 +3200,7 @@ void LoadAllBranches()
 		}
 		return *gamma_mass_;
 	}
-	const vector<int> &gamma_mcMatchId()
+	vector<int> &gamma_mcMatchId()
 	{
 		if (not gamma_mcMatchId_isLoaded) {
 			if (gamma_mcMatchId_branch != 0) {
@@ -3190,7 +3215,7 @@ void LoadAllBranches()
 		}
 		return *gamma_mcMatchId_;
 	}
-	const vector<float> &gamma_genIso()
+	vector<float> &gamma_genIso()
 	{
 		if (not gamma_genIso_isLoaded) {
 			if (gamma_genIso_branch != 0) {
@@ -3211,7 +3236,7 @@ void LoadAllBranches()
 		}
 		return *gamma_genIso_;
 	}
-	const vector<float> &gamma_chHadIso()
+	vector<float> &gamma_chHadIso()
 	{
 		if (not gamma_chHadIso_isLoaded) {
 			if (gamma_chHadIso_branch != 0) {
@@ -3232,7 +3257,7 @@ void LoadAllBranches()
 		}
 		return *gamma_chHadIso_;
 	}
-	const vector<float> &gamma_neuHadIso()
+	vector<float> &gamma_neuHadIso()
 	{
 		if (not gamma_neuHadIso_isLoaded) {
 			if (gamma_neuHadIso_branch != 0) {
@@ -3253,7 +3278,7 @@ void LoadAllBranches()
 		}
 		return *gamma_neuHadIso_;
 	}
-	const vector<float> &gamma_phIso()
+	vector<float> &gamma_phIso()
 	{
 		if (not gamma_phIso_isLoaded) {
 			if (gamma_phIso_branch != 0) {
@@ -3274,7 +3299,7 @@ void LoadAllBranches()
 		}
 		return *gamma_phIso_;
 	}
-	const vector<float> &gamma_sigmaIetaIeta()
+	vector<float> &gamma_sigmaIetaIeta()
 	{
 		if (not gamma_sigmaIetaIeta_isLoaded) {
 			if (gamma_sigmaIetaIeta_branch != 0) {
@@ -3295,7 +3320,7 @@ void LoadAllBranches()
 		}
 		return *gamma_sigmaIetaIeta_;
 	}
-	const vector<float> &gamma_r9()
+	vector<float> &gamma_r9()
 	{
 		if (not gamma_r9_isLoaded) {
 			if (gamma_r9_branch != 0) {
@@ -3316,7 +3341,7 @@ void LoadAllBranches()
 		}
 		return *gamma_r9_;
 	}
-	const vector<float> &gamma_hOverE()
+	vector<float> &gamma_hOverE()
 	{
 		if (not gamma_hOverE_isLoaded) {
 			if (gamma_hOverE_branch != 0) {
@@ -3337,7 +3362,7 @@ void LoadAllBranches()
 		}
 		return *gamma_hOverE_;
 	}
-	const vector<int> &gamma_idCutBased()
+	vector<int> &gamma_idCutBased()
 	{
 		if (not gamma_idCutBased_isLoaded) {
 			if (gamma_idCutBased_branch != 0) {
@@ -3367,7 +3392,7 @@ void LoadAllBranches()
 		}
 		return ngenPart_;
 	}
-	const vector<float> &genPart_pt()
+	vector<float> &genPart_pt()
 	{
 		if (not genPart_pt_isLoaded) {
 			if (genPart_pt_branch != 0) {
@@ -3388,7 +3413,7 @@ void LoadAllBranches()
 		}
 		return *genPart_pt_;
 	}
-	const vector<float> &genPart_eta()
+	vector<float> &genPart_eta()
 	{
 		if (not genPart_eta_isLoaded) {
 			if (genPart_eta_branch != 0) {
@@ -3409,7 +3434,7 @@ void LoadAllBranches()
 		}
 		return *genPart_eta_;
 	}
-	const vector<float> &genPart_phi()
+	vector<float> &genPart_phi()
 	{
 		if (not genPart_phi_isLoaded) {
 			if (genPart_phi_branch != 0) {
@@ -3430,7 +3455,7 @@ void LoadAllBranches()
 		}
 		return *genPart_phi_;
 	}
-	const vector<float> &genPart_mass()
+	vector<float> &genPart_mass()
 	{
 		if (not genPart_mass_isLoaded) {
 			if (genPart_mass_branch != 0) {
@@ -3451,7 +3476,7 @@ void LoadAllBranches()
 		}
 		return *genPart_mass_;
 	}
-	const vector<int> &genPart_pdgId()
+	vector<int> &genPart_pdgId()
 	{
 		if (not genPart_pdgId_isLoaded) {
 			if (genPart_pdgId_branch != 0) {
@@ -3466,7 +3491,7 @@ void LoadAllBranches()
 		}
 		return *genPart_pdgId_;
 	}
-	const vector<int> &genPart_status()
+	vector<int> &genPart_status()
 	{
 		if (not genPart_status_isLoaded) {
 			if (genPart_status_branch != 0) {
@@ -3481,7 +3506,7 @@ void LoadAllBranches()
 		}
 		return *genPart_status_;
 	}
-	const vector<float> &genPart_charge()
+	vector<float> &genPart_charge()
 	{
 		if (not genPart_charge_isLoaded) {
 			if (genPart_charge_branch != 0) {
@@ -3502,7 +3527,7 @@ void LoadAllBranches()
 		}
 		return *genPart_charge_;
 	}
-	const vector<int> &genPart_motherId()
+	vector<int> &genPart_motherId()
 	{
 		if (not genPart_motherId_isLoaded) {
 			if (genPart_motherId_branch != 0) {
@@ -3517,7 +3542,7 @@ void LoadAllBranches()
 		}
 		return *genPart_motherId_;
 	}
-	const vector<int> &genPart_grandmaId()
+	vector<int> &genPart_grandmaId()
 	{
 		if (not genPart_grandmaId_isLoaded) {
 			if (genPart_grandmaId_branch != 0) {
@@ -3577,7 +3602,7 @@ void LoadAllBranches()
 		}
 		return ngenLep_;
 	}
-	const vector<float> &genLep_pt()
+	vector<float> &genLep_pt()
 	{
 		if (not genLep_pt_isLoaded) {
 			if (genLep_pt_branch != 0) {
@@ -3598,7 +3623,7 @@ void LoadAllBranches()
 		}
 		return *genLep_pt_;
 	}
-	const vector<float> &genLep_eta()
+	vector<float> &genLep_eta()
 	{
 		if (not genLep_eta_isLoaded) {
 			if (genLep_eta_branch != 0) {
@@ -3619,7 +3644,7 @@ void LoadAllBranches()
 		}
 		return *genLep_eta_;
 	}
-	const vector<float> &genLep_phi()
+	vector<float> &genLep_phi()
 	{
 		if (not genLep_phi_isLoaded) {
 			if (genLep_phi_branch != 0) {
@@ -3640,7 +3665,7 @@ void LoadAllBranches()
 		}
 		return *genLep_phi_;
 	}
-	const vector<float> &genLep_mass()
+	vector<float> &genLep_mass()
 	{
 		if (not genLep_mass_isLoaded) {
 			if (genLep_mass_branch != 0) {
@@ -3661,7 +3686,7 @@ void LoadAllBranches()
 		}
 		return *genLep_mass_;
 	}
-	const vector<int> &genLep_pdgId()
+	vector<int> &genLep_pdgId()
 	{
 		if (not genLep_pdgId_isLoaded) {
 			if (genLep_pdgId_branch != 0) {
@@ -3676,7 +3701,7 @@ void LoadAllBranches()
 		}
 		return *genLep_pdgId_;
 	}
-	const vector<int> &genLep_status()
+	vector<int> &genLep_status()
 	{
 		if (not genLep_status_isLoaded) {
 			if (genLep_status_branch != 0) {
@@ -3691,7 +3716,7 @@ void LoadAllBranches()
 		}
 		return *genLep_status_;
 	}
-	const vector<float> &genLep_charge()
+	vector<float> &genLep_charge()
 	{
 		if (not genLep_charge_isLoaded) {
 			if (genLep_charge_branch != 0) {
@@ -3712,7 +3737,7 @@ void LoadAllBranches()
 		}
 		return *genLep_charge_;
 	}
-	const vector<int> &genLep_sourceId()
+	vector<int> &genLep_sourceId()
 	{
 		if (not genLep_sourceId_isLoaded) {
 			if (genLep_sourceId_branch != 0) {
@@ -3742,7 +3767,7 @@ void LoadAllBranches()
 		}
 		return ngenTau_;
 	}
-	const vector<float> &genTau_pt()
+	vector<float> &genTau_pt()
 	{
 		if (not genTau_pt_isLoaded) {
 			if (genTau_pt_branch != 0) {
@@ -3763,7 +3788,7 @@ void LoadAllBranches()
 		}
 		return *genTau_pt_;
 	}
-	const vector<float> &genTau_eta()
+	vector<float> &genTau_eta()
 	{
 		if (not genTau_eta_isLoaded) {
 			if (genTau_eta_branch != 0) {
@@ -3784,7 +3809,7 @@ void LoadAllBranches()
 		}
 		return *genTau_eta_;
 	}
-	const vector<float> &genTau_phi()
+	vector<float> &genTau_phi()
 	{
 		if (not genTau_phi_isLoaded) {
 			if (genTau_phi_branch != 0) {
@@ -3805,7 +3830,7 @@ void LoadAllBranches()
 		}
 		return *genTau_phi_;
 	}
-	const vector<float> &genTau_mass()
+	vector<float> &genTau_mass()
 	{
 		if (not genTau_mass_isLoaded) {
 			if (genTau_mass_branch != 0) {
@@ -3826,7 +3851,7 @@ void LoadAllBranches()
 		}
 		return *genTau_mass_;
 	}
-	const vector<int> &genTau_pdgId()
+	vector<int> &genTau_pdgId()
 	{
 		if (not genTau_pdgId_isLoaded) {
 			if (genTau_pdgId_branch != 0) {
@@ -3841,7 +3866,7 @@ void LoadAllBranches()
 		}
 		return *genTau_pdgId_;
 	}
-	const vector<int> &genTau_status()
+	vector<int> &genTau_status()
 	{
 		if (not genTau_status_isLoaded) {
 			if (genTau_status_branch != 0) {
@@ -3856,7 +3881,7 @@ void LoadAllBranches()
 		}
 		return *genTau_status_;
 	}
-	const vector<float> &genTau_charge()
+	vector<float> &genTau_charge()
 	{
 		if (not genTau_charge_isLoaded) {
 			if (genTau_charge_branch != 0) {
@@ -3877,7 +3902,7 @@ void LoadAllBranches()
 		}
 		return *genTau_charge_;
 	}
-	const vector<int> &genTau_sourceId()
+	vector<int> &genTau_sourceId()
 	{
 		if (not genTau_sourceId_isLoaded) {
 			if (genTau_sourceId_branch != 0) {
@@ -3907,7 +3932,7 @@ void LoadAllBranches()
 		}
 		return ngenLepFromTau_;
 	}
-	const vector<float> &genLepFromTau_pt()
+	vector<float> &genLepFromTau_pt()
 	{
 		if (not genLepFromTau_pt_isLoaded) {
 			if (genLepFromTau_pt_branch != 0) {
@@ -3928,7 +3953,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_pt_;
 	}
-	const vector<float> &genLepFromTau_eta()
+	vector<float> &genLepFromTau_eta()
 	{
 		if (not genLepFromTau_eta_isLoaded) {
 			if (genLepFromTau_eta_branch != 0) {
@@ -3949,7 +3974,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_eta_;
 	}
-	const vector<float> &genLepFromTau_phi()
+	vector<float> &genLepFromTau_phi()
 	{
 		if (not genLepFromTau_phi_isLoaded) {
 			if (genLepFromTau_phi_branch != 0) {
@@ -3970,7 +3995,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_phi_;
 	}
-	const vector<float> &genLepFromTau_mass()
+	vector<float> &genLepFromTau_mass()
 	{
 		if (not genLepFromTau_mass_isLoaded) {
 			if (genLepFromTau_mass_branch != 0) {
@@ -3991,7 +4016,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_mass_;
 	}
-	const vector<int> &genLepFromTau_pdgId()
+	vector<int> &genLepFromTau_pdgId()
 	{
 		if (not genLepFromTau_pdgId_isLoaded) {
 			if (genLepFromTau_pdgId_branch != 0) {
@@ -4006,7 +4031,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_pdgId_;
 	}
-	const vector<int> &genLepFromTau_status()
+	vector<int> &genLepFromTau_status()
 	{
 		if (not genLepFromTau_status_isLoaded) {
 			if (genLepFromTau_status_branch != 0) {
@@ -4021,7 +4046,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_status_;
 	}
-	const vector<float> &genLepFromTau_charge()
+	vector<float> &genLepFromTau_charge()
 	{
 		if (not genLepFromTau_charge_isLoaded) {
 			if (genLepFromTau_charge_branch != 0) {
@@ -4042,7 +4067,7 @@ void LoadAllBranches()
 		}
 		return *genLepFromTau_charge_;
 	}
-	const vector<int> &genLepFromTau_sourceId()
+	vector<int> &genLepFromTau_sourceId()
 	{
 		if (not genLepFromTau_sourceId_isLoaded) {
 			if (genLepFromTau_sourceId_branch != 0) {
@@ -4072,7 +4097,7 @@ void LoadAllBranches()
 		}
 		return njet_;
 	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jet_p4()
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jet_p4()
 	{
 		if (not jet_p4_isLoaded) {
 			if (jet_p4_branch != 0) {
@@ -4095,7 +4120,7 @@ void LoadAllBranches()
 		}
 		return *jet_p4_;
 	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_p4()
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_p4()
 	{
 		if (not jets_p4_isLoaded) {
 			if (jets_p4_branch != 0) {
@@ -4118,7 +4143,7 @@ void LoadAllBranches()
 		}
 		return *jets_p4_;
 	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_eta30_p4()
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_eta30_p4()
 	{
 		if (not jets_eta30_p4_isLoaded) {
 			if (jets_eta30_p4_branch != 0) {
@@ -4141,7 +4166,7 @@ void LoadAllBranches()
 		}
 		return *jets_eta30_p4_;
 	}
-	const vector<float> &jet_pt()
+	vector<float> &jet_pt()
 	{
 		if (not jet_pt_isLoaded) {
 			if (jet_pt_branch != 0) {
@@ -4162,7 +4187,7 @@ void LoadAllBranches()
 		}
 		return *jet_pt_;
 	}
-	const vector<float> &jet_eta()
+	vector<float> &jet_eta()
 	{
 		if (not jet_eta_isLoaded) {
 			if (jet_eta_branch != 0) {
@@ -4183,7 +4208,7 @@ void LoadAllBranches()
 		}
 		return *jet_eta_;
 	}
-	const vector<float> &jet_phi()
+	vector<float> &jet_phi()
 	{
 		if (not jet_phi_isLoaded) {
 			if (jet_phi_branch != 0) {
@@ -4204,7 +4229,7 @@ void LoadAllBranches()
 		}
 		return *jet_phi_;
 	}
-	const vector<float> &jet_mass()
+	vector<float> &jet_mass()
 	{
 		if (not jet_mass_isLoaded) {
 			if (jet_mass_branch != 0) {
@@ -4225,7 +4250,7 @@ void LoadAllBranches()
 		}
 		return *jet_mass_;
 	}
-	const vector<float> &jet_btagCSV()
+	vector<float> &jet_btagCSV()
 	{
 		if (not jet_btagCSV_isLoaded) {
 			if (jet_btagCSV_branch != 0) {
@@ -4246,7 +4271,7 @@ void LoadAllBranches()
 		}
 		return *jet_btagCSV_;
 	}
-	const vector<float> &jet_rawPt()
+	vector<float> &jet_rawPt()
 	{
 		if (not jet_rawPt_isLoaded) {
 			if (jet_rawPt_branch != 0) {
@@ -4267,7 +4292,7 @@ void LoadAllBranches()
 		}
 		return *jet_rawPt_;
 	}
-	const vector<float> &jet_mcPt()
+	vector<float> &jet_mcPt()
 	{
 		if (not jet_mcPt_isLoaded) {
 			if (jet_mcPt_branch != 0) {
@@ -4288,7 +4313,7 @@ void LoadAllBranches()
 		}
 		return *jet_mcPt_;
 	}
-	const vector<int> &jet_mcFlavour()
+	vector<int> &jet_mcFlavour()
 	{
 		if (not jet_mcFlavour_isLoaded) {
 			if (jet_mcFlavour_branch != 0) {
@@ -4303,7 +4328,7 @@ void LoadAllBranches()
 		}
 		return *jet_mcFlavour_;
 	}
-	const vector<float> &jet_quarkGluonID()
+	vector<float> &jet_quarkGluonID()
 	{
 		if (not jet_quarkGluonID_isLoaded) {
 			if (jet_quarkGluonID_branch != 0) {
@@ -4324,7 +4349,7 @@ void LoadAllBranches()
 		}
 		return *jet_quarkGluonID_;
 	}
-	const vector<float> &jet_area()
+	vector<float> &jet_area()
 	{
 		if (not jet_area_isLoaded) {
 			if (jet_area_branch != 0) {
@@ -4345,7 +4370,7 @@ void LoadAllBranches()
 		}
 		return *jet_area_;
 	}
-	const vector<int> &jet_id()
+	vector<int> &jet_id()
 	{
 		if (not jet_id_isLoaded) {
 			if (jet_id_branch != 0) {
@@ -4360,7 +4385,7 @@ void LoadAllBranches()
 		}
 		return *jet_id_;
 	}
-	const vector<int> &jet_puId()
+	vector<int> &jet_puId()
 	{
 		if (not jet_puId_isLoaded) {
 			if (jet_puId_branch != 0) {
@@ -4433,165 +4458,166 @@ extern ZMET zmet;
 #endif
 
 namespace ZMet {
-	const int &run();
-	const int &lumi();
-	const int &evt();
-	const int &isData();
-	const float &evt_scale1fb();
-	const float &evt_xsec();
-	const float &evt_kfactor();
-	const float &evt_filter();
-	const int &evt_nEvts();
-	const float &puWeight();
-	const int &nVert();
-	const int &nTrueInt();
-	const float &rho();
-	const float &rho25();
-	const int &njets();
-	const float &ht();
-	const int &njets_eta30();
-	const float &ht_eta30();
-	const float &mt2();
-	const float &mt2j();
-	const float &mt2j_eta30();
-	const int &nJet40();
-	const int &nBJet40();
-	const int &nMuons10();
-	const int &nElectrons10();
-	const int &nTaus20();
-	const int &nGammas20();
-	const float &met_pt();
-	const float &met_phi();
-	const float &met_rawPt();
-	const float &met_rawPhi();
-	const float &met_caloPt();
-	const float &met_caloPhi();
-	const float &met_genPt();
-	const float &met_genPhi();
-	const float &sumet_raw();
-	const int &Flag_EcalDeadCellTriggerPrimitiveFilter();
-	const int &Flag_trkPOG_manystripclus53X();
-	const int &Flag_ecalLaserCorrFilter();
-	const int &Flag_trkPOG_toomanystripclus53X();
-	const int &Flag_hcalLaserEventFilter();
-	const int &Flag_trkPOG_logErrorTooManyClusters();
-	const int &Flag_trkPOGFilters();
-	const int &Flag_trackingFailureFilter();
-	const int &Flag_CSCTightHaloFilter();
-	const int &Flag_HBHENoiseFilter();
-	const int &Flag_goodVertices();
-	const int &Flag_eeBadScFilter();
-	const int &Flag_METFilters();
-	const int &HLT_HT900();
-	const int &HLT_MET170();
-	const int &HLT_ht350met120();
-	const int &HLT_SingleMu();
-	const int &HLT_DoubleEl();
-	const int &HLT_MuEG();
-	const int &HLT_DoubleMu();
-	const int &HLT_Photons();
-	const float &dilmass();
-	const float &dilpt();
-	const float &matched_neutralemf();
-	const bool &elveto();
-	const int &nlep();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4();
-	const vector<float> &lep_pt();
-	const vector<float> &lep_eta();
-	const vector<float> &lep_phi();
-	const vector<float> &lep_mass();
-	const vector<int> &lep_charge();
-	const vector<int> &lep_pdgId();
-	const vector<float> &lep_dxy();
-	const vector<float> &lep_dz();
-	const vector<int> &lep_tightId();
-	const vector<float> &lep_relIso03();
-	const vector<float> &lep_relIso04();
-	const vector<int> &lep_mcMatchId();
-	const vector<int> &lep_lostHits();
-	const vector<int> &lep_convVeto();
-	const vector<int> &lep_tightCharge();
-	const int &ntau();
-	const vector<float> &tau_pt();
-	const vector<float> &tau_eta();
-	const vector<float> &tau_phi();
-	const vector<float> &tau_mass();
-	const vector<int> &tau_charge();
-	const vector<float> &tau_dxy();
-	const vector<float> &tau_dz();
-	const vector<int> &tau_idCI3hit();
-	const vector<float> &tau_isoCI3hit();
-	const int &ngamma();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gamma_p4();
-	const vector<float> &gamma_pt();
-	const vector<float> &gamma_eta();
-	const vector<float> &gamma_phi();
-	const vector<float> &gamma_mass();
-	const vector<int> &gamma_mcMatchId();
-	const vector<float> &gamma_genIso();
-	const vector<float> &gamma_chHadIso();
-	const vector<float> &gamma_neuHadIso();
-	const vector<float> &gamma_phIso();
-	const vector<float> &gamma_sigmaIetaIeta();
-	const vector<float> &gamma_r9();
-	const vector<float> &gamma_hOverE();
-	const vector<int> &gamma_idCutBased();
-	const int &ngenPart();
-	const vector<float> &genPart_pt();
-	const vector<float> &genPart_eta();
-	const vector<float> &genPart_phi();
-	const vector<float> &genPart_mass();
-	const vector<int> &genPart_pdgId();
-	const vector<int> &genPart_status();
-	const vector<float> &genPart_charge();
-	const vector<int> &genPart_motherId();
-	const vector<int> &genPart_grandmaId();
-	const int &gamma_nJet40();
-	const int &gamma_nBJet40();
-	const int &ngenLep();
-	const vector<float> &genLep_pt();
-	const vector<float> &genLep_eta();
-	const vector<float> &genLep_phi();
-	const vector<float> &genLep_mass();
-	const vector<int> &genLep_pdgId();
-	const vector<int> &genLep_status();
-	const vector<float> &genLep_charge();
-	const vector<int> &genLep_sourceId();
-	const int &ngenTau();
-	const vector<float> &genTau_pt();
-	const vector<float> &genTau_eta();
-	const vector<float> &genTau_phi();
-	const vector<float> &genTau_mass();
-	const vector<int> &genTau_pdgId();
-	const vector<int> &genTau_status();
-	const vector<float> &genTau_charge();
-	const vector<int> &genTau_sourceId();
-	const int &ngenLepFromTau();
-	const vector<float> &genLepFromTau_pt();
-	const vector<float> &genLepFromTau_eta();
-	const vector<float> &genLepFromTau_phi();
-	const vector<float> &genLepFromTau_mass();
-	const vector<int> &genLepFromTau_pdgId();
-	const vector<int> &genLepFromTau_status();
-	const vector<float> &genLepFromTau_charge();
-	const vector<int> &genLepFromTau_sourceId();
-	const int &njet();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jet_p4();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_p4();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_eta30_p4();
-	const vector<float> &jet_pt();
-	const vector<float> &jet_eta();
-	const vector<float> &jet_phi();
-	const vector<float> &jet_mass();
-	const vector<float> &jet_btagCSV();
-	const vector<float> &jet_rawPt();
-	const vector<float> &jet_mcPt();
-	const vector<int> &jet_mcFlavour();
-	const vector<float> &jet_quarkGluonID();
-	const vector<float> &jet_area();
-	const vector<int> &jet_id();
-	const vector<int> &jet_puId();
-	const int &hyp_type();
-	const int &evt_type();
+	int &run();
+	int &lumi();
+	int &evt();
+	int &isData();
+	float &evt_scale1fb();
+	float &evt_xsec();
+	float &evt_kfactor();
+	float &evt_filter();
+	int &evt_nEvts();
+	float &puWeight();
+	int &nVert();
+	int &nTrueInt();
+	float &rho();
+	float &rho25();
+	int &njets();
+	float &ht();
+	float &gen_ht();
+	int &njets_eta30();
+	float &ht_eta30();
+	float &mt2();
+	float &mt2j();
+	float &mt2j_eta30();
+	int &nJet40();
+	int &nBJet40();
+	int &nMuons10();
+	int &nElectrons10();
+	int &nTaus20();
+	int &nGammas20();
+	float &met_pt();
+	float &met_phi();
+	float &met_rawPt();
+	float &met_rawPhi();
+	float &met_caloPt();
+	float &met_caloPhi();
+	float &met_genPt();
+	float &met_genPhi();
+	float &sumet_raw();
+	int &Flag_EcalDeadCellTriggerPrimitiveFilter();
+	int &Flag_trkPOG_manystripclus53X();
+	int &Flag_ecalLaserCorrFilter();
+	int &Flag_trkPOG_toomanystripclus53X();
+	int &Flag_hcalLaserEventFilter();
+	int &Flag_trkPOG_logErrorTooManyClusters();
+	int &Flag_trkPOGFilters();
+	int &Flag_trackingFailureFilter();
+	int &Flag_CSCTightHaloFilter();
+	int &Flag_HBHENoiseFilter();
+	int &Flag_goodVertices();
+	int &Flag_eeBadScFilter();
+	int &Flag_METFilters();
+	int &HLT_HT900();
+	int &HLT_MET170();
+	int &HLT_ht350met120();
+	int &HLT_SingleMu();
+	int &HLT_DoubleEl();
+	int &HLT_MuEG();
+	int &HLT_DoubleMu();
+	int &HLT_Photons();
+	float &dilmass();
+	float &dilpt();
+	float &matched_neutralemf();
+	bool &elveto();
+	int &nlep();
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4();
+	vector<float> &lep_pt();
+	vector<float> &lep_eta();
+	vector<float> &lep_phi();
+	vector<float> &lep_mass();
+	vector<int> &lep_charge();
+	vector<int> &lep_pdgId();
+	vector<float> &lep_dxy();
+	vector<float> &lep_dz();
+	vector<int> &lep_tightId();
+	vector<float> &lep_relIso03();
+	vector<float> &lep_relIso04();
+	vector<int> &lep_mcMatchId();
+	vector<int> &lep_lostHits();
+	vector<int> &lep_convVeto();
+	vector<int> &lep_tightCharge();
+	int &ntau();
+	vector<float> &tau_pt();
+	vector<float> &tau_eta();
+	vector<float> &tau_phi();
+	vector<float> &tau_mass();
+	vector<int> &tau_charge();
+	vector<float> &tau_dxy();
+	vector<float> &tau_dz();
+	vector<int> &tau_idCI3hit();
+	vector<float> &tau_isoCI3hit();
+	int &ngamma();
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gamma_p4();
+	vector<float> &gamma_pt();
+	vector<float> &gamma_eta();
+	vector<float> &gamma_phi();
+	vector<float> &gamma_mass();
+	vector<int> &gamma_mcMatchId();
+	vector<float> &gamma_genIso();
+	vector<float> &gamma_chHadIso();
+	vector<float> &gamma_neuHadIso();
+	vector<float> &gamma_phIso();
+	vector<float> &gamma_sigmaIetaIeta();
+	vector<float> &gamma_r9();
+	vector<float> &gamma_hOverE();
+	vector<int> &gamma_idCutBased();
+	int &ngenPart();
+	vector<float> &genPart_pt();
+	vector<float> &genPart_eta();
+	vector<float> &genPart_phi();
+	vector<float> &genPart_mass();
+	vector<int> &genPart_pdgId();
+	vector<int> &genPart_status();
+	vector<float> &genPart_charge();
+	vector<int> &genPart_motherId();
+	vector<int> &genPart_grandmaId();
+	int &gamma_nJet40();
+	int &gamma_nBJet40();
+	int &ngenLep();
+	vector<float> &genLep_pt();
+	vector<float> &genLep_eta();
+	vector<float> &genLep_phi();
+	vector<float> &genLep_mass();
+	vector<int> &genLep_pdgId();
+	vector<int> &genLep_status();
+	vector<float> &genLep_charge();
+	vector<int> &genLep_sourceId();
+	int &ngenTau();
+	vector<float> &genTau_pt();
+	vector<float> &genTau_eta();
+	vector<float> &genTau_phi();
+	vector<float> &genTau_mass();
+	vector<int> &genTau_pdgId();
+	vector<int> &genTau_status();
+	vector<float> &genTau_charge();
+	vector<int> &genTau_sourceId();
+	int &ngenLepFromTau();
+	vector<float> &genLepFromTau_pt();
+	vector<float> &genLepFromTau_eta();
+	vector<float> &genLepFromTau_phi();
+	vector<float> &genLepFromTau_mass();
+	vector<int> &genLepFromTau_pdgId();
+	vector<int> &genLepFromTau_status();
+	vector<float> &genLepFromTau_charge();
+	vector<int> &genLepFromTau_sourceId();
+	int &njet();
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jet_p4();
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_p4();
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &jets_eta30_p4();
+	vector<float> &jet_pt();
+	vector<float> &jet_eta();
+	vector<float> &jet_phi();
+	vector<float> &jet_mass();
+	vector<float> &jet_btagCSV();
+	vector<float> &jet_rawPt();
+	vector<float> &jet_mcPt();
+	vector<int> &jet_mcFlavour();
+	vector<float> &jet_quarkGluonID();
+	vector<float> &jet_area();
+	vector<int> &jet_id();
+	vector<int> &jet_puId();
+	int &hyp_type();
+	int &evt_type();
 }
 #endif

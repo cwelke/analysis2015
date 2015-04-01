@@ -39,7 +39,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
   int npass = 0;
   METTemplates mettemplates;
-  mettemplates.loadTemplatesFromFile( "../output/photon/V00-00-00/All_MC_photon_templates.root", mettemplate_hists );
+  mettemplates.loadTemplatesFromFile( Form("../output/photon/%s/All_MC_photon_templates.root", iter.c_str()), mettemplate_hists );
   mettemplates.setBins();
   TH1F* currentMETTemplate = NULL;
 
@@ -84,11 +84,11 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //Stitch DY samples//
 	  //~-~-~-~-~-~-~-~-~//
 
-	  // if( TString(currentFile->GetTitle()).Contains("m50inc") ){
-	  // 	if( zmet.ht() > 100 ) continue;
-	  // }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
-	  // 	if( zmet.ht() < 100 ) continue;
-	  // }
+	  if( TString(currentFile->GetTitle()).Contains("m50inc") ){
+	  	if( zmet.gen_ht() > 100 ) continue;
+	  }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
+	  	if( zmet.gen_ht() < 100 ) continue;
+	  }
 	
 	  
 	  //~-~-~-~-~-~-~-~~-//
@@ -192,7 +192,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 								 sample.c_str()
 								 );
 
-  cout << "Writing templates to " << outputfilename << endl;
+  cout << "Writing output to " << outputfilename << endl;
   saveHist(outputfilename.c_str(),"*");
   
   // deleteHistos();

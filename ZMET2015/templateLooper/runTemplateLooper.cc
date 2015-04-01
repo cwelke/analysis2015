@@ -12,11 +12,7 @@
 
 // using namespace std;
 
-void runTemplateLooper( std::string selection = "" ){
-
-  string iter = "V00-00-00";
-
-  string sample = "All_MC"; 
+void runTemplateLooper( std::string selection = "", std::string iter = "", std::string sample = "All_MC" ){
 
   gSystem->Load("libTemplateLooper.so");
   gROOT ->SetStyle("Plain");
@@ -26,11 +22,11 @@ void runTemplateLooper( std::string selection = "" ){
 
   if ( sample == "All_MC" ){
 
-	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_m50inc*.root");
-	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht100to200*.root");
-	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht200to400*.root");
-	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht400to600*.root");
-	ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht600toinf*.root");
+	ch->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_m50inc*.root"    , iter.c_str() ));
+	ch->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht100to200*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht200to400*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht400to600*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht600toinf*.root", iter.c_str() ));
 	
   }
 
