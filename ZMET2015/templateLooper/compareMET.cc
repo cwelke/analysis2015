@@ -22,7 +22,7 @@ double getBinomialError( const double num, const double deno ){
 void compareMET( std::string iter = "")
 {
 
-  std::string filename = Form("../output/%s/All_MC_hists.root", iter.c_str() );
+  std::string filename = Form("../output/%s/zjets_hists.root", iter.c_str() );
   TFile *infile = new TFile(filename.c_str());
 
   TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_2jets")->Clone("h_zll");
@@ -134,7 +134,7 @@ void compareMET( std::string iter = "")
   h_pho->SetFillStyle(1001);
   
   h_zll->GetXaxis()->SetLabelSize(0);
-  h_zll->GetYaxis()->SetRangeUser(2e-3,3e3);
+  h_zll->GetYaxis()->SetRangeUser(2e-3,3e4);
   h_zll->SetMarkerStyle(8);
   h_zll->SetMarkerSize(0.75);
 

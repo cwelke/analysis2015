@@ -102,7 +102,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
       if( acos( cos( zmet.gamma_phi().at(0)			 
 					 - zmet.met_rawPhi() ) ) < 0.14  ) continue; // kill photons aligned with MET
 	  if( zmet.elveto()                              ) continue; // veto pixel match
-	  if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
+	  // if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
 	  
 
       // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning

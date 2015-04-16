@@ -26,6 +26,9 @@ const bool debug = false;
 
 templateLooper::templateLooper()
 {
+  n2020pass = 0;
+  n2520pass = 0;
+  n2525pass = 0;
 };
 
 templateLooper::~templateLooper()
@@ -96,18 +99,62 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //~-~-~-~-~-~-~-~-~//
 
 	  
+	  //-~-~-~-~-~-~-~-~-~-~-~-//
+	  //Deal with event weights//
+	  //-~-~-~-~-~-~-~-~-~-~-~-//
+	  float weight = 1.0;
+	  if( zmet.isData() ){
+		weight = 1.0;
+	  }else if( !zmet.isData() ){
+		weight *= zmet.evt_scale1fb();
+	  }
+
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
 
 	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
 	  if( zmet.njets()                       < 2         ) continue; // >=2 jets
+	  if( zmet.lep_pt().at(0)                < 20        ) continue; // leading lep pT > 25 GeV
+	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 25 GeV
+
+	  // if( zmet.lep_pt().at(1)                < 15        ) continue; // tailing lep pT > 25 GeV
+	  // if( zmet.lep_pt().at(1)                > 20        ){
+
+		if( (zmet.hyp_type() == 0 ||					     
+		   zmet.hyp_type() == 1 ) &&
+		  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2020pass += weight;
+	  // }
+	  
 	  if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
-	  if( zmet.lep_pt().at(1)                < 25        ) continue; // tailing lep pT > 25 GeV
+	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 25 GeV
+
+	  if( (zmet.hyp_type() == 0 ||					     
+		   zmet.hyp_type() == 1 ) &&
+		  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2520pass += weight;
+
+	  if( zmet.lep_pt().at(0)                > 25 &&
+		  zmet.lep_pt().at(1)                > 25        ){
+		if( (zmet.hyp_type() == 0 ||					     
+			 zmet.hyp_type() == 1 ) &&
+			(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2525pass += weight;
+	  }
+	  
+	  // if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
+	  // if( zmet.lep_pt().at(1)                < 25        ) continue; // tailing lep pT > 25 GeV
+
+
+	  // if( (zmet.hyp_type() == 0 ||					     
+	  // 	   zmet.hyp_type() == 1 ) &&
+	  // 	  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2525pass += weight;
+
 	  if( !(zmet.hyp_type() == 0 ||					     
 			zmet.hyp_type() == 1 ||					     
 			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
-	  if( zmet.ht()                          < 240       ) continue; // HT > 100
+	  // if( zmet.ht()                          < 240       ) continue; // HT > 100
+
+	  fillHist( "event", "mll"  , "2jets", zmet.dilmass()  , weight );
+
 	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
 	  // if( zmet.dilpt()                       < 50   ) continue; // for now, require 50 GeV dil Z pT cut
 
@@ -124,16 +171,6 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  
       ++npass;
 
-	  //-~-~-~-~-~-~-~-~-~-~-~-//
-	  //Deal with event weights//
-	  //-~-~-~-~-~-~-~-~-~-~-~-//
-	  float weight = 1.0;
-	  if( zmet.isData() ){
-		weight = 1.0;
-	  }else if( !zmet.isData() ){
-		weight *= zmet.evt_scale1fb();
-	  }
-	  
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
@@ -173,6 +210,12 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 
   cout << npass << " events passing selection" << endl;
+
+  cout<<"Number of Z events passing 2020: "<<n2020pass<<endl;
+  cout<<"Number of Z events passing 2520: "<<n2520pass<<endl;
+  cout<<"Efficiency 2520: "<<n2520pass/n2020pass<<endl;
+  cout<<"Number of Z events passing 2525: "<<n2525pass<<endl;
+  cout<<"Efficiency 2525: "<<n2525pass/n2020pass<<endl;
 
   mettemplates.NormalizeTemplates(mettemplate_hists);
   mettemplates.correctBinUncertainty( mettemplate_hists, event_hists.at("h_templ_met") );
@@ -226,6 +269,7 @@ void templateLooper::bookHistos(){
   variable.push_back("mt2");
   variable.push_back("mt2j");
   variable.push_back("njets");
+  variable.push_back("mll");
   vector <float> variable_bins;
   variable_bins.push_back(500 );
   variable_bins.push_back(500 );
@@ -233,6 +277,7 @@ void templateLooper::bookHistos(){
   variable_bins.push_back(500 );
   variable_bins.push_back(500 );
   variable_bins.push_back(20  );  
+  variable_bins.push_back(300 );  
 
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){

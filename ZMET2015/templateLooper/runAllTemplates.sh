@@ -12,16 +12,17 @@ compile_looper
 # selection="_bveto_inclusive_medium"
 # make_gtemplates $selection &
 
-# SR + CRS
+# # SR + CRS
 selection="_inclusive"
-sample="All_MC"
-run_template_looper $selection $sample
+
+# sample="All_MC"
+# run_template_looper $selection $sample &
 
 # # SR + CRS
-# selection="_inclusive"
-# make_gtemplates $selection "zjets"
-# make_gtemplates $selection "ttbar"
-# make_gtemplates $selection "top"
-# make_gtemplates $selection "vv"
-# make_gtemplates $selection "ttv"
-
+selection="_inclusive"
+# run_template_looper $selection "zjets"
+# run_template_looper $selection "ttbar"
+# run_template_looper $selection "top"
+# run_template_looper $selection "vv"
+# run_template_looper $selection "ttv"
+run_template_looper $selection "FS_BG"
