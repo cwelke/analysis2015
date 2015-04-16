@@ -95,6 +95,10 @@ class babyMaker {
   Float_t         met_genPhi;
 
   Float_t         sumet_raw;
+  Float_t         jzb_raw;
+  Float_t         jzb_T1;
+  Float_t         jgb_raw;
+  Float_t         jgb_T1;
 
 //----- MET FILTERS
   Int_t           Flag_EcalDeadCellTriggerPrimitiveFilter;

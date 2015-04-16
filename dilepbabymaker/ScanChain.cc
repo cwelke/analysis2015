@@ -769,6 +769,57 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j = -1.0;
 		mt2j_eta30 = -1.0;
 	  }
+
+	  float metx = 0.0;
+	  float mety = 0.0;
+	  float pzx  = 0.0;
+	  float pzy  = 0.0;
+	  float dx   = 0.0;
+	  float dy   = 0.0;
+
+	  if( nlep > 1 ){
+		//---------------------------------------------
+		// calculate JZB = | -MET - pTZ | - | pTZ |
+		//---------------------------------------------
+		metx = met_pt * cos( met_phi );
+		mety = met_pt * sin( met_phi );
+		pzx  = (lep_p4.at(0)+lep_p4.at(1)).px();       
+		pzy  = (lep_p4.at(0)+lep_p4.at(1)).py();       
+		dx   = -1 * ( metx + pzx );
+		dy   = -1 * ( mety + pzy );
+		jzb_T1 = sqrt( dx*dx + dy*dy ) - (lep_p4.at(0)+lep_p4.at(1)).pt();
+	  
+		//---------------------------------------------
+		// calculate JZB = | -MET - pTZ | - | pTZ |; using raw pfMET
+		//---------------------------------------------
+		metx = met_rawPt * cos( met_rawPhi );
+		mety = met_rawPt * sin( met_rawPhi );
+		dx   = -1 * ( metx + pzx );
+		dy   = -1 * ( mety + pzy );
+		jzb_raw = sqrt( dx*dx + dy*dy ) - (lep_p4.at(0)+lep_p4.at(1)).pt();
+	  }
+	  
+	  if( ngamma > 0 ){
+		//---------------------------------------------
+		// calculate JGB = | -MET - pTZ | - | pTZ |
+		//---------------------------------------------
+		metx = met_pt * cos( met_phi );
+		mety = met_pt * sin( met_phi );
+		pzx  = photons_p4.at(0).px();       
+		pzy  = photons_p4.at(0).py();       
+		dx   = -1 * ( metx + pzx );
+		dy   = -1 * ( mety + pzy );
+		jgb_T1 = sqrt( dx*dx + dy*dy ) - photons_p4.at(0).pt();
+
+		//---------------------------------------------
+		// calculate JGB = | -MET - pTZ | - | pTZ |; using raw pfMET
+		//---------------------------------------------
+		metx = met_rawPt * cos( met_rawPhi );
+		mety = met_rawPt * sin( met_rawPhi );
+		dx   = -1 * ( metx + pzx );
+		dy   = -1 * ( mety + pzy );
+		jgb_raw = sqrt( dx*dx + dy*dy ) - photons_p4.at(0).pt();
+	  }
 	  
 	  if (verbose) cout << "before taus" << endl;
 
@@ -883,6 +934,10 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("met_genPhi", &met_genPhi );
 
   BabyTree_->Branch("sumet_raw", &sumet_raw );
+  BabyTree_->Branch("jzb_raw"  , &jzb_raw   );
+  BabyTree_->Branch("jzb_T1"   , &jzb_T1    );
+  BabyTree_->Branch("jgb_raw"  , &jgb_raw   );
+  BabyTree_->Branch("jgb_T1"   , &jgb_T1    );
   
   BabyTree_->Branch("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter );
   BabyTree_->Branch("Flag_trkPOG_manystripclus53X", &Flag_trkPOG_manystripclus53X );
@@ -1064,16 +1119,20 @@ void babyMaker::InitBabyNtuple () {
   mt2j = -999.0;
   mt2j_eta30 = -999.0;
 
-  met_pt = -999.0;
-  met_phi = -999.0;
-  met_rawPt = -999.0;
-  met_rawPhi = -999.0;
-  met_caloPt = -999.0;
+  met_pt      = -999.0;
+  met_phi     = -999.0;
+  met_rawPt   = -999.0;
+  met_rawPhi  = -999.0;
+  met_caloPt  = -999.0;
   met_caloPhi = -999.0;
-  met_genPt = -999.0;
-  met_genPhi = -999.0;
+  met_genPt   = -999.0;
+  met_genPhi  = -999.0;
 
   sumet_raw = -999.0;
+  jzb_raw   = -999.0;
+  jzb_T1    = -999.0;
+  jgb_raw   = -999.0;
+  jgb_T1    = -999.0;
 
   Flag_EcalDeadCellTriggerPrimitiveFilter = -999;
   Flag_trkPOG_manystripclus53X = -999;
