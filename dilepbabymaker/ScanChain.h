@@ -43,7 +43,7 @@ class babyMaker {
 
   Int_t           run;
   Int_t           lumi;
-  Int_t           evt;
+  ULong64_t       evt;
   Int_t           isData;
 
   Float_t         evt_scale1fb;
@@ -75,6 +75,7 @@ class babyMaker {
   Int_t           evt_type; // 0 = OS; 1 = SS; 2 = photon+jets
   Float_t         dilmass;
   Float_t         dilpt;
+  Float_t         dRll;
 
   Float_t         matched_neutralemf; // neutral em fraction for jet closest to photon within dR = .1
   Bool_t          elveto; // Reject photons which have electron of pT > 10 GeV within dR < 0.2

@@ -510,6 +510,12 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		}
 		dilmass = (lep_p4.at(0)+lep_p4.at(1)).mass();
 		dilpt   = (lep_p4.at(0)+lep_p4.at(1)).pt();       
+
+		//Add dRll
+		float dEtall = lep_p4.at(0).eta()-lep_p4.at(1).eta();
+		float dPhill = acos( cos( lep_p4.at(0).phi() - lep_p4.at(1).phi() ) );
+		dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
+
 	  }else{
 		evt_type = 2; // photon + jets event
 	  }
@@ -772,9 +778,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       for(unsigned int iTau = 0; iTau < cms3.taus_pf_p4().size(); iTau++){
         if(     cms3.taus_pf_p4()                                        .at(iTau).pt()   < 20.0 ) continue; 
         if(fabs(cms3.taus_pf_p4()                                        .at(iTau).eta()) > 2.3  ) continue; 
-		if (   !cms3.taus_pf_byLooseCombinedIsolationDeltaBetaCorr3Hits().at(iTau)               ) continue; // HPS3 hits taus
-		if (   !cms3.taus_pf_againstElectronLoose()                      .at(iTau)               ) continue; // loose electron rejection 
-		if (   !cms3.taus_pf_againstMuonTight()                          .at(iTau)               ) continue; // loose muon rejection 
+		if (   !cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits", iTau)               ) continue; // HPS3 hits taus
+		if (   !cms3.passTauID("againstElectronLoose", iTau)               ) continue; // HPS3 hits taus
+		if (   !cms3.passTauID("againstMuonTight", iTau)               ) continue; // HPS3 hits taus
         
         tau_pt       .push_back(cms3.taus_pf_p4()     .at(iTau).pt());
         tau_eta      .push_back(cms3.taus_pf_p4()     .at(iTau).eta());
@@ -783,12 +789,12 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         tau_charge   .push_back(cms3.taus_pf_charge() .at(iTau));
         tau_dxy      .push_back(0); // could use the tau->dxy() function instead, but not sure what it does
         tau_dz       .push_back(0); // not sure how to get this. 
-        tau_isoCI3hit.push_back(cms3.taus_pf_byCombinedIsolationDeltaBetaCorrRaw3Hits().at(iTau));
+		tau_isoCI3hit.push_back(cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits", iTau));
 
         int temp = 0;
-        if (cms3.taus_pf_byLooseCombinedIsolationDeltaBetaCorr3Hits()  .at(iTau)) temp = 1;
-        if (cms3.taus_pf_byMediumCombinedIsolationDeltaBetaCorr3Hits() .at(iTau)) temp = 2;
-        if (cms3.taus_pf_byTightCombinedIsolationDeltaBetaCorr3Hits()  .at(iTau)) temp = 3;
+        if (cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  , iTau) ) temp = 1;
+        if (cms3.passTauID("byMediumCombinedIsolationDeltaBetaCorr3Hits" , iTau) ) temp = 2;
+        if (cms3.passTauID("byTightCombinedIsolationDeltaBetaCorr3Hits"  , iTau) ) temp = 3;
         tau_idCI3hit.push_back(temp);
         if(tau_pt[ntau] > 20) nTaus20++;
         //tau_mcMatchId[ntau] = ; // Have to do this by hand unless we want to add tau_mc branches in CMS3 through the CandToGenAssMaker
@@ -901,7 +907,8 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_Photons", &HLT_Photons );
 
   BabyTree_->Branch("dilmass", &dilmass );
-  BabyTree_->Branch("dilpt", &dilpt );
+  BabyTree_->Branch("dilpt"  , &dilpt );
+  BabyTree_->Branch("dRll"   , &dRll );
 
   BabyTree_->Branch("matched_neutralemf", &matched_neutralemf );
   BabyTree_->Branch("elveto", &elveto );
@@ -1026,7 +1033,7 @@ void babyMaker::InitBabyNtuple () {
 
   run    = -999;
   lumi   = -999;
-  evt    = -999;
+  evt    = -1;
   isData = -999;
   evt_scale1fb = 0;
   evt_xsec = -999.0;
@@ -1091,7 +1098,8 @@ void babyMaker::InitBabyNtuple () {
   HLT_Photons = -999;   
 
   dilmass = -999;
-  dilpt = -999;
+  dilpt   = -999;
+  dRll    = -999;
  
   matched_neutralemf = -999.0;
   elveto = false;  
