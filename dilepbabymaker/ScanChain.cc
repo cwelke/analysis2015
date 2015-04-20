@@ -805,11 +805,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		//---------------------------------------------
 		metx = met_pt * cos( met_phi );
 		mety = met_pt * sin( met_phi );
-		pzx  = photons_p4.at(0).px();       
-		pzy  = photons_p4.at(0).py();       
+		pzx  = cms3.photons_p4().at(0).px();       
+		pzy  = cms3.photons_p4().at(0).py();       
 		dx   = -1 * ( metx + pzx );
 		dy   = -1 * ( mety + pzy );
-		jgb_T1 = sqrt( dx*dx + dy*dy ) - photons_p4.at(0).pt();
+		jgb_T1 = sqrt( dx*dx + dy*dy ) - cms3.photons_p4().at(0).pt();
 
 		//---------------------------------------------
 		// calculate JGB = | -MET - pTZ | - | pTZ |; using raw pfMET
@@ -818,7 +818,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mety = met_rawPt * sin( met_rawPhi );
 		dx   = -1 * ( metx + pzx );
 		dy   = -1 * ( mety + pzy );
-		jgb_raw = sqrt( dx*dx + dy*dy ) - photons_p4.at(0).pt();
+		jgb_raw = sqrt( dx*dx + dy*dy ) - cms3.photons_p4().at(0).pt();
 	  }
 	  
 	  if (verbose) cout << "before taus" << endl;
