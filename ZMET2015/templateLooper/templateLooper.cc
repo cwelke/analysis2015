@@ -26,9 +26,6 @@ const bool debug = false;
 
 templateLooper::templateLooper()
 {
-  n2020pass = 0;
-  n2520pass = 0;
-  n2525pass = 0;
 };
 
 templateLooper::~templateLooper()
@@ -40,6 +37,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   // if( zmet.isData() )        cout << "Running on Data."        << endl;
   // else                       cout << "Running on MC.  "        << endl;
 
+  unsigned int nee = 0;
+  unsigned int nmm = 0;
+  unsigned int nem = 0;
+  
   int npass = 0;
   METTemplates mettemplates;
   mettemplates.loadTemplatesFromFile( Form("../output/photon/%s/All_MC_photon_templates.root", iter.c_str()), mettemplate_hists );
@@ -114,36 +115,20 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //~-~-~-~-~-~-~-~-//
 
 	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
-	  if( zmet.njets()                       < 2         ) continue; // >=2 jets
-	  if( zmet.lep_pt().at(0)                < 20        ) continue; // leading lep pT > 25 GeV
-	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 25 GeV
-
-	  // if( zmet.lep_pt().at(1)                < 15        ) continue; // tailing lep pT > 25 GeV
-	  // if( zmet.lep_pt().at(1)                > 20        ){
-
-		if( (zmet.hyp_type() == 0 ||					     
-		   zmet.hyp_type() == 1 ) &&
-		  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2020pass += weight;
-	  // }
-	  
 	  if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
-	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 25 GeV
+	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 20 GeV
 
-	  if( (zmet.hyp_type() == 0 ||					     
-		   zmet.hyp_type() == 1 ) &&
-		  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2520pass += weight;
+	  if( abs(zmet.lep_p4().at(0).eta())     > 2.4       ) continue; // eta < 2.4
+	  if( abs(zmet.lep_p4().at(1).eta())     > 2.4       ) continue; // eta < 2.4
 
-	  if( zmet.lep_pt().at(0)                > 25 &&
-		  zmet.lep_pt().at(1)                > 25        ){
-		if( (zmet.hyp_type() == 0 ||					     
-			 zmet.hyp_type() == 1 ) &&
-			(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2525pass += weight;
-	  }
+	  if( abs(zmet.lep_p4().at(0).eta())     > 1.4 &&
+		  abs(zmet.lep_p4().at(0).eta())     < 1.6       ) continue; 
+	  if( abs(zmet.lep_p4().at(1).eta())     > 1.4 &&
+		  abs(zmet.lep_p4().at(1).eta())     < 1.6       ) continue; // veto xition region
+
+
+	  if( zmet.dRll() < 0.3 ) continue;
 	  
-	  // if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
-	  // if( zmet.lep_pt().at(1)                < 25        ) continue; // tailing lep pT > 25 GeV
-
-
 	  // if( (zmet.hyp_type() == 0 ||					     
 	  // 	   zmet.hyp_type() == 1 ) &&
 	  // 	  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2525pass += weight;
@@ -153,6 +138,11 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
 	  // if( zmet.ht()                          < 240       ) continue; // HT > 100
 
+	  if( zmet.hyp_type() == 0 ) nee++;
+	  if( zmet.hyp_type() == 1 ) nmm++;
+	  if( zmet.hyp_type() == 2 ) nem++;
+	  
+	  if( zmet.njets()                       < 2         ) continue; // >=2 jets
 	  fillHist( "event", "mll"  , "2jets", zmet.dilmass()  , weight );
 
 	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
@@ -210,12 +200,9 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 
   cout << npass << " events passing selection" << endl;
-
-  cout<<"Number of Z events passing 2020: "<<n2020pass<<endl;
-  cout<<"Number of Z events passing 2520: "<<n2520pass<<endl;
-  cout<<"Efficiency 2520: "<<n2520pass/n2020pass<<endl;
-  cout<<"Number of Z events passing 2525: "<<n2525pass<<endl;
-  cout<<"Efficiency 2525: "<<n2525pass/n2020pass<<endl;
+  cout << nee << " ee events passing selection" << endl;
+  cout << nmm << " mm events passing selection" << endl;
+  cout << nem << " em events passing selection" << endl;
 
   mettemplates.NormalizeTemplates(mettemplate_hists);
   mettemplates.correctBinUncertainty( mettemplate_hists, event_hists.at("h_templ_met") );

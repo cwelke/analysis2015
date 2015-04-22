@@ -26,10 +26,6 @@ private:
 
   std::map<std::string, TH1F*> mettemplate_hists;
   std::map<std::string, TH1F*> event_hists;
-
-  float n2020pass;
-  float n2520pass;
-  float n2525pass;
   
 };
 #endif

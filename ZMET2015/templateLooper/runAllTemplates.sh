@@ -20,9 +20,9 @@ selection="_inclusive"
 
 # # SR + CRS
 selection="_inclusive"
-# run_template_looper $selection "zjets"
+run_template_looper $selection "zjets"
 # run_template_looper $selection "ttbar"
 # run_template_looper $selection "top"
 # run_template_looper $selection "vv"
 # run_template_looper $selection "ttv"
-run_template_looper $selection "FS_BG"
+# run_template_looper $selection "FS_BG"

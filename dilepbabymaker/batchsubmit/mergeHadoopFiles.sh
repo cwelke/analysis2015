@@ -5,7 +5,7 @@ function run () {
     nohup nice -n 19 root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\) >& log_merge_${TAG}_$1.txt &
 }
 
-TAG=V00-00-10
+TAG=V00-00-11
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
 OUTPUTDIR=/nfs-7/userdata/cwelke/ZMETbabies/$TAG/
@@ -17,40 +17,40 @@ chmod -R a+wrx $OUTPUTDIR
 # TTBAR
 #
 
-run ttall_msdecays
+# run ttall_msdecays
 
 #
 # DY+JETS
 #
 
-run dyjetsll_m50inc
-run dyjetsll_ht100to200
-run dyjetsll_ht200to400
-run dyjetsll_ht400to600
-run dyjetsll_ht600toinf
-run dyjetsmm_ptz180
+# run dyjetsll_m50inc
+# run dyjetsll_ht100to200
+# run dyjetsll_ht200to400
+# run dyjetsll_ht400to600
+# run dyjetsll_ht600toinf
+# run dyjetsmm_ptz180
 
 #
 # SINGLE TOP
 #
 
-# run t_bars
-# run t_bart
-# run t_tops
-# run t_topt
-# run t_toptw
-# run t_bartw
+run t_bars
+run t_bart
+run t_tops
+run t_topt
+run t_toptw
+run t_bartw
 
 
 #
 # GAMMA + JETS
 #
 
-run gjet_pt40_doubleEM
-run gjet_ht100to200
-run gjet_ht200to400
-run gjet_ht400to600
-run gjet_ht600toinf
+# run gjet_pt40_doubleEM
+# run gjet_ht100to200
+# run gjet_ht200to400
+# run gjet_ht400to600
+# run gjet_ht600toinf
 
 #
 # ALTERNATIVE TTBAR
