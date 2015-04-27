@@ -5,7 +5,7 @@ function run () {
     nohup nice -n 19 root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\) >& log_merge_${TAG}_$1.txt &
 }
 
-TAG=V00-00-12
+TAG=V00-00-12_zmet_noiso
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
 OUTPUTDIR=/nfs-7/userdata/cwelke/ZMETbabies/$TAG/
@@ -18,16 +18,20 @@ chmod -R a+wrx $OUTPUTDIR
 #
 
 run ttall_msdecays
+run T2tt_425_325
+run	T2tt_500_325
+run	T2tt_650_325
+run	T2tt_850_100
 
 # #
 # # DY+JETS
 # #
 
-# # run dyjetsll_m50inc
-# # run dyjetsll_ht100to200
-# # run dyjetsll_ht200to400
-# # run dyjetsll_ht400to600
-# # run dyjetsll_ht600toinf
+run dyjetsll_m50inc
+run dyjetsll_ht100to200
+run dyjetsll_ht200to400
+run dyjetsll_ht400to600
+run dyjetsll_ht600toinf
 # # run dyjetsmm_ptz180
 
 # #
@@ -38,8 +42,8 @@ run ttall_msdecays
 # run t_bart
 # run t_tops
 # run t_topt
-# run t_toptw
-# run t_bartw
+run t_toptw
+run t_bartw
 
 
 # #
