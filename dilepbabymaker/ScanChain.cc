@@ -326,8 +326,14 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       nlep = 0;
       nElectrons10 = 0;
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
-		if( !passElectronSelection_ZMET_v1( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+		// if( !passElectronSelection_ZMET_v1( iEl, vetoXitionRegion, maxEta24 ) ) continue;
 
+		// if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+
+		if( fabs(cms3.els_p4().at(iEl).pt()) < 15.0    ) continue; // pT > 15 GeV - Minimum pT cut
+		if(!isLooseElectronPOGphys14noIso(iEl)) continue;
+		if( elMiniRelIso(iEl) > 0.1 ) continue;
+  
         nElectrons10++;
         lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
 		vec_lep_p4s      .push_back( cms3.els_p4().at(iEl)           );
@@ -367,8 +373,15 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  if (cms3.mus_p4().size() != cms3.mus_dzPV().size()) continue;
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
- 	  	if( !passMuonSelection_ZMET_v1( iMu, vetoXitionRegion, maxEta24 ) ) continue;
-        nMuons10++;
+ 	  	// if( !passMuonSelection_ZMET_v1( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+
+ 	  	if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+		if( muMiniRelIso(iMu) > 0.2 ) continue;
+
+		// if( muRelIso03DB(iMu) > 0.15 ) continue;
+
+
+		nMuons10++;
         lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
 		vec_lep_p4s      .push_back ( cms3.mus_p4().at(iMu)           );
         vec_lep_pt       .push_back ( cms3.mus_p4().at(iMu).pt()      );
