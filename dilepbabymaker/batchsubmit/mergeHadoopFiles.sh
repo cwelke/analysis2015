@@ -2,16 +2,20 @@
 
 function run () {
     echo root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\)
-    nohup nice -n 19 root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\) >& log_merge_${TAG}_$1.txt &
+    nohup nice -n 19 root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\) >& merge_logs_${TAG}/log_merge_$1.txt &
 }
 
-TAG=V00-00-14
+TAG=V00-00-15
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
 OUTPUTDIR=/nfs-7/userdata/cwelke/ZMETbabies/$TAG/
 
 mkdir -p $OUTPUTDIR
 chmod -R a+wrx $OUTPUTDIR
+
+if [ ! -d "merge_logs_${TAG}" ]; then
+  mkdir merge_logs_${TAG}
+fi
 
 #
 # TTBAR
@@ -46,11 +50,11 @@ run t_bartw
 # # GAMMA + JETS
 # #
 
-# # run gjet_pt40_doubleEM
-# # run gjet_ht100to200
-# # run gjet_ht200to400
-# # run gjet_ht400to600
-# # run gjet_ht600toinf
+run gjet_pt40_doubleEM
+run gjet_ht100to200
+run gjet_ht200to400
+run gjet_ht400to600
+run gjet_ht600toinf
 
 # #
 # # ALTERNATIVE TTBAR
@@ -81,8 +85,8 @@ run t_bartw
 # # DIBOSON
 # #
 
-# run wz_3lnu
-# run zz_4l
+run wz_3lnu
+run zz_4l
 
 # #
 # # TRIBOSON
@@ -92,6 +96,6 @@ run t_bartw
 # # TTV
 # #
 
-# run ttw
-# run ttz
-# run tth
+run ttw
+run ttz
+run tth
