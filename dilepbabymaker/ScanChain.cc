@@ -311,6 +311,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       vector<float>vec_lep_dz;
       vector<int>  vec_lep_tightId;
       vector<float>vec_lep_relIso03;
+      vector<float>vec_lep_relIso03MREA;
+      vector<float>vec_lep_relIso03MRDB;
+      vector<float>vec_lep_relIso03MRNC;
       vector<float>vec_lep_relIso04;
       vector<int>  vec_lep_mcMatchId;
       vector<int>  vec_lep_lostHits;
@@ -327,7 +330,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       nlep = 0;
       nElectrons10 = 0;
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
-		if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+		// if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+		if( cms3.els_p4().at(iEl).pt() < 15.0 ) continue;
   
         nElectrons10++;
         lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
@@ -343,6 +348,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         vec_lep_tightId  .push_back( eleTightID(iEl, ZMET)           );
         vec_lep_relIso03 .push_back( eleRelIso03(iEl, ZMET)          );
         vec_lep_relIso04 .push_back( 0                               );
+        vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, false, 0.0, false, true ) );
+        vec_lep_relIso03MRDB .push_back( elMiniRelIso( iEl, false, 0.0, true , false) );
+        vec_lep_relIso03MRNC .push_back( elMiniRelIso( iEl, false, 0.0, false, false) );
 
         if (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11) { // matched to a prunedGenParticle electron?
           int momid =  abs(genPart_motherId[cms3.els_mc3idx().at(iEl)]);
@@ -368,7 +376,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  if (cms3.mus_p4().size() != cms3.mus_dzPV().size()) continue;
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
- 	  	if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	// if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+		if( cms3.mus_p4().at(iMu).pt() < 15.0 ) continue;
 
 		nMuons10++;
         lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
@@ -384,6 +394,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         vec_lep_tightId  .push_back ( muTightID(iMu, ZMET)            );
         vec_lep_relIso03 .push_back ( muRelIso03(iMu, ZMET)           );
         vec_lep_relIso04 .push_back ( muRelIso04(iMu, ZMET)           );
+        vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, false, 0.0, false, true ) );
+        vec_lep_relIso03MRDB .push_back( muMiniRelIso( iMu, false, 0.0, true , false) );
+        vec_lep_relIso03MRNC .push_back( muMiniRelIso( iMu, false, 0.0, false, false) );
 
         if (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13) { // matched to a prunedGenParticle electron?
           int momid =  abs(genPart_motherId[cms3.mus_mc3idx().at(iMu)]);
@@ -417,6 +430,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		// fix me
 		lep_tightId    .push_back( vec_lep_tightId     .at(it->second));
 		lep_relIso03   .push_back( vec_lep_relIso03    .at(it->second));
+		lep_relIso03MREA   .push_back( vec_lep_relIso03MREA    .at(it->second));
+		lep_relIso03MRDB   .push_back( vec_lep_relIso03MRDB    .at(it->second));
+		lep_relIso03MRNC   .push_back( vec_lep_relIso03MRNC    .at(it->second));
 		lep_relIso04   .push_back( vec_lep_relIso04    .at(it->second));
 		lep_mcMatchId  .push_back( vec_lep_mcMatchId   .at(it->second));
 		lep_lostHits   .push_back( vec_lep_lostHits    .at(it->second));
@@ -490,7 +506,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	
        
 	  // add selections to keep only events with photons and dilepton events
-	  if( !(ngamma > 0 || nlep > 1) ) continue;
+	  if( !(ngamma > 0 || nlep > 0) ) continue;// fix for not iso study
        
 	  if (nlep > 1 ) {//require min 2 leps
 		if (lep_charge.at(0)*lep_charge.at(1) > 0){
@@ -982,6 +998,9 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("lep_dz"         , "std::vector< Float_t >"       , &lep_dz         );
   BabyTree_->Branch("lep_tightId"    , "std::vector< Int_t >"         , &lep_tightId    );
   BabyTree_->Branch("lep_relIso03"   , "std::vector< Float_t >"       , &lep_relIso03   );
+  BabyTree_->Branch("lep_relIso03MREA"   , "std::vector< Float_t >"       , &lep_relIso03MREA   );
+  BabyTree_->Branch("lep_relIso03MRDB"   , "std::vector< Float_t >"       , &lep_relIso03MRDB   );
+  BabyTree_->Branch("lep_relIso03MRNC"   , "std::vector< Float_t >"       , &lep_relIso03MRNC   );
   BabyTree_->Branch("lep_relIso04"   , "std::vector< Float_t >"       , &lep_relIso04   );
   BabyTree_->Branch("lep_mcMatchId"  , "std::vector< Int_t >"         , &lep_mcMatchId  );
   BabyTree_->Branch("lep_lostHits"   , "std::vector< Int_t >"         , &lep_lostHits   );
@@ -1180,6 +1199,9 @@ void babyMaker::InitBabyNtuple () {
   lep_dz         .clear();   //[nlep]
   lep_tightId    .clear();   //[nlep]
   lep_relIso03   .clear();   //[nlep]
+  lep_relIso03MREA   .clear();   //[nlep]
+  lep_relIso03MRDB   .clear();   //[nlep]
+  lep_relIso03MRNC   .clear();   //[nlep]
   lep_relIso04   .clear();   //[nlep]
   lep_mcMatchId  .clear();   //[nlep]
   lep_lostHits   .clear();   //[nlep]

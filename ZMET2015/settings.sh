@@ -1,7 +1,7 @@
 #! /bin/bash
 
 export analysis_version="V00-00-12_zmet_noiso"
-export analysis_version="V00-00-16"
+export analysis_version="V00-00-16_zmet_noiso"
 echo "Analysis version = $analysis_version"
 localdirectory=`pwd`
 
