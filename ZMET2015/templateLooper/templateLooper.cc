@@ -140,7 +140,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 	  if( !(zmet.evt_type() == 0 )                       ) continue; // require explicit dilepton event
 
-			if( zmet.hyp_type() == 0 ) nee++;
+	  if( zmet.hyp_type() == 0 ) nee++;
 	  if( zmet.hyp_type() == 1 ) nmm++;
 	  if( zmet.hyp_type() == 2 ) nem++;
 	  

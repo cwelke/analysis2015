@@ -12,8 +12,10 @@ cd -
 # copy compiled files
 cp -r ../*.so ../jetCorrections ../processBaby.C job_input/
 
+source ../../ZMET2015/settings.sh 
+
 # update tag
-TAG="V00-00-15"
+TAG=${analysis_version}
 
 #
 # DATA

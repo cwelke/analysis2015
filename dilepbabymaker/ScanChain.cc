@@ -16,6 +16,7 @@
 #include "../CORE/Base.h"
 #include "../CORE/OSSelections.h"
 #include "../CORE/ElectronSelections.h"
+#include "../CORE/IsolationTools.h"
 #include "../CORE/JetSelections.h"
 #include "../CORE/MuonSelections.h"
 #include "../CORE/IsoTrackVeto.h"

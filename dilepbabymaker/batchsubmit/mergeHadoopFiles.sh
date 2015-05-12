@@ -5,7 +5,9 @@ function run () {
     nohup nice -n 19 root -b -q mergeHadoopFiles.C\(\"${HADOOPDIR}/${TAG}_$1/\",\"${OUTPUTDIR}/$1.root\"\) >& merge_logs_${TAG}/log_merge_$1.txt &
 }
 
-TAG=V00-00-15
+source ../../ZMET2015/settings.sh 
+
+TAG=${analysis_version}
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
 OUTPUTDIR=/nfs-7/userdata/cwelke/ZMETbabies/$TAG/
