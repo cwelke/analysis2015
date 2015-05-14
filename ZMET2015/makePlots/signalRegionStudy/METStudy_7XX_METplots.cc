@@ -18,33 +18,33 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
 {
 
   TChain * ch_zjets = new TChain("t");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht100to200.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht200to400.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht400to600.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht600toinf.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht600toinf_1.root");
+  ch_zjets->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht100to200.root");
+  ch_zjets->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht200to400.root");
+  ch_zjets->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht400to600.root");
+  ch_zjets->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht600toinf.root");
+  ch_zjets->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_ht600toinf_1.root");
 
   TChain * ch_zjets_inc = new TChain("t");
-  ch_zjets_inc->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_m50inc.root");
+  ch_zjets_inc->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/dyjetsll_m50inc.root");
 
   TChain * ch_fsbkg = new TChain("t");
-  // ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_bars.root");
-  // ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_bart.root");
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_bartw.root");
-  // ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_tops.root");
-  // ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_topt.root");
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/t_toptw.root");
+  // ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_bars.root");
+  // ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_bart.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_bartw.root");
+  // ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_tops.root");
+  // ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_topt.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/t_toptw.root");
 
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays.root");
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_1.root");
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_2.root");
-  ch_fsbkg->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_3.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_1.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_2.root");
+  ch_fsbkg->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttall_msdecays_3.root");
 
   TChain * ch_other = new TChain("t");
-  ch_other->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttw.root");
-  ch_other->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/ttz.root");
-  ch_other->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/wz_3lnu.root");
-  ch_other->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-15/zz_4l.root");
+  ch_other->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttw.root");
+  ch_other->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/ttz.root");
+  ch_other->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/wz_3lnu.root");
+  ch_other->Add("/nfs-6/userdata/cwelke/ZMETbabies/V00-00-15/zz_4l.root");
   
   TH1F * zjets_met      = new TH1F("zjets_met"     , "", 350, 0 ,350 );
   TH1F * zjets_incl_met = new TH1F("zjets_incl_met", "", 350, 0 ,350 );
@@ -68,8 +68,8 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
   TCut withb = "nBJet40 > 0";
   TCut xitionveto = "(abs(abs(lep_p4[0].eta())-1.5)>0.1&&abs(abs(lep_p4[1].eta())-1.5)>0.1)";
   TCut weight = "evt_scale1fb*10";
-  TCut SR1    = "ht > 800 && njets >= 2";
-  TCut SR2    = "ht > 600 && njets >= 3";
+  TCut SR1    = "ht > 600 && njets >= 2 && njets <= 3";
+  TCut SR2    = "njets >= 4";
   TCut SR3    = "njets >= 4";
 
   TCut selection = "";
