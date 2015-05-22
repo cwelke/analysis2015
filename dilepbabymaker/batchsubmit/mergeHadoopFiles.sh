@@ -8,9 +8,10 @@ function run () {
 source ../../ZMET2015/settings.sh 
 
 TAG=${analysis_version}
+TAG=V00-00-15
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
-OUTPUTDIR=/nfs-7/userdata/cwelke/ZMETbabies/$TAG/
+OUTPUTDIR=/nfs-6/userdata/cwelke/ZMETbabies/$TAG/
 
 mkdir -p $OUTPUTDIR
 chmod -R a+wrx $OUTPUTDIR
@@ -25,9 +26,9 @@ fi
 
 run ttall_msdecays
 
-# #
-# # DY+JETS
-# #
+# # #
+# # # DY+JETS
+# # #
 
 run dyjetsll_m50inc
 run dyjetsll_ht100to200
@@ -48,11 +49,11 @@ run t_toptw
 run t_bartw
 
 
-# #
-# # GAMMA + JETS
-# #
+#
+# GAMMA + JETS
+#
 
-run gjet_pt40_doubleEM
+# run gjet_pt40_doubleEM
 run gjet_ht100to200
 run gjet_ht200to400
 run gjet_ht400to600
@@ -83,9 +84,9 @@ run gjet_ht600toinf
 # # run zinv_ht400to600
 # # run zinv_ht600toinf
 
-# #
-# # DIBOSON
-# #
+#
+# DIBOSON
+#
 
 run wz_3lnu
 run zz_4l

@@ -330,8 +330,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       nlep = 0;
       nElectrons10 = 0;
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
-		// if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
- 	  	if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+		if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	// if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
 		if( cms3.els_p4().at(iEl).pt() < 15.0 ) continue;
   
         nElectrons10++;
@@ -363,7 +363,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         vec_lep_tightCharge.push_back ( tightChargeEle(iEl));
 
         nlep++;
-
+		// if( cms3.els_p4().at(iEl).pt() < 20.0 ) continue;
 		p4sLeptonsForJetCleaning.push_back(cms3.els_p4().at(iEl));
 
       }
@@ -376,8 +376,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  if (cms3.mus_p4().size() != cms3.mus_dzPV().size()) continue;
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
- 	  	// if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
- 	  	if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	// if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
 		if( cms3.mus_p4().at(iMu).pt() < 15.0 ) continue;
 
 		nMuons10++;
@@ -409,6 +409,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
         nlep++;
 
+		// if( cms3.mus_p4().at(iMu).pt() < 20.0 ) continue;
 		p4sLeptonsForJetCleaning.push_back(cms3.mus_p4().at(iMu));
       }
 
@@ -508,32 +509,41 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  // add selections to keep only events with photons and dilepton events
 	  if( !(ngamma > 0 || nlep > 0) ) continue;// fix for not iso study
        
+		std::pair <int, int> hyp_indices =  getHypLepIndices( lep_p4, lep_pdgId );
+		
 	  if (nlep > 1 ) {//require min 2 leps
-		if (lep_charge.at(0)*lep_charge.at(1) > 0){
+		if (lep_charge.at(hyp_indices.first)*lep_charge.at(hyp_indices.second) > 0){
 		  evt_type = 1; // same sign event
 		}else{
 		  evt_type = 0; // oppo sign event 
 		}
 
-		if (abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11 ){
-		  hyp_type = 0;// ee event
-		}else if (abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13){
-		  hyp_type = 1;// mm event	
-		}else if ((abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 13) ||
-				  (abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 11)){
+		if (        abs(lep_pdgId.at(hyp_indices.first)) == 11 && abs(lep_pdgId.at(hyp_indices.second)) == 11 ){
+		  hyp_type = 0;// ee event												   			   
+		}else if (  abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 13){
+		  hyp_type = 1;// mm event												   			   
+		}else if ( (abs(lep_pdgId.at(hyp_indices.first)) == 11 && abs(lep_pdgId.at(hyp_indices.second)) == 13) ||
+				   (abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 11)){
 		  hyp_type = 2;// em event
 		}else {
 		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
 		  continue;
 		}
-		dilmass = (lep_p4.at(0)+lep_p4.at(1)).mass();
-		dilpt   = (lep_p4.at(0)+lep_p4.at(1)).pt();       
+		dilmass = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).mass();
+		dilpt   = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).pt();       
 
 		//Add dRll
-		float dEtall = lep_p4.at(0).eta()-lep_p4.at(1).eta();
-		float dPhill = acos( cos( lep_p4.at(0).phi() - lep_p4.at(1).phi() ) );
+		float dEtall =            lep_p4.at(hyp_indices.first).eta() - lep_p4.at(hyp_indices.second).eta();
+		float dPhill = acos( cos( lep_p4.at(hyp_indices.first).phi() - lep_p4.at(hyp_indices.second).phi() ) );
 		dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
 
+		for( size_t lepind = 0; lepind < lep_p4.size(); lepind++ ){
+		  if( lepind == (size_t)hyp_indices.first  ) lep_islead.push_back(1);
+		  else          			        lep_islead.push_back(0);
+		  if( lepind == (size_t)hyp_indices.second ) lep_istail.push_back(1);
+		  else          			        lep_istail.push_back(0);
+		}
+		
 	  }else{
 		evt_type = 2; // photon + jets event
 	  }
@@ -1006,6 +1016,8 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("lep_lostHits"   , "std::vector< Int_t >"         , &lep_lostHits   );
   BabyTree_->Branch("lep_convVeto"   , "std::vector< Int_t >"         , &lep_convVeto   );
   BabyTree_->Branch("lep_tightCharge", "std::vector< Int_t >"         , &lep_tightCharge);
+  BabyTree_->Branch("lep_islead"     , "std::vector< Int_t >"         , &lep_islead     );
+  BabyTree_->Branch("lep_istail"     , "std::vector< Int_t >"         , &lep_istail     );
 
   BabyTree_->Branch("ntau", &ntau, "ntau/I" );
   BabyTree_->Branch("tau_pt"        , "std::vector <Float_t>" , &tau_pt       );
@@ -1207,6 +1219,8 @@ void babyMaker::InitBabyNtuple () {
   lep_lostHits   .clear();   //[nlep]
   lep_convVeto   .clear();   //[nlep]
   lep_tightCharge.clear();   //[nlep]
+  lep_islead     .clear();   //[nlep]
+  lep_istail     .clear();   //[nlep]
 
   ntau = -999;
   tau_pt       .clear();   //[ntau]

@@ -84,6 +84,7 @@ void draw_METvsHT( string inclusivestring = "inclusive", string bregion = "bveto
   TCut ht100      = "ht > 100";
   TCut genht100   = "gen_ht < 100";
   TCut njets2     = "njets > 1";
+  TCut njets3     = "njets > 2";
   TCut metlow50   = "met_rawPt > 0 && met_rawPt <= 50";
   TCut metlow60   = "met_rawPt > 0 && met_rawPt <= 60";
   TCut met100     = "met_rawPt > 150 && met_rawPt <= 225";
@@ -101,7 +102,7 @@ void draw_METvsHT( string inclusivestring = "inclusive", string bregion = "bveto
   selection += xitionveto;
   if( bregion == "bveto" ) selection += bveto;
   if( bregion == "withb" ) selection += withb;
-  if( bregion == "3btag" ) selection += btag3;
+  if( bregion == "btag3" ){	selection += njets3;	selection += btag3;  }
   if( bregion == "bveto" ){
 	if( metregion == "metlow" ) selection += metlow60;
 	if( metregion == "metlow" ) selection += metlow60;

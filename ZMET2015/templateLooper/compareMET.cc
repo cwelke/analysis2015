@@ -4,22 +4,15 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TPad.h"
+#include "TLatex.h"
 
 #include <iostream>
 
+#include "../sharedCode/histTools.cc"
+
 using namespace std;
 
-float err_mult(float A, float B, float errA, float errB, float C) {
-  return sqrt(C*C*(pow(errA/A,2) + pow(errB/B,2)));
-}
-
-double getBinomialError( const double num, const double deno ){
-  double   p       =   num / deno;
-  double   error   =   sqrt(p*(1-p)/deno);
-  return error;  
-}
-
-void compareMET( std::string iter = "")
+void compareMET( std::string iter = "", float luminosity = 1.0 )
 {
 
   std::string filename = Form("../output/%s/zjets_hists.root", iter.c_str() );
@@ -28,16 +21,18 @@ void compareMET( std::string iter = "")
   TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_2jets")->Clone("h_zll");
   TH1F * h_pho = (TH1F*)infile->Get("h_templ_met")->Clone("h_pho");
 
+  h_zll->Scale(luminosity);
+  h_pho->Scale(luminosity);
 
   //MAKE TABLES
   vector <float> metcut;
   metcut.push_back(0.0);
   metcut.push_back(60);
   // metcut.push_back(90);
-  metcut.push_back(130);
+  metcut.push_back(150);
   // metcut.push_back(100);
   // metcut.push_back(150);
-  metcut.push_back(200);
+  metcut.push_back(225);
   metcut.push_back(300);
   metcut.push_back(-1);
 
@@ -68,7 +63,7 @@ void compareMET( std::string iter = "")
 	}
   }
   
-  cout<<"$E_{T}^{miss} [GeV]$ &";
+  cout<<"$\\mathrm{E_{T}^{miss} [GeV]}$ &";
   for( size_t bini = 0; bini < metcut.size()-2; bini++ ){
 	cout<<Form("%.0f - %.0f & ", metcut.at(bini), metcut.at(bini+1) );
   }
@@ -76,7 +71,7 @@ void compareMET( std::string iter = "")
   cout<<endl;
 
   cout<<"\\hline "<<endl;
-  cout<<"zjets& ";
+  cout<<"Z+jets& ";
   for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
 	if( bini < val_zjets.size()-2 )
 	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
@@ -85,7 +80,7 @@ void compareMET( std::string iter = "")
   }
   cout<<endl;
 
-  cout<<"$\\gamma+jets$& ";
+  cout<<"$\\mathrm{\\gamma+jets}$& ";
   for( size_t bini = 0; bini < val_gjets.size()-1; bini++ ){
 	if( bini < val_gjets.size()-2 )
 	cout<<Form(" %.1f $\\pm$ %.1f & ", val_gjets.at(bini), err_gjets.at(bini));
@@ -121,9 +116,9 @@ void compareMET( std::string iter = "")
   // c1->SetLogy();
 
   TPad *pad = new TPad( "p_main", "p_main", 0.0, 0.3, 1.0, 1.0);
-  pad->SetBottomMargin(0.08);
+  pad->SetBottomMargin(0.05);
   pad->SetRightMargin(0.07);
-  pad->SetTopMargin(0.07);
+  pad->SetTopMargin(0.08);
   pad->SetLeftMargin(0.18);
   pad->Draw();
   pad->cd();
@@ -134,7 +129,11 @@ void compareMET( std::string iter = "")
   h_pho->SetFillStyle(1001);
   
   h_zll->GetXaxis()->SetLabelSize(0);
-  h_zll->GetYaxis()->SetRangeUser(2e-3,3e4);
+  h_zll->GetYaxis()->SetLabelSize(0.05);
+  h_zll->GetYaxis()->SetTitleOffset(1.5);
+  h_zll->GetYaxis()->SetTitleSize(0.05);
+  h_zll->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
+  h_zll->GetYaxis()->SetRangeUser(2e-3*luminosity,3e4*luminosity);
   h_zll->SetMarkerStyle(8);
   h_zll->SetMarkerSize(0.75);
 
@@ -144,7 +143,7 @@ void compareMET( std::string iter = "")
   
   pad->RedrawAxis();
 
-  TLegend *l1 = new TLegend(0.6, 0.6, 0.9, 0.90);    
+  TLegend *l1 = new TLegend(0.6, 0.6, 0.9, 0.85);    
   l1->SetLineColor(kWhite);    
   l1->SetShadowColor(kWhite);    
   l1->SetFillColor(kWhite);    
@@ -174,7 +173,8 @@ void compareMET( std::string iter = "")
 
   h_rat->GetYaxis()->SetTitle("#frac{Z+jets}{#gamma+jets}");
   h_rat->GetYaxis()->SetTitleSize(0.12);
-  h_rat->GetYaxis()->SetTitleOffset(0.65);
+  h_rat->GetYaxis()->SetTitleOffset(0.5);
+  h_rat->GetYaxis()->CenterTitle();
   // cout<<h_rat->GetYaxis()->GetTitleSize()<<endl;
 
   h_rat->GetXaxis()->SetTitle("E_{T}^{miss} GeV");
@@ -190,6 +190,8 @@ void compareMET( std::string iter = "")
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
+  drawCMSLatex( c1, luminosity );
+
   c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.png", iter.c_str() ));
   c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.pdf", iter.c_str() ));
   

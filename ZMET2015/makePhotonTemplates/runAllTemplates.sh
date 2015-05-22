@@ -2,6 +2,10 @@
 
 source ../settings.sh
 
+if [ ! -d "../output/photon/$analysis_version/" ]; then
+	mkdir -p ../output/photon/$analysis_version/
+fi
+
 compile_looper
 # create_photon_output
 

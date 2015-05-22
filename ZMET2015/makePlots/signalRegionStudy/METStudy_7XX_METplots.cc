@@ -12,7 +12,11 @@
 #include "TH1F.h"
 #include "TH2F.h"
 
+#include "../../sharedCode/histTools.cc"
+
 using namespace std;
+
+const float luminosity = 10.0;
 
 void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto" )
 {
@@ -55,41 +59,41 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
   zjets_incl_met->Sumw2();
   fsbkg_met     ->Sumw2();
   other_met     ->Sumw2();
+
+  string mettype = "met_pt";
   
   TCut dilep = "nlep > 1 && lep_pt[0] > 25 && lep_pt[1] > 20 && (hyp_type == 0 || hyp_type == 1) && dilmass > 81 && dilmass < 101 && evt_type == 0";
   TCut ht100 = "ht_eta30 > 100";
   TCut genht100 = "gen_ht < 100";
   TCut njets2 = "njets > 1";
-  TCut metlow = "met_rawPt > 0 && met_rawPt <= 60";
-  TCut met100 = "met_rawPt > 100 && met_rawPt <= 200";
-  TCut met200 = "met_rawPt > 200 && met_rawPt <= 300";
-  TCut met300 = "met_rawPt > 300";
+  TCut metlow = Form("%s > 0   && %s <= 60" , mettype.c_str(), mettype.c_str() );
+  TCut met100 = Form("%s > 100 && %s <= 200", mettype.c_str(), mettype.c_str() );
+  TCut met200 = Form("%s > 200 && %s <= 300", mettype.c_str(), mettype.c_str() );
+  TCut met300 = Form("%s > 300"                              , mettype.c_str() );
   TCut bveto = "nBJet40 == 0";
   TCut withb = "nBJet40 > 0";
+  TCut btag3 = "nBJet40 > 2";
   TCut xitionveto = "(abs(abs(lep_p4[0].eta())-1.5)>0.1&&abs(abs(lep_p4[1].eta())-1.5)>0.1)";
   TCut weight = "evt_scale1fb*10";
   TCut SR1    = "ht > 600 && njets >= 2 && njets <= 3";
   TCut SR2    = "njets >= 4";
-  TCut SR3    = "njets >= 4";
+  TCut SR3    = "njets >= 3 && nBJet40 > 2";
 
   TCut selection = "";
   selection += dilep;
-  // selection += ht100;
   selection += njets2;
   selection += xitionveto;
   if( bregion == "bveto" ) selection += bveto;
   if( bregion == "withb" ) selection += withb;
-  // selection += met100;
-  // selection += met200;
-  // selection += met300;
+  if( bregion == "btag3" ) selection += btag3;
   if( signalregion == "SR1" ) selection += SR1;
   if( signalregion == "SR2" ) selection += SR2;
   if( signalregion == "SR3" ) selection += SR3;
   
-  ch_zjets->Draw(     "min(349.5,met_rawPt)>>zjets_met"      ,  selection               *weight);
-  ch_zjets_inc->Draw( "min(349.5,met_rawPt)>>zjets_incl_met" ,  (selection + genht100 ) *weight);
-  ch_fsbkg->Draw(     "min(349.5,met_rawPt)>>fsbkg_met"      ,  selection               *weight);
-  ch_other->Draw(     "min(349.5,met_rawPt)>>other_met"      ,  selection               *weight);
+  ch_zjets->Draw(     Form("min(349.5,%s)>>zjets_met"      , mettype.c_str() ), selection               *weight);
+  ch_zjets_inc->Draw( Form("min(349.5,%s)>>zjets_incl_met" , mettype.c_str() ), (selection + genht100 ) *weight);
+  ch_fsbkg->Draw(     Form("min(349.5,%s)>>fsbkg_met"      , mettype.c_str() ), selection               *weight);
+  ch_other->Draw(     Form("min(349.5,%s)>>other_met"      , mettype.c_str() ), selection               *weight);
   zjets_met->Add(zjets_incl_met);
 
   vector <float> metcut;
@@ -97,6 +101,7 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
   metcut.push_back(0.0);
   if( bregion == "bveto" ) metcut.push_back(60.0);
   if( bregion == "withb" ) metcut.push_back(50.0);
+  if( bregion == "btag3" ) metcut.push_back(50.0);
   metcut.push_back(150.0);
   metcut.push_back(225.0);
   metcut.push_back(300.0);
@@ -318,8 +323,8 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
 
   TPad *pad = new TPad( "p_main", "p_main", 0.0, 0.0, 1.0, 1.0);
   pad->SetBottomMargin(0.18);
-  pad->SetRightMargin(0.18);
-  pad->SetTopMargin(0.07);
+  pad->SetRightMargin(0.07);
+  pad->SetTopMargin(0.06);
   pad->SetLeftMargin(0.18);
   pad->Draw();
   pad->cd();
@@ -331,15 +336,10 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
 
   // THStack * stack = new THStack("stack","");
   THStack * stack       = new THStack("stack","");
-  TH1F * h_inclusive = NULL;
-
-  // h_inclusive = dynamic_cast<TH1F*>(zjets_met->Clone("h_inclusive"));
-  // h_inclusive->Scale(0);
 
   // zjets_met->Scale(1.0/allevents);
   // other_met->Scale(1.0/allevents);
-  // fsbkg_met->Scale(1.0/allevents);
- 
+  // fsbkg_met->Scale(1.0/allevents); 
 
   zjets_met->SetFillColor(kRed);
   fsbkg_met->SetFillColor(kYellow);
@@ -357,15 +357,9 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
   stack->Add(fsbkg_met);
   stack->Add(zjets_met);
 
-
   zjets_met->GetYaxis()->SetRangeUser(2e-1,1e4);
   zjets_met->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
   zjets_met->GetYaxis()->SetTitle("Events/25 GeV");
-  // stack->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
-  // stack->GetYaxis()->SetTitle("Events/10 GeV");
-	
-  // zjets_met->GetYaxis()->SetRangeUser(2e-6,1);
-  // stack->GetZaxis()->SetRangeUser(2e-5,5e5);
 
   zjets_met->Draw("hist");
   stack->Draw("histsame");
@@ -380,30 +374,11 @@ void METStudy_7XX_METplots( string signalregion = "SR2", string bregion = "bveto
   l1->AddEntry( other_met , "Other"       , "f");
   l1->Draw("same");
 
+  // drawCMSLatex( c_met, luminosity, .18, .5 );
+  drawCMSLatex( c_met, luminosity );
+  
   c_met->SaveAs(Form("~/public_html/ZMET2015/plots/MET_study_8to13TeV/V00-00-15/MET_%s_%s.pdf", signalregion.c_str(), bregion.c_str()));
   c_met->SaveAs(Form("~/public_html/ZMET2015/plots/MET_study_8to13TeV/V00-00-15/MET_%s_%s.png", signalregion.c_str(), bregion.c_str()));
-
-  // TCanvas * c_inclusive = new TCanvas("c_inclusive","",800,800);
-
-  // c_inclusive->cd();
-
-  // TPad *p_inclusive = new TPad( "p_main", "p_main", 0.0, 0.0, 1.0, 1.0);
-  // p_inclusive->SetBottomMargin(0.18); p_inclusive->SetRightMargin(0.18);
-  // p_inclusive->SetTopMargin(0.07)   ; p_inclusive->SetLeftMargin(0.18) ;
-  // p_inclusive->Draw(); p_inclusive->cd(); p_inclusive->SetLogz();
-  
-  // for( int xbin = 1; xbin < stack->GetNbinsX()+1; xbin++ ){
-  // 	for( int ybin = 1; ybin < stack->GetNbinsY()+1; ybin++ ){
-  // 	  h_inclusive->SetBinContent( xbin, ybin, stack->Integral( xbin, -1, ybin, -1 ));
-  // 	}
-  // }
-
-  // h_inclusive->GetYaxis()->SetTitle("H_{T}");
-  // h_inclusive->GetXaxis()->SetTitle("N_{jets}");
-  // h_inclusive->Draw("colztext");
-	
-  // c_inclusive->SaveAs("~/public_html/ZMET2015/plots/MET_study_8to13TeV/V00-00-15//HT_vs_njets_run2_inclusive.pdf");
-  // c_inclusive->SaveAs("~/public_html/ZMET2015/plots/MET_study_8to13TeV/V00-00-15//HT_vs_njets_run2_inclusive.png");
   
   return;
 }

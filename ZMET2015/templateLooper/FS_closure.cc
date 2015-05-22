@@ -8,30 +8,24 @@
 
 #include <iostream>
 
+#include "../sharedCode/histTools.cc"
+
 using namespace std;
 
-float err_mult(float A, float B, float errA, float errB, float C) {
-  return sqrt(C*C*(pow(errA/A,2) + pow(errB/B,2)));
-}
-
-double getBinomialError( const double num, const double deno ){
-  double   p       =   num / deno;
-  double   error   =   sqrt(p*(1-p)/deno);
-  return error;  
-}
-
-void FS_closure( std::string iter = "")
+void FS_closure( std::string iter = "", float luminosity = 1.0 )
 {
 
   std::string filename = Form("../output/%s/FS_BG_hists.root", iter.c_str() );
   // std::string filename = Form("../output/%s/ttbar_hists.root", iter.c_str() );
   TFile *infile = new TFile(filename.c_str());
 
-  std::string variable = "mll";
+  std::string variable = "met";
   
   TH1F * h_ll = (TH1F*)infile->Get(Form("h_ll_event_%s_2jets", variable.c_str() ))->Clone("h_ll");
   TH1F * h_em = (TH1F*)infile->Get(Form("h_em_event_%s_2jets", variable.c_str() ))->Clone("h_em");
 
+  h_ll->Scale(luminosity);
+  h_em->Scale(luminosity);
 
   //MAKE TABLES
   vector <float> metcut;
@@ -48,8 +42,8 @@ void FS_closure( std::string iter = "")
   if( variable == "met" ){
 	metcut.push_back(0.0);
 	metcut.push_back(60);
-	metcut.push_back(130);
-	metcut.push_back(200);
+	metcut.push_back(150);
+	metcut.push_back(225);
 	metcut.push_back(300);
 	metcut.push_back(-1);
   }
@@ -136,13 +130,13 @@ void FS_closure( std::string iter = "")
   // c1->SetLogy();
 
   TPad *pad = new TPad( "p_main", "p_main", 0.0, 0.3, 1.0, 1.0);
-  pad->SetBottomMargin(0.08);
+  pad->SetBottomMargin(0.05);
   pad->SetRightMargin(0.07);
-  pad->SetTopMargin(0.07);
+  pad->SetTopMargin(0.08);
   pad->SetLeftMargin(0.18);
   pad->Draw();
   pad->cd();
-  // if( variable == "met" ) pad->SetLogy();
+  if( variable == "met" ) pad->SetLogy();
 
   h_ll->SetLineWidth(2);
   h_em->SetFillColor(kCyan);
@@ -150,8 +144,12 @@ void FS_closure( std::string iter = "")
   
   h_ll->GetXaxis()->SetLabelSize(0);
   // if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(1e-2,1e2);
-  if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(1e-2,1e2);
+  if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(2e-0,2e3);
   // if( variable == "mll" ) h_ll->GetYaxis()->SetRangeUser(0,5.5e2);
+  h_ll->GetYaxis()->SetLabelSize(0.05);
+  h_ll->GetYaxis()->SetTitleOffset(1.5);
+  h_ll->GetYaxis()->SetTitleSize(0.05);
+  h_ll->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
   h_ll->GetXaxis()->SetRangeUser(0,300);
   h_ll->SetMarkerStyle(8);
   h_ll->SetMarkerSize(0.75);
@@ -193,8 +191,9 @@ void FS_closure( std::string iter = "")
   h_rat->GetYaxis()->SetNdivisions(5);
 
   h_rat->GetYaxis()->SetTitle("#frac{ee+#mu#mu}{e#mu}");
+  h_rat->GetYaxis()->CenterTitle();
   h_rat->GetYaxis()->SetTitleSize(0.12);
-  h_rat->GetYaxis()->SetTitleOffset(0.65);
+  h_rat->GetYaxis()->SetTitleOffset(0.5);
   // cout<<h_rat->GetYaxis()->GetTitleSize()<<endl;
 
   if( variable == "met" ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} GeV");
@@ -212,6 +211,8 @@ void FS_closure( std::string iter = "")
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
+  drawCMSLatex( c1, luminosity );
+
   c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_FS_closure.png", iter.c_str(), variable.c_str() ));
   c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_FS_closure.pdf", iter.c_str(), variable.c_str() ));
   

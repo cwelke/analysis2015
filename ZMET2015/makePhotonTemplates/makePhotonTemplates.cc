@@ -93,6 +93,12 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
 
+	  float event_met_pt = zmet.met_pt();
+	  float event_met_ph = zmet.met_phi();
+
+	  // event_met_pt = zmet.met_rawPt();
+	  // event_met_ph = zmet.met_rawPhi();	  
+
 	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
 	  if( zmet.njets()                       < 2     ) continue; // >=2 jets
 	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
@@ -100,7 +106,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
 	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
       if( acos( cos( zmet.gamma_phi().at(0)			 
-					 - zmet.met_rawPhi() ) ) < 0.14  ) continue; // kill photons aligned with MET
+					 - event_met_ph ) ) < 0.14  ) continue; // kill photons aligned with MET
 	  if( zmet.elveto()                              ) continue; // veto pixel match
 	  // if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
 	  
@@ -140,7 +146,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
-	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), zmet.met_rawPt(), weight*vtxweight );
+	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight*vtxweight );
 
 	  // fillUnderOverFlow(mettemplate_hists.at("photon_pt"), zmet.gamma_pt().at(0), weight );
 	  // fillUnderOverFlow(mettemplate_hists.at("ht"       ), zmet.ht()            , weight );

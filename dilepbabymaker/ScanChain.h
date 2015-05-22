@@ -146,6 +146,8 @@ class babyMaker {
   vector <Int_t  > lep_lostHits   ;   //[nlep]
   vector <Int_t  > lep_convVeto   ;   //[nlep]
   vector <Int_t  > lep_tightCharge;   //[nlep]
+  vector <Int_t  > lep_islead     ;   //[nlep]
+  vector <Int_t  > lep_istail     ;   //[nlep]
   
 //----- TAUS
   Int_t           ntau;

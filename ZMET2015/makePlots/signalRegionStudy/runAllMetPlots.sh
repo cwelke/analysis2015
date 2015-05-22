@@ -1,12 +1,12 @@
 
 
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR1\", \"bveto\")" 
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR2\", \"bveto\")" 
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR1\", \"withb\")" 
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR2\", \"withb\")" 
+root -b -q "METStudy_7XX_METplots.cc+(\"SR1\", \"bveto\")" 
+root -b -q "METStudy_7XX_METplots.cc+(\"SR2\", \"bveto\")" 
+root -b -q "METStudy_7XX_METplots.cc+(\"SR1\", \"withb\")" 
+root -b -q "METStudy_7XX_METplots.cc+(\"SR2\", \"withb\")" 
 
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR3\", \"bveto\")" &
-# root -b -q "METStudy_7XX_METplots.cc+(\"SR3\", \"withb\")" &
+# root -b -q "METStudy_7XX_METplots.cc+(\"SR1\", \"btag3\")" 
+# root -b -q "METStudy_7XX_METplots.cc+(\"SR2\", \"btag3\")" 
 
 # root -b -q "draw_METvsHT.cc+( \"inclusive\", \"bveto\",\"metall\" )" 
 # root -b -q "draw_METvsHT.cc+( \"inclusive\", \"bveto\",\"metlow\" )" &
@@ -46,20 +46,16 @@
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"bveto\",\"met150\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"bveto\",\"met225\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"bveto\",\"met300\" )" &
+
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"withb\",\"metall\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"withb\",\"metlow\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"withb\",\"met150\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"withb\",\"met225\" )" &
 # root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"withb\",\"met300\" )" &
 
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metall\" )" 
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metlow\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met150\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met225\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met300\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metall\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metlow\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met150\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met225\" )" &
-root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met300\" )" &
+# root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metall\" )"
+# root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"metlow\" )" &
+# root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met150\" )" &
+# root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met225\" )" &
+# root -b -q "draw_METvsHT.cc+( \"signalbinning\", \"btag3\",\"met300\" )" &
 

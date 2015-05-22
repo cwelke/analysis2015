@@ -54,11 +54,11 @@ TAG=${analysis_version}
 # # # GAMMA + JETS
 # # #
 
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08 ${TAG}_gjet_pt40_doubleEM
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht100to200
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht200to400
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht400to600
-# ./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht600toinf
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJet_Pt40_doubleEMEnriched_TuneZ2star_13TeV-pythia6_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08 ${TAG}_gjet_pt40_doubleEM
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-100to200_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht100to200
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-200to400_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht200to400
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-400to600_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht400to600
+./writeConfig.sh /hadoop/cms/store/group/snt/phys14/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08      ${TAG}_gjet_ht600toinf
 
 # #
 # # ALTERNATIVE TTBAR

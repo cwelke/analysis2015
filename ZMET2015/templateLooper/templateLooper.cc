@@ -110,6 +110,12 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		weight *= zmet.evt_scale1fb();
 	  }
 
+	  float event_met_pt = zmet.met_pt();
+	  float event_met_ph = zmet.met_phi();
+
+	  // event_met_pt = zmet.met_rawPt();
+	  // event_met_ph = zmet.met_rawPhi();	  
+
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
@@ -188,7 +194,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //-~-~-~-~-~-~-~-~-//	  
 
 	  fillHist( "event", "njets", "2jets", zmet.njets()    , weight );
-	  fillHist( "event", "met"  , "2jets", zmet.met_rawPt(), weight );
+	  fillHist( "event", "met"  , "2jets", event_met_pt    , weight );
 	  fillHist( "event", "ht"   , "2jets", zmet.ht()       , weight );
 
 	  // }else{
