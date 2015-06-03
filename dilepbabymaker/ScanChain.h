@@ -124,6 +124,23 @@ class babyMaker {
   Int_t           HLT_MuEG;   
   Int_t           HLT_DoubleMu;   
   Int_t           HLT_Photons;   
+  Int_t           HLT_Photon22;
+  Int_t           HLT_Photon30;
+  Int_t           HLT_Photon36;
+  Int_t           HLT_Photon50;
+  Int_t           HLT_Photon75;
+  Int_t           HLT_Photon90;
+  Int_t           HLT_Photon120;
+  Int_t           HLT_Photon175;
+  Int_t           HLT_Photon165_HE10;
+  Int_t           HLT_Photon22_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon30_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon36_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon50_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon75_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon90_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon120_R9Id90_HE10_IsoM;
+  Int_t           HLT_Photon165_R9Id90_HE10_IsoM;
 
   //----- LEPTONS
   Int_t           nlep;
@@ -135,6 +152,7 @@ class babyMaker {
   vector <Int_t  > lep_charge     ;   //[nlep]
   vector <Int_t  > lep_pdgId      ;   //[nlep]
   vector <Float_t> lep_dxy        ;   //[nlep]
+  vector <Float_t> lep_etaSC      ;   //[nlep]
   vector <Float_t> lep_dz         ;   //[nlep]
   vector <Int_t  > lep_tightId    ;   //[nlep]
   vector <Float_t> lep_relIso03   ;   //[nlep]
@@ -248,6 +266,23 @@ class babyMaker {
   vector <Int_t  >         jet_id          ;   //[njet]
   vector <Int_t  >         jet_puId        ;   //[njet]
 
+  //----- edge variables
+  Int_t                  edge_hyp_type; // 10 = ee; 11 = mm; 12 = em; 12 = me
+  Int_t                  edge_njets;
+  Float_t                edge_ht;
+  Float_t                edge_dRll;
+  vector <LorentzVector> edge_jets_p4;
+
+  vector <LorentzVector> edge_lep_p4;
+  vector <Float_t>       edge_lep_pt         ;   //[nlep]
+  vector <Float_t>       edge_lep_eta        ;   //[nlep]
+  vector <Float_t>       edge_lep_phi        ;   //[nlep]
+  vector <Float_t>       edge_lep_mass       ;   //[nlep]
+  vector <Int_t  >       edge_lep_charge     ;   //[nlep]
+  vector <Int_t  >       edge_lep_pdgId      ;   //[nlep]
+  vector <Float_t>       edge_lep_dxy        ;   //[nlep]
+  vector <Float_t>       edge_lep_dz         ;   //[nlep]
+  
 };
 
 #endif

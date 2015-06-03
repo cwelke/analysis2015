@@ -39,7 +39,7 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
   }
 
   makePhotonTemplates* myLooper = new makePhotonTemplates();
-  myLooper->ScanChain( ch , iter , sample );
+  myLooper->ScanChain( ch , iter , sample, selection );
 
   
   // makePhotonTemplates myLooper(selection);

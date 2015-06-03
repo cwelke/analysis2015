@@ -15,11 +15,12 @@ using namespace std;
 void FS_closure( std::string iter = "", float luminosity = 1.0 )
 {
 
-  std::string filename = Form("../output/%s/FS_BG_hists.root", iter.c_str() );
+  std::string sample_test = "FS_BG";
+  std::string variable = "met";
+  
+  std::string filename = Form("../output/%s/%s_hists.root", iter.c_str(), sample_test.c_str() );
   // std::string filename = Form("../output/%s/ttbar_hists.root", iter.c_str() );
   TFile *infile = new TFile(filename.c_str());
-
-  std::string variable = "met";
   
   TH1F * h_ll = (TH1F*)infile->Get(Form("h_ll_event_%s_2jets", variable.c_str() ))->Clone("h_ll");
   TH1F * h_em = (TH1F*)infile->Get(Form("h_em_event_%s_2jets", variable.c_str() ))->Clone("h_em");
@@ -143,14 +144,21 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   h_em->SetFillStyle(1001);
   
   h_ll->GetXaxis()->SetLabelSize(0);
-  // if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(1e-2,1e2);
-  if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(2e-0,2e3);
-  // if( variable == "mll" ) h_ll->GetYaxis()->SetRangeUser(0,5.5e2);
+  if( sample_test == "FS_BG" ){
+	// if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(1e-2,1e2);
+	if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(2e-0,2e3);
+	// if( variable == "mll" ) h_ll->GetYaxis()->SetRangeUser(0,5.5e2);
+  }
+  
+  float xmax = 350;
+  updateoverflow( h_ll, xmax );
+  updateoverflow( h_em, xmax );
+  
   h_ll->GetYaxis()->SetLabelSize(0.05);
   h_ll->GetYaxis()->SetTitleOffset(1.5);
   h_ll->GetYaxis()->SetTitleSize(0.05);
   h_ll->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
-  h_ll->GetXaxis()->SetRangeUser(0,300);
+  h_ll->GetXaxis()->SetRangeUser(0,xmax);
   h_ll->SetMarkerStyle(8);
   h_ll->SetMarkerSize(0.75);
 
@@ -207,14 +215,14 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
 
   h_rat->Draw("e1x0");
 
-  TLine * xaxis = new TLine(0,1,300,1);
+  TLine * xaxis = new TLine(0,1,xmax,1);
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
   drawCMSLatex( c1, luminosity );
 
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_FS_closure.png", iter.c_str(), variable.c_str() ));
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_FS_closure.pdf", iter.c_str(), variable.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_closure.png", iter.c_str(), variable.c_str(), sample_test.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_closure.pdf", iter.c_str(), variable.c_str(), sample_test.c_str() ));
   
   return;
 }

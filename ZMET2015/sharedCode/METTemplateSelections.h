@@ -11,11 +11,11 @@ class METTemplates
 {
 
 public:
-  METTemplates();
+  METTemplates( const std::string selection );
   ~METTemplates();
 
   void bookMETHists( std::map<std::string, TH1F*> &methists );
-  void setBins();
+  void setBins( const std::string selection );
   int getNjetsBin( const int &njets );
   int getHTBin( const float &HT );
   int getpTBin( const float &pT );

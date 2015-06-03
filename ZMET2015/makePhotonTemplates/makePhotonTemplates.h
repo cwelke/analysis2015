@@ -17,7 +17,7 @@ public:
 
   makePhotonTemplates();
   ~makePhotonTemplates();
-  void ScanChain (TChain * chain,const std::string iter,const std::string sample);
+  void ScanChain (TChain * chain,const std::string iter,const std::string sample, const std::string selection);
   void bookHistos();
   
 private:

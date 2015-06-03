@@ -32,7 +32,7 @@ templateLooper::~templateLooper()
 {
 };
 
-void templateLooper::ScanChain ( TChain * chain , const string iter , const string sample ){
+void templateLooper::ScanChain ( TChain * chain , const string iter , const string sample, const string selection ){
 
   // if( zmet.isData() )        cout << "Running on Data."        << endl;
   // else                       cout << "Running on MC.  "        << endl;
@@ -42,9 +42,9 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   unsigned int nem = 0;
   
   int npass = 0;
-  METTemplates mettemplates;
-  mettemplates.loadTemplatesFromFile( Form("../output/photon/%s/All_MC_photon_templates.root", iter.c_str()), mettemplate_hists );
-  mettemplates.setBins();
+  METTemplates mettemplates( selection );
+  mettemplates.loadTemplatesFromFile( Form("../output/photon/%s/All_MC%s_photon_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
+  mettemplates.setBins( selection );
   TH1F* currentMETTemplate = NULL;
 
   bookHistos();
@@ -166,7 +166,16 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  // 				  templates.hbhenew()==1) )                             continue; // MET filters
 	  // // if( isdata && (h20 < 1 && h30 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
 	  // if( isdata && (h20 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
+
 	  
+	  if( TString(selection).Contains("bveto") && zmet.nBJet40() > 0 ) continue; //bveto
+	  if( TString(selection).Contains("withb") && zmet.nBJet40() < 1 ) continue; //at least 1 b-tag
+	  if( TString(selection).Contains("SRA") && !((zmet.njets() == 2 || zmet.njets() == 3) && zmet.ht() > 600) ) continue; //high HT region
+	  if( TString(selection).Contains("SRB") && zmet.njets() < 4                                               ) continue; //large njets
+
+	  // if( sample == "vv" ||
+	  // 	  sample == "ttv" ) 
+		  
       ++npass;
 
 	  //-~-~-~-~-~-~-~-~-~-//
@@ -197,6 +206,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  fillHist( "event", "met"  , "2jets", event_met_pt    , weight );
 	  fillHist( "event", "ht"   , "2jets", zmet.ht()       , weight );
 
+	  if( zmet.jzb_T1() < 0 ){
+	  	fillHist( "event", "jzb"  , "2jets", event_met_pt  , weight );
+	  }
+	  
 	  // }else{
 	  // 	  cout << "NO TRIGGERS PASS!!!" << endl;
 	  // 	  exit(0);
@@ -225,9 +238,11 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   rootdir->cd();
 
 
-  string outputfilename = 	Form("../output/%s/%s_hists.root",
+
+  string outputfilename = 	Form("../output/%s/%s%s_hists.root",
 								 iter.c_str(),
-								 sample.c_str()
+								 sample.c_str(),
+								 selection.c_str()
 								 );
 
   cout << "Writing output to " << outputfilename << endl;
@@ -257,22 +272,17 @@ void templateLooper::bookHistos(){
   object.push_back("dilep");
   vector <string> selection;
   selection.push_back("2jets");
-  vector <string> variable;
-  variable.push_back("pt");
-  variable.push_back("met");
-  variable.push_back("ht");
-  variable.push_back("mt2");
-  variable.push_back("mt2j");
-  variable.push_back("njets");
-  variable.push_back("mll");
-  vector <float> variable_bins;
-  variable_bins.push_back(500 );
-  variable_bins.push_back(500 );
-  variable_bins.push_back(1000);
-  variable_bins.push_back(500 );
-  variable_bins.push_back(500 );
-  variable_bins.push_back(20  );  
-  variable_bins.push_back(300 );  
+
+  vector <string> variable;      vector <float> variable_bins;
+
+  variable.push_back("pt");      variable_bins.push_back(500 );  
+  variable.push_back("met");     variable_bins.push_back(500 );  
+  variable.push_back("ht");	     variable_bins.push_back(1000);  
+  variable.push_back("mt2");     variable_bins.push_back(500 );  
+  variable.push_back("mt2j");    variable_bins.push_back(500 );  
+  variable.push_back("njets");   variable_bins.push_back(20  );  
+  variable.push_back("mll");     variable_bins.push_back(300 );  
+  variable.push_back("jzb");     variable_bins.push_back(500 );  
 
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -307,7 +317,7 @@ void templateLooper::bookHistos(){
 }
 
 void templateLooper::bookHist( string name, string title, int nbins, float xmin, float xmax ){
-  cout<<"Booking hist: "<<name<<endl;
+  // cout<<"Booking hist: "<<name<<endl;
   TH1F * hist = new TH1F( name.c_str(), title.c_str(), nbins, xmin, xmax );
   hist->Sumw2();
   event_hists.insert ( pair<std::string,TH1F*>( name, hist ) );		

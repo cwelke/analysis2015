@@ -8,7 +8,6 @@ function run () {
 source ../../ZMET2015/settings.sh 
 
 TAG=${analysis_version}
-TAG=V00-00-15
 
 HADOOPDIR=/hadoop/cms/store/user/${USER}/dilepbabies/
 OUTPUTDIR=/nfs-6/userdata/cwelke/ZMETbabies/$TAG/

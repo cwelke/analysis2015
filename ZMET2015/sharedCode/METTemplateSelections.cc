@@ -15,7 +15,7 @@
 
 using namespace std;
 
-METTemplates::METTemplates()
+METTemplates::METTemplates( const string selection )
 {
   photon_ptcuts.clear();
   photon_njetcuts.clear();
@@ -23,7 +23,7 @@ METTemplates::METTemplates()
   met_counts.clear();
 
 
-  setBins();
+  setBins( selection );
   size_t njetcuts = photon_njetcuts.size();  
   size_t nhtcuts  = photon_htcuts  .size();  
   size_t nptcuts  = photon_ptcuts  .size();  
@@ -35,7 +35,7 @@ METTemplates::METTemplates()
 							 , static_cast<int>(ht_ind)
 							 , static_cast<int>(pt_ind)
 							 );
-		cout<<"methistname: "<<counts<<endl;
+		// cout<<"methistname: "<<counts<<endl;
 		met_counts.insert( pair<std::string,double>( counts.c_str(), 0.0) );
 	  }
 	}
@@ -73,7 +73,7 @@ void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
 						 , static_cast<int>(photon_njetcuts.at(njets_ind))
 						 , static_cast<int>(photon_htcuts.at(ht_ind))
 						 , static_cast<int>(photon_ptcuts.at(pt_ind)) );
-		std::cout<<Form("Booking hist: %s", histname.c_str())<<std::endl;
+		// std::cout<<Form("Booking hist: %s", histname.c_str())<<std::endl;
 		methists.insert ( pair<std::string,TH1F*>(histname, new TH1F(histname.c_str(), histtitle.c_str(), 500.0, 0, 500.0)));
 		methists.at(histname)->Sumw2();	  
 	  }
@@ -82,10 +82,9 @@ void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
   return;
 }
 
-void METTemplates::setBins()
+void METTemplates::setBins( const string selection )
 {
 
-  //set photon pT cuts
   // photon_ptcuts.push_back(25);
   // photon_ptcuts.push_back(30);
   // photon_ptcuts.push_back(36);
@@ -97,38 +96,76 @@ void METTemplates::setBins()
   // photon_ptcuts.push_back(200);
   // photon_ptcuts.push_back(250);
 
-  photon_ptcuts.push_back(50);
-  photon_ptcuts.push_back(100);
-  // photon_ptcuts.push_back(120);
-  photon_ptcuts.push_back(150);
-  photon_ptcuts.push_back(200);
-  photon_ptcuts.push_back(400);
-  photon_ptcuts.push_back(600);
-  // photon_ptcuts.push_back(600);
-  photon_ptcuts.push_back(800);
-
-  //set photon njets cuts
+  //set njets cuts
   photon_njetcuts.push_back(2);
   photon_njetcuts.push_back(3);
+	photon_njetcuts.push_back(4);
+  // if( !TString(selection).Contains("inclusive") ) {
+  // 	photon_njetcuts.push_back(4);
+  // }
+
+  //set photon pT cuts
+  // photon_ptcuts.push_back(22);
+  photon_ptcuts.push_back(50);
+  photon_ptcuts.push_back(75);
+  photon_ptcuts.push_back(100);
+  photon_ptcuts.push_back(150);
+  photon_ptcuts.push_back(250);
+
+  if( TString(selection).Contains("inclusive") ) {
+	photon_htcuts.push_back(40);
+	photon_htcuts.push_back(80);
+	photon_htcuts.push_back(120);
+	photon_htcuts.push_back(160);
+	photon_htcuts.push_back(200);
+	photon_htcuts.push_back(240);
+	photon_htcuts.push_back(280);
+	photon_htcuts.push_back(320);
+	photon_htcuts.push_back(360);
+	photon_htcuts.push_back(600);
+	photon_htcuts.push_back(800);
+	photon_htcuts.push_back(1200);
+  }  
+	
+  //set event HT cuts
+  if( TString(selection).Contains("bveto") ) {
+	if( TString(selection).Contains("SRA") ){
+	  photon_htcuts.push_back(600);
+	  photon_htcuts.push_back(650);
+	  photon_htcuts.push_back(700);
+	  photon_htcuts.push_back(800);
+	  photon_htcuts.push_back(1200);
+	}
+  
+	if( TString(selection).Contains("SRB") ){
+	  photon_htcuts.push_back(160);
+	  photon_htcuts.push_back(240);
+	  photon_htcuts.push_back(320);
+	  photon_htcuts.push_back(450);
+	  photon_htcuts.push_back(600);
+	  photon_htcuts.push_back(800);
+	  photon_htcuts.push_back(1000);
+	  photon_htcuts.push_back(1500);
+	}
+  }
 
   //set event HT cuts
-  photon_htcuts.push_back(40);
-  photon_htcuts.push_back(80);
-  photon_htcuts.push_back(120);
-  photon_htcuts.push_back(160);
-  photon_htcuts.push_back(200);
-  photon_htcuts.push_back(240);
-  photon_htcuts.push_back(280);
-  photon_htcuts.push_back(320);
-  photon_htcuts.push_back(360);
-  // photon_htcuts.push_back(400);
-  // photon_htcuts.push_back(500);
-  // photon_htcuts.push_back(600);
-  // photon_htcuts.push_back(750);
-  photon_htcuts.push_back(1000);
-  photon_htcuts.push_back(1500);
-  photon_htcuts.push_back(2000);
-  // photon_htcuts.push_back(2500);
+  if( TString(selection).Contains("withb") ) {
+	if( TString(selection).Contains("SRA") ){
+	  photon_htcuts.push_back(600);
+	  photon_htcuts.push_back(650);
+	  photon_htcuts.push_back(800);
+	}
+
+	if( TString(selection).Contains("SRB") ){
+	  photon_htcuts.push_back(160);
+	  photon_htcuts.push_back(200);
+	  photon_htcuts.push_back(240);
+	  photon_htcuts.push_back(320);
+	  photon_htcuts.push_back(450);
+	  photon_htcuts.push_back(600);
+	}
+  }
 
 }
 
@@ -208,7 +245,7 @@ void METTemplates::FillTemplate( std::map<std::string, TH1F*> &methists, int nje
   catch ( exception &e )
 	{
 	  std::cout<<Form("Cannot find hist: %s", histname.c_str() )<<std::endl<<"Exiting."<<std::endl;
-	  // exit(1);
+	  exit(1);
 	}  
 }
 
@@ -246,7 +283,7 @@ void METTemplates::loadTemplatesFromFile( const std::string filename, std::map<s
   while((key=(TKey*)iKey())) {
 	TH1* hist=(TH1*)key->ReadObjectAny(TH1::Class());
 	std::string histname = hist->GetName();
-	std::cout<<"Name:  "<<TString(hist->GetName())<<std::endl;
+	// std::cout<<"Name:  "<<TString(hist->GetName())<<std::endl;
 	methists.insert ( pair<std::string,TH1F*>(histname, (TH1F*)hist));	
 	// std::string histtitle = TString(hist->GetTitle())
 	// std::cout<<"Title: "<<TString(hist->GetTitle())<<std::endl;
@@ -267,7 +304,7 @@ TH1F* METTemplates::pickTemplate( std::map<std::string, TH1F*> &methists, int nj
   catch ( exception &e )
 	{
 	  std::cout<<Form("Cannot find hist: %s", histname.c_str() )<<std::endl<<"Exiting."<<std::endl;
-	  // exit(1);
+	  exit(1);
 	}  
   return NULL;
 }

@@ -17,4 +17,14 @@ compile_looper
 
 # SR + CRS
 selection="_inclusive"
-make_gtemplates $selection "All_MC"
+make_gtemplates $selection "All_MC" 
+
+selection="_SRA_bveto"			    
+make_gtemplates $selection "All_MC" &
+selection="_SRA_withb"			    
+make_gtemplates $selection "All_MC" &
+
+selection="_SRB_bveto"			    
+make_gtemplates $selection "All_MC" &
+selection="_SRB_withb"			    
+make_gtemplates $selection "All_MC" &

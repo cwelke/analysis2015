@@ -39,7 +39,7 @@ using namespace tas;
 // turn on to add debugging statements
 const bool verbose = false;
 // turn on to apply JEC from text files
-const bool applyJECfromFile = true;
+const bool applyJECfromFile = false;
 //turn on to veto transition region for leps and photons
 const bool vetoXitionRegion = false;
 //turn on to veto eta > 2.4 for leps and photons
@@ -178,6 +178,24 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       HLT_MuEG         = passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v") || passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_Gsf_CaloId_TrackId_Iso_MediumWP_v"); 
       HLT_DoubleMu     = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v") || passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
       HLT_Photons      = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
+
+	  HLT_Photon22					 = passHLTTriggerPattern("HLT_Photon22_v");
+	  HLT_Photon30					 = passHLTTriggerPattern("HLT_Photon30_v");
+	  HLT_Photon36					 = passHLTTriggerPattern("HLT_Photon36_v");
+	  HLT_Photon50					 = passHLTTriggerPattern("HLT_Photon50_v");
+	  HLT_Photon75					 = passHLTTriggerPattern("HLT_Photon75_v");
+	  HLT_Photon90					 = passHLTTriggerPattern("HLT_Photon90_v");
+	  HLT_Photon120				 	 = passHLTTriggerPattern("HLT_Photon120_v");
+	  HLT_Photon175				 	 = passHLTTriggerPattern("HLT_Photon175_v");
+	  HLT_Photon165_HE10			 = passHLTTriggerPattern("HLT_Photon165_HE10_v");
+	  HLT_Photon22_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon22_R9Id90_HE10_IsoM_v");
+	  HLT_Photon30_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon30_R9Id90_HE10_IsoM_v");
+	  HLT_Photon36_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon36_R9Id90_HE10_IsoM_v");
+	  HLT_Photon50_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon50_R9Id90_HE10_IsoM_v");
+	  HLT_Photon75_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon75_R9Id90_HE10_IsoM_v");
+	  HLT_Photon90_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon90_R9Id90_HE10_IsoM_v");
+	  HLT_Photon120_R9Id90_HE10_IsoM = passHLTTriggerPattern("HLT_Photon120_R9Id90_HE10_IsoM_v");
+	  HLT_Photon165_R9Id90_HE10_IsoM = passHLTTriggerPattern("HLT_Photon165_R9Id90_HE10_IsoM_v");
       
       if (verbose) cout << "before gen particles" << endl;
 
@@ -319,7 +337,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       vector<int>  vec_lep_lostHits;
       vector<int>  vec_lep_convVeto;
       vector<int>  vec_lep_tightCharge;
-
+      vector<float>vec_lep_etaSC;
+	  
 	  vector<LorentzVector> vec_lep_p4s;
 
 	  vector<LorentzVector> p4sLeptonsForJetCleaning;
@@ -330,10 +349,20 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       nlep = 0;
       nElectrons10 = 0;
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
-		if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
- 	  	// if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+		// if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
 		if( cms3.els_p4().at(iEl).pt() < 15.0 ) continue;
-  
+		if( elMiniRelIso( iEl, true, 0.0, false, true ) > 0.1 ) continue;
+		if( evt == 107588904 ){
+		  // cout<<"event:                      "<<evt<<endl;
+		  // cout<<"elminireliso:               "<<elMiniRelIso( iEl, false, 0.0, false, true )<<endl;
+		  // cout<<"elminireliso w/ veto cones: "<<elMiniRelIso( iEl, true, 0.5, false, true )<<endl;
+		  // cout<<"elminireliso w/ 0pt thresh: "<<elMiniRelIso( iEl, true, 0.0, false, true )<<endl;
+		  // cout<<"electron pt :               "<< cms3.els_p4().at(iEl).pt()  <<endl;
+		  // cout<<"electron eta:               "<< cms3.els_p4().at(iEl).eta() <<endl;
+		  // cout<<"electron SCeta:             "<< els_etaSC().at(iEl) <<endl;
+		}
+		
         nElectrons10++;
         lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
 		vec_lep_p4s      .push_back( cms3.els_p4().at(iEl)           );
@@ -348,11 +377,12 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         vec_lep_tightId  .push_back( eleTightID(iEl, ZMET)           );
         vec_lep_relIso03 .push_back( eleRelIso03(iEl, ZMET)          );
         vec_lep_relIso04 .push_back( 0                               );
-        vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, false, 0.0, false, true ) );
+        vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, true , 0.0, false, true ) );
         vec_lep_relIso03MRDB .push_back( elMiniRelIso( iEl, false, 0.0, true , false) );
         vec_lep_relIso03MRNC .push_back( elMiniRelIso( iEl, false, 0.0, false, false) );
+        vec_lep_etaSC        .push_back( els_etaSC().at(iEl)         );
 
-        if (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11) { // matched to a prunedGenParticle electron?
+  if (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11) { // matched to a prunedGenParticle electron?
           int momid =  abs(genPart_motherId[cms3.els_mc3idx().at(iEl)]);
           vec_lep_mcMatchId.push_back ( momid != 11 ? momid : genPart_grandmaId[cms3.els_mc3idx().at(iEl)]); // if mother is different store mother, otherwise store grandmother
         }
@@ -368,7 +398,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
       }
 
-      if (verbose) cout << "before muons" << endl;
+	  // if( nlep > 1 ) cout<<"2 electrons pass this event"<<endl<<endl;
+	  
+	  if (verbose) cout << "before muons" << endl;
 
       //MUONS
       nMuons10 = 0;
@@ -376,9 +408,21 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  if (cms3.mus_p4().size() != cms3.mus_dzPV().size()) continue;
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
- 	  	if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
- 	  	// if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	// if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+
+		if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
 		if( cms3.mus_p4().at(iMu).pt() < 15.0 ) continue;
+		if( muMiniRelIso( iMu, true, 0.5, false, true ) > 0.1 ) continue;
+
+		if( evt == 117800315 ){
+		  cout<<"event        : "<<evt<<endl;
+		  cout<<"muminireliso : "<<muMiniRelIso( iMu, true, 0.5, false, true )<<endl;
+		  cout<<"mu pt        : "<< cms3.mus_p4().at(iMu).pt()  <<endl;
+		  cout<<"mu eta       : "<< cms3.mus_p4().at(iMu).eta() <<endl;
+		  cout<<"mu chg       : "<< cms3.mus_charge().at(iMu)   <<endl;
+		  cout<<"mu dxy       : "<< cms3.mus_dxyPV().at(iMu)    <<endl;
+		  cout<<"mu dz0       : "<< cms3.mus_dzPV().at(iMu)     <<endl;
+		}
 
 		nMuons10++;
         lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
@@ -394,9 +438,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         vec_lep_tightId  .push_back ( muTightID(iMu, ZMET)            );
         vec_lep_relIso03 .push_back ( muRelIso03(iMu, ZMET)           );
         vec_lep_relIso04 .push_back ( muRelIso04(iMu, ZMET)           );
-        vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, false, 0.0, false, true ) );
+        vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, true , 0.5, false, true ) );
         vec_lep_relIso03MRDB .push_back( muMiniRelIso( iMu, false, 0.0, true , false) );
         vec_lep_relIso03MRNC .push_back( muMiniRelIso( iMu, false, 0.0, false, false) );
+        vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()   );
 
         if (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13) { // matched to a prunedGenParticle electron?
           int momid =  abs(genPart_motherId[cms3.mus_mc3idx().at(iMu)]);
@@ -428,17 +473,28 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		lep_pdgId      .push_back( vec_lep_pdgId       .at(it->second));
 		lep_dz         .push_back( vec_lep_dz          .at(it->second));
 		lep_dxy        .push_back( vec_lep_dxy         .at(it->second));
+        lep_etaSC      .push_back( vec_lep_etaSC       .at(it->second));
+		//edge vars
+		edge_lep_p4     .push_back( vec_lep_p4s         .at(it->second));
+		edge_lep_pt     .push_back( vec_lep_pt          .at(it->second));
+		edge_lep_eta    .push_back( vec_lep_eta         .at(it->second));
+		edge_lep_phi    .push_back( vec_lep_phi         .at(it->second));
+		edge_lep_mass   .push_back( vec_lep_mass        .at(it->second));
+		edge_lep_charge .push_back( vec_lep_charge      .at(it->second));
+		edge_lep_pdgId  .push_back( vec_lep_pdgId       .at(it->second));
+		edge_lep_dz     .push_back( vec_lep_dz          .at(it->second));
+		edge_lep_dxy    .push_back( vec_lep_dxy         .at(it->second));
 		// fix me
-		lep_tightId    .push_back( vec_lep_tightId     .at(it->second));
-		lep_relIso03   .push_back( vec_lep_relIso03    .at(it->second));
-		lep_relIso03MREA   .push_back( vec_lep_relIso03MREA    .at(it->second));
-		lep_relIso03MRDB   .push_back( vec_lep_relIso03MRDB    .at(it->second));
-		lep_relIso03MRNC   .push_back( vec_lep_relIso03MRNC    .at(it->second));
-		lep_relIso04   .push_back( vec_lep_relIso04    .at(it->second));
-		lep_mcMatchId  .push_back( vec_lep_mcMatchId   .at(it->second));
-		lep_lostHits   .push_back( vec_lep_lostHits    .at(it->second));
-		lep_convVeto   .push_back( vec_lep_convVeto    .at(it->second));
-		lep_tightCharge.push_back( vec_lep_tightCharge .at(it->second));
+		lep_tightId      .push_back( vec_lep_tightId      .at(it->second));
+		lep_relIso03     .push_back( vec_lep_relIso03     .at(it->second));
+		lep_relIso03MREA .push_back( vec_lep_relIso03MREA .at(it->second));
+		lep_relIso03MRDB .push_back( vec_lep_relIso03MRDB .at(it->second));
+		lep_relIso03MRNC .push_back( vec_lep_relIso03MRNC .at(it->second));
+		lep_relIso04     .push_back( vec_lep_relIso04     .at(it->second));
+		lep_mcMatchId    .push_back( vec_lep_mcMatchId    .at(it->second));
+		lep_lostHits     .push_back( vec_lep_lostHits     .at(it->second));
+		lep_convVeto     .push_back( vec_lep_convVeto     .at(it->second));
+		lep_tightCharge  .push_back( vec_lep_tightCharge  .at(it->second));
 		i++;
       }
         
@@ -518,17 +574,25 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  evt_type = 0; // oppo sign event 
 		}
 
-		if (        abs(lep_pdgId.at(hyp_indices.first)) == 11 && abs(lep_pdgId.at(hyp_indices.second)) == 11 ){
-		  hyp_type = 0;// ee event												   			   
-		}else if (  abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 13){
-		  hyp_type = 1;// mm event												   			   
+		if (        abs(lep_pdgId.at(hyp_indices.first)) == 11 && abs(lep_pdgId.at(hyp_indices.second)) == 11  ){ hyp_type = 0;// ee event												   			   
+		}else if (  abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 13  ){ hyp_type = 1;// mm event												   			   
 		}else if ( (abs(lep_pdgId.at(hyp_indices.first)) == 11 && abs(lep_pdgId.at(hyp_indices.second)) == 13) ||
-				   (abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 11)){
-		  hyp_type = 2;// em event
+				   (abs(lep_pdgId.at(hyp_indices.first)) == 13 && abs(lep_pdgId.at(hyp_indices.second)) == 11) ){ hyp_type = 2;// em event
 		}else {
 		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
 		  continue;
 		}
+
+		//edge evt types start with 1
+		if (        abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11  ){ edge_hyp_type = 10;// ee event												   			   
+		}else if (  abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13  ){ edge_hyp_type = 11;// mm event												   			   
+		}else if ( (abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 13) || 
+				   (abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 11) ){ edge_hyp_type = 12;// em event
+		}else {
+		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
+		  continue;
+		}
+		
 		dilmass = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).mass();
 		dilpt   = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).pt();       
 
@@ -536,6 +600,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		float dEtall =            lep_p4.at(hyp_indices.first).eta() - lep_p4.at(hyp_indices.second).eta();
 		float dPhill = acos( cos( lep_p4.at(hyp_indices.first).phi() - lep_p4.at(hyp_indices.second).phi() ) );
 		dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
+
+		//Add edge dRll
+		dEtall    =            lep_p4.at(0).eta() - lep_p4.at(1).eta();
+		dPhill    = acos( cos( lep_p4.at(0).phi() - lep_p4.at(1).phi() ) );
+		edge_dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
 
 		for( size_t lepind = 0; lepind < lep_p4.size(); lepind++ ){
 		  if( lepind == (size_t)hyp_indices.first  ) lep_islead.push_back(1);
@@ -702,6 +771,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  njets_eta30 = 0;
 	  ht_eta30    = 0;
 
+	  edge_njets = 0;
+	  edge_ht    = 0;
+
       gamma_nJet40 = 0;
       gamma_nBJet40 = 0;
 
@@ -744,6 +816,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  		  jets_p4       .push_back(p4sCorrJets.at(iJet));
 		  ht+=p4sCorrJets.at(iJet).pt();
 		  njets++;
+		}
+ 		if( p4sCorrJets.at(iJet).pt() > 35.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.4 ){
+ 		  edge_jets_p4 .push_back(p4sCorrJets.at(iJet));
+		  edge_ht      +=         p4sCorrJets.at(iJet).pt();
+		  edge_njets++;
 		}
 		if( p4sCorrJets.at(iJet).pt() > 40.0 && abs(p4sCorrJets.at(iJet).eta()) < 3.0 ){
  		  jets_eta30_p4       .push_back(p4sCorrJets.at(iJet));
@@ -988,6 +1065,23 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_MuEG", &HLT_MuEG );
   BabyTree_->Branch("HLT_DoubleMu", &HLT_DoubleMu );
   BabyTree_->Branch("HLT_Photons", &HLT_Photons );
+  BabyTree_->Branch("HLT_Photon22"                  , &HLT_Photon22                   );					 
+  BabyTree_->Branch("HLT_Photon30"                  , &HLT_Photon30                   );					 
+  BabyTree_->Branch("HLT_Photon36"                  , &HLT_Photon36                   );					 
+  BabyTree_->Branch("HLT_Photon50"                  , &HLT_Photon50                   );					 
+  BabyTree_->Branch("HLT_Photon75"                  , &HLT_Photon75                   );					 
+  BabyTree_->Branch("HLT_Photon90"                  , &HLT_Photon90                   );					 
+  BabyTree_->Branch("HLT_Photon120"                 , &HLT_Photon120                  );				 
+  BabyTree_->Branch("HLT_Photon175"                 , &HLT_Photon175                  );				 
+  BabyTree_->Branch("HLT_Photon165_HE10"            , &HLT_Photon165_HE10             );			 
+  BabyTree_->Branch("HLT_Photon22_R9Id90_HE10_IsoM" , &HLT_Photon22_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon30_R9Id90_HE10_IsoM" , &HLT_Photon30_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon36_R9Id90_HE10_IsoM" , &HLT_Photon36_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon50_R9Id90_HE10_IsoM" , &HLT_Photon50_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon75_R9Id90_HE10_IsoM" , &HLT_Photon75_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon90_R9Id90_HE10_IsoM" , &HLT_Photon90_R9Id90_HE10_IsoM  ); 
+  BabyTree_->Branch("HLT_Photon120_R9Id90_HE10_IsoM", &HLT_Photon120_R9Id90_HE10_IsoM );
+  BabyTree_->Branch("HLT_Photon165_R9Id90_HE10_IsoM", &HLT_Photon165_R9Id90_HE10_IsoM );
 
   BabyTree_->Branch("dilmass", &dilmass );
   BabyTree_->Branch("dilpt"  , &dilpt );
@@ -1005,6 +1099,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("lep_charge"     , "std::vector< Int_t >"         , &lep_charge     );
   BabyTree_->Branch("lep_pdgId"      , "std::vector< Int_t >"         , &lep_pdgId      );
   BabyTree_->Branch("lep_dxy"        , "std::vector< Float_t >"       , &lep_dxy        );
+  BabyTree_->Branch("lep_etaSC"      , "std::vector< Float_t >"       , &lep_etaSC      );
   BabyTree_->Branch("lep_dz"         , "std::vector< Float_t >"       , &lep_dz         );
   BabyTree_->Branch("lep_tightId"    , "std::vector< Int_t >"         , &lep_tightId    );
   BabyTree_->Branch("lep_relIso03"   , "std::vector< Float_t >"       , &lep_relIso03   );
@@ -1114,6 +1209,23 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("evt_type", &evt_type);
  
 
+  //----- edge variables
+  BabyTree_->Branch("edge_hyp_type"   , &edge_hyp_type );
+  BabyTree_->Branch("edge_njets"      , &edge_njets    );
+  BabyTree_->Branch("edge_ht"         , &edge_ht       );
+  BabyTree_->Branch("edge_dRll"       , &edge_dRll     );
+  BabyTree_->Branch("edge_jets_p4"    , "std::vector< LorentzVector >" , &edge_jets_p4  );
+
+  BabyTree_->Branch("edge_lep_p4"         , "std::vector< LorentzVector >" , &edge_lep_p4         );
+  BabyTree_->Branch("edge_lep_pt"         , "std::vector< Float_t >"       , &edge_lep_pt         );
+  BabyTree_->Branch("edge_lep_eta"        , "std::vector< Float_t >"       , &edge_lep_eta        );
+  BabyTree_->Branch("edge_lep_phi"        , "std::vector< Float_t >"       , &edge_lep_phi        );
+  BabyTree_->Branch("edge_lep_mass"       , "std::vector< Float_t >"       , &edge_lep_mass       );
+  BabyTree_->Branch("edge_lep_charge"     , "std::vector< Int_t >"         , &edge_lep_charge     );
+  BabyTree_->Branch("edge_lep_pdgId"      , "std::vector< Int_t >"         , &edge_lep_pdgId      );
+  BabyTree_->Branch("edge_lep_dxy"        , "std::vector< Float_t >"       , &edge_lep_dxy        );
+  BabyTree_->Branch("edge_lep_dz"         , "std::vector< Float_t >"       , &edge_lep_dz         );
+
   return;
 }
 
@@ -1180,14 +1292,31 @@ void babyMaker::InitBabyNtuple () {
   Flag_goodVertices = -999;
   Flag_eeBadScFilter = -999;
   Flag_METFilters = -999;
-  HLT_HT900 = -999;
-  HLT_MET170 = -999;
+  HLT_HT900       = -999;
+  HLT_MET170      = -999;
   HLT_ht350met120 = -999;
-  HLT_SingleMu = -999;   
-  HLT_DoubleEl = -999;   
-  HLT_MuEG = -999;   
-  HLT_DoubleMu = -999;   
-  HLT_Photons = -999;   
+  HLT_SingleMu    = -999;   
+  HLT_DoubleEl    = -999;   
+  HLT_MuEG        = -999;   
+  HLT_DoubleMu    = -999;   
+  HLT_Photons     = -999;   
+  HLT_Photon22                   = -999;					 
+  HLT_Photon30                   = -999;					 
+  HLT_Photon36                   = -999;					 
+  HLT_Photon50                   = -999;					 
+  HLT_Photon75                   = -999;					 
+  HLT_Photon90                   = -999;					 
+  HLT_Photon120                  = -999;				 
+  HLT_Photon175                  = -999;				 
+  HLT_Photon165_HE10             = -999;			 
+  HLT_Photon22_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon30_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon36_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon50_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon75_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon90_R9Id90_HE10_IsoM  = -999; 
+  HLT_Photon120_R9Id90_HE10_IsoM = -999;
+  HLT_Photon165_R9Id90_HE10_IsoM = -999;
 
   dilmass = -999;
   dilpt   = -999;
@@ -1208,6 +1337,7 @@ void babyMaker::InitBabyNtuple () {
   lep_charge     .clear();   //[nlep]
   lep_pdgId      .clear();   //[nlep]
   lep_dxy        .clear();   //[nlep]
+  lep_etaSC      .clear();   //[nlep]
   lep_dz         .clear();   //[nlep]
   lep_tightId    .clear();   //[nlep]
   lep_relIso03   .clear();   //[nlep]
@@ -1312,6 +1442,23 @@ void babyMaker::InitBabyNtuple () {
 
   gamma_nJet40 = -999;
   gamma_nBJet40 = -999;
+
+  //----- edge variables
+  edge_hyp_type  = -999  ;
+  edge_njets     = -999  ;
+  edge_ht        = -999  ;
+  edge_dRll      = -999  ;
+  edge_jets_p4   .clear();
+
+  edge_lep_p4    .clear();
+  edge_lep_pt    .clear();   //[nlep]
+  edge_lep_eta   .clear();   //[nlep]
+  edge_lep_phi   .clear();   //[nlep]
+  edge_lep_mass  .clear();   //[nlep]
+  edge_lep_charge.clear();   //[nlep]
+  edge_lep_pdgId .clear();   //[nlep]
+  edge_lep_dxy   .clear();   //[nlep]
+  edge_lep_dz    .clear();   //[nlep]
   
   return;
 }

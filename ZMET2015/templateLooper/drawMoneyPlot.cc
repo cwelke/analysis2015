@@ -12,29 +12,40 @@
 #include "../sharedCode/histTools.cc"
 
 using namespace std;
-void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
+void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string selection = "_inclusive" )
 {
 
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
   TH1F * h_fsbkg = NULL;
   TH1F * h_other = NULL;
+  TH1F * h_vvbkg = NULL;
 
-  getBackground(   h_data, iter, "All_MC", "met", "ll" );
-  getBackground(  h_fsbkg, iter, "All_MC", "met", "em" );
-  getBackground(  h_other, iter, "ttv"   , "met", "ll" );
-  getTemplateMET( h_zjets, iter, "All_MC" );
+  getBackground(   h_data, iter, Form("All_MC%s", selection.c_str() ), "met", "ll" );
+  getBackground(  h_fsbkg, iter, Form("All_MC%s", selection.c_str() ), "met", "em" );
+  getBackground(  h_other, iter, Form("ttv%s"   , selection.c_str() ), "met", "ll" );
+  getBackground(  h_vvbkg, iter, Form("vv%s"    , selection.c_str() ), "met", "ll" );
+  // getBackground(  h_zjets, iter, "All_MC", "jzb", "ll" );
+  getTemplateMET( h_zjets, iter, Form("All_MC%s", selection.c_str() ) );
 
   h_data->Scale(luminosity);
   h_zjets->Scale(luminosity);
   h_fsbkg->Scale(luminosity);
   h_other->Scale(luminosity);
+  h_vvbkg->Scale(luminosity);
+  // h_vvbkg->Scale(0);
+
+  //taken care of in template prediction except for small %age of FS events from WZ->3lnu
+  // h_other->Add(h_vvbkg);
+  // h_vvbkg->Scale(luminosity);
 
   //MAKE TABLES
   vector <float> metcut;
   metcut.push_back(0.0);
-  metcut.push_back(60);
-  // metcut.push_back(90);
+  if( TString(selection).Contains("inclusive") )  metcut.push_back(50);
+  if( TString(selection).Contains("bveto"    ) )  metcut.push_back(50);
+  if( TString(selection).Contains("withb"    ) )  metcut.push_back(50);
+  metcut.push_back(100);
   metcut.push_back(150);
   // metcut.push_back(100);
   // metcut.push_back(150);
@@ -54,6 +65,9 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   vector <double> val_other;
   vector <double> err_other;
 
+  vector <double> val_vvbkg;
+  vector <double> err_vvbkg;
+
   vector <double> val_allbg;
   vector <double> err_allbg;
 
@@ -69,6 +83,8 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
 	err_fsbkg.push_back(0);
 	val_other.push_back(0);
 	err_other.push_back(0);
+	val_vvbkg.push_back(0);
+	err_vvbkg.push_back(0);
 	val_allbg.push_back(0);
 	err_allbg.push_back(0);
 	val_ratio.push_back(0);
@@ -81,17 +97,20 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
 	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
 	  val_fsbkg.at(bini) = h_fsbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_fsbkg.at(bini));
 	  val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_other.at(bini));
+	  val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvbkg.at(bini));
 	}
 	if( bini == metcut.size()-1 ){
 	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), -1, err_data .at(bini));
 	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
 	  val_fsbkg.at(bini) = h_fsbkg->IntegralAndError( metcut.at(bini), -1, err_fsbkg.at(bini));
 	  val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), -1, err_other.at(bini));
+	  val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), -1, err_vvbkg.at(bini));
 	}
   }
 
   float norm_factor = (val_data.at(0) -
 					   val_fsbkg.at(0) -
+					   val_vvbkg.at(0) -
 					   val_other.at(0))/(val_zjets.at(0));
   for( size_t bini = 0; bini < metcut.size(); bini++ ){
 	val_zjets.at(bini) *= norm_factor;
@@ -99,8 +118,8 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   }
 
   for( size_t bini = 0; bini < metcut.size(); bini++ ){
-	val_allbg.at(bini) = val_zjets.at(bini) + val_fsbkg.at(bini) + val_other.at(bini);
-	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) + pow(err_fsbkg.at(bini), 2) + pow(err_other.at(bini), 2));
+	val_allbg.at(bini) = val_zjets.at(bini) + val_fsbkg.at(bini) + val_other.at(bini) + val_vvbkg.at(bini);
+	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) + pow(err_fsbkg.at(bini), 2) + pow(err_other.at(bini), 2) + pow(err_vvbkg.at(bini), 2));
 	val_ratio.at(bini) = val_data .at(bini)/val_allbg.at(bini);
 	err_ratio.at(bini) = err_mult( val_data .at(bini), val_allbg.at(bini),
 								   err_data .at(bini), err_allbg.at(bini), val_data .at(bini)/val_allbg.at(bini));
@@ -129,6 +148,15 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
 	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
 	if( bini == val_fsbkg.size()-2 )
 	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+  }
+  cout<<endl;
+
+  cout<<"WZ + ZZ bkg& ";
+  for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
+	if( bini < val_vvbkg.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+	if( bini == val_vvbkg.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
   }
   cout<<endl;
 
@@ -180,6 +208,7 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   h_data->Rebin(rebin);
   h_zjets->Rebin(rebin);
   h_fsbkg->Rebin(rebin);
+  h_vvbkg->Rebin(rebin);
   h_other->Rebin(rebin);
 
   TCanvas * c1 = new TCanvas("c1","");
@@ -199,15 +228,28 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
 
   h_zjets->SetFillColor(kBlue);
   h_fsbkg->SetFillColor(kYellow+1);
+  h_vvbkg->SetFillColor(kRed);
   h_other->SetFillColor(kMagenta);
 
   h_zjets->SetFillStyle(1001);
   h_fsbkg->SetFillStyle(1001);
+  h_vvbkg->SetFillStyle(1001);
   h_other->SetFillStyle(1001);
+
+  cout<<"Norm factor for Z+jets: "<<norm_factor<<endl;
+  h_zjets->Scale(norm_factor);
+  
+  float xmax = 350;
+  updateoverflow( h_data , xmax );
+  updateoverflow( h_zjets, xmax );
+  updateoverflow( h_fsbkg, xmax );
+  updateoverflow( h_vvbkg, xmax );
+  updateoverflow( h_other, xmax );
 
   THStack * stack = new THStack("stack","");
 
   stack->Add(h_other);
+  stack->Add(h_vvbkg);
   stack->Add(h_fsbkg);
   stack->Add(h_zjets);
   
@@ -216,7 +258,8 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   h_data->GetYaxis()->SetTitleOffset(1.5);
   h_data->GetYaxis()->SetTitleSize(0.05);
   h_data->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
-  h_data->GetYaxis()->SetRangeUser(2e-3*luminosity,3e4*luminosity);
+  h_data->GetYaxis()->SetRangeUser(2e-3*luminosity, h_data->GetMaximum() * 1e1 );
+  h_data->GetXaxis()->SetRangeUser(0, xmax);
   h_data->SetMarkerStyle(8);
   h_data->SetMarkerSize(0.75);
 
@@ -232,8 +275,9 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   l1->SetFillColor(kWhite);    
   l1->AddEntry( h_data , "all MC"       , "lpe");
   l1->AddEntry( h_zjets , "template prediction"      , "f");
-  l1->AddEntry( h_fsbkg , "FS bkg prediction"        , "f");
-  l1->AddEntry( h_other , "rare SM"       , "f");
+  l1->AddEntry( h_fsbkg , "FS prediction"        , "f");
+  l1->AddEntry( h_vvbkg , "WZ+ZZ MC"        , "f");
+  l1->AddEntry( h_other , "rare SM MC"         , "f");
   l1->Draw("same");
   
   c1->cd();
@@ -251,15 +295,16 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   TH1F* h_den = (TH1F*)h_zjets->Clone("h_den");
   h_den->Add(h_fsbkg);
   h_den->Add(h_other);
+  h_den->Add(h_vvbkg);
 
   h_rat->Divide(h_den);
 
-  h_rat->GetYaxis()->SetRangeUser(0,2);
+  h_rat->GetYaxis()->SetRangeUser(0.6,1.4);
   h_rat->GetYaxis()->SetLabelSize(0.12);
   h_rat->GetXaxis()->SetLabelSize(0.12);
   h_rat->GetYaxis()->SetNdivisions(5);
 
-  h_rat->GetYaxis()->SetTitle("#frac{data}{background}");
+  h_rat->GetYaxis()->SetTitle("#frac{All MC}{Prediction}");
   h_rat->GetYaxis()->SetTitleSize(0.12);
   h_rat->GetYaxis()->SetTitleOffset(0.5);
   h_rat->GetYaxis()->CenterTitle();
@@ -272,16 +317,17 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0 )
   h_rat->SetMarkerStyle(8);
   h_rat->SetMarkerSize(0.75);
 
-  h_rat->Draw("e1x0");
+  h_rat->Draw("e0x0");
+  h_rat->Draw("e1x0same");
 
-  TLine * xaxis = new TLine(0,1,500,1);
+  TLine * xaxis = new TLine(0,1,xmax,1);
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
   drawCMSLatex( c1, luminosity );
 
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_signalregion.png", iter.c_str() ));
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_signalregion.pdf", iter.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_signalregion%s.png", iter.c_str(), selection.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_signalregion%s.pdf", iter.c_str(), selection.c_str() ));
   
   return;
 }

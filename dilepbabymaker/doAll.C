@@ -1,4 +1,4 @@
-void doAll( std::string sample = "ttbar" )
+void doAll( std::string sample = "edge_sync" )
 {
 
   gSystem->Load("libMiniFWLite.so");
@@ -25,6 +25,10 @@ void doAll( std::string sample = "ttbar" )
 	// ch->Add("/hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08/merged_ntuple_3.root");
 	ch->Add("/hadoop/cms/store/group/snt/phys14/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola_Phys14DR-PU20bx25_PHYS14_25_V1-v1/V07-02-08/merged_ntuple_23.root");
   }
+
+  if( sample == "edge_sync" ){
+	ch->Add("/nfs-6/userdata/cwelke/ZMETbabies/ttbar_edgesync/CMS3/ntuple_pp.root");
+	  }
   
   babyMaker *looper = new babyMaker();
   looper->ScanChain(ch, Form("OSBaby_%s_23", sample.c_str() )); 

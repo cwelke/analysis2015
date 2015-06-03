@@ -32,14 +32,14 @@ makePhotonTemplates::~makePhotonTemplates()
 {
 };
 
-void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const string sample ){
+void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const string sample, const string selection ){
 
   // if( zmet.isData() )        cout << "Running on Data."        << endl;
   // else                       cout << "Running on MC.  "        << endl;
 
   int npass = 0;
-  METTemplates mettemplates;
-  mettemplates.setBins();
+  METTemplates mettemplates( selection );
+  mettemplates.setBins( selection );
   mettemplates.bookMETHists(mettemplate_hists);
   // bookHistos();
 
@@ -110,7 +110,10 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  if( zmet.elveto()                              ) continue; // veto pixel match
 	  // if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
 	  
-
+	  if( TString(selection).Contains("bveto") && zmet.nBJet40() > 0 ) continue; //bveto
+	  if( TString(selection).Contains("withb") && zmet.nBJet40() < 1 ) continue; //at least 1 b-tag
+	  if( TString(selection).Contains("SRA") && !((zmet.njets() == 2 || zmet.njets() == 3) && zmet.ht() > 600) ) continue; //high HT region
+	  if( TString(selection).Contains("SRB") && zmet.njets() < 4                    ) continue; //large njets
       // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning
       // if( templates.maxleppt() > 20.0 )                                     continue; // veto leptons pt > 20 GeV
       // // if( bveto && templates.nbm() > 0 )                                    continue; // apply medium csv b-veto 
@@ -199,9 +202,10 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   rootdir->cd();
 
 
-  string outputfilename = 	Form("../output/photon/%s/%s_photon_templates.root",
+  string outputfilename = 	Form("../output/photon/%s/%s%s_photon_templates.root",
 								 iter.c_str(),
-								 sample.c_str()
+								 sample.c_str(),
+								 selection.c_str()
 								 );
 
   cout << "Writing templates to " << outputfilename << endl;
