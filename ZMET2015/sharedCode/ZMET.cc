@@ -3,6 +3,7 @@ ZMET zmet;
 namespace ZMet {
 	const int &run() { return zmet.run(); }
 	const int &lumi() { return zmet.lumi(); }
+	const unsigned long long &evt() { return zmet.evt(); }
 	const int &isData() { return zmet.isData(); }
 	const float &evt_scale1fb() { return zmet.evt_scale1fb(); }
 	const float &evt_xsec() { return zmet.evt_xsec(); }
@@ -37,6 +38,10 @@ namespace ZMet {
 	const float &met_genPt() { return zmet.met_genPt(); }
 	const float &met_genPhi() { return zmet.met_genPhi(); }
 	const float &sumet_raw() { return zmet.sumet_raw(); }
+	const float &jzb_raw() { return zmet.jzb_raw(); }
+	const float &jzb_T1() { return zmet.jzb_T1(); }
+	const float &jgb_raw() { return zmet.jgb_raw(); }
+	const float &jgb_T1() { return zmet.jgb_T1(); }
 	const int &Flag_EcalDeadCellTriggerPrimitiveFilter() { return zmet.Flag_EcalDeadCellTriggerPrimitiveFilter(); }
 	const int &Flag_trkPOG_manystripclus53X() { return zmet.Flag_trkPOG_manystripclus53X(); }
 	const int &Flag_ecalLaserCorrFilter() { return zmet.Flag_ecalLaserCorrFilter(); }
@@ -58,6 +63,23 @@ namespace ZMet {
 	const int &HLT_MuEG() { return zmet.HLT_MuEG(); }
 	const int &HLT_DoubleMu() { return zmet.HLT_DoubleMu(); }
 	const int &HLT_Photons() { return zmet.HLT_Photons(); }
+	const int &HLT_Photon22() { return zmet.HLT_Photon22(); }
+	const int &HLT_Photon30() { return zmet.HLT_Photon30(); }
+	const int &HLT_Photon36() { return zmet.HLT_Photon36(); }
+	const int &HLT_Photon50() { return zmet.HLT_Photon50(); }
+	const int &HLT_Photon75() { return zmet.HLT_Photon75(); }
+	const int &HLT_Photon90() { return zmet.HLT_Photon90(); }
+	const int &HLT_Photon120() { return zmet.HLT_Photon120(); }
+	const int &HLT_Photon175() { return zmet.HLT_Photon175(); }
+	const int &HLT_Photon165_HE10() { return zmet.HLT_Photon165_HE10(); }
+	const int &HLT_Photon22_R9Id90_HE10_IsoM() { return zmet.HLT_Photon22_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon30_R9Id90_HE10_IsoM() { return zmet.HLT_Photon30_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon36_R9Id90_HE10_IsoM() { return zmet.HLT_Photon36_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon50_R9Id90_HE10_IsoM() { return zmet.HLT_Photon50_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon75_R9Id90_HE10_IsoM() { return zmet.HLT_Photon75_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon90_R9Id90_HE10_IsoM() { return zmet.HLT_Photon90_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon120_R9Id90_HE10_IsoM() { return zmet.HLT_Photon120_R9Id90_HE10_IsoM(); }
+	const int &HLT_Photon165_R9Id90_HE10_IsoM() { return zmet.HLT_Photon165_R9Id90_HE10_IsoM(); }
 	const float &dilmass() { return zmet.dilmass(); }
 	const float &dilpt() { return zmet.dilpt(); }
 	const float &dRll() { return zmet.dRll(); }
@@ -72,14 +94,20 @@ namespace ZMet {
 	const vector<int> &lep_charge() { return zmet.lep_charge(); }
 	const vector<int> &lep_pdgId() { return zmet.lep_pdgId(); }
 	const vector<float> &lep_dxy() { return zmet.lep_dxy(); }
+	const vector<float> &lep_etaSC() { return zmet.lep_etaSC(); }
 	const vector<float> &lep_dz() { return zmet.lep_dz(); }
 	const vector<int> &lep_tightId() { return zmet.lep_tightId(); }
 	const vector<float> &lep_relIso03() { return zmet.lep_relIso03(); }
+	const vector<float> &lep_relIso03MREA() { return zmet.lep_relIso03MREA(); }
+	const vector<float> &lep_relIso03MRDB() { return zmet.lep_relIso03MRDB(); }
+	const vector<float> &lep_relIso03MRNC() { return zmet.lep_relIso03MRNC(); }
 	const vector<float> &lep_relIso04() { return zmet.lep_relIso04(); }
 	const vector<int> &lep_mcMatchId() { return zmet.lep_mcMatchId(); }
 	const vector<int> &lep_lostHits() { return zmet.lep_lostHits(); }
 	const vector<int> &lep_convVeto() { return zmet.lep_convVeto(); }
 	const vector<int> &lep_tightCharge() { return zmet.lep_tightCharge(); }
+	const vector<int> &lep_islead() { return zmet.lep_islead(); }
+	const vector<int> &lep_istail() { return zmet.lep_istail(); }
 	const int &ntau() { return zmet.ntau(); }
 	const vector<float> &tau_pt() { return zmet.tau_pt(); }
 	const vector<float> &tau_eta() { return zmet.tau_eta(); }
@@ -162,4 +190,18 @@ namespace ZMet {
 	const vector<int> &jet_puId() { return zmet.jet_puId(); }
 	const int &hyp_type() { return zmet.hyp_type(); }
 	const int &evt_type() { return zmet.evt_type(); }
+	const int &edge_hyp_type() { return zmet.edge_hyp_type(); }
+	const int &edge_njets() { return zmet.edge_njets(); }
+	const float &edge_ht() { return zmet.edge_ht(); }
+	const float &edge_dRll() { return zmet.edge_dRll(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_jets_p4() { return zmet.edge_jets_p4(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_lep_p4() { return zmet.edge_lep_p4(); }
+	const vector<float> &edge_lep_pt() { return zmet.edge_lep_pt(); }
+	const vector<float> &edge_lep_eta() { return zmet.edge_lep_eta(); }
+	const vector<float> &edge_lep_phi() { return zmet.edge_lep_phi(); }
+	const vector<float> &edge_lep_mass() { return zmet.edge_lep_mass(); }
+	const vector<int> &edge_lep_charge() { return zmet.edge_lep_charge(); }
+	const vector<int> &edge_lep_pdgId() { return zmet.edge_lep_pdgId(); }
+	const vector<float> &edge_lep_dxy() { return zmet.edge_lep_dxy(); }
+	const vector<float> &edge_lep_dz() { return zmet.edge_lep_dz(); }
 }
