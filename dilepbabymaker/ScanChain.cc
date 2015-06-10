@@ -174,6 +174,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       HLT_ht350met120  = passHLTTriggerPattern("HLT_PFHT350_PFMET120_NoiseCleaned_v"); 
 
       HLT_SingleMu     = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
+	  // HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v1
       HLT_DoubleEl     = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloId_TrackId_Iso_v"); 
       HLT_MuEG         = passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v") || passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_Gsf_CaloId_TrackId_Iso_MediumWP_v"); 
       HLT_DoubleMu     = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v") || passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
@@ -271,9 +272,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  } 
 		} // status 2 tau
 
-		if (goodLep || goodTau || goodLepFromTau) {
-		  sourceId = getSourceId(iGen);
-		}
+		//broken for some reason :(
+		// if (goodLep || goodTau || goodLepFromTau) {
+		//   sourceId = getSourceId(iGen);
+		// }
 
 		// save gen leptons (e/mu) directly from W/Z/H
 		if (goodLep) {
@@ -315,6 +317,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		}
 
       } // loop over genPart
+		// cout<<__LINE__<<endl;
 
 
       //LEPTONS
@@ -349,19 +352,17 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       nlep = 0;
       nElectrons10 = 0;
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
-		// if( !passElectronSelection_ZMET_v2( iEl, vetoXitionRegion, maxEta24 ) ) continue;
- 	  	if( !passElectronSelection_ZMET_v1_NoIso( iEl, vetoXitionRegion, maxEta24 ) ) continue;
-		if( cms3.els_p4().at(iEl).pt() < 15.0 ) continue;
-		if( elMiniRelIso( iEl, true, 0.0, false, true ) > 0.1 ) continue;
-		if( evt == 107588904 ){
-		  // cout<<"event:                      "<<evt<<endl;
-		  // cout<<"elminireliso:               "<<elMiniRelIso( iEl, false, 0.0, false, true )<<endl;
-		  // cout<<"elminireliso w/ veto cones: "<<elMiniRelIso( iEl, true, 0.5, false, true )<<endl;
-		  // cout<<"elminireliso w/ 0pt thresh: "<<elMiniRelIso( iEl, true, 0.0, false, true )<<endl;
-		  // cout<<"electron pt :               "<< cms3.els_p4().at(iEl).pt()  <<endl;
-		  // cout<<"electron eta:               "<< cms3.els_p4().at(iEl).eta() <<endl;
-		  // cout<<"electron SCeta:             "<< els_etaSC().at(iEl) <<endl;
-		}
+ 	  	if( !passElectronSelection_ZMET( iEl ) ) continue;
+
+		// if( evt == 107588904 ){
+		// cout<<"event:                      "<<evt<<endl;
+		// cout<<"elminireliso:               "<<elMiniRelIso( iEl, false, 0.0, false, true )<<endl;
+		// cout<<"elminireliso w/ veto cones: "<<elMiniRelIso( iEl, true, 0.5, false, true )<<endl;
+		// cout<<"elminireliso w/ 0pt thresh: "<<elMiniRelIso( iEl, true, 0.0, false, true )<<endl;
+		// cout<<"electron pt :               "<< cms3.els_p4().at(iEl).pt()  <<endl;
+		// cout<<"electron eta:               "<< cms3.els_p4().at(iEl).eta() <<endl;
+		// cout<<"electron SCeta:             "<< els_etaSC().at(iEl) <<endl;
+		// }
 		
         nElectrons10++;
         lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
@@ -408,21 +409,17 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  if (cms3.mus_p4().size() != cms3.mus_dzPV().size()) continue;
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
- 	  	// if( !passMuonSelection_ZMET_v2( iMu, vetoXitionRegion, maxEta24 ) ) continue;
+ 	  	if( !passMuonSelection_ZMET( iMu ) ) continue;
 
-		if( !passMuonSelection_ZMET_v1_NoIso( iMu, vetoXitionRegion, maxEta24 ) ) continue;
-		if( cms3.mus_p4().at(iMu).pt() < 15.0 ) continue;
-		if( muMiniRelIso( iMu, true, 0.5, false, true ) > 0.1 ) continue;
-
-		if( evt == 117800315 ){
-		  cout<<"event        : "<<evt<<endl;
-		  cout<<"muminireliso : "<<muMiniRelIso( iMu, true, 0.5, false, true )<<endl;
-		  cout<<"mu pt        : "<< cms3.mus_p4().at(iMu).pt()  <<endl;
-		  cout<<"mu eta       : "<< cms3.mus_p4().at(iMu).eta() <<endl;
-		  cout<<"mu chg       : "<< cms3.mus_charge().at(iMu)   <<endl;
-		  cout<<"mu dxy       : "<< cms3.mus_dxyPV().at(iMu)    <<endl;
-		  cout<<"mu dz0       : "<< cms3.mus_dzPV().at(iMu)     <<endl;
-		}
+		// if( evt == 117800315 ){
+		//   cout<<"event        : "<<evt<<endl;
+		//   cout<<"muminireliso : "<<muMiniRelIso( iMu, true, 0.5, false, true )<<endl;
+		//   cout<<"mu pt        : "<< cms3.mus_p4().at(iMu).pt()  <<endl;
+		//   cout<<"mu eta       : "<< cms3.mus_p4().at(iMu).eta() <<endl;
+		//   cout<<"mu chg       : "<< cms3.mus_charge().at(iMu)   <<endl;
+		//   cout<<"mu dxy       : "<< cms3.mus_dxyPV().at(iMu)    <<endl;
+		//   cout<<"mu dz0       : "<< cms3.mus_dzPV().at(iMu)     <<endl;
+		// }
 
 		nMuons10++;
         lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
@@ -474,16 +471,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		lep_dz         .push_back( vec_lep_dz          .at(it->second));
 		lep_dxy        .push_back( vec_lep_dxy         .at(it->second));
         lep_etaSC      .push_back( vec_lep_etaSC       .at(it->second));
-		//edge vars
-		edge_lep_p4     .push_back( vec_lep_p4s         .at(it->second));
-		edge_lep_pt     .push_back( vec_lep_pt          .at(it->second));
-		edge_lep_eta    .push_back( vec_lep_eta         .at(it->second));
-		edge_lep_phi    .push_back( vec_lep_phi         .at(it->second));
-		edge_lep_mass   .push_back( vec_lep_mass        .at(it->second));
-		edge_lep_charge .push_back( vec_lep_charge      .at(it->second));
-		edge_lep_pdgId  .push_back( vec_lep_pdgId       .at(it->second));
-		edge_lep_dz     .push_back( vec_lep_dz          .at(it->second));
-		edge_lep_dxy    .push_back( vec_lep_dxy         .at(it->second));
 		// fix me
 		lep_tightId      .push_back( vec_lep_tightId      .at(it->second));
 		lep_relIso03     .push_back( vec_lep_relIso03     .at(it->second));
@@ -507,7 +494,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       float gamma_met_px  = met_pt * cos(met_phi);
       float gamma_met_py  = met_pt * sin(met_phi);
 	  for(unsigned int iGamma = 0; iGamma < cms3.photons_p4().size(); iGamma++){
- 		if( !passPhotonSelection_ZMET_v1( iGamma, vetoXitionRegion, maxEta24 ) )continue;
+ 		if( !passPhotonSelection_ZMET( iGamma ) )continue;
 
 		float pt  =                   cms3.photons_p4().at(iGamma).pt();
 		float eta =                   cms3.photons_p4().at(iGamma).eta();
@@ -565,7 +552,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  // add selections to keep only events with photons and dilepton events
 	  if( !(ngamma > 0 || nlep > 0) ) continue;// fix for not iso study
        
-		std::pair <int, int> hyp_indices =  getHypLepIndices( lep_p4, lep_pdgId );
+		// std::pair <int, int> hyp_indices =  getHypLepIndices( lep_p4, lep_pdgId );
+	  std::pair <int, int> hyp_indices = std::make_pair(0, 1);
 		
 	  if (nlep > 1 ) {//require min 2 leps
 		if (lep_charge.at(hyp_indices.first)*lep_charge.at(hyp_indices.second) > 0){
@@ -582,16 +570,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
 		  continue;
 		}
-
-		//edge evt types start with 1
-		if (        abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 11  ){ edge_hyp_type = 10;// ee event												   			   
-		}else if (  abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 13  ){ edge_hyp_type = 11;// mm event												   			   
-		}else if ( (abs(lep_pdgId.at(0)) == 11 && abs(lep_pdgId.at(1)) == 13) || 
-				   (abs(lep_pdgId.at(0)) == 13 && abs(lep_pdgId.at(1)) == 11) ){ edge_hyp_type = 12;// em event
-		}else {
-		  cout<<"Leptype not ee, mm, or em! Exiting."<<endl;
-		  continue;
-		}
 		
 		dilmass = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).mass();
 		dilpt   = (lep_p4.at(hyp_indices.first)+lep_p4.at(hyp_indices.second)).pt();       
@@ -600,11 +578,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		float dEtall =            lep_p4.at(hyp_indices.first).eta() - lep_p4.at(hyp_indices.second).eta();
 		float dPhill = acos( cos( lep_p4.at(hyp_indices.first).phi() - lep_p4.at(hyp_indices.second).phi() ) );
 		dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
-
-		//Add edge dRll
-		dEtall    =            lep_p4.at(0).eta() - lep_p4.at(1).eta();
-		dPhill    = acos( cos( lep_p4.at(0).phi() - lep_p4.at(1).phi() ) );
-		edge_dRll = sqrt(pow( dEtall, 2) + pow( dPhill, 2));
 
 		for( size_t lepind = 0; lepind < lep_p4.size(); lepind++ ){
 		  if( lepind == (size_t)hyp_indices.first  ) lep_islead.push_back(1);
@@ -649,8 +622,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
 		// note this uses the eta of the jet as stored in CMS3
 		//  chance for small discrepancies if JEC changes direction slightly..
-        if(!isLoosePFJet(iJet)) continue;
-        passJets.push_back(iJet);
+        if(!isLoosePFJetV2(iJet)) continue;
+		passJets.push_back(iJet);
       }
 
 	  if (verbose) cout << "before jet/photon requirements" << endl;
@@ -706,7 +679,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
           if(p4sCorrJets.at(iJet).pt() < 10.0) continue;
           if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
-          if(!isLoosePFJet(iJet)) continue;
+          if(!isLoosePFJetV2(iJet)) continue;
 
           bool alreadyRemoved = false;
           for(unsigned int j=0; j<removedJets.size(); j++){
@@ -742,7 +715,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
           if(p4sCorrJets.at(iJet).pt() < 30.0) continue;
           if(fabs(p4sCorrJets.at(iJet).eta()) > 3.0) continue;
-          if(!isLoosePFJet(iJet)) continue;
+          if(!isLoosePFJetV2(iJet)) continue;
 
           bool alreadyRemoved = false;
           for(unsigned int j=0; j<removedJetsGamma.size(); j++){
@@ -765,14 +738,14 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       njet = 0;
       nJet40 = 0;
       nBJet40 = 0;
+      nBJetTight  = 0;
+      nBJetMedium = 0;
+      nBJetLoose  = 0;
 
 	  njets = 0;
 	  ht    = 0;
 	  njets_eta30 = 0;
 	  ht_eta30    = 0;
-
-	  edge_njets = 0;
-	  edge_ht    = 0;
 
       gamma_nJet40 = 0;
       gamma_nBJet40 = 0;
@@ -784,7 +757,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         int iJet = passJets.at(passIdx);
 
 		// fill gamma_XXX variables before checking for lepton overlap.
-        if( ( p4sCorrJets.at(iJet).pt() > 40.0) && (fabs(p4sCorrJets.at(iJet).eta()) < 2.5) ){ 
+        if( ( p4sCorrJets.at(iJet).pt() > 35.0) && (fabs(p4sCorrJets.at(iJet).eta()) < 2.4) ){ 
 		  //check against list of jets that overlap with a photon
 		  bool isOverlapJetGamma = false;
 		  for(unsigned int j=0; j<removedJetsGamma.size(); j++){
@@ -812,15 +785,13 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         }
         if(isOverlapJet) continue;
 
- 		if( p4sCorrJets.at(iJet).pt() > 40.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.5 ){
+ 		if( p4sCorrJets.at(iJet).pt() > 35.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.4 ){
  		  jets_p4       .push_back(p4sCorrJets.at(iJet));
 		  ht+=p4sCorrJets.at(iJet).pt();
 		  njets++;
-		}
- 		if( p4sCorrJets.at(iJet).pt() > 35.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.4 ){
- 		  edge_jets_p4 .push_back(p4sCorrJets.at(iJet));
-		  edge_ht      +=         p4sCorrJets.at(iJet).pt();
-		  edge_njets++;
+          if(cms3.pfjets_combinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.941) { nBJetTight++; }
+          if(cms3.pfjets_combinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.814) { nBJetMedium++; }
+          if(cms3.pfjets_combinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.423) { nBJetLoose++; }
 		}
 		if( p4sCorrJets.at(iJet).pt() > 40.0 && abs(p4sCorrJets.at(iJet).eta()) < 3.0 ){
  		  jets_eta30_p4       .push_back(p4sCorrJets.at(iJet));
@@ -1024,6 +995,9 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
 
   BabyTree_->Branch("nJet40", &nJet40 );
   BabyTree_->Branch("nBJet40", &nBJet40 );
+  BabyTree_->Branch("nBJetTight", &nBJetTight );
+  BabyTree_->Branch("nBJetMedium", &nBJetMedium );
+  BabyTree_->Branch("nBJetLoose", &nBJetLoose );
   BabyTree_->Branch("nMuons10", &nMuons10 );
   BabyTree_->Branch("nElectrons10", &nElectrons10 );
   BabyTree_->Branch("nTaus20", &nTaus20 );
@@ -1208,24 +1182,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
  
-
-  //----- edge variables
-  BabyTree_->Branch("edge_hyp_type"   , &edge_hyp_type );
-  BabyTree_->Branch("edge_njets"      , &edge_njets    );
-  BabyTree_->Branch("edge_ht"         , &edge_ht       );
-  BabyTree_->Branch("edge_dRll"       , &edge_dRll     );
-  BabyTree_->Branch("edge_jets_p4"    , "std::vector< LorentzVector >" , &edge_jets_p4  );
-
-  BabyTree_->Branch("edge_lep_p4"         , "std::vector< LorentzVector >" , &edge_lep_p4         );
-  BabyTree_->Branch("edge_lep_pt"         , "std::vector< Float_t >"       , &edge_lep_pt         );
-  BabyTree_->Branch("edge_lep_eta"        , "std::vector< Float_t >"       , &edge_lep_eta        );
-  BabyTree_->Branch("edge_lep_phi"        , "std::vector< Float_t >"       , &edge_lep_phi        );
-  BabyTree_->Branch("edge_lep_mass"       , "std::vector< Float_t >"       , &edge_lep_mass       );
-  BabyTree_->Branch("edge_lep_charge"     , "std::vector< Int_t >"         , &edge_lep_charge     );
-  BabyTree_->Branch("edge_lep_pdgId"      , "std::vector< Int_t >"         , &edge_lep_pdgId      );
-  BabyTree_->Branch("edge_lep_dxy"        , "std::vector< Float_t >"       , &edge_lep_dxy        );
-  BabyTree_->Branch("edge_lep_dz"         , "std::vector< Float_t >"       , &edge_lep_dz         );
-
   return;
 }
 
@@ -1248,6 +1204,9 @@ void babyMaker::InitBabyNtuple () {
   rho25 = -999.0;
   nJet40 = -999;
   nBJet40 = -999;
+  nBJetTight = -999;
+  nBJetMedium = -999;
+  nBJetLoose = -999;
   nMuons10 = -999;
   nElectrons10 = -999;
   nTaus20 = -999;
@@ -1443,23 +1402,6 @@ void babyMaker::InitBabyNtuple () {
   gamma_nJet40 = -999;
   gamma_nBJet40 = -999;
 
-  //----- edge variables
-  edge_hyp_type  = -999  ;
-  edge_njets     = -999  ;
-  edge_ht        = -999  ;
-  edge_dRll      = -999  ;
-  edge_jets_p4   .clear();
-
-  edge_lep_p4    .clear();
-  edge_lep_pt    .clear();   //[nlep]
-  edge_lep_eta   .clear();   //[nlep]
-  edge_lep_phi   .clear();   //[nlep]
-  edge_lep_mass  .clear();   //[nlep]
-  edge_lep_charge.clear();   //[nlep]
-  edge_lep_pdgId .clear();   //[nlep]
-  edge_lep_dxy   .clear();   //[nlep]
-  edge_lep_dz    .clear();   //[nlep]
-  
   return;
 }
 

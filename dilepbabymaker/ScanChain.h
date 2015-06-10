@@ -60,6 +60,9 @@ class babyMaker {
 
   Int_t           nJet40;
   Int_t           nBJet40;
+  Int_t           nBJetTight;
+  Int_t           nBJetMedium;
+  Int_t           nBJetLoose;
   Int_t           nMuons10;
   Int_t           nElectrons10;
   Int_t           nTaus20;
@@ -265,23 +268,6 @@ class babyMaker {
   vector <Float_t>         jet_area        ;   //[njet]
   vector <Int_t  >         jet_id          ;   //[njet]
   vector <Int_t  >         jet_puId        ;   //[njet]
-
-  //----- edge variables
-  Int_t                  edge_hyp_type; // 10 = ee; 11 = mm; 12 = em; 12 = me
-  Int_t                  edge_njets;
-  Float_t                edge_ht;
-  Float_t                edge_dRll;
-  vector <LorentzVector> edge_jets_p4;
-
-  vector <LorentzVector> edge_lep_p4;
-  vector <Float_t>       edge_lep_pt         ;   //[nlep]
-  vector <Float_t>       edge_lep_eta        ;   //[nlep]
-  vector <Float_t>       edge_lep_phi        ;   //[nlep]
-  vector <Float_t>       edge_lep_mass       ;   //[nlep]
-  vector <Int_t  >       edge_lep_charge     ;   //[nlep]
-  vector <Int_t  >       edge_lep_pdgId      ;   //[nlep]
-  vector <Float_t>       edge_lep_dxy        ;   //[nlep]
-  vector <Float_t>       edge_lep_dz         ;   //[nlep]
   
 };
 

@@ -28,7 +28,7 @@ void doAll( std::string sample = "edge_sync" )
 
   if( sample == "edge_sync" ){
 	ch->Add("/nfs-6/userdata/cwelke/ZMETbabies/ttbar_edgesync/CMS3/ntuple_pp.root");
-	  }
+  }
   
   babyMaker *looper = new babyMaker();
   looper->ScanChain(ch, Form("OSBaby_%s_23", sample.c_str() )); 
