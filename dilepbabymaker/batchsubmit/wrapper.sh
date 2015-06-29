@@ -15,24 +15,26 @@ echo "[wrapper] COPYDIR   = " ${COPYDIR}
 #
 # set up environment
 #
-CMSSW_VERSION=CMSSW_7_0_6_patch1
+CMSSW_VERSION=CMSSW_7_4_1_patch1
 
 echo "[wrapper] setting env"
-export SCRAM_ARCH=slc6_amd64_gcc481
+export SCRAM_ARCH=slc6_amd64_gcc491
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 OLDDIR=`pwd`
-cd /cvmfs/cms.cern.ch/slc6_amd64_gcc481/cms/cmssw-patch/$CMSSW_VERSION/src
+cd /cvmfs/cms.cern.ch/slc6_amd64_gcc491/cms/cmssw-patch/$CMSSW_VERSION/src
 #cmsenv
 eval `scramv1 runtime -sh`
 cd $OLDDIR
 
-#### old setup for slc5
-#export CMS_PATH=/code/osgcode/cmssoft/cms
-#export SCRAM_ARCH=slc5_amd64_gcc462
-#source /code/osgcode/cmssoft/cmsset_default.sh
-#source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh
-#export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
-#export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+# ### version using nfs install of CMSSW
+# echo "[wrapper] setting env"
+# export SCRAM_ARCH=slc6_amd64_gcc491
+# source /nfs-7/cmssoft/cms.cern.ch/cmssw/cmsset_default.sh
+# OLDDIR=`pwd`
+# cd /nfs-7/cmssoft/cms.cern.ch/cmssw/slc6_amd64_gcc491/cms/cmssw-patch/$CMSSW_VERSION/src
+# #cmsenv
+# eval `scramv1 runtime -sh`
+# cd $OLDDIR
 
 echo
 
@@ -59,17 +61,7 @@ ls
 #
 # run it
 #
-echo "
-{
-gROOT->ProcessLine(\".L processBaby.C\");
-processBaby(\"${FILEID}\", \"${FILE}\");
-}
-" > runme.C
-
-echo "[wrapper] running"
-cat runme.C
-
-root -b -q runme.C
++./processBaby ${FILEID} ${FILE}
 
 #
 # do something with output

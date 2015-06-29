@@ -1,15 +1,44 @@
-CC = g++
-INCLUDE = -I../ -I./ 
-CFLAGS = -Wall -g -fPIC $(shell root-config --cflags) $(INCLUDE) $(EXTRACFLAGS) -DTOOLSLIB
-LINKER = g++
+#
+# stuff to make
+#
+ifndef ROOTSYS
+all:
+	@echo "ROOTSYS is not set. Please set ROOT environment properly"; echo
+else
 
-LINKERFLAGS = $(shell root-config --ldflags) $(shell root-config --libs) -lMinuit
-ifeq ($(shell root-config --platform),macosx)
-	LINKERFLAGS = -dynamiclib -undefined dynamic_lookup -Wl,-x -O -Xlinker -bind_at_load -flat_namespace $(shell root-config --libs) -lEG -lGenVector
+all: 	build
+help:
+	@echo "Available Targets:";\
+	cat Makefile | perl -ne 'printf("\t%-15s %s\n",$$1,$$2) if(/^(\S+):[^#]+(#.*)$$/)'
+
+ifndef VERBOSE
+  QUIET := @
 endif
 
-SOURCES = ScanChain.cc
-OBJECTS = $(SOURCES:.cc=.o) LinkDef_out.o
+#ROOFITINCLUDE = 
+#ifdef CMSSW_VERSION
+#	ROOFITINCLUDE = $(shell scramv1 tool info roofitcore | grep INCLUDE | sed 's/^INCLUDE=/-I/')
+#endif
+
+CC = g++
+CMSROOT = ./
+INCLUDE = $(shell root-config --cflags) -I$(CMSROOT) -I$(CMSROOT)../CORE
+CFLAGS = -Wall -Wno-unused-function -g -O2 -fPIC $(INCLUDE) $(EXTRACFLAGS)
+ROOTLIBS = $(shell root-config --ldflags --cflags --libs) -lTMVA #-lEG -lGenVector
+COREDIR = ../CORE
+
+DICTINCLUDE = $(ROOTSYS)/include/Math/QuantFuncMathCore.h $(ROOTSYS)/include/TLorentzVector.h $(ROOTSYS)/include/Math/Vector4D.h
+
+LINKER = g++
+LINKERFLAGS = $(shell root-config --ldflags --libs) -lEG -lGenVector -lTMVA
+# ifeq ($(shell root-config --platform),macosx)
+# 	LINKERFLAGS = -dynamiclib -undefined dynamic_lookup -Wl,-x -O -Xlinker -bind_at_load -flat_namespace $(shell root-config --libs) -lEG -lGenVector
+# endif
+
+DIR = ./
+
+SOURCES = $(wildcard *.cc)
+OBJECTS = $(SOURCES:.cc=.o)
 LIB = libScanChain.so
 
 CORESOURCES = $(wildcard ../CORE/*.cc)
@@ -20,56 +49,122 @@ TOOLSSOURCES = $(wildcard ../Tools/*.cc) $(wildcard ../Tools/MT2/*.cc)
 TOOLSOBJECTS = $(TOOLSSOURCES:.cc=.o) 
 TOOLSLIB = libBabymakerTools.so
 
-#FWLIB = libMiniFWLite.so
-FWLIB = ../Software/MiniFWLite/libMiniFWLite.so
+# #FWLIB = libMiniFWLite.so
+# FWLIB = ../Software/MiniFWLite/libMiniFWLite.so
+
+DICT = LinkDef_out.o
 
 LIBS = $(LIB) $(CORELIB) $(TOOLSLIB) $(FWLIB) 
 
+EXE = processBaby
+
 .PHONY: all help compile clean cms2env
+
+#
+# how to make it
+#
 
 libs:	$(LIBS)
 
-$(LIB):	$(OBJECTS) 
-	echo "Linking $(LIB)"; \
-	$(LINKER) $(LINKERFLAGS) -shared $(OBJECTS) -o $@
+# $(LIB):	$(OBJECTS) 
+# 	echo "Linking $(LIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(OBJECTS) -o $@
 
-$(CORELIB):	$(COREOBJECTS) 
-	echo "Linking $(CORELIB)"; \
-	$(LINKER) $(LINKERFLAGS) -shared $(COREOBJECTS) -o $@
+# $(CORELIB):	$(COREOBJECTS) 
+# 	echo "Linking $(CORELIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(COREOBJECTS) -o $@
 
-$(TOOLSLIB):	$(TOOLSOBJECTS) 
-	echo "Linking $(TOOLSLIB)"; \
-	$(LINKER) $(LINKERFLAGS) -shared $(TOOLSOBJECTS) -o $@
+# $(TOOLSLIB):	$(TOOLSOBJECTS) 
+# 	echo "Linking $(TOOLSLIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(TOOLSOBJECTS) -o $@
 
-$(FWLIB):
-	echo "making MiniFWLite"; \
-        cd ../Software/MiniFWLite; \
-        $(MAKE) -f Makefile; cd -; \
-	cp $(FWLIB) .;
 
-LinkDef_out.cxx: LinkDef.h ScanChain.h
-	rootcint -f $@ -c $(INCLUDE) ScanChain.h $<
+$(CORELIB): $(DICT) $(COREOBJECTS)
+	$(QUIET) echo "Linking $@"; \
+	echo "$(LINKER) -shared -o $@ $(COREOBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(COREOBJECTS) $(DICT) $(LINKERFLAGS)
+
+$(TOOLSLIB): $(DICT) $(TOOLSOBJECTS)
+	$(QUIET) echo "Linking $@"; \
+	echo "$(LINKER) -shared -o $@ $(TOOLSOBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(TOOLSOBJECTS) $(DICT) $(LINKERFLAGS)
+
+$(LIB):	$(DICT) $(OBJECTS)
+	$(QUIET) echo "Linking $@"; \
+	echo "$(LINKER) -shared -o $@ $(OBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(OBJECTS) $(DICT) $(LINKERFLAGS)
+
+# $(FWLIB):
+# 	echo "making MiniFWLite"; \
+#         cd ../Software/MiniFWLite; \
+#         $(MAKE) -f Makefile; cd -; \
+# 	cp $(FWLIB) .;
+
+LinkDef_out.cxx: LinkDef.h
+	$(QUIET) echo "Making CINT dictionaries"; \
+	rootcint -f LinkDef_out.cc -c -p $(DICTINCLUDE)  LinkDef.h; \
+	cat LinkDef_out.cc > LinkDef_out.cxx; rm LinkDef_out.cc
+
+# LinkDef_out.cxx: LinkDef.h ScanChain.h
+# 	rootcint -f $@ -c $(INCLUDE) ScanChain.h $<
 
 # General rule for making object files
-%.d:	%.cc
-	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
-                     [ -s $@ ] || rm -f $@
-%.d:	%.cxx
-	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
-                     [ -s $@ ] || rm -f $@
+# %.d:	%.cc
+# 	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
+#                      [ -s $@ ] || rm -f $@
+# %.d:	%.cxx
+# 	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
+#                      [ -s $@ ] || rm -f $@
 
-%.o: 	%.cc 
+# %.o: 	%.cc 
+# 	$(CC) $(CFLAGS) $< -c -o $@
+
+# %.o: 	%.cxx
+# 	$(CC) $(CFLAGS) $< -c -o $@
+
+# .PHONY: all
+# all:	$(LIBS)  
+
+# .PHONY: clean
+
+# the option "-Wl,-rpath,./" adds ./ to the runtime search path for libraries
+$(EXE):  $(LIBS)
+	$(QUIET) echo "Building $@"; \
+	echo "$(CC) -o $@ $(LIBS) $(ROOTLIBS) -Wl,-rpath,./"; \
+	$(CC) -o $@ $(LIBS) $(ROOTLIBS) -Wl,-rpath,./ 
+
+%.o: 	%.cc %.h
+	$(QUIET) echo "Compiling $<"; \
 	$(CC) $(CFLAGS) $< -c -o $@
 
-%.o: 	%.cxx
+%.o: 	%.C %.h
+	$(QUIET) echo "Compiling $<"; \
 	$(CC) $(CFLAGS) $< -c -o $@
 
-.PHONY: all
-all:	$(LIBS)  
+%.o: 	%.cc
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
 
-.PHONY: clean
-clean:  
-	rm -v -f \
+%.o: 	%.C
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
+
+%.o:    %.cxx 
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
+
+libs:	$(LIBS)
+
+build:  $(EXE)
+
+b: build
+
+clean:
+	rm -f \
+	LinkDef_out* \
+	*.o \
+	$(LIBS) \
+	$(EXE) \
         ../CORE/*.o \
         ../CORE/*.d \
         ../CORE/*.so \
@@ -78,14 +173,11 @@ clean:
         ../Tools/*.so \
         ../Tools/MT2/*.o \
 		../Tools/MT2/*.d \
-        ../Tools/MT2/*.so \
-        ../Software/MiniFWLite/*.o \
-		../Software/MiniFWLite/*.d \
-        $(CORELIB) $(TOOLSLIB) $(MT2CORELIB) $(LIB) $(FWLIB) \
-        LinkDef_out.cxx  LinkDef_out.h \
-        *.o *.d *.so; echo "Done"
+        ../Tools/MT2/*.so 
 
-test: 
-	@echo $(INCLUDE)
+# test: 
+# 	@echo $(INCLUDE)
 
--include $(LIBDIR)/LinkDef_out.d
+# -include $(LIBDIR)/LinkDef_out.d
+
+endif
