@@ -8,13 +8,16 @@
 
 using namespace std;
 
-void plotPhotonTemplates()
+void plotPhotonTemplates( string region = "2jets_edgec" )
 {
 
   int rebin = 10;
+
+  string iter   = "V00-00-20";
+  // string region = "2jets_inclusive";
   
-  string filename = "../output/photon/V00-00-00/All_MC_photon_templates.root";
-  string outputdir = "../output/ZMET2015/V00-00-00/plots/Templates/";
+  string filename =  Form("../output/photon/%s/All_MC_%s_photon_templates.root", iter.c_str(), region.c_str());
+  string outputdir = Form("../output/ZMET2015/%s/plots/Templates/%s/"          , iter.c_str(), region.c_str());
 
   TCanvas * c1 = new TCanvas("c1","c1",800,800);
   
@@ -53,8 +56,6 @@ void plotPhotonTemplates()
 	// c1->SaveAs(outfile.c_str());
 	
   }
-
-
   
   return;
 }

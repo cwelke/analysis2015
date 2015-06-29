@@ -22,7 +22,7 @@
 using namespace std;
 
 const bool debug = false;
-const bool doReweighting = true;
+const bool doReweighting = false;
 
 makePhotonTemplates::makePhotonTemplates()
 {
@@ -101,20 +101,30 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 
 	  if( zmet.ngamma()                      < 1     ) continue; // require at least 1 good photon
 	  if( zmet.njets()                       < 2     ) continue; // >=2 jets
-	  if( zmet.gamma_pt().at(0)              < 22    ) continue; // photon pt > 22 GeV
+	  if( zmet.gamma_pt().at(0)              < 25    ) continue; // photon pt > 22 GeV
+	  if( abs(zmet.gamma_p4().at(0).eta())   > 1.4 &&
+		  abs(zmet.gamma_p4().at(0).eta())   < 1.6   ) continue; // photon in barrel only
+	  if( abs(zmet.gamma_p4().at(0).eta())   > 2.4   ) continue; // photon in barrel only
 	  // if( zmet.gamma_pt().at(0)              < 50    ) continue; // for now, require photon pt > 50 GeV
 	  if( zmet.gamma_hOverE().at(0)          > 0.1   ) continue; // H/E < 0.1	  
 	  if( zmet.matched_neutralemf()          < 0.7   ) continue; // jet neutral EM fraction cut
       if( acos( cos( zmet.gamma_phi().at(0)			 
-					 - event_met_ph ) ) < 0.14  ) continue; // kill photons aligned with MET
+					 - event_met_ph ) ) < 0.14       ) continue; // kill photons aligned with MET
 	  if( zmet.elveto()                              ) continue; // veto pixel match
 	  // if( zmet.ht()                          < 240.0 ) continue; // remove events with low HT for now
 	  
-	  if( TString(selection).Contains("bveto") && zmet.nBJet40() > 0 ) continue; //bveto
-	  if( TString(selection).Contains("withb") && zmet.nBJet40() < 1 ) continue; //at least 1 b-tag
-	  if( TString(selection).Contains("SRA") && !((zmet.njets() == 2 || zmet.njets() == 3) && zmet.ht() > 600) ) continue; //high HT region
-	  if( TString(selection).Contains("SRB") && zmet.njets() < 4                    ) continue; //large njets
-      // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning
+	  if( TString(selection).Contains("bveto"          ) && zmet.nBJetMedium() > 0 ) continue; //bveto
+	  if( TString(selection).Contains("withb"          ) && zmet.nBJetMedium() < 1 ) continue; //at least 1 b-tag
+	  if( TString(selection).Contains("SRA"            ) && !((zmet.njets() == 2 ||
+											           	   zmet.njets() == 3) &&
+											           	  zmet.ht() > 600)         ) continue; //high HT region
+	  if( TString(selection).Contains("SRB"            ) && zmet.njets() < 4       ) continue; //large njets
+	  if( TString(selection).Contains("3jets"          ) && zmet.njets() < 3       ) continue; //large njets
+
+	  // if( TString(selection).Contains("twojets"        ) && zmet.njets() > 2       ) continue; //large njets
+
+
+	  // if( templates.jetpt() - templates.etg() < -5 )                        continue; // pfjet cleaning
       // if( templates.maxleppt() > 20.0 )                                     continue; // veto leptons pt > 20 GeV
       // // if( bveto && templates.nbm() > 0 )                                    continue; // apply medium csv b-veto 
       // // if( bveto && templates.nbl() < 2 )                                    continue; // apply medium csv b-veto 
@@ -150,6 +160,9 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
 	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight*vtxweight );
+
+	  // if( zmet.gamma_pt().at(0) < 50 )	  
+		// cout<<"photon pT in event loop: "<<zmet.gamma_pt().at(0)<<endl;
 
 	  // fillUnderOverFlow(mettemplate_hists.at("photon_pt"), zmet.gamma_pt().at(0), weight );
 	  // fillUnderOverFlow(mettemplate_hists.at("ht"       ), zmet.ht()            , weight );

@@ -15,6 +15,8 @@ using namespace std;
 void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string selection = "_inclusive" )
 {
 
+  bool useedgebinning = true;
+  
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
   TH1F * h_fsbkg = NULL;
@@ -42,17 +44,23 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string 
   //MAKE TABLES
   vector <float> metcut;
   metcut.push_back(0.0);
-  if( TString(selection).Contains("inclusive") )  metcut.push_back(50);
-  if( TString(selection).Contains("bveto"    ) )  metcut.push_back(50);
-  if( TString(selection).Contains("withb"    ) )  metcut.push_back(50);
+  metcut.push_back(50);
   metcut.push_back(100);
   metcut.push_back(150);
-  // metcut.push_back(100);
-  // metcut.push_back(150);
-  metcut.push_back(225);
+  metcut.push_back(200);
   metcut.push_back(300);
   metcut.push_back(-1);
+  if( useedgebinning ){
+	metcut.clear();
+	metcut.push_back(0.0);
+	metcut.push_back(50);
+	if( TString(selection).Contains("2jets"  ) ){ metcut.push_back(150); }
+	if( TString(selection).Contains("3jets"  ) ){ metcut.push_back(100); }
+	metcut.push_back(-1);
 
+  }
+
+  
   vector <double> val_data;
   vector <double> err_data;
 
@@ -132,43 +140,65 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string 
   cout<<Form("$\\geq$ %.0f \\\\", metcut.at(metcut.size()-2) );
   cout<<endl;
 
-  cout<<"\\hline "<<endl;
-  cout<<"Z+jets& ";
-  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
-	if( bini < val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
-	if( bini == val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
-  }
-  cout<<endl;
+  if( useedgebinning ){
+	cout<<"\\hline "<<endl;
+	cout<<"Z+jets& ";
+	for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+	  if( bini < val_zjets.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini)+val_vvbkg.at(bini)+val_other.at(bini), sqrt(pow(err_zjets.at(bini),2) + pow(err_vvbkg.at(bini), 2) + pow(err_other.at(bini), 2) ));
+	  if( bini == val_zjets.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini)+val_vvbkg.at(bini)+val_other.at(bini), sqrt(pow(err_zjets.at(bini),2) + pow(err_vvbkg.at(bini), 2) + pow(err_other.at(bini), 2) ));
+	}
+	cout<<endl;
 
-  cout<<"FS bkg& ";
-  for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
-	if( bini < val_fsbkg.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
-	if( bini == val_fsbkg.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
-  }
-  cout<<endl;
+	cout<<"FS bkg& ";
+	for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
+	  if( bini < val_fsbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+	  if( bini == val_fsbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+	}
+	cout<<endl;
 
-  cout<<"WZ + ZZ bkg& ";
-  for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
-	if( bini < val_vvbkg.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-	if( bini == val_vvbkg.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-  }
-  cout<<endl;
+  }else{
+	cout<<"\\hline "<<endl;
+	cout<<"Z+jets& ";
+	for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+	  if( bini < val_zjets.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
+	  if( bini == val_zjets.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+	}
+	cout<<endl;
 
-  cout<<"rare SM BG& ";
-  for( size_t bini = 0; bini < val_other.size()-1; bini++ ){
-	if( bini < val_other.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_other.at(bini), err_other.at(bini));
-	if( bini == val_other.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_other.at(bini), err_other.at(bini));
-  }
-  cout<<endl;
+	cout<<"FS bkg& ";
+	for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
+	  if( bini < val_fsbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+	  if( bini == val_fsbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+	}
+	cout<<endl;
 
+	cout<<"WZ + ZZ bkg& ";
+	for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
+	  if( bini < val_vvbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+	  if( bini == val_vvbkg.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+	}
+	cout<<endl;
+
+	cout<<"rare SM BG& ";
+	for( size_t bini = 0; bini < val_other.size()-1; bini++ ){
+	  if( bini < val_other.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f & ", val_other.at(bini), err_other.at(bini));
+	  if( bini == val_other.size()-2 )
+		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_other.at(bini), err_other.at(bini));
+	}
+	cout<<endl;
+  }
+  
   cout<<"\\hline "<<endl;
   cout<<"total BG& ";
   for( size_t bini = 0; bini < val_allbg.size()-1; bini++ ){
@@ -191,7 +221,7 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string 
 
   cout<<"\\hline "<<endl;
   
-  cout<<"data/BG& ";
+  cout<<"All MC/BG& ";
   for( size_t bini = 0; bini < val_ratio.size()-1; bini++ ){
 	if( bini < val_ratio.size()-2 )
 	  cout<<Form(" %.2f $\\pm$ %.2f & ", val_ratio.at(bini), err_ratio.at(bini));
@@ -273,11 +303,11 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string 
   l1->SetLineColor(kWhite);    
   l1->SetShadowColor(kWhite);    
   l1->SetFillColor(kWhite);    
-  l1->AddEntry( h_data , "all MC"       , "lpe");
-  l1->AddEntry( h_zjets , "template prediction"      , "f");
-  l1->AddEntry( h_fsbkg , "FS prediction"        , "f");
-  l1->AddEntry( h_vvbkg , "WZ+ZZ MC"        , "f");
-  l1->AddEntry( h_other , "rare SM MC"         , "f");
+  l1->AddEntry( h_data  , "All MC"              , "lpe");
+  l1->AddEntry( h_zjets , "Template prediction" , "f");
+  l1->AddEntry( h_fsbkg , "FS prediction"       , "f");
+  l1->AddEntry( h_vvbkg , "WZ+ZZ MC"            , "f");
+  l1->AddEntry( h_other , "Rare SM MC"          , "f");
   l1->Draw("same");
   
   c1->cd();
@@ -299,7 +329,7 @@ void drawMoneyPlot( std::string iter = "", float luminosity = 1.0, const string 
 
   h_rat->Divide(h_den);
 
-  h_rat->GetYaxis()->SetRangeUser(0.6,1.4);
+  h_rat->GetYaxis()->SetRangeUser(0.0,2.0);
   h_rat->GetYaxis()->SetLabelSize(0.12);
   h_rat->GetXaxis()->SetLabelSize(0.12);
   h_rat->GetYaxis()->SetNdivisions(5);

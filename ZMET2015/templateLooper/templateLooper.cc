@@ -37,9 +37,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   // if( zmet.isData() )        cout << "Running on Data."        << endl;
   // else                       cout << "Running on MC.  "        << endl;
 
-  unsigned int nee = 0;
-  unsigned int nmm = 0;
-  unsigned int nem = 0;
+  unsigned long nee = 0;
+  unsigned long nmm = 0;
+  unsigned long nem = 0;
+
+  double nem_2jets = 0;
+
+  cout<<selection<<endl;
   
   int npass = 0;
   METTemplates mettemplates( selection );
@@ -88,12 +92,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //Stitch DY samples//
 	  //~-~-~-~-~-~-~-~-~//
 
-	  if( TString(currentFile->GetTitle()).Contains("m50inc") ){
-	  	if( zmet.gen_ht() > 100 ) continue;
-	  }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
-	  	if( zmet.gen_ht() < 100 ) continue;
-	  }
-	
+	  if( sample == "zjets" ){
+	  	if( TString(currentFile->GetTitle()).Contains("m50inc") ){
+	  	  if( zmet.gen_ht() > 100 ) continue;
+	  	}else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
+	  	  if( zmet.gen_ht() < 100 ) continue;
+	  	}
+	  }	
 	  
 	  //~-~-~-~-~-~-~-~~-//
 	  //trigger variables//
@@ -119,32 +124,41 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
-
 	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
 	  if( zmet.lep_pt().at(0)                < 25        ) continue; // leading lep pT > 25 GeV
 	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 20 GeV
 
 	  if( abs(zmet.lep_p4().at(0).eta())     > 2.4       ) continue; // eta < 2.4
 	  if( abs(zmet.lep_p4().at(1).eta())     > 2.4       ) continue; // eta < 2.4
+	  
+	  // if( abs(zmet.lep_etaSC()     .at(0)) >  1.4442 &&
+	  // 	  abs(zmet.lep_etaSC()     .at(0)) <  1.566     ) continue;
+	  // if( abs(zmet.lep_etaSC()     .at(1)) >  1.4442 &&
+	  // 	  abs(zmet.lep_etaSC()     .at(1)) <  1.566     ) continue;
 
 	  if( abs(zmet.lep_p4().at(0).eta())     > 1.4 &&
-		  abs(zmet.lep_p4().at(0).eta())     < 1.6       ) continue; 
+	  	  abs(zmet.lep_p4().at(0).eta())     < 1.6       ) continue; 
 	  if( abs(zmet.lep_p4().at(1).eta())     > 1.4 &&
-		  abs(zmet.lep_p4().at(1).eta())     < 1.6       ) continue; // veto xition region
+	  	  abs(zmet.lep_p4().at(1).eta())     < 1.6       ) continue; // veto xition region
 
 
-	  if( zmet.dRll() < 0.3 ) continue;
-	  
-	  // if( (zmet.hyp_type() == 0 ||					     
-	  // 	   zmet.hyp_type() == 1 ) &&
-	  // 	  (zmet.dilmass() > 81 && zmet.dilmass() < 101) ) n2525pass += weight;
+	  if( zmet.njets() > 1 /*&& (zmet.dilmass() > 81 && zmet.dilmass() < 101)*/ ){
+		fillHist( "event", "drll"  , "2jets", zmet.dRll()  , weight );
+	  }
+
+	  if( zmet.dRll() < 0.1 ) continue;
+
+	  //~-~-~-~-~-~-~-~-//
+      // event selection// 
+	  //~-~-~-~-~-~-~-~-//
 
 	  if( !(zmet.hyp_type() == 0 ||					     
 			zmet.hyp_type() == 1 ||					     
 			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
 	  // if( zmet.ht()                          < 240       ) continue; // HT > 100
+	  // if( zmet.dilpt()                          < 25     ) continue; // HT > 100
 
-	  if( !(zmet.evt_type() == 0 )                       ) continue; // require explicit dilepton event
+	  if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sign
 
 	  if( zmet.hyp_type() == 0 ) nee++;
 	  if( zmet.hyp_type() == 1 ) nmm++;
@@ -168,11 +182,36 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  // if( isdata && (h20 < 1 && h50 < 1 && h75 < 1 && h90 < 1 )) continue; // require trig
 
 	  
-	  if( TString(selection).Contains("bveto") && zmet.nBJet40() > 0 ) continue; //bveto
-	  if( TString(selection).Contains("withb") && zmet.nBJet40() < 1 ) continue; //at least 1 b-tag
-	  if( TString(selection).Contains("SRA") && !((zmet.njets() == 2 || zmet.njets() == 3) && zmet.ht() > 600) ) continue; //high HT region
-	  if( TString(selection).Contains("SRB") && zmet.njets() < 4                                               ) continue; //large njets
+	  // if( !(zmet.hyp_type() == 0 ||					     
+	  // 		zmet.hyp_type() == 1 ) ) continue;					     
 
+	  // if( zmet.dilpt() < 50 ) continue;
+	  fillHist( "event", "pt"  , "2jets"   , zmet.dilpt()  , weight );
+	  if( zmet.HLT_DoubleMu() ||
+		  zmet.HLT_DoubleEl() ||
+		  zmet.HLT_DoubleEl_noiso() ||
+		  zmet.HLT_MuEG()     ){
+		fillHist( "event", "pt"  , "passtrig", zmet.dilpt()  , weight );
+	  }
+	  
+	  // if( TString(selection).Contains("bveto"          ) && zmet.nBJetMedium() > 0 ) continue; //bveto
+	  // if( TString(selection).Contains("withb"          ) && zmet.nBJetMedium() < 1 ) continue; //at least 1 b-tag
+	  // if( TString(selection).Contains("SRA"            ) && !((zmet.njets() == 2 ||
+	  // 										           	   zmet.njets() == 3) &&
+	  // 										           	  zmet.ht() > 600)         ) continue; //high HT region
+	  // if( TString(selection).Contains("SRB"            ) && zmet.njets() < 4       ) continue; //large njets
+	  if( TString(selection).Contains("twojets"           ) && zmet.njets() > 2      ) continue; //large njets
+	  if( TString(selection).Contains("3jets"             ) && zmet.njets() < 3      ) continue; //large njets
+
+	  if( TString(selection).Contains("edgec"             ) && !(abs(zmet.lep_p4().at(0).eta())   < 1.4 &&
+																 abs(zmet.lep_p4().at(1).eta())   < 1.4          ) ) continue; //large njets	  
+	  if( TString(selection).Contains("edgef"             ) && !((abs(zmet.lep_p4().at(0).eta())   > 1.6 &&
+																  abs(zmet.lep_p4().at(1).eta())   < 1.4) ||        
+																 (abs(zmet.lep_p4().at(1).eta())   > 1.6 &&
+																  abs(zmet.lep_p4().at(0).eta())   < 1.4)  ) ) continue; //large njets
+	  
+	  if( event_met_pt < 50 && zmet.hyp_type() == 2 ) nem_2jets += weight;
+	  
 	  // if( sample == "vv" ||
 	  // 	  sample == "ttv" ) 
 		  
@@ -224,7 +263,8 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   cout << nee << " ee events passing selection" << endl;
   cout << nmm << " mm events passing selection" << endl;
   cout << nem << " em events passing selection" << endl;
-
+  cout << "em events at low MET : "     << nem_2jets*10 << endl;
+  
   mettemplates.NormalizeTemplates(mettemplate_hists);
   mettemplates.correctBinUncertainty( mettemplate_hists, event_hists.at("h_templ_met") );
 
@@ -272,10 +312,11 @@ void templateLooper::bookHistos(){
   object.push_back("dilep");
   vector <string> selection;
   selection.push_back("2jets");
+  selection.push_back("passtrig");
 
   vector <string> variable;      vector <float> variable_bins;
 
-  variable.push_back("pt");      variable_bins.push_back(500 );  
+  variable.push_back("pt");      variable_bins.push_back(1000);  
   variable.push_back("met");     variable_bins.push_back(500 );  
   variable.push_back("ht");	     variable_bins.push_back(1000);  
   variable.push_back("mt2");     variable_bins.push_back(500 );  
@@ -310,6 +351,10 @@ void templateLooper::bookHistos(){
 
   // random extra hists here
   bookHist("h_templ_met", "h_templ_met", 500,0,500);
+  bookHist("h_ll_event_drll_2jets", "h_ll_event_drll_2jets", 500,0,5);
+  bookHist("h_ee_event_drll_2jets", "h_ee_event_drll_2jets", 500,0,5);
+  bookHist("h_mm_event_drll_2jets", "h_mm_event_drll_2jets", 500,0,5);
+  bookHist("h_em_event_drll_2jets", "h_em_event_drll_2jets", 500,0,5);
 
   // need to add hists for calculating FS BG
 

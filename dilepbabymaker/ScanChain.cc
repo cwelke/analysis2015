@@ -173,12 +173,12 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       HLT_MET170       = passHLTTriggerPattern("HLT_PFMET170_NoiseCleaned_v"); 
       HLT_ht350met120  = passHLTTriggerPattern("HLT_PFHT350_PFMET120_NoiseCleaned_v"); 
 
-      HLT_SingleMu     = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
-	  // HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v1
-      HLT_DoubleEl     = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloId_TrackId_Iso_v"); 
-      HLT_MuEG         = passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v") || passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_Gsf_CaloId_TrackId_Iso_MediumWP_v"); 
-      HLT_DoubleMu     = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v") || passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
-      HLT_Photons      = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
+      HLT_SingleMu       = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
+      HLT_DoubleEl_noiso = passHLTTriggerPattern("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
+      HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloId_TrackId_Iso_v"); 
+      HLT_MuEG           = passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v") || passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_Gsf_CaloId_TrackId_Iso_MediumWP_v"); 
+      HLT_DoubleMu       = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v") || passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
+      HLT_Photons        = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
 
 	  HLT_Photon22					 = passHLTTriggerPattern("HLT_Photon22_v");
 	  HLT_Photon30					 = passHLTTriggerPattern("HLT_Photon30_v");
@@ -354,47 +354,41 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
  	  	if( !passElectronSelection_ZMET( iEl ) ) continue;
 
-		// if( evt == 107588904 ){
-		// cout<<"event:                      "<<evt<<endl;
-		// cout<<"elminireliso:               "<<elMiniRelIso( iEl, false, 0.0, false, true )<<endl;
-		// cout<<"elminireliso w/ veto cones: "<<elMiniRelIso( iEl, true, 0.5, false, true )<<endl;
-		// cout<<"elminireliso w/ 0pt thresh: "<<elMiniRelIso( iEl, true, 0.0, false, true )<<endl;
-		// cout<<"electron pt :               "<< cms3.els_p4().at(iEl).pt()  <<endl;
-		// cout<<"electron eta:               "<< cms3.els_p4().at(iEl).eta() <<endl;
-		// cout<<"electron SCeta:             "<< els_etaSC().at(iEl) <<endl;
-		// }
-		
         nElectrons10++;
-        lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
-		vec_lep_p4s      .push_back( cms3.els_p4().at(iEl)           );
-		vec_lep_pt       .push_back( cms3.els_p4().at(iEl).pt()      );
-        vec_lep_eta      .push_back( cms3.els_p4().at(iEl).eta()     ); //save eta, even though we use SCeta for ID
-        vec_lep_phi      .push_back( cms3.els_p4().at(iEl).phi()     );
-        vec_lep_mass     .push_back( cms3.els_mass().at(iEl)         );
-        vec_lep_charge   .push_back( cms3.els_charge().at(iEl)       );
-        vec_lep_pdgId    .push_back( cms3.els_charge().at(iEl)*(-11) );
-        vec_lep_dxy      .push_back( cms3.els_dxyPV().at(iEl)        );
-        vec_lep_dz       .push_back( cms3.els_dzPV().at(iEl)         );
-        vec_lep_tightId  .push_back( eleTightID(iEl, ZMET)           );
-        vec_lep_relIso03 .push_back( eleRelIso03(iEl, ZMET)          );
-        vec_lep_relIso04 .push_back( 0                               );
-        vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, true , 0.0, false, true ) );
-        vec_lep_relIso03MRDB .push_back( elMiniRelIso( iEl, false, 0.0, true , false) );
-        vec_lep_relIso03MRNC .push_back( elMiniRelIso( iEl, false, 0.0, false, false) );
-        vec_lep_etaSC        .push_back( els_etaSC().at(iEl)         );
 
-  if (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11) { // matched to a prunedGenParticle electron?
-          int momid =  abs(genPart_motherId[cms3.els_mc3idx().at(iEl)]);
-          vec_lep_mcMatchId.push_back ( momid != 11 ? momid : genPart_grandmaId[cms3.els_mc3idx().at(iEl)]); // if mother is different store mother, otherwise store grandmother
-        }
-		else{ vec_lep_mcMatchId.push_back (0);}
+		if( cms3.els_p4().at(iEl).pt() > 15.0 ){
+		  lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
+		  vec_lep_p4s      .push_back( cms3.els_p4().at(iEl)           );
+		  vec_lep_pt       .push_back( cms3.els_p4().at(iEl).pt()      );
+		  vec_lep_eta      .push_back( cms3.els_p4().at(iEl).eta()     ); //save eta, even though we use SCeta for ID
+		  vec_lep_phi      .push_back( cms3.els_p4().at(iEl).phi()     );
+		  vec_lep_mass     .push_back( cms3.els_mass().at(iEl)         );
+		  vec_lep_charge   .push_back( cms3.els_charge().at(iEl)       );
+		  vec_lep_pdgId    .push_back( cms3.els_charge().at(iEl)*(-11) );
+		  vec_lep_dxy      .push_back( cms3.els_dxyPV().at(iEl)        );
+		  vec_lep_dz       .push_back( cms3.els_dzPV().at(iEl)         );
+		  vec_lep_tightId  .push_back( eleTightID(iEl, ZMET)           );
+		  vec_lep_relIso03 .push_back( eleRelIso03(iEl, ZMET)          );
+		  vec_lep_relIso04 .push_back( 0                               );
+		  vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, true , 0.0, false, true ) );
+		  vec_lep_relIso03MRDB .push_back( elMiniRelIso( iEl, false, 0.0, true , false) );
+		  vec_lep_relIso03MRNC .push_back( elMiniRelIso( iEl, false, 0.0, false, false) );
+		  vec_lep_etaSC        .push_back( els_etaSC().at(iEl)         );
 
-        vec_lep_lostHits.push_back ( cms3.els_exp_innerlayers().at(iEl)); //cms2.els_lost_pixelhits().at(iEl);
-        vec_lep_convVeto.push_back ( !cms3.els_conv_vtx_flag().at(iEl));
-        vec_lep_tightCharge.push_back ( tightChargeEle(iEl));
+		  if (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11) { // matched to a prunedGenParticle electron?
+			int momid =  abs(genPart_motherId[cms3.els_mc3idx().at(iEl)]);
+			vec_lep_mcMatchId.push_back ( momid != 11 ? momid : genPart_grandmaId[cms3.els_mc3idx().at(iEl)]); // if mother is different store mother, otherwise store grandmother
+		  }
+		  else{ vec_lep_mcMatchId.push_back (0);}
 
-        nlep++;
-		// if( cms3.els_p4().at(iEl).pt() < 20.0 ) continue;
+		  vec_lep_lostHits.push_back ( cms3.els_exp_innerlayers().at(iEl)); //cms2.els_lost_pixelhits().at(iEl);
+		  vec_lep_convVeto.push_back ( !cms3.els_conv_vtx_flag().at(iEl));
+		  vec_lep_tightCharge.push_back ( tightChargeEle(iEl));
+
+		  nlep++;
+		  // if( cms3.els_p4().at(iEl).pt() < 20.0 ) continue;
+		}
+
 		p4sLeptonsForJetCleaning.push_back(cms3.els_p4().at(iEl));
 
       }
@@ -410,48 +404,41 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       
 	  for(unsigned int iMu = 0; iMu < cms3.mus_p4().size(); iMu++){
  	  	if( !passMuonSelection_ZMET( iMu ) ) continue;
-
-		// if( evt == 117800315 ){
-		//   cout<<"event        : "<<evt<<endl;
-		//   cout<<"muminireliso : "<<muMiniRelIso( iMu, true, 0.5, false, true )<<endl;
-		//   cout<<"mu pt        : "<< cms3.mus_p4().at(iMu).pt()  <<endl;
-		//   cout<<"mu eta       : "<< cms3.mus_p4().at(iMu).eta() <<endl;
-		//   cout<<"mu chg       : "<< cms3.mus_charge().at(iMu)   <<endl;
-		//   cout<<"mu dxy       : "<< cms3.mus_dxyPV().at(iMu)    <<endl;
-		//   cout<<"mu dz0       : "<< cms3.mus_dzPV().at(iMu)     <<endl;
-		// }
-
 		nMuons10++;
-        lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
-		vec_lep_p4s      .push_back ( cms3.mus_p4().at(iMu)           );
-        vec_lep_pt       .push_back ( cms3.mus_p4().at(iMu).pt()      );
-        vec_lep_eta      .push_back ( cms3.mus_p4().at(iMu).eta()     );
-        vec_lep_phi      .push_back ( cms3.mus_p4().at(iMu).phi()     );
-        vec_lep_mass     .push_back ( cms3.mus_mass().at(iMu)         );
-        vec_lep_charge   .push_back ( cms3.mus_charge().at(iMu)       );
-        vec_lep_pdgId    .push_back ( cms3.mus_charge().at(iMu)*(-13) );
-        vec_lep_dxy      .push_back ( cms3.mus_dxyPV().at(iMu)        ); // this uses the silicon track. should we use best track instead?
-        vec_lep_dz       .push_back ( cms3.mus_dzPV().at(iMu)         ); // this uses the silicon track. should we use best track instead?
-        vec_lep_tightId  .push_back ( muTightID(iMu, ZMET)            );
-        vec_lep_relIso03 .push_back ( muRelIso03(iMu, ZMET)           );
-        vec_lep_relIso04 .push_back ( muRelIso04(iMu, ZMET)           );
-        vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, true , 0.5, false, true ) );
-        vec_lep_relIso03MRDB .push_back( muMiniRelIso( iMu, false, 0.0, true , false) );
-        vec_lep_relIso03MRNC .push_back( muMiniRelIso( iMu, false, 0.0, false, false) );
-        vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()   );
 
-        if (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13) { // matched to a prunedGenParticle electron?
-          int momid =  abs(genPart_motherId[cms3.mus_mc3idx().at(iMu)]);
-          vec_lep_mcMatchId.push_back ( momid != 13 ? momid : genPart_grandmaId[cms3.mus_mc3idx().at(iMu)]); // if mother is different store mother, otherwise store grandmother
+		if( cms3.mus_p4().at(iMu).pt() > 15.0 ){
+		  lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
+		  vec_lep_p4s      .push_back ( cms3.mus_p4().at(iMu)           );
+		  vec_lep_pt       .push_back ( cms3.mus_p4().at(iMu).pt()      );
+		  vec_lep_eta      .push_back ( cms3.mus_p4().at(iMu).eta()     );
+		  vec_lep_phi      .push_back ( cms3.mus_p4().at(iMu).phi()     );
+		  vec_lep_mass     .push_back ( cms3.mus_mass().at(iMu)         );
+		  vec_lep_charge   .push_back ( cms3.mus_charge().at(iMu)       );
+		  vec_lep_pdgId    .push_back ( cms3.mus_charge().at(iMu)*(-13) );
+		  vec_lep_dxy      .push_back ( cms3.mus_dxyPV().at(iMu)        ); // this uses the silicon track. should we use best track instead?
+		  vec_lep_dz       .push_back ( cms3.mus_dzPV().at(iMu)         ); // this uses the silicon track. should we use best track instead?
+		  vec_lep_tightId  .push_back ( muTightID(iMu, ZMET)            );
+		  vec_lep_relIso03 .push_back ( muRelIso03(iMu, ZMET)           );
+		  vec_lep_relIso04 .push_back ( muRelIso04(iMu, ZMET)           );
+		  vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, true , 0.5, false, true ) );
+		  vec_lep_relIso03MRDB .push_back( muMiniRelIso( iMu, false, 0.0, true , false) );
+		  vec_lep_relIso03MRNC .push_back( muMiniRelIso( iMu, false, 0.0, false, false) );
+		  vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()   );
+
+		  if (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13) { // matched to a prunedGenParticle electron?
+			int momid =  abs(genPart_motherId[cms3.mus_mc3idx().at(iMu)]);
+			vec_lep_mcMatchId.push_back ( momid != 13 ? momid : genPart_grandmaId[cms3.mus_mc3idx().at(iMu)]); // if mother is different store mother, otherwise store grandmother
+		  }
+		  else vec_lep_mcMatchId.push_back (0);
+		  vec_lep_lostHits.push_back ( cms3.mus_exp_innerlayers().at(iMu)); // use defaults as if "good electron"
+		  vec_lep_convVeto.push_back ( 1);// use defaults as if "good electron"
+		  vec_lep_tightCharge.push_back ( tightChargeMuon(iMu));
+
+		  nlep++;
+
+		  // if( cms3.mus_p4().at(iMu).pt() < 20.0 ) continue;
 		}
-		else vec_lep_mcMatchId.push_back (0);
-        vec_lep_lostHits.push_back ( cms3.mus_exp_innerlayers().at(iMu)); // use defaults as if "good electron"
-        vec_lep_convVeto.push_back ( 1);// use defaults as if "good electron"
-        vec_lep_tightCharge.push_back ( tightChargeMuon(iMu));
 
-        nlep++;
-
-		// if( cms3.mus_p4().at(iMu).pt() < 20.0 ) continue;
 		p4sLeptonsForJetCleaning.push_back(cms3.mus_p4().at(iMu));
       }
 
@@ -1030,15 +1017,16 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("Flag_HBHENoiseFilter", &Flag_HBHENoiseFilter );
   BabyTree_->Branch("Flag_goodVertices", &Flag_goodVertices );
   BabyTree_->Branch("Flag_eeBadScFilter", &Flag_eeBadScFilter );
-  BabyTree_->Branch("Flag_METFilters", &Flag_METFilters );
-  BabyTree_->Branch("HLT_HT900", &HLT_HT900 );
-  BabyTree_->Branch("HLT_MET170", &HLT_MET170 );
-  BabyTree_->Branch("HLT_ht350met120", &HLT_ht350met120 );
-  BabyTree_->Branch("HLT_SingleMu", &HLT_SingleMu );
-  BabyTree_->Branch("HLT_DoubleEl", &HLT_DoubleEl );
-  BabyTree_->Branch("HLT_MuEG", &HLT_MuEG );
-  BabyTree_->Branch("HLT_DoubleMu", &HLT_DoubleMu );
-  BabyTree_->Branch("HLT_Photons", &HLT_Photons );
+  BabyTree_->Branch("Flag_METFilters"   , &Flag_METFilters );
+  BabyTree_->Branch("HLT_HT900"         , &HLT_HT900 );
+  BabyTree_->Branch("HLT_MET170"        , &HLT_MET170 );
+  BabyTree_->Branch("HLT_ht350met120"   , &HLT_ht350met120 );
+  BabyTree_->Branch("HLT_SingleMu"      , &HLT_SingleMu );
+  BabyTree_->Branch("HLT_DoubleEl"      , &HLT_DoubleEl );
+  BabyTree_->Branch("HLT_DoubleEl_noiso", &HLT_DoubleEl_noiso );
+  BabyTree_->Branch("HLT_MuEG"          , &HLT_MuEG );
+  BabyTree_->Branch("HLT_DoubleMu"      , &HLT_DoubleMu );
+  BabyTree_->Branch("HLT_Photons"       , &HLT_Photons );
   BabyTree_->Branch("HLT_Photon22"                  , &HLT_Photon22                   );					 
   BabyTree_->Branch("HLT_Photon30"                  , &HLT_Photon30                   );					 
   BabyTree_->Branch("HLT_Photon36"                  , &HLT_Photon36                   );					 
@@ -1251,14 +1239,15 @@ void babyMaker::InitBabyNtuple () {
   Flag_goodVertices = -999;
   Flag_eeBadScFilter = -999;
   Flag_METFilters = -999;
-  HLT_HT900       = -999;
-  HLT_MET170      = -999;
-  HLT_ht350met120 = -999;
-  HLT_SingleMu    = -999;   
-  HLT_DoubleEl    = -999;   
-  HLT_MuEG        = -999;   
-  HLT_DoubleMu    = -999;   
-  HLT_Photons     = -999;   
+  HLT_HT900          = -999;
+  HLT_MET170         = -999;
+  HLT_ht350met120    = -999;
+  HLT_SingleMu       = -999;   
+  HLT_DoubleEl       = -999;   
+  HLT_DoubleEl_noiso = -999;   
+  HLT_MuEG           = -999;   
+  HLT_DoubleMu       = -999;   
+  HLT_Photons        = -999;   
   HLT_Photon22                   = -999;					 
   HLT_Photon30                   = -999;					 
   HLT_Photon36                   = -999;					 

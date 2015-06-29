@@ -124,6 +124,7 @@ class babyMaker {
   Int_t           HLT_ht350met120;   
   Int_t           HLT_SingleMu;   
   Int_t           HLT_DoubleEl;   
+  Int_t           HLT_DoubleEl_noiso;   
   Int_t           HLT_MuEG;   
   Int_t           HLT_DoubleMu;   
   Int_t           HLT_Photons;   

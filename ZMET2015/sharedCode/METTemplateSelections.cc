@@ -69,10 +69,10 @@ void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
 						, static_cast<int>(njets_ind)
 						, static_cast<int>(ht_ind)
 						, static_cast<int>(pt_ind) );
-		histtitle = Form("h_template_njets%i_ht%i_pt%i"
+		histtitle = Form("h_template_njets%i_pt%i_ht%i"
 						 , static_cast<int>(photon_njetcuts.at(njets_ind))
-						 , static_cast<int>(photon_htcuts.at(ht_ind))
-						 , static_cast<int>(photon_ptcuts.at(pt_ind)) );
+						 , static_cast<int>(photon_ptcuts.at(pt_ind))
+						 , static_cast<int>(photon_htcuts.at(ht_ind)) );
 		// std::cout<<Form("Booking hist: %s", histname.c_str())<<std::endl;
 		methists.insert ( pair<std::string,TH1F*>(histname, new TH1F(histname.c_str(), histtitle.c_str(), 500.0, 0, 500.0)));
 		methists.at(histname)->Sumw2();	  
@@ -85,66 +85,140 @@ void METTemplates::bookMETHists( std::map<std::string, TH1F*> &methists )
 void METTemplates::setBins( const string selection )
 {
 
-  // photon_ptcuts.push_back(25);
-  // photon_ptcuts.push_back(30);
-  // photon_ptcuts.push_back(36);
-  // photon_ptcuts.push_back(50);
-  // photon_ptcuts.push_back(75);
-  // photon_ptcuts.push_back(90);
-  // photon_ptcuts.push_back(120);
-  // photon_ptcuts.push_back(165);
-  // photon_ptcuts.push_back(200);
-  // photon_ptcuts.push_back(250);
-
-  //set njets cuts
+  //set photon njets cuts
+  photon_njetcuts.clear();
   photon_njetcuts.push_back(2);
   photon_njetcuts.push_back(3);
-	photon_njetcuts.push_back(4);
-  // if( !TString(selection).Contains("inclusive") ) {
-  // 	photon_njetcuts.push_back(4);
-  // }
 
-  //set photon pT cuts
-  // photon_ptcuts.push_back(22);
+  //set event pT cuts
+  photon_ptcuts.clear();
   photon_ptcuts.push_back(50);
   photon_ptcuts.push_back(75);
   photon_ptcuts.push_back(100);
   photon_ptcuts.push_back(150);
-  photon_ptcuts.push_back(250);
+  photon_ptcuts.push_back(200);
+  photon_ptcuts.push_back(400);
+  photon_ptcuts.push_back(600);
 
-  if( TString(selection).Contains("inclusive") ) {
-	photon_htcuts.push_back(40);
-	photon_htcuts.push_back(80);
-	photon_htcuts.push_back(120);
-	photon_htcuts.push_back(160);
-	photon_htcuts.push_back(200);
-	photon_htcuts.push_back(240);
-	photon_htcuts.push_back(280);
-	photon_htcuts.push_back(320);
-	photon_htcuts.push_back(360);
-	photon_htcuts.push_back(600);
-	photon_htcuts.push_back(800);
-	photon_htcuts.push_back(1200);
-  }  
-	
+  //set event HT cuts
+  photon_htcuts.clear();
+  photon_htcuts.push_back(35);
+  photon_htcuts.push_back(70);
+  photon_htcuts.push_back(105);
+  photon_htcuts.push_back(140);
+  photon_htcuts.push_back(200);
+  photon_htcuts.push_back(350);
+  photon_htcuts.push_back(500);
+  photon_htcuts.push_back(1000);
+  photon_htcuts.push_back(1500);
+  photon_htcuts.push_back(2000);
+
+  if( !TString(selection).Contains("bad") ) {
+	if( TString(selection).Contains("3jets") ) {
+	  if( TString(selection).Contains("edgec") ) {
+		photon_ptcuts.clear();
+		photon_ptcuts.push_back(45);
+		photon_ptcuts.push_back(50);
+		photon_ptcuts.push_back(75);
+		photon_ptcuts.push_back(90);
+		photon_ptcuts.push_back(135);
+		photon_ptcuts.push_back(175);
+		photon_htcuts.clear();
+		photon_htcuts.push_back(105);
+		photon_htcuts.push_back(140);
+		photon_htcuts.push_back(250);
+		photon_htcuts.push_back(400);
+	  }
+	  if( TString(selection).Contains("edgef") ) {
+		photon_ptcuts.clear();
+		photon_ptcuts.push_back(50);
+		photon_ptcuts.push_back(60);
+		photon_ptcuts.push_back(75);
+		photon_ptcuts.push_back(90);
+		photon_ptcuts.push_back(135);
+		photon_ptcuts.push_back(200);
+		photon_ptcuts.push_back(350);
+		photon_htcuts.clear();
+		photon_htcuts.push_back(105);
+		photon_htcuts.push_back(140);
+		photon_htcuts.push_back(250);
+		photon_htcuts.push_back(400);
+		photon_htcuts.push_back(600);
+		photon_htcuts.push_back(1000);
+	  }
+	}
+
+	if( TString(selection).Contains("2jets") ) {
+	  if( TString(selection).Contains("edgec") ) {
+		photon_ptcuts.clear();
+		photon_ptcuts.push_back(50);
+		photon_ptcuts.push_back(75);
+		photon_ptcuts.push_back(90);
+		photon_ptcuts.push_back(135);
+		photon_ptcuts.push_back(175);
+		photon_ptcuts.push_back(250);
+		photon_htcuts.clear();
+		photon_htcuts.push_back(70);
+		photon_htcuts.push_back(105);
+		photon_htcuts.push_back(140);
+		photon_htcuts.push_back(250);
+		photon_htcuts.push_back(400);
+		photon_htcuts.push_back(600);
+	  }
+	  if( TString(selection).Contains("edgef") ) {
+		photon_ptcuts.clear();
+		photon_ptcuts.push_back(50);
+		photon_ptcuts.push_back(75);
+		photon_ptcuts.push_back(90);
+		photon_ptcuts.push_back(135);
+		photon_ptcuts.push_back(175);
+		photon_ptcuts.push_back(250);
+		photon_htcuts.clear();
+		photon_htcuts.push_back(70);
+		photon_htcuts.push_back(105);
+		photon_htcuts.push_back(140);
+		photon_htcuts.push_back(250);
+		photon_htcuts.push_back(400);
+		photon_htcuts.push_back(600);
+		photon_htcuts.push_back(1000);
+	  }
+	}
+  }
+  
   //set event HT cuts
   if( TString(selection).Contains("bveto") ) {
 	if( TString(selection).Contains("SRA") ){
 	  photon_htcuts.push_back(600);
-	  photon_htcuts.push_back(650);
-	  photon_htcuts.push_back(700);
-	  photon_htcuts.push_back(800);
-	  photon_htcuts.push_back(1200);
+	  // photon_htcuts.push_back(640);
+	  // photon_htcuts.push_back(680);
+	  // photon_htcuts.push_back(720);
+	  // photon_htcuts.push_back(760);
+	  // photon_htcuts.push_back(860);
+	  // photon_htcuts.push_back(900);
+	  // photon_htcuts.push_back(1100);
+	  // photon_htcuts.push_back(1500);
+	  // photon_htcuts.push_back(2000);
+
+	  // photon_htcuts.push_back(600);
+	  // photon_htcuts.push_back(635);
+	  // photon_htcuts.push_back(670);
+	  // photon_htcuts.push_back(705);
+	  // photon_htcuts.push_back(750);
+	  // photon_htcuts.push_back(800);
+	  // photon_htcuts.push_back(1000);
+	  // photon_htcuts.push_back(1200);
 	}
   
 	if( TString(selection).Contains("SRB") ){
-	  photon_htcuts.push_back(160);
-	  photon_htcuts.push_back(240);
-	  photon_htcuts.push_back(320);
-	  photon_htcuts.push_back(450);
-	  photon_htcuts.push_back(600);
-	  photon_htcuts.push_back(800);
+	  photon_htcuts.push_back(140);
+	  photon_htcuts.push_back(175);
+	  photon_htcuts.push_back(210);
+	  photon_htcuts.push_back(245);
+	  photon_htcuts.push_back(300);
+	  photon_htcuts.push_back(500);
+	  photon_htcuts.push_back(750);
 	  photon_htcuts.push_back(1000);
+	  photon_htcuts.push_back(1200);
 	  photon_htcuts.push_back(1500);
 	}
   }
@@ -153,39 +227,54 @@ void METTemplates::setBins( const string selection )
   if( TString(selection).Contains("withb") ) {
 	if( TString(selection).Contains("SRA") ){
 	  photon_htcuts.push_back(600);
-	  photon_htcuts.push_back(650);
+	  photon_htcuts.push_back(635);
+	  photon_htcuts.push_back(670);
+	  photon_htcuts.push_back(705);
+	  photon_htcuts.push_back(750);
 	  photon_htcuts.push_back(800);
+	  photon_htcuts.push_back(1000);
+	  photon_htcuts.push_back(1200);
 	}
 
 	if( TString(selection).Contains("SRB") ){
-	  photon_htcuts.push_back(160);
-	  photon_htcuts.push_back(200);
-	  photon_htcuts.push_back(240);
-	  photon_htcuts.push_back(320);
-	  photon_htcuts.push_back(450);
-	  photon_htcuts.push_back(600);
+	  photon_htcuts.push_back(140);
+	  photon_htcuts.push_back(175);
+	  photon_htcuts.push_back(210);
+	  photon_htcuts.push_back(245);
+	  photon_htcuts.push_back(300);
+	  photon_htcuts.push_back(500);
+	  photon_htcuts.push_back(750);
+	  photon_htcuts.push_back(1000);
+	  photon_htcuts.push_back(1200);
+	  photon_htcuts.push_back(1500);
 	}
   }
-
+  
 }
 
 int METTemplates::getNjetsBin( const int &njets )
 {
 
   size_t ncuts = photon_njetcuts.size();  
+  int returnval = -1;
   for( size_t njets_ind = 0; njets_ind < ncuts; njets_ind++ ){
 	if( njets < photon_njetcuts.at(0) )
 	  {
 		std::cout<<Form("Number of jets less than %i. ", photon_njetcuts.at(0)) <<std::endl;
-		return -999;
+	    returnval = 999;
 	  }
 	else if( njets_ind+1 < ncuts ){
-	  if     ( njets == photon_njetcuts.at(njets_ind) ){ return njets_ind; }
+	  if     ( njets >= photon_njetcuts.at(njets_ind) && njets < photon_njetcuts.at(njets_ind+1) ){
+	    returnval = njets_ind;
+	  }
 	}
 	else if( njets_ind+1 == ncuts ){
-	  if     ( njets >= photon_njetcuts.at(njets_ind) ){ return njets_ind; }
+	  if     ( njets >= photon_njetcuts.at(njets_ind) ){
+	    returnval = njets_ind;
+	  }
 	}
   }
+  return returnval;
   std::cout<<"WARNING: Did not find good Njets Bin. " <<std::endl;
   std::cout<<"NJets: "<<njets<<std::endl;
   return -9999;
@@ -197,8 +286,9 @@ int METTemplates::getHTBin( const float &HT )
   for( size_t ht_ind = 0; ht_ind < ncuts; ht_ind++ ){
 	if( HT < photon_htcuts.at(0) )
 	  {
-		std::cout<<Form("HT less than %f. ", static_cast<double>(photon_htcuts.at(0))) <<std::endl;
-		return -999;
+		// std::cout<<Form("HT less than %f. ", static_cast<double>(photon_htcuts.at(0))) <<std::endl;
+		// return -999;
+		return 0;
 	  }
 	else if( ht_ind+1 < ncuts ){
 	  if     ( HT >= photon_htcuts.at(ht_ind) && HT < photon_htcuts.at(ht_ind+1) ){ return ht_ind;}
@@ -217,14 +307,15 @@ int METTemplates::getpTBin( const float &pT )
   for( size_t pt_ind = 0; pt_ind < ncuts; pt_ind++ ){
 	if( pT < photon_ptcuts.at(0) )
 	  {
+		// std::cout<<Form("pT in templater: %f. ", pT) <<std::endl;
 		// std::cout<<Form("pT less than %f. ", static_cast<double>(photon_ptcuts.at(0))) <<std::endl;
 		// return -999;
 		return 0;
 	  }
 	else if( pt_ind+1 < ncuts ){
-	  if     ( pT >= photon_ptcuts.at(pt_ind) && pT < photon_ptcuts.at(pt_ind+1) ){ return pt_ind;}
+	  if     ( pT >= photon_ptcuts.at(pt_ind) && pT < photon_ptcuts.at(pt_ind+1) ){ return pt_ind; }
 	}else if( pt_ind+1 == ncuts ){
-	  if     ( pT >= photon_ptcuts.at(pt_ind) ){ return pt_ind;}
+	  if     ( pT >= photon_ptcuts.at(pt_ind) ){ return pt_ind; }
 	}
   }
   std::cout<<"WARNING: Did not find good pT Bin. " <<std::endl;

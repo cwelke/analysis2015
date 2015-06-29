@@ -12,10 +12,12 @@
 
 using namespace std;
 
-void compareMET( std::string iter = "", float luminosity = 1.0 )
+void compareMET( std::string iter = "", std::string region = "", float luminosity = 1.0 )
 {
 
-  std::string filename = Form("../output/%s/zjets_hists.root", iter.c_str() );
+  string sample = "zjets";
+  
+  std::string filename = Form("../output/%s/%s%s_hists.root", iter.c_str(), sample.c_str(), region.c_str() );
   TFile *infile = new TFile(filename.c_str());
 
   TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_2jets")->Clone("h_zll");
@@ -27,13 +29,12 @@ void compareMET( std::string iter = "", float luminosity = 1.0 )
   //MAKE TABLES
   vector <float> metcut;
   metcut.push_back(0.0);
-  metcut.push_back(60);
-  // metcut.push_back(90);
+  metcut.push_back(50);
   metcut.push_back(150);
   // metcut.push_back(100);
   // metcut.push_back(150);
-  metcut.push_back(225);
-  metcut.push_back(300);
+  // metcut.push_back(225);
+  // metcut.push_back(300);
   metcut.push_back(-1);
 
   vector <double> val_zjets;
@@ -192,8 +193,8 @@ void compareMET( std::string iter = "", float luminosity = 1.0 )
  
   drawCMSLatex( c1, luminosity );
 
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.png", iter.c_str() ));
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure.pdf", iter.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure%s.png", iter.c_str(), region.c_str() ));
+  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure%s.pdf", iter.c_str(), region.c_str() ));
   
   return;
 }

@@ -25,6 +25,9 @@ namespace ZMet {
 	const float &mt2j_eta30() { return zmet.mt2j_eta30(); }
 	const int &nJet40() { return zmet.nJet40(); }
 	const int &nBJet40() { return zmet.nBJet40(); }
+	const int &nBJetTight() { return zmet.nBJetTight(); }
+	const int &nBJetMedium() { return zmet.nBJetMedium(); }
+	const int &nBJetLoose() { return zmet.nBJetLoose(); }
 	const int &nMuons10() { return zmet.nMuons10(); }
 	const int &nElectrons10() { return zmet.nElectrons10(); }
 	const int &nTaus20() { return zmet.nTaus20(); }
@@ -60,6 +63,7 @@ namespace ZMet {
 	const int &HLT_ht350met120() { return zmet.HLT_ht350met120(); }
 	const int &HLT_SingleMu() { return zmet.HLT_SingleMu(); }
 	const int &HLT_DoubleEl() { return zmet.HLT_DoubleEl(); }
+	const int &HLT_DoubleEl_noiso() { return zmet.HLT_DoubleEl_noiso(); }
 	const int &HLT_MuEG() { return zmet.HLT_MuEG(); }
 	const int &HLT_DoubleMu() { return zmet.HLT_DoubleMu(); }
 	const int &HLT_Photons() { return zmet.HLT_Photons(); }
@@ -190,18 +194,4 @@ namespace ZMet {
 	const vector<int> &jet_puId() { return zmet.jet_puId(); }
 	const int &hyp_type() { return zmet.hyp_type(); }
 	const int &evt_type() { return zmet.evt_type(); }
-	const int &edge_hyp_type() { return zmet.edge_hyp_type(); }
-	const int &edge_njets() { return zmet.edge_njets(); }
-	const float &edge_ht() { return zmet.edge_ht(); }
-	const float &edge_dRll() { return zmet.edge_dRll(); }
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_jets_p4() { return zmet.edge_jets_p4(); }
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_lep_p4() { return zmet.edge_lep_p4(); }
-	const vector<float> &edge_lep_pt() { return zmet.edge_lep_pt(); }
-	const vector<float> &edge_lep_eta() { return zmet.edge_lep_eta(); }
-	const vector<float> &edge_lep_phi() { return zmet.edge_lep_phi(); }
-	const vector<float> &edge_lep_mass() { return zmet.edge_lep_mass(); }
-	const vector<int> &edge_lep_charge() { return zmet.edge_lep_charge(); }
-	const vector<int> &edge_lep_pdgId() { return zmet.edge_lep_pdgId(); }
-	const vector<float> &edge_lep_dxy() { return zmet.edge_lep_dxy(); }
-	const vector<float> &edge_lep_dz() { return zmet.edge_lep_dz(); }
 }

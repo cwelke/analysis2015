@@ -16,14 +16,16 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
 {
 
   std::string sample_test = "FS_BG";
-  std::string variable = "met";
+  std::string variable = "drll";
+  string region = "inclusive";
+
   
-  std::string filename = Form("../output/%s/%s_hists.root", iter.c_str(), sample_test.c_str() );
+  std::string filename = Form("../output/%s/%s_%s_hists.root", iter.c_str(), sample_test.c_str(), region.c_str() );
   // std::string filename = Form("../output/%s/ttbar_hists.root", iter.c_str() );
   TFile *infile = new TFile(filename.c_str());
   
-  TH1F * h_ll = (TH1F*)infile->Get(Form("h_ll_event_%s_2jets", variable.c_str() ))->Clone("h_ll");
-  TH1F * h_em = (TH1F*)infile->Get(Form("h_em_event_%s_2jets", variable.c_str() ))->Clone("h_em");
+  TH1F * h_ll = (TH1F*)infile->Get(Form("h_ee_event_%s_2jets", variable.c_str() ))->Clone("h_ll");
+  TH1F * h_em = (TH1F*)infile->Get(Form("h_mm_event_%s_2jets", variable.c_str() ))->Clone("h_em");
 
   h_ll->Scale(luminosity);
   h_em->Scale(luminosity);
@@ -46,6 +48,14 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
 	metcut.push_back(150);
 	metcut.push_back(225);
 	metcut.push_back(300);
+	metcut.push_back(-1);
+  }
+
+  if( variable == "drll" ){
+	metcut.push_back(0.0);
+	metcut.push_back(0.1);
+	metcut.push_back(0.3);
+	metcut.push_back(1.0);
 	metcut.push_back(-1);
   }
   
@@ -122,9 +132,14 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   //MAKE PLOTS
 
   int rebin = 10;
+
+  if( variable == "drll" ) rebin = 2;
   
   h_ll->Rebin(rebin);
   h_em->Rebin(rebin);
+
+  h_ll->Scale(1./h_ll->GetSumOfWeights());
+  h_em->Scale(1./h_em->GetSumOfWeights());
 
   TCanvas * c1 = new TCanvas("c1","");
   c1->cd();
@@ -146,11 +161,15 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   h_ll->GetXaxis()->SetLabelSize(0);
   if( sample_test == "FS_BG" ){
 	// if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(1e-2,1e2);
-	if( variable == "met" ) h_ll->GetYaxis()->SetRangeUser(2e-0,2e3);
+	if( variable == "met"  ) h_ll->GetYaxis()->SetRangeUser(2e-0,2e3);
+	if( variable == "drll" ) h_ll->GetYaxis()->SetRangeUser(2e-5,0.01);
 	// if( variable == "mll" ) h_ll->GetYaxis()->SetRangeUser(0,5.5e2);
   }
   
   float xmax = 350;
+
+  if( variable == "drll" ) xmax = 1;
+
   updateoverflow( h_ll, xmax );
   updateoverflow( h_em, xmax );
   
@@ -158,6 +177,7 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   h_ll->GetYaxis()->SetTitleOffset(1.5);
   h_ll->GetYaxis()->SetTitleSize(0.05);
   h_ll->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
+  if( variable == "drll" )  h_ll->GetYaxis()->SetTitle(Form("Events"));
   h_ll->GetXaxis()->SetRangeUser(0,xmax);
   h_ll->SetMarkerStyle(8);
   h_ll->SetMarkerSize(0.75);
@@ -168,12 +188,14 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   
   pad->RedrawAxis();
 
-  TLegend *l1 = new TLegend(0.6, 0.6, 0.9, 0.90);    
+  TLegend *l1 = NULL;
+  if( variable == "drll" ) l1 = new TLegend(0.25, 0.6, 0.55, 0.90);    
+  else l1 = new TLegend(0.6, 0.6, .9, 0.90);    
   l1->SetLineColor(kWhite);    
   l1->SetShadowColor(kWhite);    
   l1->SetFillColor(kWhite);    
-  l1->AddEntry( h_ll , "ee+#mu#mu events"       , "lpe");
-  l1->AddEntry( h_em , "e#mu events"       , "f");
+  l1->AddEntry( h_ll , "ee events"       , "lpe");
+  l1->AddEntry( h_em , "#mu#mu events"       , "f");
   l1->Draw("same");
   
   c1->cd();
@@ -192,13 +214,14 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
   h_rat->Divide(h_em);
 
   // if( variable == "met" ) h_rat->GetYaxis()->SetRangeUser(8,13);
-  if( variable == "met" ) h_rat->GetYaxis()->SetRangeUser(.6,1.4);
-  if( variable == "mll" ) h_rat->GetYaxis()->SetRangeUser(0.75,1.25);
+  if( variable == "met"  ) h_rat->GetYaxis()->SetRangeUser(.6,1.4);
+  if( variable == "mll"  ) h_rat->GetYaxis()->SetRangeUser(0.75,1.25);
+  if( variable == "drll" ) h_rat->GetYaxis()->SetRangeUser(0.,2);
   h_rat->GetYaxis()->SetLabelSize(0.12);
   h_rat->GetXaxis()->SetLabelSize(0.12);
   h_rat->GetYaxis()->SetNdivisions(5);
 
-  h_rat->GetYaxis()->SetTitle("#frac{ee+#mu#mu}{e#mu}");
+  h_rat->GetYaxis()->SetTitle("#frac{ee}{#mu#mu}");
   h_rat->GetYaxis()->CenterTitle();
   h_rat->GetYaxis()->SetTitleSize(0.12);
   h_rat->GetYaxis()->SetTitleOffset(0.5);
@@ -206,6 +229,7 @@ void FS_closure( std::string iter = "", float luminosity = 1.0 )
 
   if( variable == "met" ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} GeV");
   if( variable == "mll" ) h_rat->GetXaxis()->SetTitle("m_{\\ell\\ell} GeV");
+  if( variable == "drll" ) h_rat->GetXaxis()->SetTitle("dR(\\ell_{1},\\ell_{2})");
 
   h_rat->GetXaxis()->SetTitleOffset(0.9);
   h_rat->GetXaxis()->SetTitleSize(0.15);

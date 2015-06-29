@@ -19,37 +19,112 @@ fi
 # sample="All_MC"
 # run_template_looper $selection $sample &
 
+
+# # # For the edge Z+JETS BG prediction
+# selection="_2jets_inclusive"
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"  &
+# run_template_looper $selection "ttv" &
+
+# selection="_twojets"
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"  &
+# run_template_looper $selection "ttv" &
+
+# selection="_3jets_inclusive"
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"  &
+# run_template_looper $selection "ttv" &
+
+
+# # # For the edge Z+JETS BG prediction
+# selection="_2jets_edgec"
+# run_template_looper $selection "zjets"  &
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+
+# selection="_2jets_edgef"
+# run_template_looper $selection "zjets"  &
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+
+# selection="_3jets_edgef"
+# run_template_looper $selection "zjets"  &
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	  &
+# run_template_looper $selection "ttv"    &
+
+# # # done
+# selection="_3jets_edgec"
+# run_template_looper $selection "zjets"  &
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"     &
+# run_template_looper $selection "ttv"    &
+
+
+# # # For the edge Z+JETS BG prediction
+# selection="_2jets_edgec"
+# run_template_looper $selection "zjinc" &
+
+# selection="_2jets_edgef"
+# run_template_looper $selection "zjinc" &
+
+# selection="_3jets_edgec"
+# run_template_looper $selection "zjinc" &
+
+# selection="_3jets_edgef"
+# run_template_looper $selection "zjinc" &
+
+
+selection="_2jets_inclusive"
+# run_template_looper $selection "zjets"  &
+run_template_looper $selection "All_MC" &
+run_template_looper $selection "vv"     &
+run_template_looper $selection "ttv"    &
+
+# selection="_twojets"
+# run_template_looper $selection "zjets" &
+# selection="_3jets_inclusive"
+# run_template_looper $selection "zjets" &
+
+
+
 # # SR + CRS
-selection="_inclusive"
-run_template_looper $selection "All_MC" &
-run_template_looper $selection "vv"	    &
-run_template_looper $selection "ttv"    &
-run_template_looper $selection "FS_BG"  &
-
+# selection="_inclusive"
 # run_template_looper $selection "zjets"
-# # run_template_looper $selection "ttbar"
-# # # run_template_looper $selection "top"
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+# run_template_looper $selection "FS_BG"  &
 
-selection="_SRA_bveto"
-run_template_looper $selection "All_MC" &
-run_template_looper $selection "vv"	    &
-run_template_looper $selection "ttv"    &
-run_template_looper $selection "FS_BG"  &
+# # run_template_looper $selection "zjets"
+# # # run_template_looper $selection "ttbar"
+# # # # run_template_looper $selection "top"
+
+# selection="_SRA_withb"
+# run_template_looper $selection "zjets"  &
+
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+# run_template_looper $selection "FS_BG"  &
 									    
-selection="_SRA_withb"				    
-run_template_looper $selection "All_MC" &
-run_template_looper $selection "vv"	    &
-run_template_looper $selection "ttv"    &
-run_template_looper $selection "FS_BG"  &
+# selection="_SRA_withb"				    
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+# run_template_looper $selection "FS_BG"  &
 									    
-selection="_SRB_bveto"				    
-run_template_looper $selection "All_MC" &
-run_template_looper $selection "vv"	    &
-run_template_looper $selection "ttv"    &
-run_template_looper $selection "FS_BG"  &
+# selection="_SRB_bveto"				    
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+# run_template_looper $selection "FS_BG"  &
 									    
-selection="_SRB_withb"				    
-run_template_looper $selection "All_MC" &
-run_template_looper $selection "vv"	    &
-run_template_looper $selection "ttv"    &
-run_template_looper $selection "FS_BG"  &
+# selection="_SRB_withb"				    
+# run_template_looper $selection "All_MC" &
+# run_template_looper $selection "vv"	    &
+# run_template_looper $selection "ttv"    &
+# run_template_looper $selection "FS_BG"  &

@@ -90,6 +90,15 @@ protected:
 	int	nBJet40_;
 	TBranch *nBJet40_branch;
 	bool nBJet40_isLoaded;
+	int	nBJetTight_;
+	TBranch *nBJetTight_branch;
+	bool nBJetTight_isLoaded;
+	int	nBJetMedium_;
+	TBranch *nBJetMedium_branch;
+	bool nBJetMedium_isLoaded;
+	int	nBJetLoose_;
+	TBranch *nBJetLoose_branch;
+	bool nBJetLoose_isLoaded;
 	int	nMuons10_;
 	TBranch *nMuons10_branch;
 	bool nMuons10_isLoaded;
@@ -195,6 +204,9 @@ protected:
 	int	HLT_DoubleEl_;
 	TBranch *HLT_DoubleEl_branch;
 	bool HLT_DoubleEl_isLoaded;
+	int	HLT_DoubleEl_noiso_;
+	TBranch *HLT_DoubleEl_noiso_branch;
+	bool HLT_DoubleEl_noiso_isLoaded;
 	int	HLT_MuEG_;
 	TBranch *HLT_MuEG_branch;
 	bool HLT_MuEG_isLoaded;
@@ -585,48 +597,6 @@ protected:
 	int	evt_type_;
 	TBranch *evt_type_branch;
 	bool evt_type_isLoaded;
-	int	edge_hyp_type_;
-	TBranch *edge_hyp_type_branch;
-	bool edge_hyp_type_isLoaded;
-	int	edge_njets_;
-	TBranch *edge_njets_branch;
-	bool edge_njets_isLoaded;
-	float	edge_ht_;
-	TBranch *edge_ht_branch;
-	bool edge_ht_isLoaded;
-	float	edge_dRll_;
-	TBranch *edge_dRll_branch;
-	bool edge_dRll_isLoaded;
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *edge_jets_p4_;
-	TBranch *edge_jets_p4_branch;
-	bool edge_jets_p4_isLoaded;
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *edge_lep_p4_;
-	TBranch *edge_lep_p4_branch;
-	bool edge_lep_p4_isLoaded;
-	vector<float> *edge_lep_pt_;
-	TBranch *edge_lep_pt_branch;
-	bool edge_lep_pt_isLoaded;
-	vector<float> *edge_lep_eta_;
-	TBranch *edge_lep_eta_branch;
-	bool edge_lep_eta_isLoaded;
-	vector<float> *edge_lep_phi_;
-	TBranch *edge_lep_phi_branch;
-	bool edge_lep_phi_isLoaded;
-	vector<float> *edge_lep_mass_;
-	TBranch *edge_lep_mass_branch;
-	bool edge_lep_mass_isLoaded;
-	vector<int> *edge_lep_charge_;
-	TBranch *edge_lep_charge_branch;
-	bool edge_lep_charge_isLoaded;
-	vector<int> *edge_lep_pdgId_;
-	TBranch *edge_lep_pdgId_branch;
-	bool edge_lep_pdgId_isLoaded;
-	vector<float> *edge_lep_dxy_;
-	TBranch *edge_lep_dxy_branch;
-	bool edge_lep_dxy_isLoaded;
-	vector<float> *edge_lep_dz_;
-	TBranch *edge_lep_dz_branch;
-	bool edge_lep_dz_isLoaded;
 public: 
 void Init(TTree *tree) {
 	lep_p4_branch = 0;
@@ -653,16 +623,6 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("jets_eta30_p4") != 0) {
 		jets_eta30_p4_branch = tree->GetBranch("jets_eta30_p4");
 		if (jets_eta30_p4_branch) {jets_eta30_p4_branch->SetAddress(&jets_eta30_p4_);}
-	}
-	edge_jets_p4_branch = 0;
-	if (tree->GetBranch("edge_jets_p4") != 0) {
-		edge_jets_p4_branch = tree->GetBranch("edge_jets_p4");
-		if (edge_jets_p4_branch) {edge_jets_p4_branch->SetAddress(&edge_jets_p4_);}
-	}
-	edge_lep_p4_branch = 0;
-	if (tree->GetBranch("edge_lep_p4") != 0) {
-		edge_lep_p4_branch = tree->GetBranch("edge_lep_p4");
-		if (edge_lep_p4_branch) {edge_lep_p4_branch->SetAddress(&edge_lep_p4_);}
 	}
   tree->SetMakeClass(1);
 	run_branch = 0;
@@ -784,6 +744,21 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nBJet40") != 0) {
 		nBJet40_branch = tree->GetBranch("nBJet40");
 		if (nBJet40_branch) {nBJet40_branch->SetAddress(&nBJet40_);}
+	}
+	nBJetTight_branch = 0;
+	if (tree->GetBranch("nBJetTight") != 0) {
+		nBJetTight_branch = tree->GetBranch("nBJetTight");
+		if (nBJetTight_branch) {nBJetTight_branch->SetAddress(&nBJetTight_);}
+	}
+	nBJetMedium_branch = 0;
+	if (tree->GetBranch("nBJetMedium") != 0) {
+		nBJetMedium_branch = tree->GetBranch("nBJetMedium");
+		if (nBJetMedium_branch) {nBJetMedium_branch->SetAddress(&nBJetMedium_);}
+	}
+	nBJetLoose_branch = 0;
+	if (tree->GetBranch("nBJetLoose") != 0) {
+		nBJetLoose_branch = tree->GetBranch("nBJetLoose");
+		if (nBJetLoose_branch) {nBJetLoose_branch->SetAddress(&nBJetLoose_);}
 	}
 	nMuons10_branch = 0;
 	if (tree->GetBranch("nMuons10") != 0) {
@@ -959,6 +934,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("HLT_DoubleEl") != 0) {
 		HLT_DoubleEl_branch = tree->GetBranch("HLT_DoubleEl");
 		if (HLT_DoubleEl_branch) {HLT_DoubleEl_branch->SetAddress(&HLT_DoubleEl_);}
+	}
+	HLT_DoubleEl_noiso_branch = 0;
+	if (tree->GetBranch("HLT_DoubleEl_noiso") != 0) {
+		HLT_DoubleEl_noiso_branch = tree->GetBranch("HLT_DoubleEl_noiso");
+		if (HLT_DoubleEl_noiso_branch) {HLT_DoubleEl_noiso_branch->SetAddress(&HLT_DoubleEl_noiso_);}
 	}
 	HLT_MuEG_branch = 0;
 	if (tree->GetBranch("HLT_MuEG") != 0) {
@@ -1585,66 +1565,6 @@ void Init(TTree *tree) {
 		evt_type_branch = tree->GetBranch("evt_type");
 		if (evt_type_branch) {evt_type_branch->SetAddress(&evt_type_);}
 	}
-	edge_hyp_type_branch = 0;
-	if (tree->GetBranch("edge_hyp_type") != 0) {
-		edge_hyp_type_branch = tree->GetBranch("edge_hyp_type");
-		if (edge_hyp_type_branch) {edge_hyp_type_branch->SetAddress(&edge_hyp_type_);}
-	}
-	edge_njets_branch = 0;
-	if (tree->GetBranch("edge_njets") != 0) {
-		edge_njets_branch = tree->GetBranch("edge_njets");
-		if (edge_njets_branch) {edge_njets_branch->SetAddress(&edge_njets_);}
-	}
-	edge_ht_branch = 0;
-	if (tree->GetBranch("edge_ht") != 0) {
-		edge_ht_branch = tree->GetBranch("edge_ht");
-		if (edge_ht_branch) {edge_ht_branch->SetAddress(&edge_ht_);}
-	}
-	edge_dRll_branch = 0;
-	if (tree->GetBranch("edge_dRll") != 0) {
-		edge_dRll_branch = tree->GetBranch("edge_dRll");
-		if (edge_dRll_branch) {edge_dRll_branch->SetAddress(&edge_dRll_);}
-	}
-	edge_lep_pt_branch = 0;
-	if (tree->GetBranch("edge_lep_pt") != 0) {
-		edge_lep_pt_branch = tree->GetBranch("edge_lep_pt");
-		if (edge_lep_pt_branch) {edge_lep_pt_branch->SetAddress(&edge_lep_pt_);}
-	}
-	edge_lep_eta_branch = 0;
-	if (tree->GetBranch("edge_lep_eta") != 0) {
-		edge_lep_eta_branch = tree->GetBranch("edge_lep_eta");
-		if (edge_lep_eta_branch) {edge_lep_eta_branch->SetAddress(&edge_lep_eta_);}
-	}
-	edge_lep_phi_branch = 0;
-	if (tree->GetBranch("edge_lep_phi") != 0) {
-		edge_lep_phi_branch = tree->GetBranch("edge_lep_phi");
-		if (edge_lep_phi_branch) {edge_lep_phi_branch->SetAddress(&edge_lep_phi_);}
-	}
-	edge_lep_mass_branch = 0;
-	if (tree->GetBranch("edge_lep_mass") != 0) {
-		edge_lep_mass_branch = tree->GetBranch("edge_lep_mass");
-		if (edge_lep_mass_branch) {edge_lep_mass_branch->SetAddress(&edge_lep_mass_);}
-	}
-	edge_lep_charge_branch = 0;
-	if (tree->GetBranch("edge_lep_charge") != 0) {
-		edge_lep_charge_branch = tree->GetBranch("edge_lep_charge");
-		if (edge_lep_charge_branch) {edge_lep_charge_branch->SetAddress(&edge_lep_charge_);}
-	}
-	edge_lep_pdgId_branch = 0;
-	if (tree->GetBranch("edge_lep_pdgId") != 0) {
-		edge_lep_pdgId_branch = tree->GetBranch("edge_lep_pdgId");
-		if (edge_lep_pdgId_branch) {edge_lep_pdgId_branch->SetAddress(&edge_lep_pdgId_);}
-	}
-	edge_lep_dxy_branch = 0;
-	if (tree->GetBranch("edge_lep_dxy") != 0) {
-		edge_lep_dxy_branch = tree->GetBranch("edge_lep_dxy");
-		if (edge_lep_dxy_branch) {edge_lep_dxy_branch->SetAddress(&edge_lep_dxy_);}
-	}
-	edge_lep_dz_branch = 0;
-	if (tree->GetBranch("edge_lep_dz") != 0) {
-		edge_lep_dz_branch = tree->GetBranch("edge_lep_dz");
-		if (edge_lep_dz_branch) {edge_lep_dz_branch->SetAddress(&edge_lep_dz_);}
-	}
   tree->SetMakeClass(0);
 }
 void GetEntry(unsigned int idx) 
@@ -1675,6 +1595,9 @@ void GetEntry(unsigned int idx)
 		mt2j_eta30_isLoaded = false;
 		nJet40_isLoaded = false;
 		nBJet40_isLoaded = false;
+		nBJetTight_isLoaded = false;
+		nBJetMedium_isLoaded = false;
+		nBJetLoose_isLoaded = false;
 		nMuons10_isLoaded = false;
 		nElectrons10_isLoaded = false;
 		nTaus20_isLoaded = false;
@@ -1710,6 +1633,7 @@ void GetEntry(unsigned int idx)
 		HLT_ht350met120_isLoaded = false;
 		HLT_SingleMu_isLoaded = false;
 		HLT_DoubleEl_isLoaded = false;
+		HLT_DoubleEl_noiso_isLoaded = false;
 		HLT_MuEG_isLoaded = false;
 		HLT_DoubleMu_isLoaded = false;
 		HLT_Photons_isLoaded = false;
@@ -1840,20 +1764,6 @@ void GetEntry(unsigned int idx)
 		jet_puId_isLoaded = false;
 		hyp_type_isLoaded = false;
 		evt_type_isLoaded = false;
-		edge_hyp_type_isLoaded = false;
-		edge_njets_isLoaded = false;
-		edge_ht_isLoaded = false;
-		edge_dRll_isLoaded = false;
-		edge_jets_p4_isLoaded = false;
-		edge_lep_p4_isLoaded = false;
-		edge_lep_pt_isLoaded = false;
-		edge_lep_eta_isLoaded = false;
-		edge_lep_phi_isLoaded = false;
-		edge_lep_mass_isLoaded = false;
-		edge_lep_charge_isLoaded = false;
-		edge_lep_pdgId_isLoaded = false;
-		edge_lep_dxy_isLoaded = false;
-		edge_lep_dz_isLoaded = false;
 	}
 
 void LoadAllBranches() 
@@ -1883,6 +1793,9 @@ void LoadAllBranches()
 	if (mt2j_eta30_branch != 0) mt2j_eta30();
 	if (nJet40_branch != 0) nJet40();
 	if (nBJet40_branch != 0) nBJet40();
+	if (nBJetTight_branch != 0) nBJetTight();
+	if (nBJetMedium_branch != 0) nBJetMedium();
+	if (nBJetLoose_branch != 0) nBJetLoose();
 	if (nMuons10_branch != 0) nMuons10();
 	if (nElectrons10_branch != 0) nElectrons10();
 	if (nTaus20_branch != 0) nTaus20();
@@ -1918,6 +1831,7 @@ void LoadAllBranches()
 	if (HLT_ht350met120_branch != 0) HLT_ht350met120();
 	if (HLT_SingleMu_branch != 0) HLT_SingleMu();
 	if (HLT_DoubleEl_branch != 0) HLT_DoubleEl();
+	if (HLT_DoubleEl_noiso_branch != 0) HLT_DoubleEl_noiso();
 	if (HLT_MuEG_branch != 0) HLT_MuEG();
 	if (HLT_DoubleMu_branch != 0) HLT_DoubleMu();
 	if (HLT_Photons_branch != 0) HLT_Photons();
@@ -2048,20 +1962,6 @@ void LoadAllBranches()
 	if (jet_puId_branch != 0) jet_puId();
 	if (hyp_type_branch != 0) hyp_type();
 	if (evt_type_branch != 0) evt_type();
-	if (edge_hyp_type_branch != 0) edge_hyp_type();
-	if (edge_njets_branch != 0) edge_njets();
-	if (edge_ht_branch != 0) edge_ht();
-	if (edge_dRll_branch != 0) edge_dRll();
-	if (edge_jets_p4_branch != 0) edge_jets_p4();
-	if (edge_lep_p4_branch != 0) edge_lep_p4();
-	if (edge_lep_pt_branch != 0) edge_lep_pt();
-	if (edge_lep_eta_branch != 0) edge_lep_eta();
-	if (edge_lep_phi_branch != 0) edge_lep_phi();
-	if (edge_lep_mass_branch != 0) edge_lep_mass();
-	if (edge_lep_charge_branch != 0) edge_lep_charge();
-	if (edge_lep_pdgId_branch != 0) edge_lep_pdgId();
-	if (edge_lep_dxy_branch != 0) edge_lep_dxy();
-	if (edge_lep_dz_branch != 0) edge_lep_dz();
 }
 
 	int &run()
@@ -2375,6 +2275,45 @@ void LoadAllBranches()
 			nBJet40_isLoaded = true;
 		}
 		return nBJet40_;
+	}
+	int &nBJetTight()
+	{
+		if (not nBJetTight_isLoaded) {
+			if (nBJetTight_branch != 0) {
+				nBJetTight_branch->GetEntry(index);
+			} else { 
+				printf("branch nBJetTight_branch does not exist!\n");
+				exit(1);
+			}
+			nBJetTight_isLoaded = true;
+		}
+		return nBJetTight_;
+	}
+	int &nBJetMedium()
+	{
+		if (not nBJetMedium_isLoaded) {
+			if (nBJetMedium_branch != 0) {
+				nBJetMedium_branch->GetEntry(index);
+			} else { 
+				printf("branch nBJetMedium_branch does not exist!\n");
+				exit(1);
+			}
+			nBJetMedium_isLoaded = true;
+		}
+		return nBJetMedium_;
+	}
+	int &nBJetLoose()
+	{
+		if (not nBJetLoose_isLoaded) {
+			if (nBJetLoose_branch != 0) {
+				nBJetLoose_branch->GetEntry(index);
+			} else { 
+				printf("branch nBJetLoose_branch does not exist!\n");
+				exit(1);
+			}
+			nBJetLoose_isLoaded = true;
+		}
+		return nBJetLoose_;
 	}
 	int &nMuons10()
 	{
@@ -2830,6 +2769,19 @@ void LoadAllBranches()
 			HLT_DoubleEl_isLoaded = true;
 		}
 		return HLT_DoubleEl_;
+	}
+	int &HLT_DoubleEl_noiso()
+	{
+		if (not HLT_DoubleEl_noiso_isLoaded) {
+			if (HLT_DoubleEl_noiso_branch != 0) {
+				HLT_DoubleEl_noiso_branch->GetEntry(index);
+			} else { 
+				printf("branch HLT_DoubleEl_noiso_branch does not exist!\n");
+				exit(1);
+			}
+			HLT_DoubleEl_noiso_isLoaded = true;
+		}
+		return HLT_DoubleEl_noiso_;
 	}
 	int &HLT_MuEG()
 	{
@@ -4521,188 +4473,6 @@ void LoadAllBranches()
 		}
 		return evt_type_;
 	}
-	int &edge_hyp_type()
-	{
-		if (not edge_hyp_type_isLoaded) {
-			if (edge_hyp_type_branch != 0) {
-				edge_hyp_type_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_hyp_type_branch does not exist!\n");
-				exit(1);
-			}
-			edge_hyp_type_isLoaded = true;
-		}
-		return edge_hyp_type_;
-	}
-	int &edge_njets()
-	{
-		if (not edge_njets_isLoaded) {
-			if (edge_njets_branch != 0) {
-				edge_njets_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_njets_branch does not exist!\n");
-				exit(1);
-			}
-			edge_njets_isLoaded = true;
-		}
-		return edge_njets_;
-	}
-	float &edge_ht()
-	{
-		if (not edge_ht_isLoaded) {
-			if (edge_ht_branch != 0) {
-				edge_ht_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_ht_branch does not exist!\n");
-				exit(1);
-			}
-			edge_ht_isLoaded = true;
-		}
-		return edge_ht_;
-	}
-	float &edge_dRll()
-	{
-		if (not edge_dRll_isLoaded) {
-			if (edge_dRll_branch != 0) {
-				edge_dRll_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_dRll_branch does not exist!\n");
-				exit(1);
-			}
-			edge_dRll_isLoaded = true;
-		}
-		return edge_dRll_;
-	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_jets_p4()
-	{
-		if (not edge_jets_p4_isLoaded) {
-			if (edge_jets_p4_branch != 0) {
-				edge_jets_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_jets_p4_branch does not exist!\n");
-				exit(1);
-			}
-			edge_jets_p4_isLoaded = true;
-		}
-		return *edge_jets_p4_;
-	}
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_lep_p4()
-	{
-		if (not edge_lep_p4_isLoaded) {
-			if (edge_lep_p4_branch != 0) {
-				edge_lep_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_p4_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_p4_isLoaded = true;
-		}
-		return *edge_lep_p4_;
-	}
-	const vector<float> &edge_lep_pt()
-	{
-		if (not edge_lep_pt_isLoaded) {
-			if (edge_lep_pt_branch != 0) {
-				edge_lep_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_pt_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_pt_isLoaded = true;
-		}
-		return *edge_lep_pt_;
-	}
-	const vector<float> &edge_lep_eta()
-	{
-		if (not edge_lep_eta_isLoaded) {
-			if (edge_lep_eta_branch != 0) {
-				edge_lep_eta_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_eta_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_eta_isLoaded = true;
-		}
-		return *edge_lep_eta_;
-	}
-	const vector<float> &edge_lep_phi()
-	{
-		if (not edge_lep_phi_isLoaded) {
-			if (edge_lep_phi_branch != 0) {
-				edge_lep_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_phi_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_phi_isLoaded = true;
-		}
-		return *edge_lep_phi_;
-	}
-	const vector<float> &edge_lep_mass()
-	{
-		if (not edge_lep_mass_isLoaded) {
-			if (edge_lep_mass_branch != 0) {
-				edge_lep_mass_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_mass_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_mass_isLoaded = true;
-		}
-		return *edge_lep_mass_;
-	}
-	const vector<int> &edge_lep_charge()
-	{
-		if (not edge_lep_charge_isLoaded) {
-			if (edge_lep_charge_branch != 0) {
-				edge_lep_charge_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_charge_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_charge_isLoaded = true;
-		}
-		return *edge_lep_charge_;
-	}
-	const vector<int> &edge_lep_pdgId()
-	{
-		if (not edge_lep_pdgId_isLoaded) {
-			if (edge_lep_pdgId_branch != 0) {
-				edge_lep_pdgId_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_pdgId_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_pdgId_isLoaded = true;
-		}
-		return *edge_lep_pdgId_;
-	}
-	const vector<float> &edge_lep_dxy()
-	{
-		if (not edge_lep_dxy_isLoaded) {
-			if (edge_lep_dxy_branch != 0) {
-				edge_lep_dxy_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_dxy_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_dxy_isLoaded = true;
-		}
-		return *edge_lep_dxy_;
-	}
-	const vector<float> &edge_lep_dz()
-	{
-		if (not edge_lep_dz_isLoaded) {
-			if (edge_lep_dz_branch != 0) {
-				edge_lep_dz_branch->GetEntry(index);
-			} else { 
-				printf("branch edge_lep_dz_branch does not exist!\n");
-				exit(1);
-			}
-			edge_lep_dz_isLoaded = true;
-		}
-		return *edge_lep_dz_;
-	}
 
   static void progress( int nEventsTotal, int nEventsChain ){
     int period = 1000;
@@ -4755,6 +4525,9 @@ namespace ZMet {
 	const float &mt2j_eta30();
 	const int &nJet40();
 	const int &nBJet40();
+	const int &nBJetTight();
+	const int &nBJetMedium();
+	const int &nBJetLoose();
 	const int &nMuons10();
 	const int &nElectrons10();
 	const int &nTaus20();
@@ -4790,6 +4563,7 @@ namespace ZMet {
 	const int &HLT_ht350met120();
 	const int &HLT_SingleMu();
 	const int &HLT_DoubleEl();
+	const int &HLT_DoubleEl_noiso();
 	const int &HLT_MuEG();
 	const int &HLT_DoubleMu();
 	const int &HLT_Photons();
@@ -4920,19 +4694,5 @@ namespace ZMet {
 	const vector<int> &jet_puId();
 	const int &hyp_type();
 	const int &evt_type();
-	const int &edge_hyp_type();
-	const int &edge_njets();
-	const float &edge_ht();
-	const float &edge_dRll();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_jets_p4();
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &edge_lep_p4();
-	const vector<float> &edge_lep_pt();
-	const vector<float> &edge_lep_eta();
-	const vector<float> &edge_lep_phi();
-	const vector<float> &edge_lep_mass();
-	const vector<int> &edge_lep_charge();
-	const vector<int> &edge_lep_pdgId();
-	const vector<float> &edge_lep_dxy();
-	const vector<float> &edge_lep_dz();
 }
 #endif

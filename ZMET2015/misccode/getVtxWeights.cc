@@ -12,18 +12,20 @@ int getVtxWeights()
 
   TChain * ch_zjets = new TChain("t");
 
+  string iter = "V00-00-20";
+  
   // ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_m50inc*.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht100to200*.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht200to400*.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht400to600*.root");
-  ch_zjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/dyjetsll_ht600toinf*.root");
+  ch_zjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht100to200*.root", iter.c_str() ));
+  ch_zjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht200to400*.root", iter.c_str() ));
+  ch_zjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht400to600*.root", iter.c_str() ));
+  ch_zjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/dyjetsll_ht600toinf*.root", iter.c_str() ));
   
   TChain * ch_gjets = new TChain("t");
 
-  ch_gjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/gjet_ht100to200*.root");
-  ch_gjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/gjet_ht200to400*.root");
-  ch_gjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/gjet_ht400to600*.root");
-  ch_gjets->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-07/gjet_ht600toinf*.root");
+  ch_gjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/gjet_ht100to200*.root", iter.c_str() ));
+  ch_gjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/gjet_ht200to400*.root", iter.c_str() ));
+  ch_gjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/gjet_ht400to600*.root", iter.c_str() ));
+  ch_gjets->Add(Form("/nfs-7/userdata/cwelke/ZMETbabies/%s/gjet_ht600toinf*.root", iter.c_str() ));
 
   TH1F * h_nvtx = new TH1F("h_nvtx", "", 50,0,50);
   // TH1F * h_num = new TH1F("h_num", "", 50,0,50);
@@ -33,10 +35,9 @@ int getVtxWeights()
   // h_num->Sumw2();
   h_den->Sumw2();
   
-  TCut dilep    ("nlep  > 1 && dilmass > 81 && dilmass < 101");
+  TCut dilep    ("nlep > 1 && lep_pt[0] > 25 && lep_pt[1] > 20 && dilmass > 81 && dilmass < 101 && dRll > 0.1 && evt_type == 0");
   TCut dilpt50  ("dilpt > 50");
   TCut gteq2jets("njets > 1 ");
-  TCut pt2525   ("lep_pt[0] > 25 && lep_pt[1] > 25");  
   TCut ht100    ("ht > 100");  
   TCut ht240    ("ht > 240");  
   TCut llonly   ("hyp_type==0||hyp_type==1");  
@@ -54,7 +55,7 @@ int getVtxWeights()
   cout<<"Getting photon+jets events."<<endl;
   ch_gjets->Draw("min(nVert, 49.5)>>h_den", selection);
 	
-  selection = dilep+gteq2jets+pt2525+ht240;
+  selection = dilep+gteq2jets;
   selection += llonly;
   
   cout<<"Getting Z+jets events."<<endl;
