@@ -61,7 +61,7 @@ ls
 #
 # run it
 #
-+./processBaby ${FILEID} ${FILE}
+./processBaby ${FILEID} ${FILE}
 
 #
 # do something with output
