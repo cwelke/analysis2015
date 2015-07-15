@@ -1,0 +1,13 @@
+#ifndef ANALYSISSELECTIONS_H
+#define ANALYSISSELECTIONS_H
+
+#include "AnalysisSelections.h"
+
+bool passBaselineSelections();
+bool passSignalRegionSelection( std::string selection );
+bool eventHas2GoodLeps();
+bool eventHas3Jets();
+bool eventHasGoodPhoton();
+bool highHT_zjinc( std::string samplename );
+
+#endif
