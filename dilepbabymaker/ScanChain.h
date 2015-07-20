@@ -46,6 +46,7 @@ class babyMaker {
   ULong64_t       evt;
   Int_t           isData;
 
+  Bool_t          evt_passgoodrunlist;
   Float_t         evt_scale1fb;
   Float_t         evt_xsec;
   Float_t         evt_kfactor;
@@ -124,9 +125,12 @@ class babyMaker {
   Int_t           HLT_ht350met120;   
   Int_t           HLT_SingleMu;   
   Int_t           HLT_DoubleEl;   
+  Int_t           HLT_DoubleEl_DZ;   
   Int_t           HLT_DoubleEl_noiso;   
   Int_t           HLT_MuEG;   
+  Int_t           HLT_MuEG_2;   
   Int_t           HLT_DoubleMu;   
+  Int_t           HLT_DoubleMu_tk;   
   Int_t           HLT_Photons;   
   Int_t           HLT_Photon22;
   Int_t           HLT_Photon30;

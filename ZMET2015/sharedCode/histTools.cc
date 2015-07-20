@@ -63,7 +63,8 @@ void drawCMSLatex( TCanvas * &canvas, float luminosity )
 
   canvas->cd();
   TLatex *lumitex = NULL;
-  lumitex = new TLatex(0.66,0.955, Form("%.1f fb^{-1} (13 TeV)", luminosity) );    
+  lumitex = new TLatex(0.66,0.955, Form("%.1f pb^{-1} (13 TeV)", luminosity*1000) );    
+  // lumitex = new TLatex(0.66,0.955, Form("few pb^{-1} (13 TeV)") );    
   lumitex->SetNDC();    
   lumitex->SetTextSize(0.04);    
   lumitex->SetLineWidth(2);
@@ -71,7 +72,7 @@ void drawCMSLatex( TCanvas * &canvas, float luminosity )
   lumitex->Draw();
 
   TLatex *cmstex = NULL;
-  cmstex = new TLatex(0.18,0.95, "CMS Simulation" );    
+  cmstex = new TLatex(0.18,0.95, "CMS Preliminary" );    
   cmstex->SetNDC();    
   cmstex->SetTextSize(0.04);    
   cmstex->SetLineWidth(2);
@@ -86,6 +87,7 @@ void drawCMSLatex( TCanvas * &canvas, float luminosity, float cmsleftmargin, flo
 
   canvas->cd();
   TLatex *lumitex = NULL;
+  // lumitex = new TLatex(lumileftmargin, 0.955, Form("%.1f fb^{-1} (13 TeV)", luminosity) );    
   lumitex = new TLatex(lumileftmargin, 0.955, Form("%.1f fb^{-1} (13 TeV)", luminosity) );    
   lumitex->SetNDC();    
   lumitex->SetTextSize(0.04);    
@@ -104,11 +106,11 @@ void drawCMSLatex( TCanvas * &canvas, float luminosity, float cmsleftmargin, flo
   return;
 }
 
-void getBackground( TH1F* &backgroundhist, std::string iter, std::string bgfileprefix, std::string variable, std::string leptype )
+void getBackground( TH1F* &backgroundhist, std::string iter, std::string bgfileprefix, std::string variable, std::string leptype, std::string selection )
 {
   std::string filename = Form("../output/%s/%s_hists.root", iter.c_str(), bgfileprefix.c_str() );
   TFile *infile = TFile::Open(filename.c_str(),"READ");
-  backgroundhist = dynamic_cast<TH1F*>(infile->Get(Form("h_%s_event_%s_2jets", leptype.c_str(), variable.c_str() ))->Clone("backgroundhist"));
+  backgroundhist = dynamic_cast<TH1F*>(infile->Get(Form("h_%s_event_%s_%s", leptype.c_str(), variable.c_str(), selection.c_str() ))->Clone("backgroundhist"));
   return;
 }
 
