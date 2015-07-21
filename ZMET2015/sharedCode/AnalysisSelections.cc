@@ -19,6 +19,7 @@ using namespace std;
 bool passBaselineSelections()
 {
   if( zmet.njets()                       < 2         ) return false; // >=2 jets  
+  // if( zmet.ht()                          < 240       ) return false; // >=240 GeV HT  
   return true;
 }
 
@@ -53,12 +54,36 @@ bool eventHas2GoodLeps()
 		zmet.hyp_type() == 1 ||					     
 		zmet.hyp_type() == 2 )                       ) return false; // require explicit dilepton event
   if( !(zmet.evt_type() == 0 )                       ) return false; // require opposite sign
-  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) return false; // HT > 100
+  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) return false; // on-Z
+  if( !(zmet.dilpt() > 50)                           ) return false; // Z pT > 50 GeV
+  return true;
+}
+
+bool eventHas3Jets()
+{
+  if( zmet.njets()                       < 3         ) return false; // require at least 3 jets
   return true;
 }
 
 bool eventHasGoodPhoton()
 {
-  
-  return;
+  if( zmet.ngamma()                      < 1     ) return false; // require at least 1 good photon
+  if( zmet.gamma_pt().at(0)              < 80   ) return false; // photon pt > 22 GeV
+  if( abs(zmet.gamma_p4().at(0).eta())   > 1.4 &&
+	  abs(zmet.gamma_p4().at(0).eta())   < 1.6   ) return false; // veto xition region
+  if( abs(zmet.gamma_p4().at(0).eta())   > 2.4   ) return false; // photon in EC or EB
+  if( zmet.gamma_hOverE().at(0)          > 0.1   ) return false; // H/E < 0.1	  
+  if( zmet.matched_neutralemf()          < 0.7   ) return false; // jet neutral EM fraction cut
+  if( acos( cos( zmet.gamma_phi().at(0)			 
+				 - zmet.met_phi() ) )    < 0.14  ) return false; // kill photons aligned with MET
+  if( zmet.elveto()                              ) return false; // veto pixel match
+  return true;  
+}
+
+bool highHT_zjinc( string samplename )
+{
+  if( TString(samplename).Contains("m50inc") ){
+	if( zmet.gen_ht() > 100 ) return true;
+  }
+  return false;
 }
