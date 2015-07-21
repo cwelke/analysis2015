@@ -30,6 +30,9 @@ protected:
 	int	isData_;
 	TBranch *isData_branch;
 	bool isData_isLoaded;
+	bool	evt_passgoodrunlist_;
+	TBranch *evt_passgoodrunlist_branch;
+	bool evt_passgoodrunlist_isLoaded;
 	float	evt_scale1fb_;
 	TBranch *evt_scale1fb_branch;
 	bool evt_scale1fb_isLoaded;
@@ -204,15 +207,24 @@ protected:
 	int	HLT_DoubleEl_;
 	TBranch *HLT_DoubleEl_branch;
 	bool HLT_DoubleEl_isLoaded;
+	int	HLT_DoubleEl_DZ_;
+	TBranch *HLT_DoubleEl_DZ_branch;
+	bool HLT_DoubleEl_DZ_isLoaded;
 	int	HLT_DoubleEl_noiso_;
 	TBranch *HLT_DoubleEl_noiso_branch;
 	bool HLT_DoubleEl_noiso_isLoaded;
 	int	HLT_MuEG_;
 	TBranch *HLT_MuEG_branch;
 	bool HLT_MuEG_isLoaded;
+	int	HLT_MuEG_2_;
+	TBranch *HLT_MuEG_2_branch;
+	bool HLT_MuEG_2_isLoaded;
 	int	HLT_DoubleMu_;
 	TBranch *HLT_DoubleMu_branch;
 	bool HLT_DoubleMu_isLoaded;
+	int	HLT_DoubleMu_tk_;
+	TBranch *HLT_DoubleMu_tk_branch;
+	bool HLT_DoubleMu_tk_isLoaded;
 	int	HLT_Photons_;
 	TBranch *HLT_Photons_branch;
 	bool HLT_Photons_isLoaded;
@@ -429,6 +441,9 @@ protected:
 	int	ngenPart_;
 	TBranch *ngenPart_branch;
 	bool ngenPart_isLoaded;
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *genPart_p4_;
+	TBranch *genPart_p4_branch;
+	bool genPart_p4_isLoaded;
 	vector<float> *genPart_pt_;
 	TBranch *genPart_pt_branch;
 	bool genPart_pt_isLoaded;
@@ -456,6 +471,9 @@ protected:
 	vector<int> *genPart_grandmaId_;
 	TBranch *genPart_grandmaId_branch;
 	bool genPart_grandmaId_isLoaded;
+	vector<bool> *genPart_isp6status3_;
+	TBranch *genPart_isp6status3_branch;
+	bool genPart_isp6status3_isLoaded;
 	int	gamma_nJet40_;
 	TBranch *gamma_nJet40_branch;
 	bool gamma_nJet40_isLoaded;
@@ -489,6 +507,9 @@ protected:
 	vector<int> *genLep_sourceId_;
 	TBranch *genLep_sourceId_branch;
 	bool genLep_sourceId_isLoaded;
+	vector<bool> *genLep_isp6status3_;
+	TBranch *genLep_isp6status3_branch;
+	bool genLep_isp6status3_isLoaded;
 	int	ngenTau_;
 	TBranch *ngenTau_branch;
 	bool ngenTau_isLoaded;
@@ -609,6 +630,11 @@ void Init(TTree *tree) {
 		gamma_p4_branch = tree->GetBranch("gamma_p4");
 		if (gamma_p4_branch) {gamma_p4_branch->SetAddress(&gamma_p4_);}
 	}
+	genPart_p4_branch = 0;
+	if (tree->GetBranch("genPart_p4") != 0) {
+		genPart_p4_branch = tree->GetBranch("genPart_p4");
+		if (genPart_p4_branch) {genPart_p4_branch->SetAddress(&genPart_p4_);}
+	}
 	jet_p4_branch = 0;
 	if (tree->GetBranch("jet_p4") != 0) {
 		jet_p4_branch = tree->GetBranch("jet_p4");
@@ -644,6 +670,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("isData") != 0) {
 		isData_branch = tree->GetBranch("isData");
 		if (isData_branch) {isData_branch->SetAddress(&isData_);}
+	}
+	evt_passgoodrunlist_branch = 0;
+	if (tree->GetBranch("evt_passgoodrunlist") != 0) {
+		evt_passgoodrunlist_branch = tree->GetBranch("evt_passgoodrunlist");
+		if (evt_passgoodrunlist_branch) {evt_passgoodrunlist_branch->SetAddress(&evt_passgoodrunlist_);}
 	}
 	evt_scale1fb_branch = 0;
 	if (tree->GetBranch("evt_scale1fb") != 0) {
@@ -935,6 +966,11 @@ void Init(TTree *tree) {
 		HLT_DoubleEl_branch = tree->GetBranch("HLT_DoubleEl");
 		if (HLT_DoubleEl_branch) {HLT_DoubleEl_branch->SetAddress(&HLT_DoubleEl_);}
 	}
+	HLT_DoubleEl_DZ_branch = 0;
+	if (tree->GetBranch("HLT_DoubleEl_DZ") != 0) {
+		HLT_DoubleEl_DZ_branch = tree->GetBranch("HLT_DoubleEl_DZ");
+		if (HLT_DoubleEl_DZ_branch) {HLT_DoubleEl_DZ_branch->SetAddress(&HLT_DoubleEl_DZ_);}
+	}
 	HLT_DoubleEl_noiso_branch = 0;
 	if (tree->GetBranch("HLT_DoubleEl_noiso") != 0) {
 		HLT_DoubleEl_noiso_branch = tree->GetBranch("HLT_DoubleEl_noiso");
@@ -945,10 +981,20 @@ void Init(TTree *tree) {
 		HLT_MuEG_branch = tree->GetBranch("HLT_MuEG");
 		if (HLT_MuEG_branch) {HLT_MuEG_branch->SetAddress(&HLT_MuEG_);}
 	}
+	HLT_MuEG_2_branch = 0;
+	if (tree->GetBranch("HLT_MuEG_2") != 0) {
+		HLT_MuEG_2_branch = tree->GetBranch("HLT_MuEG_2");
+		if (HLT_MuEG_2_branch) {HLT_MuEG_2_branch->SetAddress(&HLT_MuEG_2_);}
+	}
 	HLT_DoubleMu_branch = 0;
 	if (tree->GetBranch("HLT_DoubleMu") != 0) {
 		HLT_DoubleMu_branch = tree->GetBranch("HLT_DoubleMu");
 		if (HLT_DoubleMu_branch) {HLT_DoubleMu_branch->SetAddress(&HLT_DoubleMu_);}
+	}
+	HLT_DoubleMu_tk_branch = 0;
+	if (tree->GetBranch("HLT_DoubleMu_tk") != 0) {
+		HLT_DoubleMu_tk_branch = tree->GetBranch("HLT_DoubleMu_tk");
+		if (HLT_DoubleMu_tk_branch) {HLT_DoubleMu_tk_branch->SetAddress(&HLT_DoubleMu_tk_);}
 	}
 	HLT_Photons_branch = 0;
 	if (tree->GetBranch("HLT_Photons") != 0) {
@@ -1345,6 +1391,11 @@ void Init(TTree *tree) {
 		genPart_grandmaId_branch = tree->GetBranch("genPart_grandmaId");
 		if (genPart_grandmaId_branch) {genPart_grandmaId_branch->SetAddress(&genPart_grandmaId_);}
 	}
+	genPart_isp6status3_branch = 0;
+	if (tree->GetBranch("genPart_isp6status3") != 0) {
+		genPart_isp6status3_branch = tree->GetBranch("genPart_isp6status3");
+		if (genPart_isp6status3_branch) {genPart_isp6status3_branch->SetAddress(&genPart_isp6status3_);}
+	}
 	gamma_nJet40_branch = 0;
 	if (tree->GetBranch("gamma_nJet40") != 0) {
 		gamma_nJet40_branch = tree->GetBranch("gamma_nJet40");
@@ -1399,6 +1450,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("genLep_sourceId") != 0) {
 		genLep_sourceId_branch = tree->GetBranch("genLep_sourceId");
 		if (genLep_sourceId_branch) {genLep_sourceId_branch->SetAddress(&genLep_sourceId_);}
+	}
+	genLep_isp6status3_branch = 0;
+	if (tree->GetBranch("genLep_isp6status3") != 0) {
+		genLep_isp6status3_branch = tree->GetBranch("genLep_isp6status3");
+		if (genLep_isp6status3_branch) {genLep_isp6status3_branch->SetAddress(&genLep_isp6status3_);}
 	}
 	ngenTau_branch = 0;
 	if (tree->GetBranch("ngenTau") != 0) {
@@ -1575,6 +1631,7 @@ void GetEntry(unsigned int idx)
 		lumi_isLoaded = false;
 		evt_isLoaded = false;
 		isData_isLoaded = false;
+		evt_passgoodrunlist_isLoaded = false;
 		evt_scale1fb_isLoaded = false;
 		evt_xsec_isLoaded = false;
 		evt_kfactor_isLoaded = false;
@@ -1633,9 +1690,12 @@ void GetEntry(unsigned int idx)
 		HLT_ht350met120_isLoaded = false;
 		HLT_SingleMu_isLoaded = false;
 		HLT_DoubleEl_isLoaded = false;
+		HLT_DoubleEl_DZ_isLoaded = false;
 		HLT_DoubleEl_noiso_isLoaded = false;
 		HLT_MuEG_isLoaded = false;
+		HLT_MuEG_2_isLoaded = false;
 		HLT_DoubleMu_isLoaded = false;
+		HLT_DoubleMu_tk_isLoaded = false;
 		HLT_Photons_isLoaded = false;
 		HLT_Photon22_isLoaded = false;
 		HLT_Photon30_isLoaded = false;
@@ -1708,6 +1768,7 @@ void GetEntry(unsigned int idx)
 		gamma_hOverE_isLoaded = false;
 		gamma_idCutBased_isLoaded = false;
 		ngenPart_isLoaded = false;
+		genPart_p4_isLoaded = false;
 		genPart_pt_isLoaded = false;
 		genPart_eta_isLoaded = false;
 		genPart_phi_isLoaded = false;
@@ -1717,6 +1778,7 @@ void GetEntry(unsigned int idx)
 		genPart_charge_isLoaded = false;
 		genPart_motherId_isLoaded = false;
 		genPart_grandmaId_isLoaded = false;
+		genPart_isp6status3_isLoaded = false;
 		gamma_nJet40_isLoaded = false;
 		gamma_nBJet40_isLoaded = false;
 		ngenLep_isLoaded = false;
@@ -1728,6 +1790,7 @@ void GetEntry(unsigned int idx)
 		genLep_status_isLoaded = false;
 		genLep_charge_isLoaded = false;
 		genLep_sourceId_isLoaded = false;
+		genLep_isp6status3_isLoaded = false;
 		ngenTau_isLoaded = false;
 		genTau_pt_isLoaded = false;
 		genTau_eta_isLoaded = false;
@@ -1773,6 +1836,7 @@ void LoadAllBranches()
 	if (lumi_branch != 0) lumi();
 	if (evt_branch != 0) evt();
 	if (isData_branch != 0) isData();
+	if (evt_passgoodrunlist_branch != 0) evt_passgoodrunlist();
 	if (evt_scale1fb_branch != 0) evt_scale1fb();
 	if (evt_xsec_branch != 0) evt_xsec();
 	if (evt_kfactor_branch != 0) evt_kfactor();
@@ -1831,9 +1895,12 @@ void LoadAllBranches()
 	if (HLT_ht350met120_branch != 0) HLT_ht350met120();
 	if (HLT_SingleMu_branch != 0) HLT_SingleMu();
 	if (HLT_DoubleEl_branch != 0) HLT_DoubleEl();
+	if (HLT_DoubleEl_DZ_branch != 0) HLT_DoubleEl_DZ();
 	if (HLT_DoubleEl_noiso_branch != 0) HLT_DoubleEl_noiso();
 	if (HLT_MuEG_branch != 0) HLT_MuEG();
+	if (HLT_MuEG_2_branch != 0) HLT_MuEG_2();
 	if (HLT_DoubleMu_branch != 0) HLT_DoubleMu();
+	if (HLT_DoubleMu_tk_branch != 0) HLT_DoubleMu_tk();
 	if (HLT_Photons_branch != 0) HLT_Photons();
 	if (HLT_Photon22_branch != 0) HLT_Photon22();
 	if (HLT_Photon30_branch != 0) HLT_Photon30();
@@ -1906,6 +1973,7 @@ void LoadAllBranches()
 	if (gamma_hOverE_branch != 0) gamma_hOverE();
 	if (gamma_idCutBased_branch != 0) gamma_idCutBased();
 	if (ngenPart_branch != 0) ngenPart();
+	if (genPart_p4_branch != 0) genPart_p4();
 	if (genPart_pt_branch != 0) genPart_pt();
 	if (genPart_eta_branch != 0) genPart_eta();
 	if (genPart_phi_branch != 0) genPart_phi();
@@ -1915,6 +1983,7 @@ void LoadAllBranches()
 	if (genPart_charge_branch != 0) genPart_charge();
 	if (genPart_motherId_branch != 0) genPart_motherId();
 	if (genPart_grandmaId_branch != 0) genPart_grandmaId();
+	if (genPart_isp6status3_branch != 0) genPart_isp6status3();
 	if (gamma_nJet40_branch != 0) gamma_nJet40();
 	if (gamma_nBJet40_branch != 0) gamma_nBJet40();
 	if (ngenLep_branch != 0) ngenLep();
@@ -1926,6 +1995,7 @@ void LoadAllBranches()
 	if (genLep_status_branch != 0) genLep_status();
 	if (genLep_charge_branch != 0) genLep_charge();
 	if (genLep_sourceId_branch != 0) genLep_sourceId();
+	if (genLep_isp6status3_branch != 0) genLep_isp6status3();
 	if (ngenTau_branch != 0) ngenTau();
 	if (genTau_pt_branch != 0) genTau_pt();
 	if (genTau_eta_branch != 0) genTau_eta();
@@ -2015,6 +2085,19 @@ void LoadAllBranches()
 			isData_isLoaded = true;
 		}
 		return isData_;
+	}
+	bool &	evt_passgoodrunlist()
+	{
+		if (not evt_passgoodrunlist_isLoaded) {
+			if (evt_passgoodrunlist_branch != 0) {
+				evt_passgoodrunlist_branch->GetEntry(index);
+			} else { 
+				printf("branch evt_passgoodrunlist_branch does not exist!\n");
+				exit(1);
+			}
+			evt_passgoodrunlist_isLoaded = true;
+		}
+		return evt_passgoodrunlist_;
 	}
 	float &evt_scale1fb()
 	{
@@ -2770,6 +2853,19 @@ void LoadAllBranches()
 		}
 		return HLT_DoubleEl_;
 	}
+	int &HLT_DoubleEl_DZ()
+	{
+		if (not HLT_DoubleEl_DZ_isLoaded) {
+			if (HLT_DoubleEl_DZ_branch != 0) {
+				HLT_DoubleEl_DZ_branch->GetEntry(index);
+			} else { 
+				printf("branch HLT_DoubleEl_DZ_branch does not exist!\n");
+				exit(1);
+			}
+			HLT_DoubleEl_DZ_isLoaded = true;
+		}
+		return HLT_DoubleEl_DZ_;
+	}
 	int &HLT_DoubleEl_noiso()
 	{
 		if (not HLT_DoubleEl_noiso_isLoaded) {
@@ -2796,6 +2892,19 @@ void LoadAllBranches()
 		}
 		return HLT_MuEG_;
 	}
+	int &HLT_MuEG_2()
+	{
+		if (not HLT_MuEG_2_isLoaded) {
+			if (HLT_MuEG_2_branch != 0) {
+				HLT_MuEG_2_branch->GetEntry(index);
+			} else { 
+				printf("branch HLT_MuEG_2_branch does not exist!\n");
+				exit(1);
+			}
+			HLT_MuEG_2_isLoaded = true;
+		}
+		return HLT_MuEG_2_;
+	}
 	int &HLT_DoubleMu()
 	{
 		if (not HLT_DoubleMu_isLoaded) {
@@ -2808,6 +2917,19 @@ void LoadAllBranches()
 			HLT_DoubleMu_isLoaded = true;
 		}
 		return HLT_DoubleMu_;
+	}
+	int &HLT_DoubleMu_tk()
+	{
+		if (not HLT_DoubleMu_tk_isLoaded) {
+			if (HLT_DoubleMu_tk_branch != 0) {
+				HLT_DoubleMu_tk_branch->GetEntry(index);
+			} else { 
+				printf("branch HLT_DoubleMu_tk_branch does not exist!\n");
+				exit(1);
+			}
+			HLT_DoubleMu_tk_isLoaded = true;
+		}
+		return HLT_DoubleMu_tk_;
 	}
 	int &HLT_Photons()
 	{
@@ -3745,6 +3867,19 @@ void LoadAllBranches()
 		}
 		return ngenPart_;
 	}
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genPart_p4()
+	{
+		if (not genPart_p4_isLoaded) {
+			if (genPart_p4_branch != 0) {
+				genPart_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch genPart_p4_branch does not exist!\n");
+				exit(1);
+			}
+			genPart_p4_isLoaded = true;
+		}
+		return *genPart_p4_;
+	}
 	const vector<float> &genPart_pt()
 	{
 		if (not genPart_pt_isLoaded) {
@@ -3861,6 +3996,19 @@ void LoadAllBranches()
 			genPart_grandmaId_isLoaded = true;
 		}
 		return *genPart_grandmaId_;
+	}
+	const vector<bool> &genPart_isp6status3()
+	{
+		if (not genPart_isp6status3_isLoaded) {
+			if (genPart_isp6status3_branch != 0) {
+				genPart_isp6status3_branch->GetEntry(index);
+			} else { 
+				printf("branch genPart_isp6status3_branch does not exist!\n");
+				exit(1);
+			}
+			genPart_isp6status3_isLoaded = true;
+		}
+		return *genPart_isp6status3_;
 	}
 	int &gamma_nJet40()
 	{
@@ -4004,6 +4152,19 @@ void LoadAllBranches()
 			genLep_sourceId_isLoaded = true;
 		}
 		return *genLep_sourceId_;
+	}
+	const vector<bool> &genLep_isp6status3()
+	{
+		if (not genLep_isp6status3_isLoaded) {
+			if (genLep_isp6status3_branch != 0) {
+				genLep_isp6status3_branch->GetEntry(index);
+			} else { 
+				printf("branch genLep_isp6status3_branch does not exist!\n");
+				exit(1);
+			}
+			genLep_isp6status3_isLoaded = true;
+		}
+		return *genLep_isp6status3_;
 	}
 	int &ngenTau()
 	{
@@ -4505,6 +4666,7 @@ namespace ZMet {
 	const int &lumi();
 	const unsigned long long &evt();
 	const int &isData();
+	const bool &evt_passgoodrunlist();
 	const float &evt_scale1fb();
 	const float &evt_xsec();
 	const float &evt_kfactor();
@@ -4563,9 +4725,12 @@ namespace ZMet {
 	const int &HLT_ht350met120();
 	const int &HLT_SingleMu();
 	const int &HLT_DoubleEl();
+	const int &HLT_DoubleEl_DZ();
 	const int &HLT_DoubleEl_noiso();
 	const int &HLT_MuEG();
+	const int &HLT_MuEG_2();
 	const int &HLT_DoubleMu();
+	const int &HLT_DoubleMu_tk();
 	const int &HLT_Photons();
 	const int &HLT_Photon22();
 	const int &HLT_Photon30();
@@ -4638,6 +4803,7 @@ namespace ZMet {
 	const vector<float> &gamma_hOverE();
 	const vector<int> &gamma_idCutBased();
 	const int &ngenPart();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genPart_p4();
 	const vector<float> &genPart_pt();
 	const vector<float> &genPart_eta();
 	const vector<float> &genPart_phi();
@@ -4647,6 +4813,7 @@ namespace ZMet {
 	const vector<float> &genPart_charge();
 	const vector<int> &genPart_motherId();
 	const vector<int> &genPart_grandmaId();
+	const vector<bool> &genPart_isp6status3();
 	const int &gamma_nJet40();
 	const int &gamma_nBJet40();
 	const int &ngenLep();
@@ -4658,6 +4825,7 @@ namespace ZMet {
 	const vector<int> &genLep_status();
 	const vector<float> &genLep_charge();
 	const vector<int> &genLep_sourceId();
+	const vector<bool> &genLep_isp6status3();
 	const int &ngenTau();
 	const vector<float> &genTau_pt();
 	const vector<float> &genTau_eta();

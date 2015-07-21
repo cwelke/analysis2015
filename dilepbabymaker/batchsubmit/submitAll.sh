@@ -1,20 +1,9 @@
 #!/bin/bash
 voms-proxy-init -voms cms -valid 240:00
-condor_submit configs_V00-00-20/condor_V00-00-20_dyjetsll_ht100to200.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_dyjetsll_ht200to400.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_dyjetsll_ht400to600.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_dyjetsll_ht600toinf.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_dyjetsll_m50inc.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_gjet_ht100to200.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_gjet_ht200to400.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_gjet_ht400to600.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_gjet_ht600toinf.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_gjet_pt40_doubleEM.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_t_bartw.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_t_toptw.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_ttall_msdecays.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_tth.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_ttw.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_ttz.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_wz_3lnu.cmd
-condor_submit configs_V00-00-20/condor_V00-00-20_zz_4l.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_ee.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_em.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_mm.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_ph.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_se.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_data_50ns_sm.cmd
+condor_submit configs_V07-04-03_goodtrigs/condor_V07-04-03_goodtrigs_wz_50ns_incl.cmd

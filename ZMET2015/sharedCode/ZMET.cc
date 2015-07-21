@@ -5,6 +5,7 @@ namespace ZMet {
 	const int &lumi() { return zmet.lumi(); }
 	const unsigned long long &evt() { return zmet.evt(); }
 	const int &isData() { return zmet.isData(); }
+	const bool &evt_passgoodrunlist() { return zmet.evt_passgoodrunlist(); }
 	const float &evt_scale1fb() { return zmet.evt_scale1fb(); }
 	const float &evt_xsec() { return zmet.evt_xsec(); }
 	const float &evt_kfactor() { return zmet.evt_kfactor(); }
@@ -63,9 +64,12 @@ namespace ZMet {
 	const int &HLT_ht350met120() { return zmet.HLT_ht350met120(); }
 	const int &HLT_SingleMu() { return zmet.HLT_SingleMu(); }
 	const int &HLT_DoubleEl() { return zmet.HLT_DoubleEl(); }
+	const int &HLT_DoubleEl_DZ() { return zmet.HLT_DoubleEl_DZ(); }
 	const int &HLT_DoubleEl_noiso() { return zmet.HLT_DoubleEl_noiso(); }
 	const int &HLT_MuEG() { return zmet.HLT_MuEG(); }
+	const int &HLT_MuEG_2() { return zmet.HLT_MuEG_2(); }
 	const int &HLT_DoubleMu() { return zmet.HLT_DoubleMu(); }
+	const int &HLT_DoubleMu_tk() { return zmet.HLT_DoubleMu_tk(); }
 	const int &HLT_Photons() { return zmet.HLT_Photons(); }
 	const int &HLT_Photon22() { return zmet.HLT_Photon22(); }
 	const int &HLT_Photon30() { return zmet.HLT_Photon30(); }
@@ -138,6 +142,7 @@ namespace ZMet {
 	const vector<float> &gamma_hOverE() { return zmet.gamma_hOverE(); }
 	const vector<int> &gamma_idCutBased() { return zmet.gamma_idCutBased(); }
 	const int &ngenPart() { return zmet.ngenPart(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genPart_p4() { return zmet.genPart_p4(); }
 	const vector<float> &genPart_pt() { return zmet.genPart_pt(); }
 	const vector<float> &genPart_eta() { return zmet.genPart_eta(); }
 	const vector<float> &genPart_phi() { return zmet.genPart_phi(); }
@@ -147,6 +152,7 @@ namespace ZMet {
 	const vector<float> &genPart_charge() { return zmet.genPart_charge(); }
 	const vector<int> &genPart_motherId() { return zmet.genPart_motherId(); }
 	const vector<int> &genPart_grandmaId() { return zmet.genPart_grandmaId(); }
+	const vector<bool> &genPart_isp6status3() { return zmet.genPart_isp6status3(); }
 	const int &gamma_nJet40() { return zmet.gamma_nJet40(); }
 	const int &gamma_nBJet40() { return zmet.gamma_nBJet40(); }
 	const int &ngenLep() { return zmet.ngenLep(); }
@@ -158,6 +164,7 @@ namespace ZMet {
 	const vector<int> &genLep_status() { return zmet.genLep_status(); }
 	const vector<float> &genLep_charge() { return zmet.genLep_charge(); }
 	const vector<int> &genLep_sourceId() { return zmet.genLep_sourceId(); }
+	const vector<bool> &genLep_isp6status3() { return zmet.genLep_isp6status3(); }
 	const int &ngenTau() { return zmet.ngenTau(); }
 	const vector<float> &genTau_pt() { return zmet.genTau_pt(); }
 	const vector<float> &genTau_eta() { return zmet.genTau_eta(); }

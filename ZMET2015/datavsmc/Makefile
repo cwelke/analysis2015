@@ -22,10 +22,9 @@ endif
 
 CC = g++
 CMSROOT = ./
-INCLUDE = $(shell root-config --cflags) -I$(CMSROOT) -I$(CMSROOT)../CORE
+INCLUDE = $(shell root-config --cflags) -I$(CMSROOT) -I$(CMSROOT)../sharedCode/
 CFLAGS = -Wall -Wno-unused-function -g -O2 -fPIC $(INCLUDE) $(EXTRACFLAGS)
 ROOTLIBS = $(shell root-config --ldflags --cflags --libs) -lTMVA #-lEG -lGenVector
-COREDIR = ../CORE
 
 DICTINCLUDE = $(ROOTSYS)/include/Math/QuantFuncMathCore.h $(ROOTSYS)/include/TLorentzVector.h $(ROOTSYS)/include/Math/Vector4D.h
 
@@ -37,26 +36,19 @@ LINKERFLAGS = $(shell root-config --ldflags --libs) -lEG -lGenVector -lTMVA
 
 DIR = ./
 
-SOURCES = $(wildcard *.cc)
+SOURCES = templateLooper.cc runTemplateLooper.cc ../../Tools/dorky/dorky.cc ../../Tools/goodrun.cc
 OBJECTS = $(SOURCES:.cc=.o)
-LIB = libScanChain.so
+LIB = libTemplateLooper.so
 
-CORESOURCES = $(wildcard ../CORE/*.cc)
-COREOBJECTS = $(CORESOURCES:.cc=.o) 
-CORELIB = libBabymakerCORE.so
-
-TOOLSSOURCES = $(wildcard ../Tools/*.cc) $(wildcard ../Tools/MT2/*.cc)
-TOOLSOBJECTS = $(TOOLSSOURCES:.cc=.o) 
-TOOLSLIB = libBabymakerTools.so
-
-# #FWLIB = libMiniFWLite.so
-# FWLIB = ../Software/MiniFWLite/libMiniFWLite.so
+SHAREDSOURCES = $(wildcard ../sharedCode/*.cc)
+SHAREDOBJECTS = $(SHAREDSOURCES:.cc=.o) 
+SHAREDLIB = libSharedCode.so
 
 DICT = LinkDef_out.o
 
-LIBS = $(LIB) $(CORELIB) $(TOOLSLIB) $(FWLIB) 
+LIBS = $(LIB) $(SHAREDLIB) $(FWLIB) 
 
-EXE = processBaby
+EXE = runTemplateLooper
 
 .PHONY: all help compile clean cms2env
 
@@ -70,24 +62,15 @@ libs:	$(LIBS)
 # 	echo "Linking $(LIB)"; \
 # 	$(LINKER) $(LINKERFLAGS) -shared $(OBJECTS) -o $@
 
-# $(CORELIB):	$(COREOBJECTS) 
-# 	echo "Linking $(CORELIB)"; \
-# 	$(LINKER) $(LINKERFLAGS) -shared $(COREOBJECTS) -o $@
-
-# $(TOOLSLIB):	$(TOOLSOBJECTS) 
-# 	echo "Linking $(TOOLSLIB)"; \
-# 	$(LINKER) $(LINKERFLAGS) -shared $(TOOLSOBJECTS) -o $@
+# $(SHAREDLIB):	$(SHAREDOBJECTS) 
+# 	echo "Linking $(SHAREDLIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(SHAREDOBJECTS) -o $@
 
 
-$(CORELIB): $(DICT) $(COREOBJECTS)
+$(SHAREDLIB): $(DICT) $(SHAREDOBJECTS)
 	$(QUIET) echo "Linking $@"; \
-	echo "$(LINKER) -shared -o $@ $(COREOBJECTS) $(DICT) $(LINKERFLAGS)"; \
-	$(LINKER) -shared -o $@ $(COREOBJECTS) $(DICT) $(LINKERFLAGS)
-
-$(TOOLSLIB): $(DICT) $(TOOLSOBJECTS)
-	$(QUIET) echo "Linking $@"; \
-	echo "$(LINKER) -shared -o $@ $(TOOLSOBJECTS) $(DICT) $(LINKERFLAGS)"; \
-	$(LINKER) -shared -o $@ $(TOOLSOBJECTS) $(DICT) $(LINKERFLAGS)
+	echo "$(LINKER) -shared -o $@ $(SHAREDOBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(SHAREDOBJECTS) $(DICT) $(LINKERFLAGS)
 
 $(LIB):	$(DICT) $(OBJECTS)
 	$(QUIET) echo "Linking $@"; \
@@ -165,15 +148,9 @@ clean:
 	*.o \
 	$(LIBS) \
 	$(EXE) \
-        ../CORE/*.o \
-        ../CORE/*.d \
-        ../CORE/*.so \
-        ../Tools/*.o \
-		../Tools/*.d \
-        ../Tools/*.so \
-        ../Tools/MT2/*.o \
-		../Tools/MT2/*.d \
-        ../Tools/MT2/*.so 
+        ../sharedCode/*.o \
+		../sharedCode/*.d \
+        ../sharedCode/*.so 
 
 # test: 
 # 	@echo $(INCLUDE)

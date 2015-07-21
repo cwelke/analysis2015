@@ -6,7 +6,7 @@
 
 1) copy files to run looper into job_input directory
 for example, from this directory
-> cp -r ../*.so ../jetCorrections ../processBaby.C job_input/
+> cp -r ../*.so ../jetCorrections ../processBaby job_input/
 
 *** note that after copying the latest source files into the job_input subdir, you must run one of the writeConfig scripts below to recreate the input tarball which is used for the batch jobs!
 
@@ -50,7 +50,7 @@ the submission log should be in submit_logs
 > git clone git@github.com:cmstas/NtupleTools.git
 > cd NtupleTools/condorMergingTools
 > make
-> ./sweepRoot -b -o "mt2" /hadoop/cms/store/user/${USER}/mt2babies/<BABYDIRS>/*.root
+> ./sweepRoot -b -o "t" /hadoop/cms/store/user/${USER}/dilepbabies/<BABYDIRS>/*.root
 
 where <BABYDIRS> is something like V00-00-01_*
 
@@ -77,4 +77,4 @@ everything at once
 > ./mergeHadoopFiles.sh
 You can also specify the output directory in the script. Typically the babies are
 stored under:
-/nfs-6/userdata/mt2/<VERSION>/
+/nfs-6/userdata/ZMETbabies/<VERSION>/

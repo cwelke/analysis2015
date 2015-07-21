@@ -46,6 +46,7 @@ class babyMaker {
   ULong64_t       evt;
   Int_t           isData;
 
+  Bool_t          evt_passgoodrunlist;
   Float_t         evt_scale1fb;
   Float_t         evt_xsec;
   Float_t         evt_kfactor;
@@ -124,9 +125,12 @@ class babyMaker {
   Int_t           HLT_ht350met120;   
   Int_t           HLT_SingleMu;   
   Int_t           HLT_DoubleEl;   
+  Int_t           HLT_DoubleEl_DZ;   
   Int_t           HLT_DoubleEl_noiso;   
   Int_t           HLT_MuEG;   
+  Int_t           HLT_MuEG_2;   
   Int_t           HLT_DoubleMu;   
+  Int_t           HLT_DoubleMu_tk;   
   Int_t           HLT_Photons;   
   Int_t           HLT_Photon22;
   Int_t           HLT_Photon30;
@@ -148,60 +152,60 @@ class babyMaker {
 
   //----- LEPTONS
   Int_t           nlep;
-  vector <LorentzVector> lep_p4;
-  vector <Float_t> lep_pt         ;   //[nlep]
-  vector <Float_t> lep_eta        ;   //[nlep]
-  vector <Float_t> lep_phi        ;   //[nlep]
-  vector <Float_t> lep_mass       ;   //[nlep]
-  vector <Int_t  > lep_charge     ;   //[nlep]
-  vector <Int_t  > lep_pdgId      ;   //[nlep]
-  vector <Float_t> lep_dxy        ;   //[nlep]
-  vector <Float_t> lep_etaSC      ;   //[nlep]
-  vector <Float_t> lep_dz         ;   //[nlep]
-  vector <Int_t  > lep_tightId    ;   //[nlep]
-  vector <Float_t> lep_relIso03   ;   //[nlep]
-  vector <Float_t> lep_relIso03MREA   ;   //[nlep]
-  vector <Float_t> lep_relIso03MRDB   ;   //[nlep]
-  vector <Float_t> lep_relIso03MRNC   ;   //[nlep]
-  vector <Float_t> lep_relIso04   ;   //[nlep]
-  vector <Int_t  > lep_mcMatchId  ;   //[nlep]
-  vector <Int_t  > lep_lostHits   ;   //[nlep]
-  vector <Int_t  > lep_convVeto   ;   //[nlep]
-  vector <Int_t  > lep_tightCharge;   //[nlep]
-  vector <Int_t  > lep_islead     ;   //[nlep]
-  vector <Int_t  > lep_istail     ;   //[nlep]
+  std::vector <LorentzVector> lep_p4;
+  std::vector <Float_t> lep_pt         ;   //[nlep]
+  std::vector <Float_t> lep_eta        ;   //[nlep]
+  std::vector <Float_t> lep_phi        ;   //[nlep]
+  std::vector <Float_t> lep_mass       ;   //[nlep]
+  std::vector <Int_t  > lep_charge     ;   //[nlep]
+  std::vector <Int_t  > lep_pdgId      ;   //[nlep]
+  std::vector <Float_t> lep_dxy        ;   //[nlep]
+  std::vector <Float_t> lep_etaSC      ;   //[nlep]
+  std::vector <Float_t> lep_dz         ;   //[nlep]
+  std::vector <Int_t  > lep_tightId    ;   //[nlep]
+  std::vector <Float_t> lep_relIso03   ;   //[nlep]
+  std::vector <Float_t> lep_relIso03MREA   ;   //[nlep]
+  std::vector <Float_t> lep_relIso03MRDB   ;   //[nlep]
+  std::vector <Float_t> lep_relIso03MRNC   ;   //[nlep]
+  std::vector <Float_t> lep_relIso04   ;   //[nlep]
+  std::vector <Int_t  > lep_mcMatchId  ;   //[nlep]
+  std::vector <Int_t  > lep_lostHits   ;   //[nlep]
+  std::vector <Int_t  > lep_convVeto   ;   //[nlep]
+  std::vector <Int_t  > lep_tightCharge;   //[nlep]
+  std::vector <Int_t  > lep_islead     ;   //[nlep]
+  std::vector <Int_t  > lep_istail     ;   //[nlep]
   
 //----- TAUS
   Int_t           ntau;
-  vector <Float_t> tau_pt       ;   //[ntau]
-  vector <Float_t> tau_eta      ;   //[ntau]
-  vector <Float_t> tau_phi      ;   //[ntau]
-  vector <Float_t> tau_mass     ;   //[ntau]
-  vector <Int_t  > tau_charge   ;   //[ntau]
-  vector <Float_t> tau_dxy      ;   //[ntau]
-  vector <Float_t> tau_dz       ;   //[ntau]
-  vector <Int_t  > tau_idCI3hit ;   //[ntau]
-  vector <Float_t> tau_isoCI3hit;   //[ntau]
-  // vector <Float_t> tau_isoMVA2  ;   //[ntau]
-  // vector <Int_t  > tau_idMVA2   ;   //[ntau]
-  // vector <Int_t  > tau_mcMatchId;   //[ntau]
+  std::vector <Float_t> tau_pt       ;   //[ntau]
+  std::vector <Float_t> tau_eta      ;   //[ntau]
+  std::vector <Float_t> tau_phi      ;   //[ntau]
+  std::vector <Float_t> tau_mass     ;   //[ntau]
+  std::vector <Int_t  > tau_charge   ;   //[ntau]
+  std::vector <Float_t> tau_dxy      ;   //[ntau]
+  std::vector <Float_t> tau_dz       ;   //[ntau]
+  std::vector <Int_t  > tau_idCI3hit ;   //[ntau]
+  std::vector <Float_t> tau_isoCI3hit;   //[ntau]
+  // std::vector <Float_t> tau_isoMVA2  ;   //[ntau]
+  // std::vector <Int_t  > tau_idMVA2   ;   //[ntau]
+  // std::vector <Int_t  > tau_mcMatchId;   //[ntau]
 
 //----- PHOTONS
   Int_t           ngamma;
-  vector <LorentzVector>   gamma_p4;
-  vector <Float_t>         gamma_pt           ;   //[ngamma]
-  vector <Float_t>         gamma_eta          ;   //[ngamma]
-  vector <Float_t>         gamma_phi          ;   //[ngamma]
-  vector <Float_t>         gamma_mass         ;   //[ngamma]
-  vector <Float_t>         gamma_sigmaIetaIeta;   //[ngamma]
-  vector <Float_t>         gamma_chHadIso     ;   //[ngamma]
-  vector <Float_t>         gamma_neuHadIso    ;   //[ngamma]
-  vector <Float_t>         gamma_phIso        ;   //[ngamma]
-  vector <Float_t>         gamma_r9           ;   //[ngamma]
-  vector <Float_t>         gamma_hOverE       ;   //[ngamma]
-  vector <Int_t  >         gamma_idCutBased   ;   //[ngamma]
-  vector <Int_t  >         gamma_mcMatchId    ;   //[ngamma]
-  vector <Float_t>         gamma_genIso       ;   //[ngamma]
+  std::vector <LorentzVector>   gamma_p4;
+  std::vector <Float_t>         gamma_pt           ;   //[ngamma]
+  std::vector <Float_t>         gamma_eta          ;   //[ngamma]
+  std::vector <Float_t>         gamma_phi          ;   //[ngamma]
+  std::vector <Float_t>         gamma_mass         ;   //[ngamma]
+  std::vector <Float_t>         gamma_sigmaIetaIeta;   //[ngamma]
+  std::vector <Float_t>         gamma_chHadIso     ;   //[ngamma]
+  std::vector <Float_t>         gamma_neuHadIso    ;   //[ngamma]
+  std::vector <Float_t>         gamma_phIso        ;   //[ngamma]
+  std::vector <Float_t>         gamma_r9           ;   //[ngamma]
+  std::vector <Float_t>         gamma_hOverE       ;   //[ngamma]
+  std::vector <Int_t  >         gamma_idCutBased   ;   //[ngamma]
+  std::vector <Int_t  >         gamma_mcMatchId    ;   //[ngamma]
+  std::vector <Float_t>         gamma_genIso       ;   //[ngamma]
 
   // event level vars recalculated for photon+jets control region
   Int_t           gamma_nJet40;
@@ -209,66 +213,71 @@ class babyMaker {
 
 //----- GEN PARTICLES
   Int_t           ngenPart;
-  vector <Float_t>         genPart_pt       ;   //[ngenPart]
-  vector <Float_t>         genPart_eta      ;   //[ngenPart]
-  vector <Float_t>         genPart_phi      ;   //[ngenPart]
-  vector <Float_t>         genPart_mass     ;   //[ngenPart]
-  vector <Int_t  >         genPart_pdgId    ;   //[ngenPart]
-  vector <Int_t  >         genPart_status   ;   //[ngenPart]
-  vector <Float_t>         genPart_charge   ;   //[ngenPart]
-  vector <Int_t  >         genPart_motherId ;   //[ngenPart]
-  vector <Int_t  >         genPart_grandmaId;   //[ngenPart]
+  Int_t           ngen_p6s3Part;
+  std::vector <LorentzVector>   genPart_p4         ;
+  std::vector <Float_t>         genPart_pt         ;   //[ngenPart]
+  std::vector <Float_t>         genPart_eta        ;   //[ngenPart]
+  std::vector <Float_t>         genPart_phi        ;   //[ngenPart]
+  std::vector <Float_t>         genPart_mass       ;   //[ngenPart]
+  std::vector <Int_t  >         genPart_pdgId      ;   //[ngenPart]
+  std::vector <Int_t  >         genPart_status     ;   //[ngenPart]
+  std::vector <Bool_t >         genPart_isp6status3;   //[ngenPart]
+  std::vector <Float_t>         genPart_charge     ;   //[ngenPart]
+  std::vector <Int_t  >         genPart_motherId   ;   //[ngenPart]
+  std::vector <Int_t  >         genPart_grandmaId  ;   //[ngenPart]
 
 //----- GEN LEPTONS (ELECTRONS/MUONS)
   Int_t           ngenLep;
-  vector <Float_t>         genLep_pt      ;   //[ngenLep]
-  vector <Float_t>         genLep_eta     ;   //[ngenLep]
-  vector <Float_t>         genLep_phi     ;   //[ngenLep]
-  vector <Float_t>         genLep_mass    ;   //[ngenLep]
-  vector <Int_t  >         genLep_pdgId   ;   //[ngenLep]
-  vector <Int_t  >         genLep_status  ;   //[ngenLep]
-  vector <Float_t>         genLep_charge  ;   //[ngenLep]
-  vector <Int_t  >         genLep_sourceId;   //[ngenLep]
+  Int_t           ngen_p6s3Lep;
+  std::vector <Float_t>         genLep_pt         ;   //[ngenLep]
+  std::vector <Float_t>         genLep_eta        ;   //[ngenLep]
+  std::vector <Float_t>         genLep_phi        ;   //[ngenLep]
+  std::vector <Float_t>         genLep_mass       ;   //[ngenLep]
+  std::vector <Int_t  >         genLep_pdgId      ;   //[ngenLep]
+  std::vector <Int_t  >         genLep_status     ;   //[ngenLep]
+  std::vector <Bool_t >         genLep_isp6status3;   //[ngenLep]
+  std::vector <Float_t>         genLep_charge     ;   //[ngenLep]
+  std::vector <Int_t  >         genLep_sourceId   ;   //[ngenLep]
 
 //----- GEN TAUS
   Int_t           ngenTau;
-  vector <Float_t>         genTau_pt      ;   //[ngenTau]
-  vector <Float_t>         genTau_eta     ;   //[ngenTau]
-  vector <Float_t>         genTau_phi     ;   //[ngenTau]
-  vector <Float_t>         genTau_mass    ;   //[ngenTau]
-  vector <Int_t  >         genTau_pdgId   ;   //[ngenTau]
-  vector <Int_t  >         genTau_status  ;   //[ngenTau]
-  vector <Float_t>         genTau_charge  ;   //[ngenTau]
-  vector <Int_t  >         genTau_sourceId;   //[ngenTau]
+  std::vector <Float_t>         genTau_pt      ;   //[ngenTau]
+  std::vector <Float_t>         genTau_eta     ;   //[ngenTau]
+  std::vector <Float_t>         genTau_phi     ;   //[ngenTau]
+  std::vector <Float_t>         genTau_mass    ;   //[ngenTau]
+  std::vector <Int_t  >         genTau_pdgId   ;   //[ngenTau]
+  std::vector <Int_t  >         genTau_status  ;   //[ngenTau]
+  std::vector <Float_t>         genTau_charge  ;   //[ngenTau]
+  std::vector <Int_t  >         genTau_sourceId;   //[ngenTau]
 
 //----- GEN LEPTONS FROM TAUS
   Int_t           ngenLepFromTau;
-  vector <Float_t>         genLepFromTau_pt      ;   //[ngenLepFromTau]
-  vector <Float_t>         genLepFromTau_eta     ;   //[ngenLepFromTau]
-  vector <Float_t>         genLepFromTau_phi     ;   //[ngenLepFromTau]
-  vector <Float_t>         genLepFromTau_mass    ;   //[ngenLepFromTau]
-  vector <Int_t  >         genLepFromTau_pdgId   ;   //[ngenLepFromTau]
-  vector <Int_t  >         genLepFromTau_status  ;   //[ngenLepFromTau]
-  vector <Float_t>         genLepFromTau_charge  ;   //[ngenLepFromTau]
-  vector <Int_t  >         genLepFromTau_sourceId;   //[ngenLepFromTau]
+  std::vector <Float_t>         genLepFromTau_pt      ;   //[ngenLepFromTau]
+  std::vector <Float_t>         genLepFromTau_eta     ;   //[ngenLepFromTau]
+  std::vector <Float_t>         genLepFromTau_phi     ;   //[ngenLepFromTau]
+  std::vector <Float_t>         genLepFromTau_mass    ;   //[ngenLepFromTau]
+  std::vector <Int_t  >         genLepFromTau_pdgId   ;   //[ngenLepFromTau]
+  std::vector <Int_t  >         genLepFromTau_status  ;   //[ngenLepFromTau]
+  std::vector <Float_t>         genLepFromTau_charge  ;   //[ngenLepFromTau]
+  std::vector <Int_t  >         genLepFromTau_sourceId;   //[ngenLepFromTau]
 
 //----- JETS
   Int_t           njet;
-  vector <LorentzVector>   jet_p4;
-  vector <LorentzVector>   jets_p4;
-  vector <LorentzVector>   jets_eta30_p4;
-  vector <Float_t>         jet_pt          ;   //[njet]
-  vector <Float_t>         jet_eta         ;   //[njet]
-  vector <Float_t>         jet_phi         ;   //[njet]
-  vector <Float_t>         jet_mass        ;   //[njet]
-  vector <Float_t>         jet_btagCSV     ;   //[njet]
-  vector <Float_t>         jet_rawPt       ;   //[njet]
-  vector <Float_t>         jet_mcPt        ;   //[njet]
-  vector <Int_t  >         jet_mcFlavour   ;   //[njet]
-  vector <Float_t>         jet_quarkGluonID;   //[njet]
-  vector <Float_t>         jet_area        ;   //[njet]
-  vector <Int_t  >         jet_id          ;   //[njet]
-  vector <Int_t  >         jet_puId        ;   //[njet]
+  std::vector <LorentzVector>   jet_p4;
+  std::vector <LorentzVector>   jets_p4;
+  std::vector <LorentzVector>   jets_eta30_p4;
+  std::vector <Float_t>         jet_pt          ;   //[njet]
+  std::vector <Float_t>         jet_eta         ;   //[njet]
+  std::vector <Float_t>         jet_phi         ;   //[njet]
+  std::vector <Float_t>         jet_mass        ;   //[njet]
+  std::vector <Float_t>         jet_btagCSV     ;   //[njet]
+  std::vector <Float_t>         jet_rawPt       ;   //[njet]
+  std::vector <Float_t>         jet_mcPt        ;   //[njet]
+  std::vector <Int_t  >         jet_mcFlavour   ;   //[njet]
+  std::vector <Float_t>         jet_quarkGluonID;   //[njet]
+  std::vector <Float_t>         jet_area        ;   //[njet]
+  std::vector <Int_t  >         jet_id          ;   //[njet]
+  std::vector <Int_t  >         jet_puId        ;   //[njet]
   
 };
 
