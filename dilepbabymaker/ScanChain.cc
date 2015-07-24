@@ -195,23 +195,25 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       HLT_DoubleMu_tk    = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
       HLT_Photons        = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
 
-	  HLT_Photon22					 = passHLTTriggerPattern("HLT_Photon22_v");
-	  HLT_Photon30					 = passHLTTriggerPattern("HLT_Photon30_v");
-	  HLT_Photon36					 = passHLTTriggerPattern("HLT_Photon36_v");
-	  HLT_Photon50					 = passHLTTriggerPattern("HLT_Photon50_v");
-	  HLT_Photon75					 = passHLTTriggerPattern("HLT_Photon75_v");
-	  HLT_Photon90					 = passHLTTriggerPattern("HLT_Photon90_v");
-	  HLT_Photon120				 	 = passHLTTriggerPattern("HLT_Photon120_v");
-	  HLT_Photon175				 	 = passHLTTriggerPattern("HLT_Photon175_v");
-	  HLT_Photon165_HE10			 = passHLTTriggerPattern("HLT_Photon165_HE10_v");
-	  HLT_Photon22_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon22_R9Id90_HE10_IsoM_v");
-	  HLT_Photon30_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon30_R9Id90_HE10_IsoM_v");
-	  HLT_Photon36_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon36_R9Id90_HE10_IsoM_v");
-	  HLT_Photon50_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon50_R9Id90_HE10_IsoM_v");
-	  HLT_Photon75_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon75_R9Id90_HE10_IsoM_v");
-	  HLT_Photon90_R9Id90_HE10_IsoM  = passHLTTriggerPattern("HLT_Photon90_R9Id90_HE10_IsoM_v");
-	  HLT_Photon120_R9Id90_HE10_IsoM = passHLTTriggerPattern("HLT_Photon120_R9Id90_HE10_IsoM_v");
-	  HLT_Photon165_R9Id90_HE10_IsoM = passHLTTriggerPattern("HLT_Photon165_R9Id90_HE10_IsoM_v");
+	  HLT_Photon22					 = HLT_prescale(triggerName("HLT_Photon22_v"                  ));
+	  HLT_Photon30					 = HLT_prescale(triggerName("HLT_Photon30_v"                  ));
+	  HLT_Photon36					 = HLT_prescale(triggerName("HLT_Photon36_v"                  ));
+	  HLT_Photon50					 = HLT_prescale(triggerName("HLT_Photon50_v"                  ));
+	  HLT_Photon75					 = HLT_prescale(triggerName("HLT_Photon75_v"                  ));
+	  HLT_Photon90					 = HLT_prescale(triggerName("HLT_Photon90_v"                  ));
+	  HLT_Photon120				 	 = HLT_prescale(triggerName("HLT_Photon120_v"                 ));
+	  HLT_Photon175				 	 = HLT_prescale(triggerName("HLT_Photon175_v"                 ));
+	  HLT_Photon165_HE10			 = HLT_prescale(triggerName("HLT_Photon165_HE10_v"            ));
+	  HLT_Photon22_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon22_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon30_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon30_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon36_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon36_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon50_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon50_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon75_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon75_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon90_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon90_R9Id90_HE10_IsoM_v" ));
+	  HLT_Photon120_R9Id90_HE10_IsoM = HLT_prescale(triggerName("HLT_Photon120_R9Id90_HE10_IsoM_v"));
+	  HLT_Photon165_R9Id90_HE10_IsoM = HLT_prescale(triggerName("HLT_Photon165_R9Id90_HE10_IsoM_v"));
+
+	  // HLT_l1prescale; do I want to add this?
       
       if (verbose) cout << "before gen particles" << endl;
 
@@ -868,6 +870,75 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j_eta30 = -1.0;
 	  }
 
+	  if( verbose ) cout<<" Before loop over pfcands " <<endl;
+	  
+	  LorentzVector chphpfmet_trk_p4(0,0,0,0);
+	  LorentzVector chpfmet_trk_p4(0,0,0,0);
+
+	  LorentzVector nupfmet_trk_p4(0,0,0,0);
+	  LorentzVector nupfmet_fwd_p4(0,0,0,0);
+	  LorentzVector nupfmet_all_p4(0,0,0,0);
+
+	  LorentzVector nunophpfmet_trk_p4(0,0,0,0);
+	  LorentzVector nunophpfmet_fwd_p4(0,0,0,0);
+	  LorentzVector nunophpfmet_all_p4(0,0,0,0);
+
+	  for( size_t pfind = 0; pfind < cms3.pfcands_p4().size(); pfind++ ){
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // neutral cands
+		  nupfmet_all_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
+			nupfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		  if( cms3.pfcands_p4().at(pfind).eta() > 2.4 ){ // forward region
+			nupfmet_fwd_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral cands
+		  nunophpfmet_all_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
+			nunophpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		  if( cms3.pfcands_p4().at(pfind).eta() > 2.4 ){ // forward region
+			nunophpfmet_fwd_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
+		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
+			chpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) > 0 || abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // charged cands + photons
+		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){
+			chphpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
+		  }
+		}
+
+	  }
+	  
+	  chpfmet_trk_pt    = chpfmet_trk_p4.pt();
+	  chpfmet_trk_phi   = chpfmet_trk_p4.phi();
+
+	  chphpfmet_trk_pt    = chphpfmet_trk_p4.pt();
+	  chphpfmet_trk_phi   = chphpfmet_trk_p4.phi();
+	  
+	  nupfmet_trk_pt  = nupfmet_trk_p4.pt();
+	  nupfmet_fwd_pt  = nupfmet_fwd_p4.pt();
+	  nupfmet_all_pt  = nupfmet_all_p4.pt();
+	  nupfmet_trk_phi = nupfmet_trk_p4.phi();
+	  nupfmet_fwd_phi = nupfmet_fwd_p4.phi();
+	  nupfmet_all_phi = nupfmet_all_p4.phi();
+
+	  nunophpfmet_trk_pt  = nunophpfmet_trk_p4.pt();
+	  nunophpfmet_fwd_pt  = nunophpfmet_fwd_p4.pt();
+	  nunophpfmet_all_pt  = nunophpfmet_all_p4.pt();
+	  nunophpfmet_trk_phi = nunophpfmet_trk_p4.phi();
+	  nunophpfmet_fwd_phi = nunophpfmet_fwd_p4.phi();
+	  nunophpfmet_all_phi = nunophpfmet_all_p4.phi();
+
 	  float metx = 0.0;
 	  float mety = 0.0;
 	  float pzx  = 0.0;
@@ -1063,6 +1134,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_MuEG_2"        , &HLT_MuEG_2 );
   BabyTree_->Branch("HLT_DoubleMu"      , &HLT_DoubleMu );
   BabyTree_->Branch("HLT_DoubleMu_tk"   , &HLT_DoubleMu_tk );
+  BabyTree_->Branch("HLT_l1prescale"    , &HLT_l1prescale );
   BabyTree_->Branch("HLT_Photons"       , &HLT_Photons );
   BabyTree_->Branch("HLT_Photon22"                  , &HLT_Photon22                   );					 
   BabyTree_->Branch("HLT_Photon30"                  , &HLT_Photon30                   );					 
@@ -1207,6 +1279,26 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("jet_id"          , "std::vector <Int_t  >" , &jet_id          );
   BabyTree_->Branch("jet_puId"        , "std::vector <Int_t  >" , &jet_puId        );
 
+  BabyTree_->Branch("chpfmet_trk_pt"      , &chpfmet_trk_pt    );
+  BabyTree_->Branch("chpfmet_trk_phi"     , &chpfmet_trk_phi   );
+
+  BabyTree_->Branch("chphpfmet_trk_pt"      , &chphpfmet_trk_pt    );
+  BabyTree_->Branch("chphpfmet_trk_phi"     , &chphpfmet_trk_phi   );
+
+  BabyTree_->Branch("nunophpfmet_trk_pt"    , &nunophpfmet_trk_pt  );
+  BabyTree_->Branch("nunophpfmet_trk_phi"   , &nunophpfmet_trk_phi );
+  BabyTree_->Branch("nunophpfmet_fwd_pt"    , &nunophpfmet_fwd_pt  );
+  BabyTree_->Branch("nunophpfmet_fwd_phi"   , &nunophpfmet_fwd_phi );  
+  BabyTree_->Branch("nunophpfmet_all_pt"    , &nunophpfmet_all_pt  );
+  BabyTree_->Branch("nunophpfmet_all_phi"   , &nunophpfmet_all_phi );
+
+  BabyTree_->Branch("nupfmet_trk_pt"    , &nupfmet_trk_pt  );
+  BabyTree_->Branch("nupfmet_trk_phi"   , &nupfmet_trk_phi );
+  BabyTree_->Branch("nupfmet_fwd_pt"    , &nupfmet_fwd_pt  );
+  BabyTree_->Branch("nupfmet_fwd_phi"   , &nupfmet_fwd_phi );  
+  BabyTree_->Branch("nupfmet_all_pt"    , &nupfmet_all_pt  );
+  BabyTree_->Branch("nupfmet_all_phi"   , &nupfmet_all_phi );
+
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
  
@@ -1291,6 +1383,7 @@ void babyMaker::InitBabyNtuple () {
   HLT_MuEG_2         = -999;   
   HLT_DoubleMu       = -999;   
   HLT_DoubleMu_tk    = -999;   
+  HLT_l1prescale     = -999;
   HLT_Photons        = -999;   
   HLT_Photon22                   = -999;					 
   HLT_Photon30                   = -999;					 
@@ -1436,6 +1529,28 @@ void babyMaker::InitBabyNtuple () {
   jet_area        .clear();   //[njet]
   jet_id          .clear();   //[njet]
   jet_puId        .clear();   //[njet]
+
+
+  //----- pfMETs
+  chpfmet_trk_pt    = -999;
+  chpfmet_trk_phi   = -999;
+
+  chphpfmet_trk_pt    = -999;
+  chphpfmet_trk_phi   = -999;
+
+  nupfmet_trk_pt  = -999;
+  nupfmet_trk_phi = -999;
+  nupfmet_fwd_pt  = -999;
+  nupfmet_fwd_phi = -999;  
+  nupfmet_all_pt  = -999;
+  nupfmet_all_phi = -999;
+
+  nunophpfmet_trk_pt  = -999;
+  nunophpfmet_trk_phi = -999;
+  nunophpfmet_fwd_pt  = -999;
+  nunophpfmet_fwd_phi = -999;  
+  nunophpfmet_all_pt  = -999;
+  nunophpfmet_all_phi = -999;
 
   gamma_nJet40 = -999;
   gamma_nBJet40 = -999;

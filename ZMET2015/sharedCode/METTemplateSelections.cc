@@ -92,13 +92,13 @@ void METTemplates::setBins( const string selection )
 
   //set event pT cuts
   photon_ptcuts.clear();
-  photon_ptcuts.push_back(50);
-  photon_ptcuts.push_back(75);
+  photon_ptcuts.push_back(22);
+  photon_ptcuts.push_back(40);
+  photon_ptcuts.push_back(60);
+  photon_ptcuts.push_back(80);
   photon_ptcuts.push_back(100);
-  photon_ptcuts.push_back(150);
-  photon_ptcuts.push_back(200);
-  photon_ptcuts.push_back(400);
-  photon_ptcuts.push_back(600);
+  photon_ptcuts.push_back(125);
+  photon_ptcuts.push_back(170);
 
   //set event HT cuts
   photon_htcuts.clear();
@@ -106,12 +106,12 @@ void METTemplates::setBins( const string selection )
   photon_htcuts.push_back(70);
   photon_htcuts.push_back(105);
   photon_htcuts.push_back(140);
-  photon_htcuts.push_back(200);
-  photon_htcuts.push_back(350);
-  photon_htcuts.push_back(500);
-  photon_htcuts.push_back(1000);
-  photon_htcuts.push_back(1500);
-  photon_htcuts.push_back(2000);
+  // photon_htcuts.push_back(200);
+  // photon_htcuts.push_back(350);
+  // photon_htcuts.push_back(500);
+  // photon_htcuts.push_back(1000);
+  // photon_htcuts.push_back(1500);
+  // photon_htcuts.push_back(2000);
 
   if( !TString(selection).Contains("bad") ) {
 	if( TString(selection).Contains("3jets") ) {
@@ -366,9 +366,11 @@ void METTemplates::NormalizeTemplates( std::map<std::string, TH1F*> &methists )
 
 void METTemplates::loadTemplatesFromFile( const std::string filename, std::map<std::string, TH1F*> &methists )
 {
+  TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
+  // h_vtxweight->SetDirectory(rootdir);
   TFile *infile = new TFile(filename.c_str());
   std::cout<<"Reading hists from file: "<<filename<<std::endl;
-  infile->cd();
+  // infile->cd();
   TIter iKey(infile->GetListOfKeys());
   TKey* key=0;
   while((key=(TKey*)iKey())) {

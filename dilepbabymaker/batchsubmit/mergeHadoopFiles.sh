@@ -19,17 +19,15 @@ if [ ! -d "merge_logs_${TAG}" ]; then
   mkdir merge_logs_${TAG}
 fi
 
-run data_50ns_ee
-run data_50ns_mm
-run data_50ns_em
-run data_50ns_se
-run data_50ns_sm
-run data_50ns_ph
+# run data_50ns_ee
+# run data_50ns_ph
+# run data_50ns_mm
+# run data_50ns_em
 
-# # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/ ${TAG}_ttall_50ns_mgp8
-# # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/ ${TAG}_ttall_50ns_nlo
+# run wz_50ns_incl
 # run tt2lnu_50ns_php8
-# # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TT_TuneCUETP8M1_13TeV-powheg-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v4/V07-04-03/ ${TAG}_ttall_50ns_php8
+run dyjetsll_50ns_m1050nlo
+# run dyjetsll_50ns_m50nlo
 
 # run dyjetsll_50ns_m1050nlo
 # run dyjetsll_50ns_m50nlo

@@ -16,6 +16,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 {
 
   bool useedgebinning = true;
+  bool usetemplates   = false;
+  bool usefsbkg       = false;
   
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
@@ -28,22 +30,53 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // string dilep = "ll";
   
   getBackground(   h_data, iter, Form("data%s" , selection.c_str() ), variable, dilep, region );
-  getBackground(  h_ttbar, iter, Form("ttbar%s", selection.c_str() ), variable, dilep, region );
-  getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
+  if( usefsbkg ) getBackground(  h_ttbar, "V07-04-03_updatedHLT", Form("data%s", selection.c_str() ), "metgt1jet", "em", "inclusive" );
+  else           getBackground(  h_ttbar, iter, Form("ttbar%s", selection.c_str() ), variable, dilep, region );
+  // getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
   // getBackground(  h_other, iter, Form("ttv%s"   , selection.c_str() ), "met", "ll" );
   // getBackground(  h_vvbkg, iter, Form("vv%s"    , selection.c_str() ), "met", "ll" );
   // getBackground(  h_zjets, iter, "All_MC", "jzb", "ll" );
-  // getTemplateMET( h_zjets, iter, Form("All_MC%s", selection.c_str() ) );
+  if( usetemplates ) getTemplateMET( h_zjets, "V07-04-03_updatedHLT", Form("data%s", selection.c_str() ) );
+  else getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
+  // getTemplateMET( h_zjets, iter, Form("data%s", selection.c_str() ) );
 
   // h_zjets->Scale(0.057);
   // h_ttbar->Scale(0.057);
 
   // h_data->Scale(luminosity);
-  h_zjets->Scale(luminosity);
-  h_ttbar->Scale(luminosity);
   // h_other->Scale(luminosity);
   // h_vvbkg->Scale(luminosity);
   // h_vvbkg->Scale(0);
+
+  if( usetemplates ){
+  
+	h_ttbar->Scale(0.15);
+	h_zjets->Scale(1./h_zjets->GetSumOfWeights());
+
+	float val_data  = h_data  -> Integral(1,49);
+	float val_ttbar = h_ttbar -> Integral(1,49);
+	float val_zjets = h_zjets -> Integral(1,49);
+
+	cout<<"data:  "<<val_data<<endl;
+	cout<<"zjets: "<<val_zjets<<endl;
+	cout<<"ttbar: "<<val_ttbar<<endl;
+  
+	float scaleval = ((val_data-val_ttbar)/(val_zjets));
+	h_zjets->Scale(scaleval);
+  
+	val_data  = h_data  -> Integral(1,49);
+	val_ttbar = h_ttbar -> Integral(1,49);
+	val_zjets = h_zjets -> Integral(1,49);
+
+	cout<<"data:  "<<val_data<<endl;
+	cout<<"zjets: "<<val_zjets<<endl;
+	cout<<"ttbar: "<<val_ttbar<<endl;
+
+  }
+  else{
+	h_zjets->Scale(luminosity);
+	h_ttbar->Scale(luminosity);
+  }
 
   // //MAKE TABLES
   // vector <float> metcut;
@@ -247,6 +280,18 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
     // ymin = 0;
 	rebin = 25;
   }
+  if( TString(variable).Contains("MHT") ){
+	xmin = 0;
+	xmax = 250;
+    // ymin = 0;
+	rebin = 5;
+  }
+  if( TString(variable).Contains("mhtphi") ){
+	// xmin = 0;
+	// xmax = 250;
+    // // ymin = 0;
+	rebin = 5;
+  }
   if( dilep == "em" ){
     rebin = 10;
 	ymin = 1e0;
@@ -263,9 +308,10 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
   if( TString(variable).Contains("met") ){
 	if( dilep == "em" ) rebin = 10;
-	else rebin = 5;
+	else rebin = 10;
 	  xmin = 0;
-	xmax = 150;
+	  if( usefsbkg ) xmax = 150;
+	  else           xmax = 150;
     ymax = 5e1;
   }
   if( variable == "ht" ){
@@ -286,7 +332,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
     ymax = 5e1;
 	rebin = 1;
   }
-  if( variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
+  if( TString(variable).Contains("phi") || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	xmin = -3.2;
 	xmax = 3.2;
 	ymax = 1000;
@@ -310,7 +356,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   pad->SetLeftMargin(0.18);
   pad->Draw();
   pad->cd();
-  if( !(variable == "nVert" || dilep == "em" || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir") ){
+  if( !(TString(variable).Contains("phi") || variable == "nVert" || variable == "mhtphi" || dilep == "em" || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir") ){
 	pad->SetLogy();
   }
   
@@ -367,13 +413,13 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_data->GetYaxis()->SetTitleOffset(1.5);
   h_data->GetYaxis()->SetTitleSize(0.05);
   h_data->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
-  if( dilep    == "em" || variable == "nVert" ||variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
+  if( TString(variable).Contains("phi") || variable == "mhtphi" || dilep    == "em" || variable == "nVert" ||variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	h_data->GetYaxis()->SetRangeUser(0, h_data->GetMaximum()*1.4 );  
   }
   else{
 	h_data->GetYaxis()->SetRangeUser(ymin*luminosity, h_data->GetMaximum() * ymax );
   }
-  if( variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
+  if( TString(variable).Contains("phi") || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	h_data->GetYaxis()->SetRangeUser(0, h_data->GetMaximum()*1.4 );  
   }
   
@@ -392,8 +438,16 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   l1->SetShadowColor(kWhite);    
   l1->SetFillColor(kWhite);    
   l1->AddEntry( h_data  , "data"              , "lpe");
-  l1->AddEntry( h_zjets , "Z+jets MC"         , "f");
-  l1->AddEntry( h_ttbar , "t#bar{t} MC"       , "f");
+  if( usetemplates ){
+	l1->AddEntry( h_zjets , "MET Templates"      , "f");
+  }else{
+	l1->AddEntry( h_zjets , "Z+jets MC"         , "f");
+  }
+  if( usefsbkg ){
+  	l1->AddEntry( h_ttbar , "FS Bkg"       , "f");
+  }else{
+	l1->AddEntry( h_ttbar , "t#bar{t} MC"       , "f");
+  }
   // l1->AddEntry( h_vvbkg , "WZ+ZZ MC"            , "f");
   // l1->AddEntry( h_other , "Rare SM MC"          , "f");
   l1->Draw("same");
@@ -433,10 +487,14 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   if( variable == "nVert"               ) h_rat->GetXaxis()->SetTitle("N_{vtx}");
   if( TString(variable).Contains("met") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} GeV");
+  if( TString(variable).Contains("MHT") ) h_rat->GetXaxis()->SetTitle("H_{T}^{miss} GeV");
+  if( TString(variable).Contains("mhtphi") ) h_rat->GetXaxis()->SetTitle("H_{T} Phi");
   if( variable == "ht"                  ) h_rat->GetXaxis()->SetTitle("H_{T} GeV");
   if( TString(variable).Contains("pt")  ) h_rat->GetXaxis()->SetTitle("p_{T} GeV");
   if( variable == "njets"               ) h_rat->GetXaxis()->SetTitle("N_{jets}");  
   if( variable == "mll"                 ) h_rat->GetXaxis()->SetTitle("M_{\\ell\\ell} GeV");
+  if( TString(variable).Contains("phi") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} #phi");
+  if( TString(variable).Contains("_pt") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
   h_rat->GetXaxis()->SetTitleOffset(0.9);
   h_rat->GetXaxis()->SetTitleSize(0.15);
 
@@ -452,8 +510,13 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
  
   drawCMSLatex( c1, luminosity*norm_factor );
 
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_%s.png", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
-  c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_%s.pdf", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
+  if( usefsbkg ) {
+	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_fsbkg_%s.png", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
+	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_fsbkg_%s.pdf", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
+  }else{
+	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_%s.png", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
+	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_%s.pdf", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));
+  }
   
   return;
 }

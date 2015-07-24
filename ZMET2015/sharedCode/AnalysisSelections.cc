@@ -67,8 +67,9 @@ bool eventHas3Jets()
 
 bool eventHasGoodPhoton()
 {
-  if( zmet.ngamma()                      < 1     ) return false; // require at least 1 good photon
-  if( zmet.gamma_pt().at(0)              < 80   ) return false; // photon pt > 22 GeV
+  if( zmet.ngamma()                      <  1    ) return false; // require at least 1 good photon
+  if( zmet.evt_type()                    != 2    ) return false; // photon + jets events
+  if( zmet.gamma_pt().at(0)              < 22    ) return false; // photon pt > 22 GeV
   if( abs(zmet.gamma_p4().at(0).eta())   > 1.4 &&
 	  abs(zmet.gamma_p4().at(0).eta())   < 1.6   ) return false; // veto xition region
   if( abs(zmet.gamma_p4().at(0).eta())   > 2.4   ) return false; // photon in EC or EB
@@ -78,6 +79,89 @@ bool eventHasGoodPhoton()
 				 - zmet.met_phi() ) )    < 0.14  ) return false; // kill photons aligned with MET
   if( zmet.elveto()                              ) return false; // veto pixel match
   return true;  
+}
+
+bool passPhotonTrigger()
+{
+  if(      passPhotonTrigger22()  ) return true;
+  else if( passPhotonTrigger30()  ) return true;
+  else if( passPhotonTrigger36()  ) return true;
+  else if( passPhotonTrigger50()  ) return true;
+  else if( passPhotonTrigger75()  ) return true;
+  else if( passPhotonTrigger90()  ) return true;
+  else if( passPhotonTrigger120() ) return true;
+  else if( passPhotonTrigger165() ) return true;
+  return false;
+}
+
+bool passPhotonTrigger22()
+{
+  if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 0   && zmet.gamma_pt().at(0) < 35  ) return true;
+  return false;
+}
+
+bool passPhotonTrigger30()
+{
+  if( zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 35  && zmet.gamma_pt().at(0) < 40  ) return true;
+  return false;
+}
+
+bool passPhotonTrigger36()
+{
+  if( zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 40  && zmet.gamma_pt().at(0) < 60  ) return true;
+  return false;
+}
+
+bool passPhotonTrigger50()
+{
+  if( zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 60  && zmet.gamma_pt().at(0) < 80  ) return true;
+  return false;
+}
+
+bool passPhotonTrigger75()
+{
+  if( zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 80  && zmet.gamma_pt().at(0) < 100 ) return true;
+  return false;
+}
+
+bool passPhotonTrigger90()
+{
+  if( zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 100 && zmet.gamma_pt().at(0) < 125 ) return true;
+  return false;
+}
+
+bool passPhotonTrigger120()
+{
+  if( zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 125 && zmet.gamma_pt().at(0) < 170 ) return true;
+  return false;
+}
+
+bool passPhotonTrigger165()
+{
+  if( zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 170                                ) return true;
+  return false;
+}
+
+int getPrescale()
+{
+  if( !( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 || 
+		 zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 || 
+		 zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 ||
+		 zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 
+		 ) ) return 0;
+  if(      passPhotonTrigger22()  ) return zmet.HLT_Photon22_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger30()  ) return zmet.HLT_Photon30_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger36()  ) return zmet.HLT_Photon36_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger50()  ) return zmet.HLT_Photon50_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger75()  ) return zmet.HLT_Photon75_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger90()  ) return zmet.HLT_Photon90_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger120() ) return zmet.HLT_Photon120_R9Id90_HE10_IsoM();
+  else if( passPhotonTrigger165() ) return zmet.HLT_Photon165_R9Id90_HE10_IsoM();
+  return -1; // should not get here
 }
 
 bool highHT_zjinc( string samplename )

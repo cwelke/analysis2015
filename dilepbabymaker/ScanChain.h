@@ -149,6 +149,7 @@ class babyMaker {
   Int_t           HLT_Photon90_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon120_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon165_R9Id90_HE10_IsoM;
+  Int_t           HLT_l1prescale;   
 
   //----- LEPTONS
   Int_t           nlep;
@@ -278,6 +279,27 @@ class babyMaker {
   std::vector <Float_t>         jet_area        ;   //[njet]
   std::vector <Int_t  >         jet_id          ;   //[njet]
   std::vector <Int_t  >         jet_puId        ;   //[njet]
+
+//----- pfMETs
+  Float_t chpfmet_trk_pt;
+  Float_t chpfmet_trk_phi;
+
+  Float_t chphpfmet_trk_pt;
+  Float_t chphpfmet_trk_phi;
+
+  Float_t nupfmet_trk_pt;
+  Float_t nupfmet_trk_phi;
+  Float_t nupfmet_fwd_pt;
+  Float_t nupfmet_fwd_phi;  
+  Float_t nupfmet_all_pt;
+  Float_t nupfmet_all_phi;
+
+  Float_t nunophpfmet_trk_pt;
+  Float_t nunophpfmet_trk_phi;
+  Float_t nunophpfmet_fwd_pt;
+  Float_t nunophpfmet_fwd_phi;  
+  Float_t nunophpfmet_all_pt;
+  Float_t nunophpfmet_all_phi;
   
 };
 

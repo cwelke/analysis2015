@@ -11,10 +11,12 @@ if [ ! -d "../output/$analysis_version/" ]; then
 fi
 
 selection="_inclusive"
-./runTemplateLooper $selection V07-04-03_goodtrigs data  &
-./runTemplateLooper $selection V07-04-03_goodtrigs zjets &
-./runTemplateLooper $selection V07-04-03_goodtrigs ttbar &
-./runTemplateLooper $selection V07-04-03_goodtrigs All_MC  &
+# ./runTemplateLooper $selection V07-04-03_updatedHLT data  &
+
+./runTemplateLooper $selection V07-04-03_extraMETVariables data  &
+./runTemplateLooper $selection V07-04-03_extraMETVariables zjets &
+./runTemplateLooper $selection V07-04-03_extraMETVariables ttbar &
+# ./runTemplateLooper $selection V07-04-03_goodtrigs All_MC  &
 
 # # For Closure tests
 # selection="_2btag_inclusive_medium"
