@@ -337,7 +337,9 @@ class babyMaker {
   Float_t nupfcands_2430_phi;
   Float_t nupfcands_30in_phi;
 
-  
+  Float_t met_T1CHS_pt;
+  Float_t met_T1CHS_phi;
+
 };
 
 #endif

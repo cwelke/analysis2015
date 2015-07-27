@@ -65,7 +65,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_DCSONLY_Run2015B_snt.txt";
+  const char* json_file = "json_270715_golden.txt";
   set_goodrun_file(json_file);
   
   // File Loop
@@ -100,9 +100,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       jetcorr_filenames_pfL1FastJetL2L3.clear();
 
       // files for Pythia8 MC  
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/PY8_RunIISpring15DR74_bx50_MC_L1FastJet_AK4PFchs.txt");
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/PY8_RunIISpring15DR74_bx50_MC_L2Relative_AK4PFchs.txt");
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/PY8_RunIISpring15DR74_bx50_MC_L3Absolute_AK4PFchs.txt");
+      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L1FastJet_AK4PFchs.txt");
+      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L2Relative_AK4PFchs.txt");
+      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L3Absolute_AK4PFchs.txt");
 
       jet_corrector_pfL1FastJetL2L3  = makeJetCorrector(jetcorr_filenames_pfL1FastJetL2L3);
     }
@@ -614,6 +614,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
        	  
 	  if (verbose) cout << "before jets" << endl;
 
+	  LorentzVector corrjets(0,0,0,0);
+	  LorentzVector uncorrjets(0,0,0,0);
+	  
       //JETS
       //correct jets and check baseline selections
       vector<LorentzVector> p4sCorrJets; // store corrected p4 for ALL jets, so indices match CMS3 ntuple
@@ -635,12 +638,20 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  double corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
 
 		  // apply new JEC to p4
-		  pfjet_p4_cor = pfjet_p4_uncor * corr;
+		  if( pfjet_p4_uncor.pt() > 10.0){ // don't correct jets with pT < 10 GeV
+			pfjet_p4_cor = pfjet_p4_uncor * corr;
+		  }else{
+			pfjet_p4_cor = pfjet_p4_uncor;
+		  }
+		  
+		  uncorrjets += pfjet_p4_uncor;
+		  corrjets   += pfjet_p4_cor;
+
 		}
 
 		p4sCorrJets.push_back(pfjet_p4_cor);
 
-        if(p4sCorrJets.at(iJet).pt() < 10.0) continue;
+		if(p4sCorrJets.at(iJet).pt() < 10.0) continue; 
         if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
 		// note this uses the eta of the jet as stored in CMS3
 		//  chance for small discrepancies if JEC changes direction slightly..
@@ -870,6 +881,18 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j_eta30 = -1.0;
 	  }
 
+	  // uncorrjets += pfjet_p4_uncor;
+	  // corrjets   += pfjet_p4_cor;
+	  LorentzVector newMET(cms3.evt_pfmet_raw()*cos(cms3.evt_pfmetPhi_raw()),
+						   cms3.evt_pfmet_raw()*sin(cms3.evt_pfmetPhi_raw()),
+						   0,
+						   sqrt(pow(cms3.evt_pfmet_raw()*cos(cms3.evt_pfmetPhi_raw()),2) + 
+								pow(cms3.evt_pfmet_raw()*sin(cms3.evt_pfmetPhi_raw()),2))); // initialize to rawMET
+	  newMET = newMET - corrjets + uncorrjets; // add corrections
+
+      met_T1CHS_pt  = newMET.pt();
+      met_T1CHS_phi = newMET.phi();
+	  
 	  if( verbose ) cout<<" Before loop over pfcands " <<endl;
 	  
 	  LorentzVector chphpfmet_trk_p4(0,0,0,0);
@@ -1414,6 +1437,9 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("nupfcands_2430_phi"     , &nupfcands_2430_phi   );
   BabyTree_->Branch("nupfcands_30in_phi"     , &nupfcands_30in_phi   );
 
+  BabyTree_->Branch("met_T1CHS_pt"      , &met_T1CHS_pt    );
+  BabyTree_->Branch("met_T1CHS_phi"     , &met_T1CHS_phi   );
+
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
  
@@ -1705,6 +1731,8 @@ void babyMaker::InitBabyNtuple () {
   nupfcands_2430_phi = -999;
   nupfcands_30in_phi = -999;
 
+  met_T1CHS_pt  = -999;
+  met_T1CHS_phi = -999;
   
   return;
 }

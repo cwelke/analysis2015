@@ -248,6 +248,8 @@ namespace ZMet {
 	const float &nupfcands_1624_phi() { return zmet.nupfcands_1624_phi(); }
 	const float &nupfcands_2430_phi() { return zmet.nupfcands_2430_phi(); }
 	const float &nupfcands_30in_phi() { return zmet.nupfcands_30in_phi(); }
+	const float &met_T1CHS_pt() { return zmet.met_T1CHS_pt(); }
+	const float &met_T1CHS_phi() { return zmet.met_T1CHS_phi(); }
 	const int &hyp_type() { return zmet.hyp_type(); }
 	const int &evt_type() { return zmet.evt_type(); }
 }

@@ -759,6 +759,12 @@ protected:
 	float	nupfcands_30in_phi_;
 	TBranch *nupfcands_30in_phi_branch;
 	bool nupfcands_30in_phi_isLoaded;
+	float	met_T1CHS_pt_;
+	TBranch *met_T1CHS_pt_branch;
+	bool met_T1CHS_pt_isLoaded;
+	float	met_T1CHS_phi_;
+	TBranch *met_T1CHS_phi_branch;
+	bool met_T1CHS_phi_isLoaded;
 	int	hyp_type_;
 	TBranch *hyp_type_branch;
 	bool hyp_type_isLoaded;
@@ -2003,6 +2009,16 @@ void Init(TTree *tree) {
 		nupfcands_30in_phi_branch = tree->GetBranch("nupfcands_30in_phi");
 		if (nupfcands_30in_phi_branch) {nupfcands_30in_phi_branch->SetAddress(&nupfcands_30in_phi_);}
 	}
+	met_T1CHS_pt_branch = 0;
+	if (tree->GetBranch("met_T1CHS_pt") != 0) {
+		met_T1CHS_pt_branch = tree->GetBranch("met_T1CHS_pt");
+		if (met_T1CHS_pt_branch) {met_T1CHS_pt_branch->SetAddress(&met_T1CHS_pt_);}
+	}
+	met_T1CHS_phi_branch = 0;
+	if (tree->GetBranch("met_T1CHS_phi") != 0) {
+		met_T1CHS_phi_branch = tree->GetBranch("met_T1CHS_phi");
+		if (met_T1CHS_phi_branch) {met_T1CHS_phi_branch->SetAddress(&met_T1CHS_phi_);}
+	}
 	hyp_type_branch = 0;
 	if (tree->GetBranch("hyp_type") != 0) {
 		hyp_type_branch = tree->GetBranch("hyp_type");
@@ -2266,6 +2282,8 @@ void GetEntry(unsigned int idx)
 		nupfcands_1624_phi_isLoaded = false;
 		nupfcands_2430_phi_isLoaded = false;
 		nupfcands_30in_phi_isLoaded = false;
+		met_T1CHS_pt_isLoaded = false;
+		met_T1CHS_phi_isLoaded = false;
 		hyp_type_isLoaded = false;
 		evt_type_isLoaded = false;
 	}
@@ -2520,6 +2538,8 @@ void LoadAllBranches()
 	if (nupfcands_1624_phi_branch != 0) nupfcands_1624_phi();
 	if (nupfcands_2430_phi_branch != 0) nupfcands_2430_phi();
 	if (nupfcands_30in_phi_branch != 0) nupfcands_30in_phi();
+	if (met_T1CHS_pt_branch != 0) met_T1CHS_pt();
+	if (met_T1CHS_phi_branch != 0) met_T1CHS_phi();
 	if (hyp_type_branch != 0) hyp_type();
 	if (evt_type_branch != 0) evt_type();
 }
@@ -5735,6 +5755,32 @@ void LoadAllBranches()
 		}
 		return nupfcands_30in_phi_;
 	}
+	float &met_T1CHS_pt()
+	{
+		if (not met_T1CHS_pt_isLoaded) {
+			if (met_T1CHS_pt_branch != 0) {
+				met_T1CHS_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHS_pt_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHS_pt_isLoaded = true;
+		}
+		return met_T1CHS_pt_;
+	}
+	float &met_T1CHS_phi()
+	{
+		if (not met_T1CHS_phi_isLoaded) {
+			if (met_T1CHS_phi_branch != 0) {
+				met_T1CHS_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHS_phi_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHS_phi_isLoaded = true;
+		}
+		return met_T1CHS_phi_;
+	}
 	int &hyp_type()
 	{
 		if (not hyp_type_isLoaded) {
@@ -6036,6 +6082,8 @@ namespace ZMet {
 	const float &nupfcands_1624_phi();
 	const float &nupfcands_2430_phi();
 	const float &nupfcands_30in_phi();
+	const float &met_T1CHS_pt();
+	const float &met_T1CHS_phi();
 	const int &hyp_type();
 	const int &evt_type();
 }
