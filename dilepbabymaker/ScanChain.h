@@ -284,6 +284,9 @@ class babyMaker {
   Float_t chpfmet_trk_pt;
   Float_t chpfmet_trk_phi;
 
+  Float_t chpfmet_pv1_pt;
+  Float_t chpfmet_pv1_phi;
+
   Float_t chphpfmet_trk_pt;
   Float_t chphpfmet_trk_phi;
 
@@ -300,6 +303,40 @@ class babyMaker {
   Float_t nunophpfmet_fwd_phi;  
   Float_t nunophpfmet_all_pt;
   Float_t nunophpfmet_all_phi;
+
+  //pfcand vector sums
+  Float_t chpfcands_0013_pt;
+  Float_t chpfcands_1316_pt;
+  Float_t chpfcands_1624_pt;
+  Float_t chpfcands_2430_pt;
+  Float_t chpfcands_30in_pt;
+  Float_t phpfcands_0013_pt;
+  Float_t phpfcands_1316_pt;
+  Float_t phpfcands_1624_pt;
+  Float_t phpfcands_2430_pt;
+  Float_t phpfcands_30in_pt;
+  Float_t nupfcands_0013_pt;
+  Float_t nupfcands_1316_pt;
+  Float_t nupfcands_1624_pt;
+  Float_t nupfcands_2430_pt;
+  Float_t nupfcands_30in_pt;
+
+  Float_t chpfcands_0013_phi;
+  Float_t chpfcands_1316_phi;
+  Float_t chpfcands_1624_phi;
+  Float_t chpfcands_2430_phi;
+  Float_t chpfcands_30in_phi;
+  Float_t phpfcands_0013_phi;
+  Float_t phpfcands_1316_phi;
+  Float_t phpfcands_1624_phi;
+  Float_t phpfcands_2430_phi;
+  Float_t phpfcands_30in_phi;
+  Float_t nupfcands_0013_phi;
+  Float_t nupfcands_1316_phi;
+  Float_t nupfcands_1624_phi;
+  Float_t nupfcands_2430_phi;
+  Float_t nupfcands_30in_phi;
+
   
 };
 

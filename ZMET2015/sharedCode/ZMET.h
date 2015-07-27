@@ -621,6 +621,12 @@ protected:
 	float	chpfmet_trk_phi_;
 	TBranch *chpfmet_trk_phi_branch;
 	bool chpfmet_trk_phi_isLoaded;
+	float	chpfmet_pv1_pt_;
+	TBranch *chpfmet_pv1_pt_branch;
+	bool chpfmet_pv1_pt_isLoaded;
+	float	chpfmet_pv1_phi_;
+	TBranch *chpfmet_pv1_phi_branch;
+	bool chpfmet_pv1_phi_isLoaded;
 	float	chphpfmet_trk_pt_;
 	TBranch *chphpfmet_trk_pt_branch;
 	bool chphpfmet_trk_pt_isLoaded;
@@ -663,6 +669,96 @@ protected:
 	float	nupfmet_all_phi_;
 	TBranch *nupfmet_all_phi_branch;
 	bool nupfmet_all_phi_isLoaded;
+	float	chpfcands_0013_pt_;
+	TBranch *chpfcands_0013_pt_branch;
+	bool chpfcands_0013_pt_isLoaded;
+	float	chpfcands_1316_pt_;
+	TBranch *chpfcands_1316_pt_branch;
+	bool chpfcands_1316_pt_isLoaded;
+	float	chpfcands_1624_pt_;
+	TBranch *chpfcands_1624_pt_branch;
+	bool chpfcands_1624_pt_isLoaded;
+	float	chpfcands_2430_pt_;
+	TBranch *chpfcands_2430_pt_branch;
+	bool chpfcands_2430_pt_isLoaded;
+	float	chpfcands_30in_pt_;
+	TBranch *chpfcands_30in_pt_branch;
+	bool chpfcands_30in_pt_isLoaded;
+	float	phpfcands_0013_pt_;
+	TBranch *phpfcands_0013_pt_branch;
+	bool phpfcands_0013_pt_isLoaded;
+	float	phpfcands_1316_pt_;
+	TBranch *phpfcands_1316_pt_branch;
+	bool phpfcands_1316_pt_isLoaded;
+	float	phpfcands_1624_pt_;
+	TBranch *phpfcands_1624_pt_branch;
+	bool phpfcands_1624_pt_isLoaded;
+	float	phpfcands_2430_pt_;
+	TBranch *phpfcands_2430_pt_branch;
+	bool phpfcands_2430_pt_isLoaded;
+	float	phpfcands_30in_pt_;
+	TBranch *phpfcands_30in_pt_branch;
+	bool phpfcands_30in_pt_isLoaded;
+	float	nupfcands_0013_pt_;
+	TBranch *nupfcands_0013_pt_branch;
+	bool nupfcands_0013_pt_isLoaded;
+	float	nupfcands_1316_pt_;
+	TBranch *nupfcands_1316_pt_branch;
+	bool nupfcands_1316_pt_isLoaded;
+	float	nupfcands_1624_pt_;
+	TBranch *nupfcands_1624_pt_branch;
+	bool nupfcands_1624_pt_isLoaded;
+	float	nupfcands_2430_pt_;
+	TBranch *nupfcands_2430_pt_branch;
+	bool nupfcands_2430_pt_isLoaded;
+	float	nupfcands_30in_pt_;
+	TBranch *nupfcands_30in_pt_branch;
+	bool nupfcands_30in_pt_isLoaded;
+	float	chpfcands_0013_phi_;
+	TBranch *chpfcands_0013_phi_branch;
+	bool chpfcands_0013_phi_isLoaded;
+	float	chpfcands_1316_phi_;
+	TBranch *chpfcands_1316_phi_branch;
+	bool chpfcands_1316_phi_isLoaded;
+	float	chpfcands_1624_phi_;
+	TBranch *chpfcands_1624_phi_branch;
+	bool chpfcands_1624_phi_isLoaded;
+	float	chpfcands_2430_phi_;
+	TBranch *chpfcands_2430_phi_branch;
+	bool chpfcands_2430_phi_isLoaded;
+	float	chpfcands_30in_phi_;
+	TBranch *chpfcands_30in_phi_branch;
+	bool chpfcands_30in_phi_isLoaded;
+	float	phpfcands_0013_phi_;
+	TBranch *phpfcands_0013_phi_branch;
+	bool phpfcands_0013_phi_isLoaded;
+	float	phpfcands_1316_phi_;
+	TBranch *phpfcands_1316_phi_branch;
+	bool phpfcands_1316_phi_isLoaded;
+	float	phpfcands_1624_phi_;
+	TBranch *phpfcands_1624_phi_branch;
+	bool phpfcands_1624_phi_isLoaded;
+	float	phpfcands_2430_phi_;
+	TBranch *phpfcands_2430_phi_branch;
+	bool phpfcands_2430_phi_isLoaded;
+	float	phpfcands_30in_phi_;
+	TBranch *phpfcands_30in_phi_branch;
+	bool phpfcands_30in_phi_isLoaded;
+	float	nupfcands_0013_phi_;
+	TBranch *nupfcands_0013_phi_branch;
+	bool nupfcands_0013_phi_isLoaded;
+	float	nupfcands_1316_phi_;
+	TBranch *nupfcands_1316_phi_branch;
+	bool nupfcands_1316_phi_isLoaded;
+	float	nupfcands_1624_phi_;
+	TBranch *nupfcands_1624_phi_branch;
+	bool nupfcands_1624_phi_isLoaded;
+	float	nupfcands_2430_phi_;
+	TBranch *nupfcands_2430_phi_branch;
+	bool nupfcands_2430_phi_isLoaded;
+	float	nupfcands_30in_phi_;
+	TBranch *nupfcands_30in_phi_branch;
+	bool nupfcands_30in_phi_isLoaded;
 	int	hyp_type_;
 	TBranch *hyp_type_branch;
 	bool hyp_type_isLoaded;
@@ -1677,6 +1773,16 @@ void Init(TTree *tree) {
 		chpfmet_trk_phi_branch = tree->GetBranch("chpfmet_trk_phi");
 		if (chpfmet_trk_phi_branch) {chpfmet_trk_phi_branch->SetAddress(&chpfmet_trk_phi_);}
 	}
+	chpfmet_pv1_pt_branch = 0;
+	if (tree->GetBranch("chpfmet_pv1_pt") != 0) {
+		chpfmet_pv1_pt_branch = tree->GetBranch("chpfmet_pv1_pt");
+		if (chpfmet_pv1_pt_branch) {chpfmet_pv1_pt_branch->SetAddress(&chpfmet_pv1_pt_);}
+	}
+	chpfmet_pv1_phi_branch = 0;
+	if (tree->GetBranch("chpfmet_pv1_phi") != 0) {
+		chpfmet_pv1_phi_branch = tree->GetBranch("chpfmet_pv1_phi");
+		if (chpfmet_pv1_phi_branch) {chpfmet_pv1_phi_branch->SetAddress(&chpfmet_pv1_phi_);}
+	}
 	chphpfmet_trk_pt_branch = 0;
 	if (tree->GetBranch("chphpfmet_trk_pt") != 0) {
 		chphpfmet_trk_pt_branch = tree->GetBranch("chphpfmet_trk_pt");
@@ -1746,6 +1852,156 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nupfmet_all_phi") != 0) {
 		nupfmet_all_phi_branch = tree->GetBranch("nupfmet_all_phi");
 		if (nupfmet_all_phi_branch) {nupfmet_all_phi_branch->SetAddress(&nupfmet_all_phi_);}
+	}
+	chpfcands_0013_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_0013_pt") != 0) {
+		chpfcands_0013_pt_branch = tree->GetBranch("chpfcands_0013_pt");
+		if (chpfcands_0013_pt_branch) {chpfcands_0013_pt_branch->SetAddress(&chpfcands_0013_pt_);}
+	}
+	chpfcands_1316_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_1316_pt") != 0) {
+		chpfcands_1316_pt_branch = tree->GetBranch("chpfcands_1316_pt");
+		if (chpfcands_1316_pt_branch) {chpfcands_1316_pt_branch->SetAddress(&chpfcands_1316_pt_);}
+	}
+	chpfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_1624_pt") != 0) {
+		chpfcands_1624_pt_branch = tree->GetBranch("chpfcands_1624_pt");
+		if (chpfcands_1624_pt_branch) {chpfcands_1624_pt_branch->SetAddress(&chpfcands_1624_pt_);}
+	}
+	chpfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_2430_pt") != 0) {
+		chpfcands_2430_pt_branch = tree->GetBranch("chpfcands_2430_pt");
+		if (chpfcands_2430_pt_branch) {chpfcands_2430_pt_branch->SetAddress(&chpfcands_2430_pt_);}
+	}
+	chpfcands_30in_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_30in_pt") != 0) {
+		chpfcands_30in_pt_branch = tree->GetBranch("chpfcands_30in_pt");
+		if (chpfcands_30in_pt_branch) {chpfcands_30in_pt_branch->SetAddress(&chpfcands_30in_pt_);}
+	}
+	phpfcands_0013_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_0013_pt") != 0) {
+		phpfcands_0013_pt_branch = tree->GetBranch("phpfcands_0013_pt");
+		if (phpfcands_0013_pt_branch) {phpfcands_0013_pt_branch->SetAddress(&phpfcands_0013_pt_);}
+	}
+	phpfcands_1316_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_1316_pt") != 0) {
+		phpfcands_1316_pt_branch = tree->GetBranch("phpfcands_1316_pt");
+		if (phpfcands_1316_pt_branch) {phpfcands_1316_pt_branch->SetAddress(&phpfcands_1316_pt_);}
+	}
+	phpfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_1624_pt") != 0) {
+		phpfcands_1624_pt_branch = tree->GetBranch("phpfcands_1624_pt");
+		if (phpfcands_1624_pt_branch) {phpfcands_1624_pt_branch->SetAddress(&phpfcands_1624_pt_);}
+	}
+	phpfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_2430_pt") != 0) {
+		phpfcands_2430_pt_branch = tree->GetBranch("phpfcands_2430_pt");
+		if (phpfcands_2430_pt_branch) {phpfcands_2430_pt_branch->SetAddress(&phpfcands_2430_pt_);}
+	}
+	phpfcands_30in_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_30in_pt") != 0) {
+		phpfcands_30in_pt_branch = tree->GetBranch("phpfcands_30in_pt");
+		if (phpfcands_30in_pt_branch) {phpfcands_30in_pt_branch->SetAddress(&phpfcands_30in_pt_);}
+	}
+	nupfcands_0013_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_0013_pt") != 0) {
+		nupfcands_0013_pt_branch = tree->GetBranch("nupfcands_0013_pt");
+		if (nupfcands_0013_pt_branch) {nupfcands_0013_pt_branch->SetAddress(&nupfcands_0013_pt_);}
+	}
+	nupfcands_1316_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_1316_pt") != 0) {
+		nupfcands_1316_pt_branch = tree->GetBranch("nupfcands_1316_pt");
+		if (nupfcands_1316_pt_branch) {nupfcands_1316_pt_branch->SetAddress(&nupfcands_1316_pt_);}
+	}
+	nupfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_1624_pt") != 0) {
+		nupfcands_1624_pt_branch = tree->GetBranch("nupfcands_1624_pt");
+		if (nupfcands_1624_pt_branch) {nupfcands_1624_pt_branch->SetAddress(&nupfcands_1624_pt_);}
+	}
+	nupfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_2430_pt") != 0) {
+		nupfcands_2430_pt_branch = tree->GetBranch("nupfcands_2430_pt");
+		if (nupfcands_2430_pt_branch) {nupfcands_2430_pt_branch->SetAddress(&nupfcands_2430_pt_);}
+	}
+	nupfcands_30in_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_30in_pt") != 0) {
+		nupfcands_30in_pt_branch = tree->GetBranch("nupfcands_30in_pt");
+		if (nupfcands_30in_pt_branch) {nupfcands_30in_pt_branch->SetAddress(&nupfcands_30in_pt_);}
+	}
+	chpfcands_0013_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_0013_phi") != 0) {
+		chpfcands_0013_phi_branch = tree->GetBranch("chpfcands_0013_phi");
+		if (chpfcands_0013_phi_branch) {chpfcands_0013_phi_branch->SetAddress(&chpfcands_0013_phi_);}
+	}
+	chpfcands_1316_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_1316_phi") != 0) {
+		chpfcands_1316_phi_branch = tree->GetBranch("chpfcands_1316_phi");
+		if (chpfcands_1316_phi_branch) {chpfcands_1316_phi_branch->SetAddress(&chpfcands_1316_phi_);}
+	}
+	chpfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_1624_phi") != 0) {
+		chpfcands_1624_phi_branch = tree->GetBranch("chpfcands_1624_phi");
+		if (chpfcands_1624_phi_branch) {chpfcands_1624_phi_branch->SetAddress(&chpfcands_1624_phi_);}
+	}
+	chpfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_2430_phi") != 0) {
+		chpfcands_2430_phi_branch = tree->GetBranch("chpfcands_2430_phi");
+		if (chpfcands_2430_phi_branch) {chpfcands_2430_phi_branch->SetAddress(&chpfcands_2430_phi_);}
+	}
+	chpfcands_30in_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_30in_phi") != 0) {
+		chpfcands_30in_phi_branch = tree->GetBranch("chpfcands_30in_phi");
+		if (chpfcands_30in_phi_branch) {chpfcands_30in_phi_branch->SetAddress(&chpfcands_30in_phi_);}
+	}
+	phpfcands_0013_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_0013_phi") != 0) {
+		phpfcands_0013_phi_branch = tree->GetBranch("phpfcands_0013_phi");
+		if (phpfcands_0013_phi_branch) {phpfcands_0013_phi_branch->SetAddress(&phpfcands_0013_phi_);}
+	}
+	phpfcands_1316_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_1316_phi") != 0) {
+		phpfcands_1316_phi_branch = tree->GetBranch("phpfcands_1316_phi");
+		if (phpfcands_1316_phi_branch) {phpfcands_1316_phi_branch->SetAddress(&phpfcands_1316_phi_);}
+	}
+	phpfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_1624_phi") != 0) {
+		phpfcands_1624_phi_branch = tree->GetBranch("phpfcands_1624_phi");
+		if (phpfcands_1624_phi_branch) {phpfcands_1624_phi_branch->SetAddress(&phpfcands_1624_phi_);}
+	}
+	phpfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_2430_phi") != 0) {
+		phpfcands_2430_phi_branch = tree->GetBranch("phpfcands_2430_phi");
+		if (phpfcands_2430_phi_branch) {phpfcands_2430_phi_branch->SetAddress(&phpfcands_2430_phi_);}
+	}
+	phpfcands_30in_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_30in_phi") != 0) {
+		phpfcands_30in_phi_branch = tree->GetBranch("phpfcands_30in_phi");
+		if (phpfcands_30in_phi_branch) {phpfcands_30in_phi_branch->SetAddress(&phpfcands_30in_phi_);}
+	}
+	nupfcands_0013_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_0013_phi") != 0) {
+		nupfcands_0013_phi_branch = tree->GetBranch("nupfcands_0013_phi");
+		if (nupfcands_0013_phi_branch) {nupfcands_0013_phi_branch->SetAddress(&nupfcands_0013_phi_);}
+	}
+	nupfcands_1316_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_1316_phi") != 0) {
+		nupfcands_1316_phi_branch = tree->GetBranch("nupfcands_1316_phi");
+		if (nupfcands_1316_phi_branch) {nupfcands_1316_phi_branch->SetAddress(&nupfcands_1316_phi_);}
+	}
+	nupfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_1624_phi") != 0) {
+		nupfcands_1624_phi_branch = tree->GetBranch("nupfcands_1624_phi");
+		if (nupfcands_1624_phi_branch) {nupfcands_1624_phi_branch->SetAddress(&nupfcands_1624_phi_);}
+	}
+	nupfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_2430_phi") != 0) {
+		nupfcands_2430_phi_branch = tree->GetBranch("nupfcands_2430_phi");
+		if (nupfcands_2430_phi_branch) {nupfcands_2430_phi_branch->SetAddress(&nupfcands_2430_phi_);}
+	}
+	nupfcands_30in_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_30in_phi") != 0) {
+		nupfcands_30in_phi_branch = tree->GetBranch("nupfcands_30in_phi");
+		if (nupfcands_30in_phi_branch) {nupfcands_30in_phi_branch->SetAddress(&nupfcands_30in_phi_);}
 	}
 	hyp_type_branch = 0;
 	if (tree->GetBranch("hyp_type") != 0) {
@@ -1964,6 +2220,8 @@ void GetEntry(unsigned int idx)
 		jet_puId_isLoaded = false;
 		chpfmet_trk_pt_isLoaded = false;
 		chpfmet_trk_phi_isLoaded = false;
+		chpfmet_pv1_pt_isLoaded = false;
+		chpfmet_pv1_phi_isLoaded = false;
 		chphpfmet_trk_pt_isLoaded = false;
 		chphpfmet_trk_phi_isLoaded = false;
 		nunophpfmet_trk_pt_isLoaded = false;
@@ -1978,6 +2236,36 @@ void GetEntry(unsigned int idx)
 		nupfmet_fwd_phi_isLoaded = false;
 		nupfmet_all_pt_isLoaded = false;
 		nupfmet_all_phi_isLoaded = false;
+		chpfcands_0013_pt_isLoaded = false;
+		chpfcands_1316_pt_isLoaded = false;
+		chpfcands_1624_pt_isLoaded = false;
+		chpfcands_2430_pt_isLoaded = false;
+		chpfcands_30in_pt_isLoaded = false;
+		phpfcands_0013_pt_isLoaded = false;
+		phpfcands_1316_pt_isLoaded = false;
+		phpfcands_1624_pt_isLoaded = false;
+		phpfcands_2430_pt_isLoaded = false;
+		phpfcands_30in_pt_isLoaded = false;
+		nupfcands_0013_pt_isLoaded = false;
+		nupfcands_1316_pt_isLoaded = false;
+		nupfcands_1624_pt_isLoaded = false;
+		nupfcands_2430_pt_isLoaded = false;
+		nupfcands_30in_pt_isLoaded = false;
+		chpfcands_0013_phi_isLoaded = false;
+		chpfcands_1316_phi_isLoaded = false;
+		chpfcands_1624_phi_isLoaded = false;
+		chpfcands_2430_phi_isLoaded = false;
+		chpfcands_30in_phi_isLoaded = false;
+		phpfcands_0013_phi_isLoaded = false;
+		phpfcands_1316_phi_isLoaded = false;
+		phpfcands_1624_phi_isLoaded = false;
+		phpfcands_2430_phi_isLoaded = false;
+		phpfcands_30in_phi_isLoaded = false;
+		nupfcands_0013_phi_isLoaded = false;
+		nupfcands_1316_phi_isLoaded = false;
+		nupfcands_1624_phi_isLoaded = false;
+		nupfcands_2430_phi_isLoaded = false;
+		nupfcands_30in_phi_isLoaded = false;
 		hyp_type_isLoaded = false;
 		evt_type_isLoaded = false;
 	}
@@ -2186,6 +2474,8 @@ void LoadAllBranches()
 	if (jet_puId_branch != 0) jet_puId();
 	if (chpfmet_trk_pt_branch != 0) chpfmet_trk_pt();
 	if (chpfmet_trk_phi_branch != 0) chpfmet_trk_phi();
+	if (chpfmet_pv1_pt_branch != 0) chpfmet_pv1_pt();
+	if (chpfmet_pv1_phi_branch != 0) chpfmet_pv1_phi();
 	if (chphpfmet_trk_pt_branch != 0) chphpfmet_trk_pt();
 	if (chphpfmet_trk_phi_branch != 0) chphpfmet_trk_phi();
 	if (nunophpfmet_trk_pt_branch != 0) nunophpfmet_trk_pt();
@@ -2200,6 +2490,36 @@ void LoadAllBranches()
 	if (nupfmet_fwd_phi_branch != 0) nupfmet_fwd_phi();
 	if (nupfmet_all_pt_branch != 0) nupfmet_all_pt();
 	if (nupfmet_all_phi_branch != 0) nupfmet_all_phi();
+	if (chpfcands_0013_pt_branch != 0) chpfcands_0013_pt();
+	if (chpfcands_1316_pt_branch != 0) chpfcands_1316_pt();
+	if (chpfcands_1624_pt_branch != 0) chpfcands_1624_pt();
+	if (chpfcands_2430_pt_branch != 0) chpfcands_2430_pt();
+	if (chpfcands_30in_pt_branch != 0) chpfcands_30in_pt();
+	if (phpfcands_0013_pt_branch != 0) phpfcands_0013_pt();
+	if (phpfcands_1316_pt_branch != 0) phpfcands_1316_pt();
+	if (phpfcands_1624_pt_branch != 0) phpfcands_1624_pt();
+	if (phpfcands_2430_pt_branch != 0) phpfcands_2430_pt();
+	if (phpfcands_30in_pt_branch != 0) phpfcands_30in_pt();
+	if (nupfcands_0013_pt_branch != 0) nupfcands_0013_pt();
+	if (nupfcands_1316_pt_branch != 0) nupfcands_1316_pt();
+	if (nupfcands_1624_pt_branch != 0) nupfcands_1624_pt();
+	if (nupfcands_2430_pt_branch != 0) nupfcands_2430_pt();
+	if (nupfcands_30in_pt_branch != 0) nupfcands_30in_pt();
+	if (chpfcands_0013_phi_branch != 0) chpfcands_0013_phi();
+	if (chpfcands_1316_phi_branch != 0) chpfcands_1316_phi();
+	if (chpfcands_1624_phi_branch != 0) chpfcands_1624_phi();
+	if (chpfcands_2430_phi_branch != 0) chpfcands_2430_phi();
+	if (chpfcands_30in_phi_branch != 0) chpfcands_30in_phi();
+	if (phpfcands_0013_phi_branch != 0) phpfcands_0013_phi();
+	if (phpfcands_1316_phi_branch != 0) phpfcands_1316_phi();
+	if (phpfcands_1624_phi_branch != 0) phpfcands_1624_phi();
+	if (phpfcands_2430_phi_branch != 0) phpfcands_2430_phi();
+	if (phpfcands_30in_phi_branch != 0) phpfcands_30in_phi();
+	if (nupfcands_0013_phi_branch != 0) nupfcands_0013_phi();
+	if (nupfcands_1316_phi_branch != 0) nupfcands_1316_phi();
+	if (nupfcands_1624_phi_branch != 0) nupfcands_1624_phi();
+	if (nupfcands_2430_phi_branch != 0) nupfcands_2430_phi();
+	if (nupfcands_30in_phi_branch != 0) nupfcands_30in_phi();
 	if (hyp_type_branch != 0) hyp_type();
 	if (evt_type_branch != 0) evt_type();
 }
@@ -4817,6 +5137,32 @@ void LoadAllBranches()
 		}
 		return chpfmet_trk_phi_;
 	}
+	float &chpfmet_pv1_pt()
+	{
+		if (not chpfmet_pv1_pt_isLoaded) {
+			if (chpfmet_pv1_pt_branch != 0) {
+				chpfmet_pv1_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfmet_pv1_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfmet_pv1_pt_isLoaded = true;
+		}
+		return chpfmet_pv1_pt_;
+	}
+	float &chpfmet_pv1_phi()
+	{
+		if (not chpfmet_pv1_phi_isLoaded) {
+			if (chpfmet_pv1_phi_branch != 0) {
+				chpfmet_pv1_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfmet_pv1_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfmet_pv1_phi_isLoaded = true;
+		}
+		return chpfmet_pv1_phi_;
+	}
 	float &chphpfmet_trk_pt()
 	{
 		if (not chphpfmet_trk_pt_isLoaded) {
@@ -4998,6 +5344,396 @@ void LoadAllBranches()
 			nupfmet_all_phi_isLoaded = true;
 		}
 		return nupfmet_all_phi_;
+	}
+	float &chpfcands_0013_pt()
+	{
+		if (not chpfcands_0013_pt_isLoaded) {
+			if (chpfcands_0013_pt_branch != 0) {
+				chpfcands_0013_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_0013_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_0013_pt_isLoaded = true;
+		}
+		return chpfcands_0013_pt_;
+	}
+	float &chpfcands_1316_pt()
+	{
+		if (not chpfcands_1316_pt_isLoaded) {
+			if (chpfcands_1316_pt_branch != 0) {
+				chpfcands_1316_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_1316_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_1316_pt_isLoaded = true;
+		}
+		return chpfcands_1316_pt_;
+	}
+	float &chpfcands_1624_pt()
+	{
+		if (not chpfcands_1624_pt_isLoaded) {
+			if (chpfcands_1624_pt_branch != 0) {
+				chpfcands_1624_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_1624_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_1624_pt_isLoaded = true;
+		}
+		return chpfcands_1624_pt_;
+	}
+	float &chpfcands_2430_pt()
+	{
+		if (not chpfcands_2430_pt_isLoaded) {
+			if (chpfcands_2430_pt_branch != 0) {
+				chpfcands_2430_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_2430_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_2430_pt_isLoaded = true;
+		}
+		return chpfcands_2430_pt_;
+	}
+	float &chpfcands_30in_pt()
+	{
+		if (not chpfcands_30in_pt_isLoaded) {
+			if (chpfcands_30in_pt_branch != 0) {
+				chpfcands_30in_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_30in_pt_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_30in_pt_isLoaded = true;
+		}
+		return chpfcands_30in_pt_;
+	}
+	float &phpfcands_0013_pt()
+	{
+		if (not phpfcands_0013_pt_isLoaded) {
+			if (phpfcands_0013_pt_branch != 0) {
+				phpfcands_0013_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_0013_pt_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_0013_pt_isLoaded = true;
+		}
+		return phpfcands_0013_pt_;
+	}
+	float &phpfcands_1316_pt()
+	{
+		if (not phpfcands_1316_pt_isLoaded) {
+			if (phpfcands_1316_pt_branch != 0) {
+				phpfcands_1316_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_1316_pt_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_1316_pt_isLoaded = true;
+		}
+		return phpfcands_1316_pt_;
+	}
+	float &phpfcands_1624_pt()
+	{
+		if (not phpfcands_1624_pt_isLoaded) {
+			if (phpfcands_1624_pt_branch != 0) {
+				phpfcands_1624_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_1624_pt_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_1624_pt_isLoaded = true;
+		}
+		return phpfcands_1624_pt_;
+	}
+	float &phpfcands_2430_pt()
+	{
+		if (not phpfcands_2430_pt_isLoaded) {
+			if (phpfcands_2430_pt_branch != 0) {
+				phpfcands_2430_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_2430_pt_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_2430_pt_isLoaded = true;
+		}
+		return phpfcands_2430_pt_;
+	}
+	float &phpfcands_30in_pt()
+	{
+		if (not phpfcands_30in_pt_isLoaded) {
+			if (phpfcands_30in_pt_branch != 0) {
+				phpfcands_30in_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_30in_pt_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_30in_pt_isLoaded = true;
+		}
+		return phpfcands_30in_pt_;
+	}
+	float &nupfcands_0013_pt()
+	{
+		if (not nupfcands_0013_pt_isLoaded) {
+			if (nupfcands_0013_pt_branch != 0) {
+				nupfcands_0013_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_0013_pt_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_0013_pt_isLoaded = true;
+		}
+		return nupfcands_0013_pt_;
+	}
+	float &nupfcands_1316_pt()
+	{
+		if (not nupfcands_1316_pt_isLoaded) {
+			if (nupfcands_1316_pt_branch != 0) {
+				nupfcands_1316_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_1316_pt_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_1316_pt_isLoaded = true;
+		}
+		return nupfcands_1316_pt_;
+	}
+	float &nupfcands_1624_pt()
+	{
+		if (not nupfcands_1624_pt_isLoaded) {
+			if (nupfcands_1624_pt_branch != 0) {
+				nupfcands_1624_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_1624_pt_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_1624_pt_isLoaded = true;
+		}
+		return nupfcands_1624_pt_;
+	}
+	float &nupfcands_2430_pt()
+	{
+		if (not nupfcands_2430_pt_isLoaded) {
+			if (nupfcands_2430_pt_branch != 0) {
+				nupfcands_2430_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_2430_pt_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_2430_pt_isLoaded = true;
+		}
+		return nupfcands_2430_pt_;
+	}
+	float &nupfcands_30in_pt()
+	{
+		if (not nupfcands_30in_pt_isLoaded) {
+			if (nupfcands_30in_pt_branch != 0) {
+				nupfcands_30in_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_30in_pt_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_30in_pt_isLoaded = true;
+		}
+		return nupfcands_30in_pt_;
+	}
+	float &chpfcands_0013_phi()
+	{
+		if (not chpfcands_0013_phi_isLoaded) {
+			if (chpfcands_0013_phi_branch != 0) {
+				chpfcands_0013_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_0013_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_0013_phi_isLoaded = true;
+		}
+		return chpfcands_0013_phi_;
+	}
+	float &chpfcands_1316_phi()
+	{
+		if (not chpfcands_1316_phi_isLoaded) {
+			if (chpfcands_1316_phi_branch != 0) {
+				chpfcands_1316_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_1316_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_1316_phi_isLoaded = true;
+		}
+		return chpfcands_1316_phi_;
+	}
+	float &chpfcands_1624_phi()
+	{
+		if (not chpfcands_1624_phi_isLoaded) {
+			if (chpfcands_1624_phi_branch != 0) {
+				chpfcands_1624_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_1624_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_1624_phi_isLoaded = true;
+		}
+		return chpfcands_1624_phi_;
+	}
+	float &chpfcands_2430_phi()
+	{
+		if (not chpfcands_2430_phi_isLoaded) {
+			if (chpfcands_2430_phi_branch != 0) {
+				chpfcands_2430_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_2430_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_2430_phi_isLoaded = true;
+		}
+		return chpfcands_2430_phi_;
+	}
+	float &chpfcands_30in_phi()
+	{
+		if (not chpfcands_30in_phi_isLoaded) {
+			if (chpfcands_30in_phi_branch != 0) {
+				chpfcands_30in_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch chpfcands_30in_phi_branch does not exist!\n");
+				exit(1);
+			}
+			chpfcands_30in_phi_isLoaded = true;
+		}
+		return chpfcands_30in_phi_;
+	}
+	float &phpfcands_0013_phi()
+	{
+		if (not phpfcands_0013_phi_isLoaded) {
+			if (phpfcands_0013_phi_branch != 0) {
+				phpfcands_0013_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_0013_phi_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_0013_phi_isLoaded = true;
+		}
+		return phpfcands_0013_phi_;
+	}
+	float &phpfcands_1316_phi()
+	{
+		if (not phpfcands_1316_phi_isLoaded) {
+			if (phpfcands_1316_phi_branch != 0) {
+				phpfcands_1316_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_1316_phi_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_1316_phi_isLoaded = true;
+		}
+		return phpfcands_1316_phi_;
+	}
+	float &phpfcands_1624_phi()
+	{
+		if (not phpfcands_1624_phi_isLoaded) {
+			if (phpfcands_1624_phi_branch != 0) {
+				phpfcands_1624_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_1624_phi_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_1624_phi_isLoaded = true;
+		}
+		return phpfcands_1624_phi_;
+	}
+	float &phpfcands_2430_phi()
+	{
+		if (not phpfcands_2430_phi_isLoaded) {
+			if (phpfcands_2430_phi_branch != 0) {
+				phpfcands_2430_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_2430_phi_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_2430_phi_isLoaded = true;
+		}
+		return phpfcands_2430_phi_;
+	}
+	float &phpfcands_30in_phi()
+	{
+		if (not phpfcands_30in_phi_isLoaded) {
+			if (phpfcands_30in_phi_branch != 0) {
+				phpfcands_30in_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch phpfcands_30in_phi_branch does not exist!\n");
+				exit(1);
+			}
+			phpfcands_30in_phi_isLoaded = true;
+		}
+		return phpfcands_30in_phi_;
+	}
+	float &nupfcands_0013_phi()
+	{
+		if (not nupfcands_0013_phi_isLoaded) {
+			if (nupfcands_0013_phi_branch != 0) {
+				nupfcands_0013_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_0013_phi_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_0013_phi_isLoaded = true;
+		}
+		return nupfcands_0013_phi_;
+	}
+	float &nupfcands_1316_phi()
+	{
+		if (not nupfcands_1316_phi_isLoaded) {
+			if (nupfcands_1316_phi_branch != 0) {
+				nupfcands_1316_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_1316_phi_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_1316_phi_isLoaded = true;
+		}
+		return nupfcands_1316_phi_;
+	}
+	float &nupfcands_1624_phi()
+	{
+		if (not nupfcands_1624_phi_isLoaded) {
+			if (nupfcands_1624_phi_branch != 0) {
+				nupfcands_1624_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_1624_phi_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_1624_phi_isLoaded = true;
+		}
+		return nupfcands_1624_phi_;
+	}
+	float &nupfcands_2430_phi()
+	{
+		if (not nupfcands_2430_phi_isLoaded) {
+			if (nupfcands_2430_phi_branch != 0) {
+				nupfcands_2430_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_2430_phi_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_2430_phi_isLoaded = true;
+		}
+		return nupfcands_2430_phi_;
+	}
+	float &nupfcands_30in_phi()
+	{
+		if (not nupfcands_30in_phi_isLoaded) {
+			if (nupfcands_30in_phi_branch != 0) {
+				nupfcands_30in_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch nupfcands_30in_phi_branch does not exist!\n");
+				exit(1);
+			}
+			nupfcands_30in_phi_isLoaded = true;
+		}
+		return nupfcands_30in_phi_;
 	}
 	int &hyp_type()
 	{
@@ -5254,6 +5990,8 @@ namespace ZMet {
 	const vector<int> &jet_puId();
 	const float &chpfmet_trk_pt();
 	const float &chpfmet_trk_phi();
+	const float &chpfmet_pv1_pt();
+	const float &chpfmet_pv1_phi();
 	const float &chphpfmet_trk_pt();
 	const float &chphpfmet_trk_phi();
 	const float &nunophpfmet_trk_pt();
@@ -5268,6 +6006,36 @@ namespace ZMet {
 	const float &nupfmet_fwd_phi();
 	const float &nupfmet_all_pt();
 	const float &nupfmet_all_phi();
+	const float &chpfcands_0013_pt();
+	const float &chpfcands_1316_pt();
+	const float &chpfcands_1624_pt();
+	const float &chpfcands_2430_pt();
+	const float &chpfcands_30in_pt();
+	const float &phpfcands_0013_pt();
+	const float &phpfcands_1316_pt();
+	const float &phpfcands_1624_pt();
+	const float &phpfcands_2430_pt();
+	const float &phpfcands_30in_pt();
+	const float &nupfcands_0013_pt();
+	const float &nupfcands_1316_pt();
+	const float &nupfcands_1624_pt();
+	const float &nupfcands_2430_pt();
+	const float &nupfcands_30in_pt();
+	const float &chpfcands_0013_phi();
+	const float &chpfcands_1316_phi();
+	const float &chpfcands_1624_phi();
+	const float &chpfcands_2430_phi();
+	const float &chpfcands_30in_phi();
+	const float &phpfcands_0013_phi();
+	const float &phpfcands_1316_phi();
+	const float &phpfcands_1624_phi();
+	const float &phpfcands_2430_phi();
+	const float &phpfcands_30in_phi();
+	const float &nupfcands_0013_phi();
+	const float &nupfcands_1316_phi();
+	const float &nupfcands_1624_phi();
+	const float &nupfcands_2430_phi();
+	const float &nupfcands_30in_phi();
 	const int &hyp_type();
 	const int &evt_type();
 }

@@ -19,15 +19,15 @@ if [ ! -d "merge_logs_${TAG}" ]; then
   mkdir merge_logs_${TAG}
 fi
 
-# run data_50ns_ee
-# run data_50ns_ph
-# run data_50ns_mm
-# run data_50ns_em
+run data_50ns_ee
+run data_50ns_ph
+run data_50ns_mm
+run data_50ns_em
 
-# run wz_50ns_incl
-# run tt2lnu_50ns_php8
+run wz_50ns_incl
+run tt2lnu_50ns_php8
 run dyjetsll_50ns_m1050nlo
-# run dyjetsll_50ns_m50nlo
+run dyjetsll_50ns_m50nlo
 
 # run dyjetsll_50ns_m1050nlo
 # run dyjetsll_50ns_m50nlo

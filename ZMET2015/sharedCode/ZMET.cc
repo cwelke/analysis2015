@@ -202,6 +202,8 @@ namespace ZMet {
 	const vector<int> &jet_puId() { return zmet.jet_puId(); }
 	const float &chpfmet_trk_pt() { return zmet.chpfmet_trk_pt(); }
 	const float &chpfmet_trk_phi() { return zmet.chpfmet_trk_phi(); }
+	const float &chpfmet_pv1_pt() { return zmet.chpfmet_pv1_pt(); }
+	const float &chpfmet_pv1_phi() { return zmet.chpfmet_pv1_phi(); }
 	const float &chphpfmet_trk_pt() { return zmet.chphpfmet_trk_pt(); }
 	const float &chphpfmet_trk_phi() { return zmet.chphpfmet_trk_phi(); }
 	const float &nunophpfmet_trk_pt() { return zmet.nunophpfmet_trk_pt(); }
@@ -216,6 +218,36 @@ namespace ZMet {
 	const float &nupfmet_fwd_phi() { return zmet.nupfmet_fwd_phi(); }
 	const float &nupfmet_all_pt() { return zmet.nupfmet_all_pt(); }
 	const float &nupfmet_all_phi() { return zmet.nupfmet_all_phi(); }
+	const float &chpfcands_0013_pt() { return zmet.chpfcands_0013_pt(); }
+	const float &chpfcands_1316_pt() { return zmet.chpfcands_1316_pt(); }
+	const float &chpfcands_1624_pt() { return zmet.chpfcands_1624_pt(); }
+	const float &chpfcands_2430_pt() { return zmet.chpfcands_2430_pt(); }
+	const float &chpfcands_30in_pt() { return zmet.chpfcands_30in_pt(); }
+	const float &phpfcands_0013_pt() { return zmet.phpfcands_0013_pt(); }
+	const float &phpfcands_1316_pt() { return zmet.phpfcands_1316_pt(); }
+	const float &phpfcands_1624_pt() { return zmet.phpfcands_1624_pt(); }
+	const float &phpfcands_2430_pt() { return zmet.phpfcands_2430_pt(); }
+	const float &phpfcands_30in_pt() { return zmet.phpfcands_30in_pt(); }
+	const float &nupfcands_0013_pt() { return zmet.nupfcands_0013_pt(); }
+	const float &nupfcands_1316_pt() { return zmet.nupfcands_1316_pt(); }
+	const float &nupfcands_1624_pt() { return zmet.nupfcands_1624_pt(); }
+	const float &nupfcands_2430_pt() { return zmet.nupfcands_2430_pt(); }
+	const float &nupfcands_30in_pt() { return zmet.nupfcands_30in_pt(); }
+	const float &chpfcands_0013_phi() { return zmet.chpfcands_0013_phi(); }
+	const float &chpfcands_1316_phi() { return zmet.chpfcands_1316_phi(); }
+	const float &chpfcands_1624_phi() { return zmet.chpfcands_1624_phi(); }
+	const float &chpfcands_2430_phi() { return zmet.chpfcands_2430_phi(); }
+	const float &chpfcands_30in_phi() { return zmet.chpfcands_30in_phi(); }
+	const float &phpfcands_0013_phi() { return zmet.phpfcands_0013_phi(); }
+	const float &phpfcands_1316_phi() { return zmet.phpfcands_1316_phi(); }
+	const float &phpfcands_1624_phi() { return zmet.phpfcands_1624_phi(); }
+	const float &phpfcands_2430_phi() { return zmet.phpfcands_2430_phi(); }
+	const float &phpfcands_30in_phi() { return zmet.phpfcands_30in_phi(); }
+	const float &nupfcands_0013_phi() { return zmet.nupfcands_0013_phi(); }
+	const float &nupfcands_1316_phi() { return zmet.nupfcands_1316_phi(); }
+	const float &nupfcands_1624_phi() { return zmet.nupfcands_1624_phi(); }
+	const float &nupfcands_2430_phi() { return zmet.nupfcands_2430_phi(); }
+	const float &nupfcands_30in_phi() { return zmet.nupfcands_30in_phi(); }
 	const int &hyp_type() { return zmet.hyp_type(); }
 	const int &evt_type() { return zmet.evt_type(); }
 }

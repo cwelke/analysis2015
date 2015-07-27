@@ -875,6 +875,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  LorentzVector chphpfmet_trk_p4(0,0,0,0);
 	  LorentzVector chpfmet_trk_p4(0,0,0,0);
 
+	  LorentzVector chpfmet_pv1_p4(0,0,0,0);
+
 	  LorentzVector nupfmet_trk_p4(0,0,0,0);
 	  LorentzVector nupfmet_fwd_p4(0,0,0,0);
 	  LorentzVector nupfmet_all_p4(0,0,0,0);
@@ -882,9 +884,53 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  LorentzVector nunophpfmet_trk_p4(0,0,0,0);
 	  LorentzVector nunophpfmet_fwd_p4(0,0,0,0);
 	  LorentzVector nunophpfmet_all_p4(0,0,0,0);
+	  
+	  LorentzVector chpfcands_0013_p4;
+	  LorentzVector chpfcands_1316_p4;
+	  LorentzVector chpfcands_1624_p4;
+	  LorentzVector chpfcands_2430_p4;
+	  LorentzVector chpfcands_30in_p4;
+	  LorentzVector phpfcands_0013_p4;
+	  LorentzVector phpfcands_1316_p4;
+	  LorentzVector phpfcands_1624_p4;
+	  LorentzVector phpfcands_2430_p4;
+	  LorentzVector phpfcands_30in_p4;
+	  LorentzVector nupfcands_0013_p4;
+	  LorentzVector nupfcands_1316_p4;
+	  LorentzVector nupfcands_1624_p4;
+	  LorentzVector nupfcands_2430_p4;
+	  LorentzVector nupfcands_30in_p4;
 
 	  for( size_t pfind = 0; pfind < cms3.pfcands_p4().size(); pfind++ ){
 
+		if( abs(cms3.pfcands_dz().at(pfind)) < 0.1&&abs(cms3.pfcands_charge().at(pfind))>0 ){ // charged cands from pv
+		  chpfmet_pv1_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) chpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) chpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) chpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) chpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) chpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // photon cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) phpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) phpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) phpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) phpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral had cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) nupfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) nupfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) nupfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) nupfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) nupfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+		
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // neutral cands
 		  nupfmet_all_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
@@ -922,6 +968,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  chpfmet_trk_pt    = chpfmet_trk_p4.pt();
 	  chpfmet_trk_phi   = chpfmet_trk_p4.phi();
 
+	  chpfmet_pv1_pt    = chpfmet_pv1_p4.pt();
+	  chpfmet_pv1_phi   = chpfmet_pv1_p4.phi();
+
 	  chphpfmet_trk_pt    = chphpfmet_trk_p4.pt();
 	  chphpfmet_trk_phi   = chphpfmet_trk_p4.phi();
 	  
@@ -939,6 +988,38 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  nunophpfmet_fwd_phi = nunophpfmet_fwd_p4.phi();
 	  nunophpfmet_all_phi = nunophpfmet_all_p4.phi();
 
+	  chpfcands_0013_pt = chpfcands_0013_p4.pt();
+	  chpfcands_1316_pt = chpfcands_1316_p4.pt();
+	  chpfcands_1624_pt = chpfcands_1624_p4.pt();
+	  chpfcands_2430_pt = chpfcands_2430_p4.pt();
+	  chpfcands_30in_pt = chpfcands_30in_p4.pt();
+	  phpfcands_0013_pt = phpfcands_0013_p4.pt();
+	  phpfcands_1316_pt = phpfcands_1316_p4.pt();
+	  phpfcands_1624_pt = phpfcands_1624_p4.pt();
+	  phpfcands_2430_pt = phpfcands_2430_p4.pt();
+	  phpfcands_30in_pt = phpfcands_30in_p4.pt();
+	  nupfcands_0013_pt = nupfcands_0013_p4.pt();
+	  nupfcands_1316_pt = nupfcands_1316_p4.pt();
+	  nupfcands_1624_pt = nupfcands_1624_p4.pt();
+	  nupfcands_2430_pt = nupfcands_2430_p4.pt();
+	  nupfcands_30in_pt = nupfcands_30in_p4.pt();
+
+	  chpfcands_0013_phi = chpfcands_0013_p4.phi();
+	  chpfcands_1316_phi = chpfcands_1316_p4.phi();
+	  chpfcands_1624_phi = chpfcands_1624_p4.phi();
+	  chpfcands_2430_phi = chpfcands_2430_p4.phi();
+	  chpfcands_30in_phi = chpfcands_30in_p4.phi();
+	  phpfcands_0013_phi = phpfcands_0013_p4.phi();
+	  phpfcands_1316_phi = phpfcands_1316_p4.phi();
+	  phpfcands_1624_phi = phpfcands_1624_p4.phi();
+	  phpfcands_2430_phi = phpfcands_2430_p4.phi();
+	  phpfcands_30in_phi = phpfcands_30in_p4.phi();
+	  nupfcands_0013_phi = nupfcands_0013_p4.phi();
+	  nupfcands_1316_phi = nupfcands_1316_p4.phi();
+	  nupfcands_1624_phi = nupfcands_1624_p4.phi();
+	  nupfcands_2430_phi = nupfcands_2430_p4.phi();
+	  nupfcands_30in_phi = nupfcands_30in_p4.phi();
+	  
 	  float metx = 0.0;
 	  float mety = 0.0;
 	  float pzx  = 0.0;
@@ -1281,6 +1362,8 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
 
   BabyTree_->Branch("chpfmet_trk_pt"      , &chpfmet_trk_pt    );
   BabyTree_->Branch("chpfmet_trk_phi"     , &chpfmet_trk_phi   );
+  BabyTree_->Branch("chpfmet_pv1_pt"      , &chpfmet_pv1_pt    );
+  BabyTree_->Branch("chpfmet_pv1_phi"     , &chpfmet_pv1_phi   );
 
   BabyTree_->Branch("chphpfmet_trk_pt"      , &chphpfmet_trk_pt    );
   BabyTree_->Branch("chphpfmet_trk_phi"     , &chphpfmet_trk_phi   );
@@ -1298,6 +1381,38 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("nupfmet_fwd_phi"   , &nupfmet_fwd_phi );  
   BabyTree_->Branch("nupfmet_all_pt"    , &nupfmet_all_pt  );
   BabyTree_->Branch("nupfmet_all_phi"   , &nupfmet_all_phi );
+
+  BabyTree_->Branch("chpfcands_0013_pt"     , &chpfcands_0013_pt   );
+  BabyTree_->Branch("chpfcands_1316_pt"     , &chpfcands_1316_pt   );
+  BabyTree_->Branch("chpfcands_1624_pt"     , &chpfcands_1624_pt   );
+  BabyTree_->Branch("chpfcands_2430_pt"     , &chpfcands_2430_pt   );
+  BabyTree_->Branch("chpfcands_30in_pt"     , &chpfcands_30in_pt   );
+  BabyTree_->Branch("phpfcands_0013_pt"     , &phpfcands_0013_pt   );
+  BabyTree_->Branch("phpfcands_1316_pt"     , &phpfcands_1316_pt   );
+  BabyTree_->Branch("phpfcands_1624_pt"     , &phpfcands_1624_pt   );
+  BabyTree_->Branch("phpfcands_2430_pt"     , &phpfcands_2430_pt   );
+  BabyTree_->Branch("phpfcands_30in_pt"     , &phpfcands_30in_pt   );
+  BabyTree_->Branch("nupfcands_0013_pt"     , &nupfcands_0013_pt   );
+  BabyTree_->Branch("nupfcands_1316_pt"     , &nupfcands_1316_pt   );
+  BabyTree_->Branch("nupfcands_1624_pt"     , &nupfcands_1624_pt   );
+  BabyTree_->Branch("nupfcands_2430_pt"     , &nupfcands_2430_pt   );
+  BabyTree_->Branch("nupfcands_30in_pt"     , &nupfcands_30in_pt   );
+
+  BabyTree_->Branch("chpfcands_0013_phi"     , &chpfcands_0013_phi   );
+  BabyTree_->Branch("chpfcands_1316_phi"     , &chpfcands_1316_phi   );
+  BabyTree_->Branch("chpfcands_1624_phi"     , &chpfcands_1624_phi   );
+  BabyTree_->Branch("chpfcands_2430_phi"     , &chpfcands_2430_phi   );
+  BabyTree_->Branch("chpfcands_30in_phi"     , &chpfcands_30in_phi   );
+  BabyTree_->Branch("phpfcands_0013_phi"     , &phpfcands_0013_phi   );
+  BabyTree_->Branch("phpfcands_1316_phi"     , &phpfcands_1316_phi   );
+  BabyTree_->Branch("phpfcands_1624_phi"     , &phpfcands_1624_phi   );
+  BabyTree_->Branch("phpfcands_2430_phi"     , &phpfcands_2430_phi   );
+  BabyTree_->Branch("phpfcands_30in_phi"     , &phpfcands_30in_phi   );
+  BabyTree_->Branch("nupfcands_0013_phi"     , &nupfcands_0013_phi   );
+  BabyTree_->Branch("nupfcands_1316_phi"     , &nupfcands_1316_phi   );
+  BabyTree_->Branch("nupfcands_1624_phi"     , &nupfcands_1624_phi   );
+  BabyTree_->Branch("nupfcands_2430_phi"     , &nupfcands_2430_phi   );
+  BabyTree_->Branch("nupfcands_30in_phi"     , &nupfcands_30in_phi   );
 
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
@@ -1535,6 +1650,9 @@ void babyMaker::InitBabyNtuple () {
   chpfmet_trk_pt    = -999;
   chpfmet_trk_phi   = -999;
 
+  chpfmet_pv1_pt    = -999;
+  chpfmet_pv1_phi   = -999;
+
   chphpfmet_trk_pt    = -999;
   chphpfmet_trk_phi   = -999;
 
@@ -1555,6 +1673,39 @@ void babyMaker::InitBabyNtuple () {
   gamma_nJet40 = -999;
   gamma_nBJet40 = -999;
 
+  chpfcands_0013_pt = -999;
+  chpfcands_1316_pt = -999;
+  chpfcands_1624_pt = -999;
+  chpfcands_2430_pt = -999;
+  chpfcands_30in_pt = -999;
+  phpfcands_0013_pt = -999;
+  phpfcands_1316_pt = -999;
+  phpfcands_1624_pt = -999;
+  phpfcands_2430_pt = -999;
+  phpfcands_30in_pt = -999;
+  nupfcands_0013_pt = -999;
+  nupfcands_1316_pt = -999;
+  nupfcands_1624_pt = -999;
+  nupfcands_2430_pt = -999;
+  nupfcands_30in_pt = -999;
+
+  chpfcands_0013_phi = -999;
+  chpfcands_1316_phi = -999;
+  chpfcands_1624_phi = -999;
+  chpfcands_2430_phi = -999;
+  chpfcands_30in_phi = -999;
+  phpfcands_0013_phi = -999;
+  phpfcands_1316_phi = -999;
+  phpfcands_1624_phi = -999;
+  phpfcands_2430_phi = -999;
+  phpfcands_30in_phi = -999;
+  nupfcands_0013_phi = -999;
+  nupfcands_1316_phi = -999;
+  nupfcands_1624_phi = -999;
+  nupfcands_2430_phi = -999;
+  nupfcands_30in_phi = -999;
+
+  
   return;
 }
 
