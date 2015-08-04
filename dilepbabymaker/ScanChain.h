@@ -307,36 +307,79 @@ class babyMaker {
   //pfcand vector sums
   Float_t chpfcands_0013_pt;
   Float_t chpfcands_1316_pt;
-  Float_t chpfcands_1624_pt;
-  Float_t chpfcands_2430_pt;
+  Float_t chpfcands_1625_pt;
+  Float_t chpfcands_2530_pt;
   Float_t chpfcands_30in_pt;
   Float_t phpfcands_0013_pt;
   Float_t phpfcands_1316_pt;
-  Float_t phpfcands_1624_pt;
-  Float_t phpfcands_2430_pt;
+  Float_t phpfcands_1625_pt;
+  Float_t phpfcands_2530_pt;
   Float_t phpfcands_30in_pt;
   Float_t nupfcands_0013_pt;
   Float_t nupfcands_1316_pt;
-  Float_t nupfcands_1624_pt;
-  Float_t nupfcands_2430_pt;
+  Float_t nupfcands_1625_pt;
+  Float_t nupfcands_2530_pt;
   Float_t nupfcands_30in_pt;
+
+  Float_t chpfcands_0013_sumet;
+  Float_t chpfcands_1316_sumet;
+  Float_t chpfcands_1625_sumet;
+  Float_t chpfcands_2530_sumet;
+  Float_t chpfcands_30in_sumet;
+  Float_t phpfcands_0013_sumet;
+  Float_t phpfcands_1316_sumet;
+  Float_t phpfcands_1625_sumet;
+  Float_t phpfcands_2530_sumet;
+  Float_t phpfcands_30in_sumet;
+  Float_t nupfcands_0013_sumet;
+  Float_t nupfcands_1316_sumet;
+  Float_t nupfcands_1625_sumet;
+  Float_t nupfcands_2530_sumet;
+  Float_t nupfcands_30in_sumet;
 
   Float_t chpfcands_0013_phi;
   Float_t chpfcands_1316_phi;
-  Float_t chpfcands_1624_phi;
-  Float_t chpfcands_2430_phi;
+  Float_t chpfcands_1625_phi;
+  Float_t chpfcands_2530_phi;
   Float_t chpfcands_30in_phi;
   Float_t phpfcands_0013_phi;
   Float_t phpfcands_1316_phi;
-  Float_t phpfcands_1624_phi;
-  Float_t phpfcands_2430_phi;
+  Float_t phpfcands_1625_phi;
+  Float_t phpfcands_2530_phi;
   Float_t phpfcands_30in_phi;
   Float_t nupfcands_0013_phi;
   Float_t nupfcands_1316_phi;
-  Float_t nupfcands_1624_phi;
-  Float_t nupfcands_2430_phi;
+  Float_t nupfcands_1625_phi;
+  Float_t nupfcands_2530_phi;
   Float_t nupfcands_30in_phi;
 
+  Float_t pfcandmet_pt05_pt;
+  Float_t pfcandmet_pt10_pt;
+  Float_t pfcandmet_pt15_pt;
+  Float_t pfcandmet_pt20_pt;
+  Float_t pfcandmet_pt25_pt;
+  Float_t nupfcands_pt05_pt;
+  Float_t nupfcands_pt10_pt;
+  Float_t nupfcands_pt15_pt;
+  Float_t nupfcands_pt20_pt;
+  Float_t nupfcands_pt25_pt;
+
+  Float_t pfcandmet_pt05_phi;
+  Float_t pfcandmet_pt10_phi;
+  Float_t pfcandmet_pt15_phi;
+  Float_t pfcandmet_pt20_phi;
+  Float_t pfcandmet_pt25_phi;
+  Float_t nupfcands_pt05_phi;
+  Float_t nupfcands_pt10_phi;
+  Float_t nupfcands_pt15_phi;
+  Float_t nupfcands_pt20_phi;
+  Float_t nupfcands_pt25_phi;
+
+  Float_t pfcandmet_0030_pt ;
+  Float_t pfcandmet_0030_phi;
+
+  Int_t nFWjets;
+  
   Float_t met_T1CHS_pt;
   Float_t met_T1CHS_phi;
 

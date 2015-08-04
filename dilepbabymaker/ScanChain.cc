@@ -99,13 +99,13 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
     if (applyJECfromFile) {
       jetcorr_filenames_pfL1FastJetL2L3.clear();
 
-      // files for Pythia8 MC  
+      // files for Pythia8 MC for Spring15 MC 
       jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L1FastJet_AK4PFchs.txt");
       jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L2Relative_AK4PFchs.txt");
       jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L3Absolute_AK4PFchs.txt");
 
       jet_corrector_pfL1FastJetL2L3  = makeJetCorrector(jetcorr_filenames_pfL1FastJetL2L3);
-    }
+	}
 
     // Event Loop
     unsigned int nEventsTree = tree->GetEntriesFast();
@@ -127,6 +127,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       evt    = cms3.evt_event();
       isData = cms3.evt_isRealData();
 
+	  if( event > 10 ) exit(1);
+	  
+	  // cout<<"run:lumi:event"<<endl;
+	  // cout<<run<<":"<<lumi<<":"<<evt<<endl;
+	  
       evt_nEvts    = cms3.evt_nEvts();
       evt_scale1fb = cms3.evt_scale1fb();
       evt_xsec     = cms3.evt_xsec_incl();
@@ -616,37 +621,87 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 	  LorentzVector corrjets(0,0,0,0);
 	  LorentzVector uncorrjets(0,0,0,0);
+	  LorentzVector uncl_ener_forMET(0,0,0,0);
+	  LorentzVector corr_jets_forMET(0,0,0,0);
+	  LorentzVector ucor_jets_forMET(0,0,0,0);
+	  LorentzVector sumo_puen_forMET(0,0,0,0);
+
 	  
-      //JETS
+	  nFWjets = 0;
+
+	  //JETS
       //correct jets and check baseline selections
       vector<LorentzVector> p4sCorrJets; // store corrected p4 for ALL jets, so indices match CMS3 ntuple
       vector<int> passJets; //index of jets that pass baseline selections
       for(unsigned int iJet = 0; iJet < cms3.pfjets_p4().size(); iJet++){
 
-		LorentzVector pfjet_p4_cor = cms3.pfjets_p4().at(iJet);
+		LorentzVector pfjet_p4_cor        = cms3.pfjets_p4().at(iJet);
+		LorentzVector pfjet_p4_cor_forMET = cms3.pfjets_p4().at(iJet);
 
 		if (applyJECfromFile) {
 
 		  // get uncorrected jet p4 to use as input for corrections
 		  LorentzVector pfjet_p4_uncor = cms3.pfjets_p4().at(iJet) * cms3.pfjets_undoJEC().at(iJet);
+		  LorentzVector corrjet_presave_p4 = cms3.pfjets_p4().at(iJet) * cms3.pfjets_undoJEC().at(iJet);
 
-		  // get L1FastL2L3Residual total correction
+		  // get L1FastL2L3 total correction
 		  jet_corrector_pfL1FastJetL2L3->setRho   ( cms3.evt_fixgridfastjet_all_rho() );
 		  jet_corrector_pfL1FastJetL2L3->setJetA  ( cms3.pfjets_area().at(iJet)       );
 		  jet_corrector_pfL1FastJetL2L3->setJetPt ( pfjet_p4_uncor.pt()               );
 		  jet_corrector_pfL1FastJetL2L3->setJetEta( pfjet_p4_uncor.eta()              );
-		  double corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
+		  // float corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
 
+		  //Note the subcorrections are stored as index N = cor(N)*corr(N-1)*...*corr(1)
+		  vector<float> corr_l1_V1 = jet_corrector_pfL1FastJetL2L3->getSubCorrections();
+		  
+		  float corr_l1 = corr_l1_V1.at(0);// L1 corrections only
+		  float corr   = corr_l1_V1.at(corr_l1_V1.size()-1);// All corrections
+
+		  corrjet_presave_p4 = corrjet_presave_p4*(corr);
+		  
 		  // apply new JEC to p4
-		  if( pfjet_p4_uncor.pt() > 10.0){ // don't correct jets with pT < 10 GeV
-			pfjet_p4_cor = pfjet_p4_uncor * corr;
+		  if( pfjet_p4_uncor.pt() > 10.0 ){ // don't correct jets with pT < 10 GeV
+		  // if( pfjet_p4_uncor.pt() > 10.0 ){ // don't correct jets with pT < 10 GeV
+		  // if( pfjets_muonE()[iJet] / (pfjets_undoJEC().at(iJet)*pfjets_p4()[iJet].energy()) < 0.9 ){
+		  //   if( (pfjets_chargedEmE()[iJet] + pfjets_neutralEmE()[iJet]) / (pfjets_undoJEC().at(iJet)*pfjets_p4()[iJet].energy()) < 0.9 ){
+		  // if( cms3.pfjets_p4().at(iJet).pt() > 10 ){
+			if( (pfjets_chargedEmE()[iJet] + pfjets_neutralEmE()[iJet])/(pfjets_undoJEC().at(iJet)*pfjets_p4()[iJet].energy()) < 0.9 ){ // require em frac < 0.9
+			  pfjet_p4_cor        = pfjet_p4_uncor * (corr);
+			  pfjet_p4_cor_forMET = pfjet_p4_uncor * ((corr)+(1-corr_l1)); // close...
+			  // else 			             pfjet_p4_cor_forMET = pfjet_p4_uncor;
+// 			  if( pfjets_muonMultiplicity()[iJet] >0 ){
+// 				cout<<"found muons: "<<pfjets_muonMultiplicity()[iJet]<<endl;
+// pfjet_p4_cor_forMET -= 
+// 			  }
+			}			  
+		  }
+		  // if( pfjet_p4_cor.pt()			unclust_energy_forMET += pfjet_p4_uncor * (corr);
+		  //   }
+		  // }
+		  // }else{
+		  // 	pfjet_p4_cor        = pfjet_p4_uncor;
+		  // }
+
+		  if( pfjet_p4_cor.pt() > 10 ){
+			ucor_jets_forMET += pfjet_p4_uncor;
+			corr_jets_forMET += pfjet_p4_cor;
+
+			//this is a test
+			sumo_puen_forMET += pfjet_p4_uncor * (corr_l1);
 		  }else{
-			pfjet_p4_cor = pfjet_p4_uncor;
+			uncl_ener_forMET += pfjet_p4_uncor;
 		  }
 		  
-		  uncorrjets += pfjet_p4_uncor;
-		  corrjets   += pfjet_p4_cor;
+		  if( pfjet_p4_uncor.pt() > 10 ){
+			uncorrjets += pfjet_p4_uncor;
+			corrjets   += pfjet_p4_cor_forMET;
+		  }else{
+			uncorrjets += pfjet_p4_uncor;
+			corrjets   += pfjet_p4_uncor;
+		  }
 
+		  if( pfjet_p4_uncor.eta() > 3.0 && pfjet_p4_uncor.pt() > 30.0 ) nFWjets++;
+		
 		}
 
 		p4sCorrJets.push_back(pfjet_p4_cor);
@@ -890,8 +945,24 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 								pow(cms3.evt_pfmet_raw()*sin(cms3.evt_pfmetPhi_raw()),2))); // initialize to rawMET
 	  newMET = newMET - corrjets + uncorrjets; // add corrections
 
+	  // LorentzVector uncl_ener_forMET(0,0,0,0);
+	  // LorentzVector corr_jets_forMET(0,0,0,0);
+	  // LorentzVector ucor_jets_forMET(0,0,0,0);
+	  // LorentzVector sumo_puen_forMET(0,0,0,0);
+
+	  LorentzVector newMET_test(0,0,0,0);
+
+	  newMET_test += (corr_jets_forMET - ucor_jets_forMET);
+	  newMET_test += uncl_ener_forMET;
+	  newMET_test += sumo_puen_forMET;
+  
       met_T1CHS_pt  = newMET.pt();
       met_T1CHS_phi = newMET.phi();
+
+	  cout<<"event num: "<<evt<<endl;
+	  cout<<"T1CHS  MET: "<<met_T1CHS_pt<<endl;
+	  cout<<"oldcor MET: "<<met_pt<<endl;
+	  cout<<"raw    MET: "<<met_rawPt<<endl;
 	  
 	  if( verbose ) cout<<" Before loop over pfcands " <<endl;
 	  
@@ -908,50 +979,117 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  LorentzVector nunophpfmet_fwd_p4(0,0,0,0);
 	  LorentzVector nunophpfmet_all_p4(0,0,0,0);
 	  
-	  LorentzVector chpfcands_0013_p4;
-	  LorentzVector chpfcands_1316_p4;
-	  LorentzVector chpfcands_1624_p4;
-	  LorentzVector chpfcands_2430_p4;
-	  LorentzVector chpfcands_30in_p4;
-	  LorentzVector phpfcands_0013_p4;
-	  LorentzVector phpfcands_1316_p4;
-	  LorentzVector phpfcands_1624_p4;
-	  LorentzVector phpfcands_2430_p4;
-	  LorentzVector phpfcands_30in_p4;
-	  LorentzVector nupfcands_0013_p4;
-	  LorentzVector nupfcands_1316_p4;
-	  LorentzVector nupfcands_1624_p4;
-	  LorentzVector nupfcands_2430_p4;
-	  LorentzVector nupfcands_30in_p4;
+	  LorentzVector chpfcands_0013_p4(0,0,0,0);
+	  LorentzVector chpfcands_1316_p4(0,0,0,0);
+	  LorentzVector chpfcands_1625_p4(0,0,0,0);
+	  LorentzVector chpfcands_2530_p4(0,0,0,0);
+	  LorentzVector chpfcands_30in_p4(0,0,0,0);
+	  LorentzVector phpfcands_0013_p4(0,0,0,0);
+	  LorentzVector phpfcands_1316_p4(0,0,0,0);
+	  LorentzVector phpfcands_1625_p4(0,0,0,0);
+	  LorentzVector phpfcands_2530_p4(0,0,0,0);
+	  LorentzVector phpfcands_30in_p4(0,0,0,0);
+	  LorentzVector nupfcands_0013_p4(0,0,0,0);
+	  LorentzVector nupfcands_1316_p4(0,0,0,0);
+	  LorentzVector nupfcands_1625_p4(0,0,0,0);
+	  LorentzVector nupfcands_2530_p4(0,0,0,0);
+	  LorentzVector nupfcands_30in_p4(0,0,0,0);
 
+	  LorentzVector pfcandmet_0030_p4(0,0,0,0);
+	  LorentzVector pfcandmet_pt05_p4(0,0,0,0);
+	  LorentzVector pfcandmet_pt10_p4(0,0,0,0);
+	  LorentzVector pfcandmet_pt15_p4(0,0,0,0);
+	  LorentzVector pfcandmet_pt20_p4(0,0,0,0);
+	  LorentzVector pfcandmet_pt25_p4(0,0,0,0);
+	  LorentzVector nupfcands_pt05_p4(0,0,0,0);
+	  LorentzVector nupfcands_pt10_p4(0,0,0,0);
+	  LorentzVector nupfcands_pt15_p4(0,0,0,0);
+	  LorentzVector nupfcands_pt20_p4(0,0,0,0);
+	  LorentzVector nupfcands_pt25_p4(0,0,0,0);
+
+	  
 	  for( size_t pfind = 0; pfind < cms3.pfcands_p4().size(); pfind++ ){
 
-		if( abs(cms3.pfcands_dz().at(pfind)) < 0.1&&abs(cms3.pfcands_charge().at(pfind))>0 ){ // charged cands from pv
-		  chpfmet_pv1_p4 -= cms3.pfcands_p4().at(pfind);
+		float pfcandpt          = cms3.pfcands_p4().at(pfind).pt();
+		float pfcandeta         = cms3.pfcands_p4().at(pfind).eta();
+		float pfcandcharge      = cms3.pfcands_p4().at(pfind).eta();
+		LorentzVector pfcand_p4 = cms3.pfcands_p4().at(pfind);
+		
+		if( abs(cms3.pfcands_dz().at(pfind)) < 0.1 && abs( pfcandcharge ) > 0 ){ // charged cands from pv
+		  chpfmet_pv1_p4 -= pfcand_p4;
 		}
 
+		if( abs( pfcandeta ) < 3.0 ){ // tracker style MET with no particles with eta > 3.0
+		  pfcandmet_0030_p4 -= pfcand_p4;
+		}
+
+		if( ( pfcandpt > 0.5 && abs( pfcandcharge )==0 ) || abs( pfcandcharge ) > 0 ){ // no neutrals with pT > 0.5
+		  pfcandmet_pt05_p4 -= pfcand_p4;
+		  if( ( pfcandpt > 0.5 && abs( pfcandcharge ) == 0 ) ) nupfcands_pt05_p4 -= pfcand_p4;
+		}
+		if( ( pfcandpt > 1.0 && abs( pfcandcharge )==0 ) || abs( pfcandcharge ) > 0 ){ // no neutrals with pT > 1.0
+		  pfcandmet_pt10_p4 -= pfcand_p4;
+		  if( ( pfcandpt > 1.0 && abs( pfcandcharge ) == 0 ) ) nupfcands_pt10_p4 -= pfcand_p4;
+		}
+		if( ( pfcandpt > 1.5 && abs( pfcandcharge )==0 ) || abs( pfcandcharge ) > 0 ){ // no neutrals with pT > 1.5
+		  pfcandmet_pt15_p4 -= pfcand_p4;
+		  if( ( pfcandpt > 1.5 && abs( pfcandcharge ) == 0 ) ) nupfcands_pt15_p4 -= pfcand_p4;
+		}
+		if( ( pfcandpt > 2.0 && abs( pfcandcharge )==0 ) || abs( pfcandcharge ) > 0 ){ // no neutrals with pT > 2.0
+		  pfcandmet_pt20_p4 -= pfcand_p4;
+		  if( ( pfcandpt > 2.0 && abs( pfcandcharge ) == 0 ) ) nupfcands_pt20_p4 -= pfcand_p4;
+		}
+		if( ( pfcandpt > 2.5 && abs( pfcandcharge )==0 ) || abs( pfcandcharge ) > 0 ){ // no neutrals with pT > 2.5
+		  pfcandmet_pt25_p4 -= pfcand_p4;
+		  if( ( pfcandpt > 2.5 && abs( pfcandcharge ) == 0 ) ) nupfcands_pt25_p4 -= pfcand_p4;
+		}
+		
 		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
 		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) chpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) chpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) chpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) chpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) chpfcands_1625_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) chpfcands_2530_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) chpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
 		}
 
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // photon cands
 		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) phpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) phpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) phpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) phpfcands_1625_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2530_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) phpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
 		}
 
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral had cands
 		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) nupfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) nupfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) nupfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) nupfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) nupfcands_1625_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) nupfcands_2530_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) nupfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral had cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) nupfcands_0013_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) nupfcands_1316_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) nupfcands_1625_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) nupfcands_2530_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) nupfcands_30in_sumet += cms3.pfcands_p4().at(pfind).pt();
+		}
+		
+		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) chpfcands_0013_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) chpfcands_1316_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) chpfcands_1625_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) chpfcands_2530_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) chpfcands_30in_sumet += cms3.pfcands_p4().at(pfind).pt();
+		}
+
+		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // photon cands
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) phpfcands_0013_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) phpfcands_1316_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.5 ) phpfcands_1625_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.5 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2530_sumet += cms3.pfcands_p4().at(pfind).pt();
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) phpfcands_30in_sumet += cms3.pfcands_p4().at(pfind).pt();
 		}
 		
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // neutral cands
@@ -1013,36 +1151,64 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 	  chpfcands_0013_pt = chpfcands_0013_p4.pt();
 	  chpfcands_1316_pt = chpfcands_1316_p4.pt();
-	  chpfcands_1624_pt = chpfcands_1624_p4.pt();
-	  chpfcands_2430_pt = chpfcands_2430_p4.pt();
+	  chpfcands_1625_pt = chpfcands_1625_p4.pt();
+	  chpfcands_2530_pt = chpfcands_2530_p4.pt();
 	  chpfcands_30in_pt = chpfcands_30in_p4.pt();
 	  phpfcands_0013_pt = phpfcands_0013_p4.pt();
 	  phpfcands_1316_pt = phpfcands_1316_p4.pt();
-	  phpfcands_1624_pt = phpfcands_1624_p4.pt();
-	  phpfcands_2430_pt = phpfcands_2430_p4.pt();
+	  phpfcands_1625_pt = phpfcands_1625_p4.pt();
+	  phpfcands_2530_pt = phpfcands_2530_p4.pt();
 	  phpfcands_30in_pt = phpfcands_30in_p4.pt();
 	  nupfcands_0013_pt = nupfcands_0013_p4.pt();
 	  nupfcands_1316_pt = nupfcands_1316_p4.pt();
-	  nupfcands_1624_pt = nupfcands_1624_p4.pt();
-	  nupfcands_2430_pt = nupfcands_2430_p4.pt();
+	  nupfcands_1625_pt = nupfcands_1625_p4.pt();
+	  nupfcands_2530_pt = nupfcands_2530_p4.pt();
 	  nupfcands_30in_pt = nupfcands_30in_p4.pt();
 
 	  chpfcands_0013_phi = chpfcands_0013_p4.phi();
 	  chpfcands_1316_phi = chpfcands_1316_p4.phi();
-	  chpfcands_1624_phi = chpfcands_1624_p4.phi();
-	  chpfcands_2430_phi = chpfcands_2430_p4.phi();
+	  chpfcands_1625_phi = chpfcands_1625_p4.phi();
+	  chpfcands_2530_phi = chpfcands_2530_p4.phi();
 	  chpfcands_30in_phi = chpfcands_30in_p4.phi();
 	  phpfcands_0013_phi = phpfcands_0013_p4.phi();
 	  phpfcands_1316_phi = phpfcands_1316_p4.phi();
-	  phpfcands_1624_phi = phpfcands_1624_p4.phi();
-	  phpfcands_2430_phi = phpfcands_2430_p4.phi();
+	  phpfcands_1625_phi = phpfcands_1625_p4.phi();
+	  phpfcands_2530_phi = phpfcands_2530_p4.phi();
 	  phpfcands_30in_phi = phpfcands_30in_p4.phi();
 	  nupfcands_0013_phi = nupfcands_0013_p4.phi();
 	  nupfcands_1316_phi = nupfcands_1316_p4.phi();
-	  nupfcands_1624_phi = nupfcands_1624_p4.phi();
-	  nupfcands_2430_phi = nupfcands_2430_p4.phi();
+	  nupfcands_1625_phi = nupfcands_1625_p4.phi();
+	  nupfcands_2530_phi = nupfcands_2530_p4.phi();
 	  nupfcands_30in_phi = nupfcands_30in_p4.phi();
 	  
+	  pfcandmet_pt05_pt = pfcandmet_pt05_p4.pt();
+	  pfcandmet_pt10_pt = pfcandmet_pt10_p4.pt();
+	  pfcandmet_pt15_pt = pfcandmet_pt15_p4.pt();
+	  pfcandmet_pt20_pt = pfcandmet_pt20_p4.pt();
+	  pfcandmet_pt25_pt = pfcandmet_pt25_p4.pt();
+  
+	  pfcandmet_pt05_phi = pfcandmet_pt05_p4.phi();
+	  pfcandmet_pt10_phi = pfcandmet_pt10_p4.phi();
+	  pfcandmet_pt15_phi = pfcandmet_pt15_p4.phi();
+	  pfcandmet_pt20_phi = pfcandmet_pt20_p4.phi();
+	  pfcandmet_pt25_phi = pfcandmet_pt25_p4.phi();
+  
+	  nupfcands_pt05_pt = nupfcands_pt05_p4.pt();
+	  nupfcands_pt10_pt = nupfcands_pt10_p4.pt();
+	  nupfcands_pt15_pt = nupfcands_pt15_p4.pt();
+	  nupfcands_pt20_pt = nupfcands_pt20_p4.pt();
+	  nupfcands_pt25_pt = nupfcands_pt25_p4.pt();
+  
+	  nupfcands_pt05_phi = nupfcands_pt05_p4.phi();
+	  nupfcands_pt10_phi = nupfcands_pt10_p4.phi();
+	  nupfcands_pt15_phi = nupfcands_pt15_p4.phi();
+	  nupfcands_pt20_phi = nupfcands_pt20_p4.phi();
+	  nupfcands_pt25_phi = nupfcands_pt25_p4.phi();
+  
+	  // pf MET from eta < 3.0
+	  pfcandmet_0030_pt = pfcandmet_0030_p4.pt();
+	  pfcandmet_0030_phi = pfcandmet_0030_p4.phi();
+		  
 	  float metx = 0.0;
 	  float mety = 0.0;
 	  float pzx  = 0.0;
@@ -1405,40 +1571,83 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("nupfmet_all_pt"    , &nupfmet_all_pt  );
   BabyTree_->Branch("nupfmet_all_phi"   , &nupfmet_all_phi );
 
+  BabyTree_->Branch("chpfcands_0013_sumet"     , &chpfcands_0013_sumet   );
+  BabyTree_->Branch("chpfcands_1316_sumet"     , &chpfcands_1316_sumet   );
+  BabyTree_->Branch("chpfcands_1625_sumet"     , &chpfcands_1625_sumet   );
+  BabyTree_->Branch("chpfcands_2530_sumet"     , &chpfcands_2530_sumet   );
+  BabyTree_->Branch("chpfcands_30in_sumet"     , &chpfcands_30in_sumet   );
+  BabyTree_->Branch("phpfcands_0013_sumet"     , &phpfcands_0013_sumet   );
+  BabyTree_->Branch("phpfcands_1316_sumet"     , &phpfcands_1316_sumet   );
+  BabyTree_->Branch("phpfcands_1625_sumet"     , &phpfcands_1625_sumet   );
+  BabyTree_->Branch("phpfcands_2530_sumet"     , &phpfcands_2530_sumet   );
+  BabyTree_->Branch("phpfcands_30in_sumet"     , &phpfcands_30in_sumet   );
+  BabyTree_->Branch("nupfcands_0013_sumet"     , &nupfcands_0013_sumet   );
+  BabyTree_->Branch("nupfcands_1316_sumet"     , &nupfcands_1316_sumet   );
+  BabyTree_->Branch("nupfcands_1625_sumet"     , &nupfcands_1625_sumet   );
+  BabyTree_->Branch("nupfcands_2530_sumet"     , &nupfcands_2530_sumet   );
+  BabyTree_->Branch("nupfcands_30in_sumet"     , &nupfcands_30in_sumet   );
+
   BabyTree_->Branch("chpfcands_0013_pt"     , &chpfcands_0013_pt   );
   BabyTree_->Branch("chpfcands_1316_pt"     , &chpfcands_1316_pt   );
-  BabyTree_->Branch("chpfcands_1624_pt"     , &chpfcands_1624_pt   );
-  BabyTree_->Branch("chpfcands_2430_pt"     , &chpfcands_2430_pt   );
+  BabyTree_->Branch("chpfcands_1625_pt"     , &chpfcands_1625_pt   );
+  BabyTree_->Branch("chpfcands_2530_pt"     , &chpfcands_2530_pt   );
   BabyTree_->Branch("chpfcands_30in_pt"     , &chpfcands_30in_pt   );
   BabyTree_->Branch("phpfcands_0013_pt"     , &phpfcands_0013_pt   );
   BabyTree_->Branch("phpfcands_1316_pt"     , &phpfcands_1316_pt   );
-  BabyTree_->Branch("phpfcands_1624_pt"     , &phpfcands_1624_pt   );
-  BabyTree_->Branch("phpfcands_2430_pt"     , &phpfcands_2430_pt   );
+  BabyTree_->Branch("phpfcands_1625_pt"     , &phpfcands_1625_pt   );
+  BabyTree_->Branch("phpfcands_2530_pt"     , &phpfcands_2530_pt   );
   BabyTree_->Branch("phpfcands_30in_pt"     , &phpfcands_30in_pt   );
   BabyTree_->Branch("nupfcands_0013_pt"     , &nupfcands_0013_pt   );
   BabyTree_->Branch("nupfcands_1316_pt"     , &nupfcands_1316_pt   );
-  BabyTree_->Branch("nupfcands_1624_pt"     , &nupfcands_1624_pt   );
-  BabyTree_->Branch("nupfcands_2430_pt"     , &nupfcands_2430_pt   );
+  BabyTree_->Branch("nupfcands_1625_pt"     , &nupfcands_1625_pt   );
+  BabyTree_->Branch("nupfcands_2530_pt"     , &nupfcands_2530_pt   );
   BabyTree_->Branch("nupfcands_30in_pt"     , &nupfcands_30in_pt   );
 
   BabyTree_->Branch("chpfcands_0013_phi"     , &chpfcands_0013_phi   );
   BabyTree_->Branch("chpfcands_1316_phi"     , &chpfcands_1316_phi   );
-  BabyTree_->Branch("chpfcands_1624_phi"     , &chpfcands_1624_phi   );
-  BabyTree_->Branch("chpfcands_2430_phi"     , &chpfcands_2430_phi   );
+  BabyTree_->Branch("chpfcands_1625_phi"     , &chpfcands_1625_phi   );
+  BabyTree_->Branch("chpfcands_2530_phi"     , &chpfcands_2530_phi   );
   BabyTree_->Branch("chpfcands_30in_phi"     , &chpfcands_30in_phi   );
   BabyTree_->Branch("phpfcands_0013_phi"     , &phpfcands_0013_phi   );
   BabyTree_->Branch("phpfcands_1316_phi"     , &phpfcands_1316_phi   );
-  BabyTree_->Branch("phpfcands_1624_phi"     , &phpfcands_1624_phi   );
-  BabyTree_->Branch("phpfcands_2430_phi"     , &phpfcands_2430_phi   );
+  BabyTree_->Branch("phpfcands_1625_phi"     , &phpfcands_1625_phi   );
+  BabyTree_->Branch("phpfcands_2530_phi"     , &phpfcands_2530_phi   );
   BabyTree_->Branch("phpfcands_30in_phi"     , &phpfcands_30in_phi   );
   BabyTree_->Branch("nupfcands_0013_phi"     , &nupfcands_0013_phi   );
   BabyTree_->Branch("nupfcands_1316_phi"     , &nupfcands_1316_phi   );
-  BabyTree_->Branch("nupfcands_1624_phi"     , &nupfcands_1624_phi   );
-  BabyTree_->Branch("nupfcands_2430_phi"     , &nupfcands_2430_phi   );
+  BabyTree_->Branch("nupfcands_1625_phi"     , &nupfcands_1625_phi   );
+  BabyTree_->Branch("nupfcands_2530_phi"     , &nupfcands_2530_phi   );
   BabyTree_->Branch("nupfcands_30in_phi"     , &nupfcands_30in_phi   );
+
+  BabyTree_->Branch("pfcandmet_pt05_pt"     , &pfcandmet_pt05_pt    );
+  BabyTree_->Branch("pfcandmet_pt10_pt"     , &pfcandmet_pt10_pt    );
+  BabyTree_->Branch("pfcandmet_pt15_pt"     , &pfcandmet_pt15_pt    );
+  BabyTree_->Branch("pfcandmet_pt20_pt"     , &pfcandmet_pt20_pt    );
+  BabyTree_->Branch("pfcandmet_pt25_pt"     , &pfcandmet_pt25_pt    );
+  BabyTree_->Branch("nupfcands_pt05_pt"     , &nupfcands_pt05_pt    );
+  BabyTree_->Branch("nupfcands_pt10_pt"     , &nupfcands_pt10_pt    );
+  BabyTree_->Branch("nupfcands_pt15_pt"     , &nupfcands_pt15_pt    );
+  BabyTree_->Branch("nupfcands_pt20_pt"     , &nupfcands_pt20_pt    );
+  BabyTree_->Branch("nupfcands_pt25_pt"     , &nupfcands_pt25_pt    );
+
+  BabyTree_->Branch("pfcandmet_pt05_phi"     , &pfcandmet_pt05_phi   );
+  BabyTree_->Branch("pfcandmet_pt10_phi"     , &pfcandmet_pt10_phi   );
+  BabyTree_->Branch("pfcandmet_pt15_phi"     , &pfcandmet_pt15_phi   );
+  BabyTree_->Branch("pfcandmet_pt20_phi"     , &pfcandmet_pt20_phi   );
+  BabyTree_->Branch("pfcandmet_pt25_phi"     , &pfcandmet_pt25_phi   );
+  BabyTree_->Branch("nupfcands_pt05_phi"     , &nupfcands_pt05_phi   );
+  BabyTree_->Branch("nupfcands_pt10_phi"     , &nupfcands_pt10_phi   );
+  BabyTree_->Branch("nupfcands_pt15_phi"     , &nupfcands_pt15_phi   );
+  BabyTree_->Branch("nupfcands_pt20_phi"     , &nupfcands_pt20_phi   );
+  BabyTree_->Branch("nupfcands_pt25_phi"     , &nupfcands_pt25_phi   );
+
+  BabyTree_->Branch("pfcandmet_0030_pt"     , &pfcandmet_0030_pt    );
+  BabyTree_->Branch("pfcandmet_0030_phi"    , &pfcandmet_0030_phi   );
 
   BabyTree_->Branch("met_T1CHS_pt"      , &met_T1CHS_pt    );
   BabyTree_->Branch("met_T1CHS_phi"     , &met_T1CHS_phi   );
+
+  BabyTree_->Branch("nFWjets"     , &nFWjets   );
 
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
@@ -1701,36 +1910,79 @@ void babyMaker::InitBabyNtuple () {
 
   chpfcands_0013_pt = -999;
   chpfcands_1316_pt = -999;
-  chpfcands_1624_pt = -999;
-  chpfcands_2430_pt = -999;
+  chpfcands_1625_pt = -999;
+  chpfcands_2530_pt = -999;
   chpfcands_30in_pt = -999;
   phpfcands_0013_pt = -999;
   phpfcands_1316_pt = -999;
-  phpfcands_1624_pt = -999;
-  phpfcands_2430_pt = -999;
+  phpfcands_1625_pt = -999;
+  phpfcands_2530_pt = -999;
   phpfcands_30in_pt = -999;
   nupfcands_0013_pt = -999;
   nupfcands_1316_pt = -999;
-  nupfcands_1624_pt = -999;
-  nupfcands_2430_pt = -999;
+  nupfcands_1625_pt = -999;
+  nupfcands_2530_pt = -999;
   nupfcands_30in_pt = -999;
+
+  chpfcands_0013_sumet = 0;
+  chpfcands_1316_sumet = 0;
+  chpfcands_1625_sumet = 0;
+  chpfcands_2530_sumet = 0;
+  chpfcands_30in_sumet = 0;
+  phpfcands_0013_sumet = 0;
+  phpfcands_1316_sumet = 0;
+  phpfcands_1625_sumet = 0;
+  phpfcands_2530_sumet = 0;
+  phpfcands_30in_sumet = 0;
+  nupfcands_0013_sumet = 0;
+  nupfcands_1316_sumet = 0;
+  nupfcands_1625_sumet = 0;
+  nupfcands_2530_sumet = 0;
+  nupfcands_30in_sumet = 0;
 
   chpfcands_0013_phi = -999;
   chpfcands_1316_phi = -999;
-  chpfcands_1624_phi = -999;
-  chpfcands_2430_phi = -999;
+  chpfcands_1625_phi = -999;
+  chpfcands_2530_phi = -999;
   chpfcands_30in_phi = -999;
   phpfcands_0013_phi = -999;
   phpfcands_1316_phi = -999;
-  phpfcands_1624_phi = -999;
-  phpfcands_2430_phi = -999;
+  phpfcands_1625_phi = -999;
+  phpfcands_2530_phi = -999;
   phpfcands_30in_phi = -999;
   nupfcands_0013_phi = -999;
   nupfcands_1316_phi = -999;
-  nupfcands_1624_phi = -999;
-  nupfcands_2430_phi = -999;
+  nupfcands_1625_phi = -999;
+  nupfcands_2530_phi = -999;
   nupfcands_30in_phi = -999;
 
+  pfcandmet_pt05_pt = -999;
+  pfcandmet_pt10_pt = -999;
+  pfcandmet_pt15_pt = -999;
+  pfcandmet_pt20_pt = -999;
+  pfcandmet_pt25_pt = -999;
+  nupfcands_pt05_pt = -999;
+  nupfcands_pt10_pt = -999;
+  nupfcands_pt15_pt = -999;
+  nupfcands_pt20_pt = -999;
+  nupfcands_pt25_pt = -999;
+
+  pfcandmet_pt05_phi = -999;
+  pfcandmet_pt10_phi = -999;
+  pfcandmet_pt15_phi = -999;
+  pfcandmet_pt20_phi = -999;
+  pfcandmet_pt25_phi = -999;
+  nupfcands_pt05_phi = -999;
+  nupfcands_pt10_phi = -999;
+  nupfcands_pt15_phi = -999;
+  nupfcands_pt20_phi = -999;
+  nupfcands_pt25_phi = -999;
+
+  pfcandmet_0030_pt  = -999;
+  pfcandmet_0030_phi = -999;
+
+  nFWjets = -999;
+  
   met_T1CHS_pt  = -999;
   met_T1CHS_phi = -999;
   
