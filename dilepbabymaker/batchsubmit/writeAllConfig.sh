@@ -10,7 +10,7 @@ make -j25
 cd -
 
 # copy compiled files
-cp -r ../*.so ../jetCorrections ../processBaby ../json_DCSONLY_Run2015B_snt.txt job_input/ 
+cp -r ../*.so ../jetCorrections ../processBaby ../../json*.txt job_input/ 
 
 source ../../ZMET2015/settings.sh 
 

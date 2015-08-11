@@ -943,15 +943,18 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) phpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) phpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
 		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) phpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
 		}
 
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral had cands
-		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) nupfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) nupfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) nupfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) nupfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) nupfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3  ) nupfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6  ) nupfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4  ) nupfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0  ) nupfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
+		}
+
+		if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0 && abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // HF cands have different particle ID
+		  if( abs(cms3.pfcands_particleId().at(pfind)) == 1 ) nupfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
+		  if( abs(cms3.pfcands_particleId().at(pfind)) == 2 ) phpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
 		}
 		
 		if( abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // neutral cands
