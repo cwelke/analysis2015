@@ -20,8 +20,8 @@
 #include "../sharedCode/ZMET.h"
 #include "../sharedCode/METTemplateSelections.h"
 
-#include "../../Tools/dorky/dorky.h"
-#include "../../Tools/goodrun.h"
+#include "../../CORE/Tools/dorky/dorky.h"
+#include "../../CORE/Tools/goodrun.h"
 
 using namespace std;
 using namespace duplicate_removal;
@@ -63,12 +63,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   TH1F* currentMETTemplate = NULL;
   
   // do this once per job
-  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_1_patch1/analysis2015_dev/analysis2015/ZMET2015/json_DCSONLY_180715.txt";
-  // const char* json_file = "/home/users/cerati/SSAnalysis74X/SSAnalysis/LeptonBabyMaker/goodRunList/json_DCSONLY_Run2015B_snt_072015.txt";
-  // const char* json_file = "/home/users/olivito/mt2_74x_branch/MT2Analysis/babymaker/jsons/Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON_snt.txt";
-
-  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_1_patch1/analysis2015_dev/analysis2015/ZMET2015/json_fgolf_210715.txt";
-  const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_1_patch1/analysis2015_dev/analysis2015/ZMET2015/json_mark_230715.txt";
+  const char* json_file = "../../json/json_270715_golden.txt";
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");

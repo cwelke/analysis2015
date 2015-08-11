@@ -17,9 +17,11 @@ cd analysis2015
 
 git clone git@github.com:cmstas/Software.git
 
-git clone git@github.com:cmstas/Tools.git
+git checkout root6
 
 git clone git@github.com:cmstas/CORE.git
+
+git checkout cmssw74x
 
 cd dilepbabymaker
 

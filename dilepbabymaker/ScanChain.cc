@@ -25,12 +25,12 @@
 #include "../CORE/TriggerSelections.h"
 #include "../CORE/VertexSelections.h"
 #include "../CORE/MCSelections.h"
-#include "../Tools/jetcorr/FactorizedJetCorrector.h"
-#include "../Tools/JetCorrector.h"
-#include "../Tools/MT2/MT2.h"
-#include "../Tools/hemJet.h"
-#include "../Tools/utils.h"
-#include "../Tools/goodrun.h"
+#include "../CORE/Tools/jetcorr/FactorizedJetCorrector.h"
+#include "../CORE/Tools/JetCorrector.h"
+#include "../CORE/Tools/MT2/MT2.h"
+#include "../CORE/Tools/hemJet.h"
+#include "../CORE/Tools/utils.h"
+#include "../CORE/Tools/goodrun.h"
 
 // header
 #include "ScanChain.h"
@@ -65,7 +65,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_270715_golden.txt";
+  const char* json_file = "../json/json_270715_golden.txt";
   set_goodrun_file(json_file);
   
   // File Loop

@@ -45,7 +45,7 @@ CORESOURCES = $(wildcard ../CORE/*.cc)
 COREOBJECTS = $(CORESOURCES:.cc=.o) 
 CORELIB = libBabymakerCORE.so
 
-TOOLSSOURCES = $(wildcard ../Tools/*.cc) $(wildcard ../Tools/MT2/*.cc)
+TOOLSSOURCES = $(wildcard ../CORE/Tools/*.cc) $(wildcard ../CORE/Tools/MT2/*.cc)
 TOOLSOBJECTS = $(TOOLSSOURCES:.cc=.o) 
 TOOLSLIB = libBabymakerTools.so
 
@@ -168,12 +168,12 @@ clean:
         ../CORE/*.o \
         ../CORE/*.d \
         ../CORE/*.so \
-        ../Tools/*.o \
-		../Tools/*.d \
-        ../Tools/*.so \
-        ../Tools/MT2/*.o \
-		../Tools/MT2/*.d \
-        ../Tools/MT2/*.so 
+        ../CORE/Tools/*.o \
+		../CORE/Tools/*.d \
+        ../CORE/Tools/*.so \
+        ../CORE/Tools/MT2/*.o \
+		../CORE/Tools/MT2/*.d \
+        ../CORE/Tools/MT2/*.so 
 
 # test: 
 # 	@echo $(INCLUDE)
