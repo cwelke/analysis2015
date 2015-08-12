@@ -18,10 +18,12 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   bool useedgebinning = true;
   bool usetemplates   = false;
   bool usefsbkg       = false;
-  
+  bool printyields    = false;
+
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
   TH1F * h_ttbar = NULL;
+
   // TH1F * h_fsbkg = NULL;
   // TH1F * h_other = NULL;
   // TH1F * h_vvbkg = NULL;
@@ -30,13 +32,16 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // string dilep = "ll";
   
   getBackground(   h_data, iter, Form("data%s" , selection.c_str() ), variable, dilep, region );
-  if( usefsbkg ) getBackground(  h_ttbar, "V07-04-03_updatedHLT", Form("data%s", selection.c_str() ), "metgt1jet", "em", "inclusive" );
+  if( usefsbkg ){
+	getBackground(  h_ttbar, iter, Form("data%s", selection.c_str() ),    "metgt1jet", "em", "inclusive" );
+  }
+
   else           getBackground(  h_ttbar, iter, Form("ttbar%s", selection.c_str() ), variable, dilep, region );
   // getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
   // getBackground(  h_other, iter, Form("ttv%s"   , selection.c_str() ), "met", "ll" );
   // getBackground(  h_vvbkg, iter, Form("vv%s"    , selection.c_str() ), "met", "ll" );
   // getBackground(  h_zjets, iter, "All_MC", "jzb", "ll" );
-  if( usetemplates ) getTemplateMET( h_zjets, "V07-04-03_updatedHLT", Form("data%s", selection.c_str() ) );
+  if( usetemplates ) getTemplateMET( h_zjets, iter, Form("data%s", selection.c_str() ) );
   else getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
   // getTemplateMET( h_zjets, iter, Form("data%s", selection.c_str() ) );
 
@@ -50,7 +55,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   if( usetemplates ){
   
-	h_ttbar->Scale(0.15);
+	h_ttbar->Scale(0.14*1.01);
 	h_zjets->Scale(1./h_zjets->GetSumOfWeights());
 
 	float val_data  = h_data  -> Integral(1,49);
@@ -78,15 +83,29 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	h_ttbar->Scale(luminosity);
   }
 
-  // //MAKE TABLES
-  // vector <float> metcut;
-  // metcut.push_back(0.0);
-  // metcut.push_back(50);
-  // metcut.push_back(100);
-  // metcut.push_back(150);
-  // metcut.push_back(200);
-  // metcut.push_back(300);
-  // metcut.push_back(-1);
+  if( printyields ){
+  
+  //MAKE TABLES
+  vector <float> metcut;
+  if( variable == "mll" ){
+  metcut.clear();
+  metcut.push_back(20);
+  metcut.push_back(70);
+  metcut.push_back(81);
+  metcut.push_back(101);
+  metcut.push_back(120);
+  metcut.push_back(165);
+  metcut.push_back(185);
+  metcut.push_back(-1);
+  }else{
+  metcut.clear();
+  metcut.push_back(0.0);
+  metcut.push_back(30);
+  metcut.push_back(60);
+  metcut.push_back(90);
+  metcut.push_back(120);
+  metcut.push_back(-1);
+  }
   // if( useedgebinning ){
   // 	metcut.clear();
   // 	metcut.push_back(0.0);
@@ -98,14 +117,14 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // }
 
   
-  // vector <double> val_data;
-  // vector <double> err_data;
+  vector <double> val_data;
+  vector <double> err_data;
 
-  // vector <double> val_zjets;
-  // vector <double> err_zjets;
+  vector <double> val_zjets;
+  vector <double> err_zjets;
 
-  // vector <double> val_fsbkg;
-  // vector <double> err_fsbkg;
+  vector <double> val_fsbkg;
+  vector <double> err_fsbkg;
 
   // vector <double> val_other;
   // vector <double> err_other;
@@ -113,69 +132,74 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // vector <double> val_vvbkg;
   // vector <double> err_vvbkg;
 
-  // vector <double> val_allbg;
-  // vector <double> err_allbg;
+  vector <double> val_allbg;
+  vector <double> err_allbg;
 
-  // vector <double> val_ratio;
-  // vector <double> err_ratio;
+  vector <double> val_ratio;
+  vector <double> err_ratio;
   
-  // for( size_t i = 0; i < metcut.size(); i++ ){
-  // 	val_data.push_back(0);
-  // 	err_data.push_back(0);
-  // 	val_zjets.push_back(0);
-  // 	err_zjets.push_back(0);
-  // 	val_fsbkg.push_back(0);
-  // 	err_fsbkg.push_back(0);
-  // 	val_other.push_back(0);
-  // 	err_other.push_back(0);
-  // 	val_vvbkg.push_back(0);
-  // 	err_vvbkg.push_back(0);
-  // 	val_allbg.push_back(0);
-  // 	err_allbg.push_back(0);
-  // 	val_ratio.push_back(0);
-  // 	err_ratio.push_back(0);
-  // }
+  for( size_t i = 0; i < metcut.size(); i++ ){
+  	val_data.push_back(0);
+  	err_data.push_back(0);
+  	val_zjets.push_back(0);
+  	err_zjets.push_back(0);
+  	val_fsbkg.push_back(0);
+  	err_fsbkg.push_back(0);
+  	// val_other.push_back(0);
+  	// err_other.push_back(0);
+  	// val_vvbkg.push_back(0);
+  	// err_vvbkg.push_back(0);
+  	val_allbg.push_back(0);
+  	err_allbg.push_back(0);
+  	val_ratio.push_back(0);
+  	err_ratio.push_back(0);
+  }
 
-  // for( size_t bini = 0; bini < metcut.size()-1; bini++ ){
-  // 	if( bini < metcut.size()-1 ){
-  // 	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_data .at(bini));
-  // 	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
-  // 	  val_fsbkg.at(bini) = h_fsbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_fsbkg.at(bini));
-  // 	  val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_other.at(bini));
-  // 	  val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvbkg.at(bini));
-  // 	}
-  // 	if( bini == metcut.size()-1 ){
-  // 	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), -1, err_data .at(bini));
-  // 	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
-  // 	  val_fsbkg.at(bini) = h_fsbkg->IntegralAndError( metcut.at(bini), -1, err_fsbkg.at(bini));
-  // 	  val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), -1, err_other.at(bini));
-  // 	  val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), -1, err_vvbkg.at(bini));
-  // 	}
-  // }
+  for( size_t bini = 0; bini < metcut.size()-1; bini++ ){
+  	if( bini < metcut.size()-1 ){
+  	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_data .at(bini));
+  	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
+  	  val_fsbkg.at(bini) = h_ttbar->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_fsbkg.at(bini));
+  	  // val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_other.at(bini));
+  	  // val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvbkg.at(bini));
+  	}
+  	if( bini == metcut.size()-1 ){
+  	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), -1, err_data .at(bini));
+  	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
+  	  val_fsbkg.at(bini) = h_ttbar->IntegralAndError( metcut.at(bini), -1, err_fsbkg.at(bini));
+  	  // val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), -1, err_other.at(bini));
+  	  // val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), -1, err_vvbkg.at(bini));
+  	}
+  }
 
   // float norm_factor = (val_data.at(0) -
-  // 					   val_fsbkg.at(0) -
-  // 					   val_vvbkg.at(0) -
-  // 					   val_other.at(0))/(val_zjets.at(0));
+  // 					   val_fsbkg.at(0)
+  // 					   // - val_vvbkg.at(0)
+  // 					   // - val_other.at(0))
+  // 					   )/(val_zjets.at(0));
   // for( size_t bini = 0; bini < metcut.size(); bini++ ){
   // 	val_zjets.at(bini) *= norm_factor;
-  //   err_zjets.at(bini) *= norm_factor;
+  // 	err_zjets.at(bini) *= norm_factor;
   // }
 
-  // for( size_t bini = 0; bini < metcut.size(); bini++ ){
-  // 	val_allbg.at(bini) = val_zjets.at(bini) + val_fsbkg.at(bini) + val_other.at(bini) + val_vvbkg.at(bini);
-  // 	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) + pow(err_fsbkg.at(bini), 2) + pow(err_other.at(bini), 2) + pow(err_vvbkg.at(bini), 2));
-  // 	val_ratio.at(bini) = val_data .at(bini)/val_allbg.at(bini);
-  // 	err_ratio.at(bini) = err_mult( val_data .at(bini), val_allbg.at(bini),
-  // 								   err_data .at(bini), err_allbg.at(bini), val_data .at(bini)/val_allbg.at(bini));
-  // }
+  for( size_t bini = 0; bini < metcut.size(); bini++ ){
+  	val_allbg.at(bini) = val_zjets.at(bini) + val_fsbkg.at(bini)
+	  // + val_other.at(bini) + val_vvbkg.at(bini)
+	  ;
+  	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) + pow(err_fsbkg.at(bini), 2)
+							   // + pow(err_other.at(bini), 2) + pow(err_vvbkg.at(bini), 2)
+							   );
+  	val_ratio.at(bini) = val_data .at(bini)/val_allbg.at(bini);
+  	err_ratio.at(bini) = err_mult( val_data .at(bini), val_allbg.at(bini),
+  								   err_data .at(bini), err_allbg.at(bini), val_data .at(bini)/val_allbg.at(bini));
+  }
   
-  // cout<<"$\\mathrm{E_{T}^{miss} [GeV]}$ &";
-  // for( size_t bini = 0; bini < metcut.size()-2; bini++ ){
-  // 	cout<<Form("%.0f - %.0f & ", metcut.at(bini), metcut.at(bini+1) );
-  // }
-  // cout<<Form("$\\geq$ %.0f \\\\", metcut.at(metcut.size()-2) );
-  // cout<<endl;
+  cout<<"$\\mathrm{E_{T}^{miss} [GeV]}$ &";
+  for( size_t bini = 0; bini < metcut.size()-2; bini++ ){
+  	cout<<Form("%.0f - %.0f & ", metcut.at(bini), metcut.at(bini+1) );
+  }
+  cout<<Form("$\\geq$ %.0f \\\\", metcut.at(metcut.size()-2) );
+  cout<<endl;
 
   // if( useedgebinning ){
   // 	cout<<"\\hline "<<endl;
@@ -198,24 +222,24 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // 	cout<<endl;
 
   // }else{
-  // 	cout<<"\\hline "<<endl;
-  // 	cout<<"Z+jets& ";
-  // 	for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
-  // 	  if( bini < val_zjets.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
-  // 	  if( bini == val_zjets.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
-  // 	}
-  // 	cout<<endl;
+  cout<<"\\hline "<<endl;
+  cout<<"Z+jets& ";
+  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+	if( bini < val_zjets.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
+	if( bini == val_zjets.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+  }
+  cout<<endl;
 
-  // 	cout<<"FS bkg& ";
-  // 	for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
-  // 	  if( bini < val_fsbkg.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
-  // 	  if( bini == val_fsbkg.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
-  // 	}
-  // 	cout<<endl;
+  cout<<"FS bkg& ";
+  for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
+	if( bini < val_fsbkg.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+	if( bini == val_fsbkg.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_fsbkg.at(bini), err_fsbkg.at(bini));
+  }
+  cout<<endl;
 
   // 	cout<<"WZ + ZZ bkg& ";
   // 	for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
@@ -236,40 +260,42 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // 	cout<<endl;
   // }
   
-  // cout<<"\\hline "<<endl;
-  // cout<<"total BG& ";
-  // for( size_t bini = 0; bini < val_allbg.size()-1; bini++ ){
-  // 	if( bini < val_allbg.size()-2 )
-  // 	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_allbg.at(bini), err_allbg.at(bini));
-  // 	if( bini == val_allbg.size()-2 )
-  // 	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_allbg.at(bini), err_allbg.at(bini));
-  // }
-  // cout<<endl;
+  cout<<"\\hline "<<endl;
+  cout<<"total BG& ";
+  for( size_t bini = 0; bini < val_allbg.size()-1; bini++ ){
+  	if( bini < val_allbg.size()-2 )
+  	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_allbg.at(bini), err_allbg.at(bini));
+  	if( bini == val_allbg.size()-2 )
+  	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_allbg.at(bini), err_allbg.at(bini));
+  }
+  cout<<endl;
 
-  // cout<<"\\hline "<<endl;
-  // cout<<"all MC& ";
-  // for( size_t bini = 0; bini < val_data.size()-1; bini++ ){
-  // 	if( bini < val_data.size()-2 )
-  // 	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_data.at(bini), err_data.at(bini));
-  // 	if( bini == val_data.size()-2 )
-  // 	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_data.at(bini), err_data.at(bini));
-  // }
-  // cout<<endl;
+  cout<<"\\hline "<<endl;
+  cout<<"Data& ";
+  for( size_t bini = 0; bini < val_data.size()-1; bini++ ){
+  	if( bini < val_data.size()-2 )
+  	  // cout<<Form(" %.1f $\\pm$ %.1f & ", val_data.at(bini), err_data.at(bini)); // with errors
+  	  cout<<Form(" %.0f & ", val_data.at(bini));
+  	if( bini == val_data.size()-2 )
+  	  // cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_data.at(bini), err_data.at(bini));
+  	  cout<<Form(" %.0f \\\\ ", val_data.at(bini));
+  }
+  cout<<endl;
 
-  // cout<<"\\hline "<<endl;
+  cout<<"\\hline "<<endl;
   
-  // cout<<"All MC/BG& ";
-  // for( size_t bini = 0; bini < val_ratio.size()-1; bini++ ){
-  // 	if( bini < val_ratio.size()-2 )
-  // 	  cout<<Form(" %.2f $\\pm$ %.2f & ", val_ratio.at(bini), err_ratio.at(bini));
-  // 	if( bini == val_ratio.size()-2 )
-  // 	  cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_ratio.at(bini), err_ratio.at(bini));
-  // }
-  // cout<<endl;
-
+  cout<<"Data/BG& ";
+  for( size_t bini = 0; bini < val_ratio.size()-1; bini++ ){
+  	if( bini < val_ratio.size()-2 )
+  	  cout<<Form(" %.2f $\\pm$ %.2f & ", val_ratio.at(bini), err_ratio.at(bini));
+  	if( bini == val_ratio.size()-2 )
+  	  cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_ratio.at(bini), err_ratio.at(bini));
+  }
+  cout<<endl;
+  }
 
   //MAKE PLOTS
-  float xmin = 50; float xmax = 200;
+  float xmin = 20; float xmax = 300;
   float ymin = 1e-1; float ymax = 1e2;
 
   int rebin = 5;
@@ -306,27 +332,39 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
     ymin = 0;
 	rebin = 1;
   }
+
   if( TString(variable).Contains("met") ){
 	if( dilep == "em" ) rebin = 10;
-	else rebin = 10;
+	else rebin = 5;
 	  xmin = 0;
-	  if( usefsbkg ) xmax = 150;
-	  else           xmax = 150;
-    ymax = 5e1;
+	  if( usefsbkg ){
+		xmax = 150;
+		rebin = 5;
+	  }
+	  else
+		xmax = 150;
+	  ymax = 5e1;
   }
-  if( variable == "ht" ){
-	xmin = 0;
+
+  if( variable == "ht" || TString(variable).Contains("sumet") ){
+	xmin = 35;
 	xmax = 500;
     // ymax = 5e1;
-	rebin = 10;
+	rebin = 5;
+	if( variable == "nupfcands_30in_sumet" ){
+	  xmin = 0;
+	  xmax = 1000;
+	  // ymax = 5e1;
+	  rebin = 10;
+	}
   }
-  if( TString(variable).Contains("pt") ){
+  if( TString(variable).Contains("pt") && !TString(variable).Contains("met") ){
 	xmin = 0;
 	xmax = 200;
     // ymax = 5e1;
 	rebin = 5;
   }
-  if( variable == "njets" ){
+  if( variable == "njets" || variable == "nFWjets" ){
 	xmin = 0;
 	xmax = 10;
     ymax = 5e1;
@@ -336,6 +374,12 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	xmin = -3.2;
 	xmax = 3.2;
 	ymax = 1000;
+	rebin = 5;
+  }
+  if( variable == "pfcandmet_0030_pt" ){
+	xmin = 0;
+	xmax = 200;
+    // ymax = 5e1;
 	rebin = 5;
   }
   
@@ -415,6 +459,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_data->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
   if( TString(variable).Contains("phi") || variable == "mhtphi" || dilep    == "em" || variable == "nVert" ||variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	h_data->GetYaxis()->SetRangeUser(0, h_data->GetMaximum()*1.4 );  
+	if( TString(variable).Contains("phi") )h_data->GetYaxis()->SetTitle(Form("Events/%.2f", (2*3.14159)/200*(float)rebin));
   }
   else{
 	h_data->GetYaxis()->SetRangeUser(ymin*luminosity, h_data->GetMaximum() * ymax );
@@ -422,6 +467,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   if( TString(variable).Contains("phi") || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	h_data->GetYaxis()->SetRangeUser(0, h_data->GetMaximum()*1.4 );  
   }
+
+if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Events", (2*3.14159)/200*(float)rebin));
   
   h_data->GetXaxis()->SetRangeUser(xmin, xmax);
   h_data->SetMarkerStyle(8);
@@ -471,10 +518,11 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   h_rat->Divide(h_den);
 
-  h_rat->GetYaxis()->SetRangeUser(0.6,1.4);
-  if( TString(variable).Contains("met") ){
+  // h_rat->GetYaxis()->SetRangeUser(0.6,1.4);
+  // if( TString(variable).Contains("met") ){
   h_rat->GetYaxis()->SetRangeUser(0.0,2.0);
-  }
+  // }
+
   h_rat->GetYaxis()->SetLabelSize(0.12);
   h_rat->GetXaxis()->SetLabelSize(0.12);
   h_rat->GetYaxis()->SetNdivisions(5);
@@ -487,6 +535,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   if( variable == "nVert"               ) h_rat->GetXaxis()->SetTitle("N_{vtx}");
   if( TString(variable).Contains("met") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} GeV");
+  if( TString(variable).Contains("sumet") ) h_rat->GetXaxis()->SetTitle("sum E_{T} GeV");
   if( TString(variable).Contains("MHT") ) h_rat->GetXaxis()->SetTitle("H_{T}^{miss} GeV");
   if( TString(variable).Contains("mhtphi") ) h_rat->GetXaxis()->SetTitle("H_{T} Phi");
   if( variable == "ht"                  ) h_rat->GetXaxis()->SetTitle("H_{T} GeV");

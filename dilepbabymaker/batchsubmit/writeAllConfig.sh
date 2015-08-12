@@ -10,7 +10,7 @@ make -j25
 cd -
 
 # copy compiled files
-cp -r ../*.so ../jetCorrections ../processBaby ../../json*.txt job_input/ 
+cp -r ../*.so ../jetCorrections ../processBaby ../../json/*.txt job_input/ 
 
 source ../../ZMET2015/settings.sh 
 
@@ -20,17 +20,25 @@ TAG=${analysis_version}
 #
 # DATA
 #
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleEG_MINIAOD_PromptReco-v1/merged/V07-04-06/   ${TAG}_data_50ns_ee
-./writeConfig.sh /hadoop/cms/store/user/cwelke/run2_data/SinglePhoton_Run2015B-PromptReco-v1/V07-04-06/            ${TAG}_data_50ns_ph
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleMuon_MINIAOD_PromptReco-v1/merged/V07-04-06/ ${TAG}_data_50ns_mm
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_MuonEG_MINIAOD_PromptReco-v1/merged/V07-04-06/     ${TAG}_data_50ns_em
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleEG_MINIAOD_PromptReco-v1/merged/V07-04-06/   ${TAG}_data_50nsPrompt_ee
+./writeConfig.sh /hadoop/cms/store/user/cwelke/run2_data/SinglePhoton_Run2015B-PromptReco-v1/V07-04-06/            ${TAG}_data_50nsPrompt_ph
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleMuon_MINIAOD_PromptReco-v1/merged/V07-04-06/ ${TAG}_data_50nsPrompt_mm
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_MuonEG_MINIAOD_PromptReco-v1/merged/V07-04-06/     ${TAG}_data_50nsPrompt_em
+
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleEG_MINIAOD_17Jul2015-v1/merged/V07-04-07/     ${TAG}_data_50ns17Jul_ee
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_SinglePhoton_MINIAOD_17Jul2015-v1/merged/V07-04-07/ ${TAG}_data_50ns17Jul_ph
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_DoubleMuon_MINIAOD_17Jul2015-v1/merged/V07-04-07/   ${TAG}_data_50ns17Jul_mm
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_MuonEG_MINIAOD_17Jul2015-v1/merged/V07-04-07/       ${TAG}_data_50ns17Jul_em
+
 # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_SingleElectron_MINIAOD_PromptReco-v1/merged/V07-04-04/ ${TAG}_data_50ns_se
 # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_data/Run2015B_SingleMuon_MINIAOD_PromptReco-v1/merged/V07-04-04/	   ${TAG}_data_50ns_sm
 
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/WZ_TuneCUETP8M1_13TeV-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/                               ${TAG}_wz_50ns_incl
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTTo2L2Nu_13TeV-powheg_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/                                      ${TAG}_tt2lnu_50ns_php8
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/WZ_TuneCUETP8M1_13TeV-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/                               ${TAG}_wz_50ns_incl			 
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTTo2L2Nu_13TeV-powheg_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/                                      ${TAG}_tt2lnu_50ns_php8		 
 ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/ ${TAG}_dyjetsll_50ns_m1050nlo
-./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/     ${TAG}_dyjetsll_50ns_m50nlo
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/     ${TAG}_dyjetsll_50ns_m50nlo	 
+																																												                         
+./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-07/      ${TAG}_dyjetsll_50ns_m50mlm  
 
 # # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/ ${TAG}_ttall_50ns_mgp8
 # # ./writeConfig.sh /hadoop/cms/store/group/snt/run2_50ns/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/ ${TAG}_ttall_50ns_nlo

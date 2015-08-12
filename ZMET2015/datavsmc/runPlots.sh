@@ -11,31 +11,25 @@ fi
 
 # root -b -q "compareMET.cc+( \"$analysis_version\", \"_2jets_inclusive\", 0.057 )"
 
-lumi=0.0358 # vince json
-lumi=0.0284 # fgolf json
-lumi=0.0419 # mark json
+lumi=0.04002 # golden json
 # lumi=0.001
 
 root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"mll\",       \"passtrig\" )" 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"mll\",       \"passtrig\" )" 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"mll\",       \"passtrig\" )" 
 
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_30in_pt\" ,       \"passtrig\" )" &
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_30in_pt\" ,       \"passtrig\" )" &
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_30in_pt\" ,       \"passtrig\" )" &
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_30in_pt\" ,       \"passtrig\" )" &
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_30in_pt\" ,       \"passtrig\" )" &
+root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_30in_pt\" ,       \"passtrig\" )" &
+
+
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_raw_vince\" , \"passtrig\" )" &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_rawgt1jet\" , \"passtrig\" )" &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"ptdil\"         , \"passtrig\" )" &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"MHTFBgt1jet\",     \"passtrig\" )" &
-
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfmet_trk_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfmet_trk_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfmet_trk_pt\"    ,       \"passtrig\" )" &
-																					  											  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfmet_all_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfmet_all_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfmet_all_pt\"    ,       \"passtrig\" )" &
-																					  											  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfmet_fwd_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfmet_fwd_pt\"    ,       \"passtrig\" )" &
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfmet_fwd_pt\"    ,       \"passtrig\" )" &
 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met\"       , \"passtrig\" )" &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_raw\"       , \"passtrig\" )" &

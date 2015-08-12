@@ -13,9 +13,10 @@ fi
 selection="_inclusive"
 # ./runTemplateLooper $selection V07-04-03_updatedHLT data  &
 
-./runTemplateLooper $selection V07-04-03_extraMETVariables data  &
-./runTemplateLooper $selection V07-04-03_extraMETVariables zjets &
-./runTemplateLooper $selection V07-04-03_extraMETVariables ttbar &
+./runTemplateLooper $selection $analysis_version data  &
+./runTemplateLooper $selection $analysis_version zjets &
+./runTemplateLooper $selection $analysis_version ttbar &
+
 # ./runTemplateLooper $selection V07-04-03_goodtrigs All_MC  &
 
 # # For Closure tests

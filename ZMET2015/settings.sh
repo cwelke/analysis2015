@@ -8,10 +8,10 @@ localdirectory=`pwd`
 function link_output
 {
 	if [ ! -L "$localdirectory/output" ]; then
-		echo "Linking to output directory: /nfs-7/userdata/cwelke/output"
-		ln -s /nfs-7/userdata/cwelke/output
+		echo "Linking to output directory: /nfs-6/userdata/cwelke/output"
+		ln -s /nfs-6/userdata/cwelke/output
 	else
-		echo "Saving output to: /nfs-7/userdata/cwelke/output"
+		echo "Saving output to: /nfs-6/userdata/cwelke/output"
 	fi
 }
 

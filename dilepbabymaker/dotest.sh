@@ -8,6 +8,8 @@ if [ ! $didcompile == "0" ]; then
 	exit $didcompile
 fi
 
+cp ../json/json_270715_golden.txt .
+
 # ./processBaby test  /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/V07-04-03/merged_ntuple_1.root
 ./processBaby test_mc  /hadoop/cms/store/group/snt/run2_50ns/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/V07-04-03/merged_ntuple_1.root
 # ./processBaby test_data /hadoop/cms/store/user/cwelke/run2_data/SinglePhoton_Run2015B-PromptReco-v1/V07-04-06/merged_ntuple_1.root 

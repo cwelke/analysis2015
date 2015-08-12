@@ -27,8 +27,10 @@ using namespace std;
 using namespace duplicate_removal;
 
 const bool debug = false;
-const bool usejson = true;
-const bool dovtxreweighting = true;
+
+const bool usejson              = true;
+const bool dovtxreweighting     = false;
+const bool dotemplateprediction = false;
 
 templateLooper::templateLooper()
 {
@@ -56,11 +58,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   bookHistos();
 
   double npass = 0;
+
   METTemplates mettemplates( selection );
-  // mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
-  mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str()), mettemplate_hists );
-  mettemplates.setBins( selection );
   TH1F* currentMETTemplate = NULL;
+  if( dotemplateprediction ){
+	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
+	mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str()), mettemplate_hists );
+	mettemplates.setBins( selection );
+  }
   
   // do this once per job
   const char* json_file = "../../json/json_270715_golden.txt";
@@ -365,24 +370,36 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( zmet.hyp_type() == 2 ) nem += weight;	  
 	  if( zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ) nll += weight;
 
+	  if( zmet.phpfcands_30in_pt() > 0 ){	 
+  	  fillHist( "event", "phpfcands_30in_pt"  , "passtrig", zmet.phpfcands_30in_pt() , weight );	  
+  	  fillHist( "event", "phpfcands_30in_phi" , "passtrig", zmet.phpfcands_30in_phi(), weight );	  
+	  }
+	  if( zmet.nupfcands_30in_pt() > 0 ){	 
+  	  fillHist( "event", "nupfcands_30in_pt"  , "passtrig", zmet.nupfcands_30in_pt() , weight );	  
+  	  fillHist( "event", "nupfcands_30in_phi" , "passtrig", zmet.nupfcands_30in_phi(), weight );	  
+	  }
+
+	  
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
 	  if( zmet.njets()                        < 2         ) continue; // require at least 2 good jets
       npass += weight;
 
-	  if( zmet.isData() && (zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ) ){
-	  	currentMETTemplate = mettemplates.pickTemplate( mettemplate_hists, zmet.njets(), zmet.ht(), zmet.dilpt() );
-	  	mettemplates.countTemplate( zmet.njets(), zmet.ht(), zmet.dilpt(), weight );
-	  	try
-	  	  {
-	  		event_hists.at( "h_templ_met" ) -> Add( currentMETTemplate, weight );		
-	  	  }
-	  	catch(exception &e)
-	  	  {
-	  		cout<<"Hist: h_templ_met Does not exist!"<<endl;
-	  		exit(1);
-	  	  }
+	  if( dotemplateprediction ){
+		if( zmet.isData() && (zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ) ){
+		  currentMETTemplate = mettemplates.pickTemplate( mettemplate_hists, zmet.njets(), zmet.ht(), zmet.dilpt() );
+		  mettemplates.countTemplate( zmet.njets(), zmet.ht(), zmet.dilpt(), weight );
+		  try
+			{
+			  event_hists.at( "h_templ_met" ) -> Add( currentMETTemplate, weight );		
+			}
+		  catch(exception &e)
+			{
+			  cout<<"Hist: h_templ_met Does not exist!"<<endl;
+			  exit(1);
+			}
+		}
 	  }
 
     } // end loop over events
@@ -480,7 +497,39 @@ void templateLooper::bookHistos(){
   variable.push_back("phpfmet_trk_pt" ); variable_bins.push_back(500);
   variable.push_back("phpfmet_fwd_pt" ); variable_bins.push_back(500);
   variable.push_back("phpfmet_all_pt" ); variable_bins.push_back(500);
-  
+
+  variable.push_back("chpfcands_0013_pt" ); variable_bins.push_back(500);
+  variable.push_back("chpfcands_1316_pt" ); variable_bins.push_back(500);
+  variable.push_back("chpfcands_1625_pt" ); variable_bins.push_back(500);
+  variable.push_back("chpfcands_2530_pt" ); variable_bins.push_back(500);
+  variable.push_back("chpfcands_30in_pt" ); variable_bins.push_back(500);
+  variable.push_back("phpfcands_0013_pt" ); variable_bins.push_back(500);
+  variable.push_back("phpfcands_1316_pt" ); variable_bins.push_back(500);
+  variable.push_back("phpfcands_1625_pt" ); variable_bins.push_back(500);
+  variable.push_back("phpfcands_2530_pt" ); variable_bins.push_back(500);
+  variable.push_back("phpfcands_30in_pt" ); variable_bins.push_back(500);
+  variable.push_back("nupfcands_0013_pt" ); variable_bins.push_back(500);
+  variable.push_back("nupfcands_1316_pt" ); variable_bins.push_back(500);
+  variable.push_back("nupfcands_1625_pt" ); variable_bins.push_back(500);
+  variable.push_back("nupfcands_2530_pt" ); variable_bins.push_back(500);
+  variable.push_back("nupfcands_30in_pt" ); variable_bins.push_back(500);
+
+  // variable.push_back("chpfcands_0013_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("chpfcands_1316_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("chpfcands_1625_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("chpfcands_2530_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("chpfcands_30in_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("phpfcands_0013_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("phpfcands_1316_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("phpfcands_1625_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("phpfcands_2530_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("phpfcands_30in_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("nupfcands_0013_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("nupfcands_1316_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("nupfcands_1625_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("nupfcands_2530_sumet" ); variable_bins.push_back(1000);
+  // variable.push_back("nupfcands_30in_sumet" ); variable_bins.push_back(1000);
+
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
 	  for( unsigned int varind = 0; varind < variable.size(); varind++ ){
@@ -523,7 +572,23 @@ void templateLooper::bookHistos(){
   phivars.push_back( "nupfmet_trk_phi"     );
   phivars.push_back( "nupfmet_fwd_phi"     );
   phivars.push_back( "nupfmet_all_phi"     );
-  
+
+  phivars.push_back( "chpfcands_0013_phi"     );
+  phivars.push_back( "chpfcands_1316_phi"     );
+  phivars.push_back( "chpfcands_1625_phi"     );
+  phivars.push_back( "chpfcands_2530_phi"     );
+  phivars.push_back( "chpfcands_30in_phi"     );
+  phivars.push_back( "phpfcands_0013_phi"     );
+  phivars.push_back( "phpfcands_1316_phi"     );
+  phivars.push_back( "phpfcands_1625_phi"     );
+  phivars.push_back( "phpfcands_2530_phi"     );
+  phivars.push_back( "phpfcands_30in_phi"     );
+  phivars.push_back( "nupfcands_0013_phi"     );
+  phivars.push_back( "nupfcands_1316_phi"     );
+  phivars.push_back( "nupfcands_1625_phi"     );
+  phivars.push_back( "nupfcands_2530_phi"     );
+  phivars.push_back( "nupfcands_30in_phi"     );
+
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
 	  for( unsigned int varind = 0; varind < phivars.size(); varind++ ){
