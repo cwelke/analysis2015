@@ -19,6 +19,7 @@ if [ ! -d "merge_logs_${TAG}" ]; then
   mkdir merge_logs_${TAG}
 fi
 
+# done
 run data_50nsPrompt_ee
 run data_50nsPrompt_ph
 run data_50nsPrompt_mm
@@ -29,13 +30,18 @@ run data_50ns17Jul_ph
 run data_50ns17Jul_mm
 run data_50ns17Jul_em
 
-run wz_50ns_incl			 
 run tt2lnu_50ns_php8		 
 run dyjetsll_50ns_m1050nlo
 run dyjetsll_50ns_m50nlo	 
 
-run dyjetsll_50ns_m50mlm  
+# run wz_50ns_incl			 
 
+#to do
+# run dyjetsll_50ns_m50mlm  
+# run dyjetsll_50ns_m50mlmht100200
+# run dyjetsll_50ns_m50mlmht200400
+# run dyjetsll_50ns_m50mlmht400600
+# run dyjetsll_50ns_m50mlmht600inf
 
 # #
 # # TTBAR

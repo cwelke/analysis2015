@@ -295,7 +295,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
 
   //MAKE PLOTS
-  float xmin = 20; float xmax = 300;
+  float xmin = 50; float xmax = 200;
   float ymin = 1e-1; float ymax = 1e2;
 
   int rebin = 5;
@@ -347,10 +347,10 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
 
   if( variable == "ht" || TString(variable).Contains("sumet") ){
-	xmin = 35;
+	xmin = 40;
 	xmax = 500;
     // ymax = 5e1;
-	rebin = 5;
+	rebin = 20;
 	if( variable == "nupfcands_30in_sumet" ){
 	  xmin = 0;
 	  xmax = 1000;

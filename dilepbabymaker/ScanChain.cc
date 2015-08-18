@@ -25,6 +25,7 @@
 #include "../CORE/TriggerSelections.h"
 #include "../CORE/VertexSelections.h"
 #include "../CORE/MCSelections.h"
+#include "../CORE/MetSelections.h"
 #include "../CORE/Tools/jetcorr/FactorizedJetCorrector.h"
 #include "../CORE/Tools/JetCorrector.h"
 #include "../CORE/Tools/MT2/MT2.h"
@@ -99,11 +100,20 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
     if (applyJECfromFile) {
       jetcorr_filenames_pfL1FastJetL2L3.clear();
 
-      // files for Pythia8 MC  
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L1FastJet_AK4PFchs.txt");
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L2Relative_AK4PFchs.txt");
-      jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV2_MC_L3Absolute_AK4PFchs.txt");
+	  if( TString(currentFile->GetTitle()).Contains("Run2015B") ){
+		// files for Data  
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L3Absolute_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+	  }else{
 
+		// files for Pythia8 MC  
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L3Absolute_AK4PFchs.txt"  );
+	  }
+	  
       jet_corrector_pfL1FastJetL2L3  = makeJetCorrector(jetcorr_filenames_pfL1FastJetL2L3);
     }
 
@@ -112,6 +122,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
     for( unsigned int event = 0; event < nEventsTree; ++event) {
 	  //for( unsigned int event = 0; event < 100; ++event) {
 
+	  // if( event > 1000 ) continue;
+	  
       // Get Event Content
       tree->LoadTree(event);
       cms3.GetEntry(event);
@@ -183,10 +195,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
       HLT_SingleMu       = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
       HLT_DoubleEl_noiso = passHLTTriggerPattern("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
-      // HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloId_TrackId_Iso_v"); 
       HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v");
 	  HLT_DoubleEl_DZ    = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
-      // HLT_MuEG           = passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_Gsf_CaloId_TrackId_Iso_MediumWP_v") || passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_Gsf_CaloId_TrackId_Iso_MediumWP_v");
       HLT_MuEG           = (passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") );
       HLT_MuEG_2         = (passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
@@ -613,9 +623,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  }
        	  
 	  if (verbose) cout << "before jets" << endl;
-
-	  LorentzVector corrjets(0,0,0,0);
-	  LorentzVector uncorrjets(0,0,0,0);
 	  
       //JETS
       //correct jets and check baseline selections
@@ -640,12 +647,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  // apply new JEC to p4
 		  if( pfjet_p4_uncor.pt() > 10.0){ // don't correct jets with pT < 10 GeV
 			pfjet_p4_cor = pfjet_p4_uncor * corr;
-		  }else{
-			pfjet_p4_cor = pfjet_p4_uncor;
 		  }
-		  
-		  uncorrjets += pfjet_p4_uncor;
-		  corrjets   += pfjet_p4_cor;
 
 		}
 
@@ -881,19 +883,27 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j_eta30 = -1.0;
 	  }
 
-	  // uncorrjets += pfjet_p4_uncor;
-	  // corrjets   += pfjet_p4_cor;
-	  LorentzVector newMET(cms3.evt_pfmet_raw()*cos(cms3.evt_pfmetPhi_raw()),
-						   cms3.evt_pfmet_raw()*sin(cms3.evt_pfmetPhi_raw()),
-						   0,
-						   sqrt(pow(cms3.evt_pfmet_raw()*cos(cms3.evt_pfmetPhi_raw()),2) + 
-								pow(cms3.evt_pfmet_raw()*sin(cms3.evt_pfmetPhi_raw()),2))); // initialize to rawMET
-	  newMET = newMET - corrjets + uncorrjets; // add corrections
+	  pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
+	  met_T1CHS_fromCORE_pt  = newMET.first;
+	  met_T1CHS_fromCORE_phi = newMET.second;
 
-      met_T1CHS_pt  = newMET.pt();
-      met_T1CHS_phi = newMET.phi();
+	  pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+	  met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
+      met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
+
+	  met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
+      met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
+
+	  met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
+      met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
+
+	  met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
+      met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
+
+	  // cout<<"CORE: "<<met_T1CHS_fromCORE_pt<<endl;
+	  // cout<<"METG: "<<met_T1CHS_pt<<endl<<endl;
 	  
-	  if( verbose ) cout<<" Before loop over pfcands " <<endl;
+  if( verbose ) cout<<" Before loop over pfcands " <<endl;
 	  
 	  LorentzVector chphpfmet_trk_p4(0,0,0,0);
 	  LorentzVector chpfmet_trk_p4(0,0,0,0);
@@ -1153,7 +1163,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   cout << "CPU  Time:	" << Form( "%.01f s", bmark->GetCpuTime("benchmark")  ) << endl;
   cout << "Real Time:	" << Form( "%.01f s", bmark->GetRealTime("benchmark") ) << endl;
   cout << endl;
-  delete bmark;
+  // delete bmark;
 
   return;
 }
@@ -1440,8 +1450,16 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("nupfcands_2430_phi"     , &nupfcands_2430_phi   );
   BabyTree_->Branch("nupfcands_30in_phi"     , &nupfcands_30in_phi   );
 
-  BabyTree_->Branch("met_T1CHS_pt"      , &met_T1CHS_pt    );
-  BabyTree_->Branch("met_T1CHS_phi"     , &met_T1CHS_phi   );
+  BabyTree_->Branch("met_T1CHS_pt"               , &met_T1CHS_pt               );
+  BabyTree_->Branch("met_T1CHS_phi"              , &met_T1CHS_phi              );
+  BabyTree_->Branch("met_T1CHS_fromCORE_pt"      , &met_T1CHS_fromCORE_pt      );
+  BabyTree_->Branch("met_T1CHS_fromCORE_phi"     , &met_T1CHS_fromCORE_phi     );
+  BabyTree_->Branch("met_T1CHSNoHF_pt"           , &met_T1CHSNoHF_pt           );
+  BabyTree_->Branch("met_T1CHSNoHF_phi"          , &met_T1CHSNoHF_phi          );
+  BabyTree_->Branch("met_rawNoHF_pt"             , &met_rawNoHF_pt             );
+  BabyTree_->Branch("met_rawNoHF_phi"            , &met_rawNoHF_phi            );
+  BabyTree_->Branch("met_T1CHSNoHF_fromCORE_pt"  , &met_T1CHSNoHF_fromCORE_pt  );
+  BabyTree_->Branch("met_T1CHSNoHF_fromCORE_phi" , &met_T1CHSNoHF_fromCORE_phi );
 
   BabyTree_->Branch("hyp_type", &hyp_type);
   BabyTree_->Branch("evt_type", &evt_type);
@@ -1734,8 +1752,16 @@ void babyMaker::InitBabyNtuple () {
   nupfcands_2430_phi = -999;
   nupfcands_30in_phi = -999;
 
-  met_T1CHS_pt  = -999;
-  met_T1CHS_phi = -999;
+  met_T1CHS_pt               = -999;
+  met_T1CHS_phi              = -999;
+  met_T1CHS_fromCORE_pt      = -999;
+  met_T1CHS_fromCORE_phi     = -999;
+  met_T1CHSNoHF_pt           = -999;
+  met_T1CHSNoHF_phi          = -999;
+  met_rawNoHF_pt           = -999;
+  met_rawNoHF_phi          = -999;
+  met_T1CHSNoHF_fromCORE_pt  = -999;
+  met_T1CHSNoHF_fromCORE_phi = -999;
   
   return;
 }

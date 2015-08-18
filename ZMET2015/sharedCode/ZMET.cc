@@ -218,76 +218,46 @@ namespace ZMet {
 	const float &nupfmet_fwd_phi() { return zmet.nupfmet_fwd_phi(); }
 	const float &nupfmet_all_pt() { return zmet.nupfmet_all_pt(); }
 	const float &nupfmet_all_phi() { return zmet.nupfmet_all_phi(); }
-	const float &chpfcands_0013_sumet() { return zmet.chpfcands_0013_sumet(); }
-	const float &chpfcands_1316_sumet() { return zmet.chpfcands_1316_sumet(); }
-	const float &chpfcands_1625_sumet() { return zmet.chpfcands_1625_sumet(); }
-	const float &chpfcands_2530_sumet() { return zmet.chpfcands_2530_sumet(); }
-	const float &chpfcands_30in_sumet() { return zmet.chpfcands_30in_sumet(); }
-	const float &phpfcands_0013_sumet() { return zmet.phpfcands_0013_sumet(); }
-	const float &phpfcands_1316_sumet() { return zmet.phpfcands_1316_sumet(); }
-	const float &phpfcands_1625_sumet() { return zmet.phpfcands_1625_sumet(); }
-	const float &phpfcands_2530_sumet() { return zmet.phpfcands_2530_sumet(); }
-	const float &phpfcands_30in_sumet() { return zmet.phpfcands_30in_sumet(); }
-	const float &nupfcands_0013_sumet() { return zmet.nupfcands_0013_sumet(); }
-	const float &nupfcands_1316_sumet() { return zmet.nupfcands_1316_sumet(); }
-	const float &nupfcands_1625_sumet() { return zmet.nupfcands_1625_sumet(); }
-	const float &nupfcands_2530_sumet() { return zmet.nupfcands_2530_sumet(); }
-	const float &nupfcands_30in_sumet() { return zmet.nupfcands_30in_sumet(); }
 	const float &chpfcands_0013_pt() { return zmet.chpfcands_0013_pt(); }
 	const float &chpfcands_1316_pt() { return zmet.chpfcands_1316_pt(); }
-	const float &chpfcands_1625_pt() { return zmet.chpfcands_1625_pt(); }
-	const float &chpfcands_2530_pt() { return zmet.chpfcands_2530_pt(); }
+	const float &chpfcands_1624_pt() { return zmet.chpfcands_1624_pt(); }
+	const float &chpfcands_2430_pt() { return zmet.chpfcands_2430_pt(); }
 	const float &chpfcands_30in_pt() { return zmet.chpfcands_30in_pt(); }
 	const float &phpfcands_0013_pt() { return zmet.phpfcands_0013_pt(); }
 	const float &phpfcands_1316_pt() { return zmet.phpfcands_1316_pt(); }
-	const float &phpfcands_1625_pt() { return zmet.phpfcands_1625_pt(); }
-	const float &phpfcands_2530_pt() { return zmet.phpfcands_2530_pt(); }
+	const float &phpfcands_1624_pt() { return zmet.phpfcands_1624_pt(); }
+	const float &phpfcands_2430_pt() { return zmet.phpfcands_2430_pt(); }
 	const float &phpfcands_30in_pt() { return zmet.phpfcands_30in_pt(); }
 	const float &nupfcands_0013_pt() { return zmet.nupfcands_0013_pt(); }
 	const float &nupfcands_1316_pt() { return zmet.nupfcands_1316_pt(); }
-	const float &nupfcands_1625_pt() { return zmet.nupfcands_1625_pt(); }
-	const float &nupfcands_2530_pt() { return zmet.nupfcands_2530_pt(); }
+	const float &nupfcands_1624_pt() { return zmet.nupfcands_1624_pt(); }
+	const float &nupfcands_2430_pt() { return zmet.nupfcands_2430_pt(); }
 	const float &nupfcands_30in_pt() { return zmet.nupfcands_30in_pt(); }
 	const float &chpfcands_0013_phi() { return zmet.chpfcands_0013_phi(); }
 	const float &chpfcands_1316_phi() { return zmet.chpfcands_1316_phi(); }
-	const float &chpfcands_1625_phi() { return zmet.chpfcands_1625_phi(); }
-	const float &chpfcands_2530_phi() { return zmet.chpfcands_2530_phi(); }
+	const float &chpfcands_1624_phi() { return zmet.chpfcands_1624_phi(); }
+	const float &chpfcands_2430_phi() { return zmet.chpfcands_2430_phi(); }
 	const float &chpfcands_30in_phi() { return zmet.chpfcands_30in_phi(); }
 	const float &phpfcands_0013_phi() { return zmet.phpfcands_0013_phi(); }
 	const float &phpfcands_1316_phi() { return zmet.phpfcands_1316_phi(); }
-	const float &phpfcands_1625_phi() { return zmet.phpfcands_1625_phi(); }
-	const float &phpfcands_2530_phi() { return zmet.phpfcands_2530_phi(); }
+	const float &phpfcands_1624_phi() { return zmet.phpfcands_1624_phi(); }
+	const float &phpfcands_2430_phi() { return zmet.phpfcands_2430_phi(); }
 	const float &phpfcands_30in_phi() { return zmet.phpfcands_30in_phi(); }
 	const float &nupfcands_0013_phi() { return zmet.nupfcands_0013_phi(); }
 	const float &nupfcands_1316_phi() { return zmet.nupfcands_1316_phi(); }
-	const float &nupfcands_1625_phi() { return zmet.nupfcands_1625_phi(); }
-	const float &nupfcands_2530_phi() { return zmet.nupfcands_2530_phi(); }
+	const float &nupfcands_1624_phi() { return zmet.nupfcands_1624_phi(); }
+	const float &nupfcands_2430_phi() { return zmet.nupfcands_2430_phi(); }
 	const float &nupfcands_30in_phi() { return zmet.nupfcands_30in_phi(); }
-	const float &pfcandmet_pt05_pt() { return zmet.pfcandmet_pt05_pt(); }
-	const float &pfcandmet_pt10_pt() { return zmet.pfcandmet_pt10_pt(); }
-	const float &pfcandmet_pt15_pt() { return zmet.pfcandmet_pt15_pt(); }
-	const float &pfcandmet_pt20_pt() { return zmet.pfcandmet_pt20_pt(); }
-	const float &pfcandmet_pt25_pt() { return zmet.pfcandmet_pt25_pt(); }
-	const float &nupfcands_pt05_pt() { return zmet.nupfcands_pt05_pt(); }
-	const float &nupfcands_pt10_pt() { return zmet.nupfcands_pt10_pt(); }
-	const float &nupfcands_pt15_pt() { return zmet.nupfcands_pt15_pt(); }
-	const float &nupfcands_pt20_pt() { return zmet.nupfcands_pt20_pt(); }
-	const float &nupfcands_pt25_pt() { return zmet.nupfcands_pt25_pt(); }
-	const float &pfcandmet_pt05_phi() { return zmet.pfcandmet_pt05_phi(); }
-	const float &pfcandmet_pt10_phi() { return zmet.pfcandmet_pt10_phi(); }
-	const float &pfcandmet_pt15_phi() { return zmet.pfcandmet_pt15_phi(); }
-	const float &pfcandmet_pt20_phi() { return zmet.pfcandmet_pt20_phi(); }
-	const float &pfcandmet_pt25_phi() { return zmet.pfcandmet_pt25_phi(); }
-	const float &nupfcands_pt05_phi() { return zmet.nupfcands_pt05_phi(); }
-	const float &nupfcands_pt10_phi() { return zmet.nupfcands_pt10_phi(); }
-	const float &nupfcands_pt15_phi() { return zmet.nupfcands_pt15_phi(); }
-	const float &nupfcands_pt20_phi() { return zmet.nupfcands_pt20_phi(); }
-	const float &nupfcands_pt25_phi() { return zmet.nupfcands_pt25_phi(); }
-	const float &pfcandmet_0030_pt() { return zmet.pfcandmet_0030_pt(); }
-	const float &pfcandmet_0030_phi() { return zmet.pfcandmet_0030_phi(); }
 	const float &met_T1CHS_pt() { return zmet.met_T1CHS_pt(); }
 	const float &met_T1CHS_phi() { return zmet.met_T1CHS_phi(); }
-	const int &nFWjets() { return zmet.nFWjets(); }
+	const float &met_T1CHS_fromCORE_pt() { return zmet.met_T1CHS_fromCORE_pt(); }
+	const float &met_T1CHS_fromCORE_phi() { return zmet.met_T1CHS_fromCORE_phi(); }
+	const float &met_T1CHSNoHF_pt() { return zmet.met_T1CHSNoHF_pt(); }
+	const float &met_T1CHSNoHF_phi() { return zmet.met_T1CHSNoHF_phi(); }
+	const float &met_rawNoHF_pt() { return zmet.met_rawNoHF_pt(); }
+	const float &met_rawNoHF_phi() { return zmet.met_rawNoHF_phi(); }
+	const float &met_T1CHSNoHF_fromCORE_pt() { return zmet.met_T1CHSNoHF_fromCORE_pt(); }
+	const float &met_T1CHSNoHF_fromCORE_phi() { return zmet.met_T1CHSNoHF_fromCORE_phi(); }
 	const int &hyp_type() { return zmet.hyp_type(); }
 	const int &evt_type() { return zmet.evt_type(); }
 }

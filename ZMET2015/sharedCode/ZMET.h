@@ -669,63 +669,18 @@ protected:
 	float	nupfmet_all_phi_;
 	TBranch *nupfmet_all_phi_branch;
 	bool nupfmet_all_phi_isLoaded;
-	float	chpfcands_0013_sumet_;
-	TBranch *chpfcands_0013_sumet_branch;
-	bool chpfcands_0013_sumet_isLoaded;
-	float	chpfcands_1316_sumet_;
-	TBranch *chpfcands_1316_sumet_branch;
-	bool chpfcands_1316_sumet_isLoaded;
-	float	chpfcands_1625_sumet_;
-	TBranch *chpfcands_1625_sumet_branch;
-	bool chpfcands_1625_sumet_isLoaded;
-	float	chpfcands_2530_sumet_;
-	TBranch *chpfcands_2530_sumet_branch;
-	bool chpfcands_2530_sumet_isLoaded;
-	float	chpfcands_30in_sumet_;
-	TBranch *chpfcands_30in_sumet_branch;
-	bool chpfcands_30in_sumet_isLoaded;
-	float	phpfcands_0013_sumet_;
-	TBranch *phpfcands_0013_sumet_branch;
-	bool phpfcands_0013_sumet_isLoaded;
-	float	phpfcands_1316_sumet_;
-	TBranch *phpfcands_1316_sumet_branch;
-	bool phpfcands_1316_sumet_isLoaded;
-	float	phpfcands_1625_sumet_;
-	TBranch *phpfcands_1625_sumet_branch;
-	bool phpfcands_1625_sumet_isLoaded;
-	float	phpfcands_2530_sumet_;
-	TBranch *phpfcands_2530_sumet_branch;
-	bool phpfcands_2530_sumet_isLoaded;
-	float	phpfcands_30in_sumet_;
-	TBranch *phpfcands_30in_sumet_branch;
-	bool phpfcands_30in_sumet_isLoaded;
-	float	nupfcands_0013_sumet_;
-	TBranch *nupfcands_0013_sumet_branch;
-	bool nupfcands_0013_sumet_isLoaded;
-	float	nupfcands_1316_sumet_;
-	TBranch *nupfcands_1316_sumet_branch;
-	bool nupfcands_1316_sumet_isLoaded;
-	float	nupfcands_1625_sumet_;
-	TBranch *nupfcands_1625_sumet_branch;
-	bool nupfcands_1625_sumet_isLoaded;
-	float	nupfcands_2530_sumet_;
-	TBranch *nupfcands_2530_sumet_branch;
-	bool nupfcands_2530_sumet_isLoaded;
-	float	nupfcands_30in_sumet_;
-	TBranch *nupfcands_30in_sumet_branch;
-	bool nupfcands_30in_sumet_isLoaded;
 	float	chpfcands_0013_pt_;
 	TBranch *chpfcands_0013_pt_branch;
 	bool chpfcands_0013_pt_isLoaded;
 	float	chpfcands_1316_pt_;
 	TBranch *chpfcands_1316_pt_branch;
 	bool chpfcands_1316_pt_isLoaded;
-	float	chpfcands_1625_pt_;
-	TBranch *chpfcands_1625_pt_branch;
-	bool chpfcands_1625_pt_isLoaded;
-	float	chpfcands_2530_pt_;
-	TBranch *chpfcands_2530_pt_branch;
-	bool chpfcands_2530_pt_isLoaded;
+	float	chpfcands_1624_pt_;
+	TBranch *chpfcands_1624_pt_branch;
+	bool chpfcands_1624_pt_isLoaded;
+	float	chpfcands_2430_pt_;
+	TBranch *chpfcands_2430_pt_branch;
+	bool chpfcands_2430_pt_isLoaded;
 	float	chpfcands_30in_pt_;
 	TBranch *chpfcands_30in_pt_branch;
 	bool chpfcands_30in_pt_isLoaded;
@@ -735,12 +690,12 @@ protected:
 	float	phpfcands_1316_pt_;
 	TBranch *phpfcands_1316_pt_branch;
 	bool phpfcands_1316_pt_isLoaded;
-	float	phpfcands_1625_pt_;
-	TBranch *phpfcands_1625_pt_branch;
-	bool phpfcands_1625_pt_isLoaded;
-	float	phpfcands_2530_pt_;
-	TBranch *phpfcands_2530_pt_branch;
-	bool phpfcands_2530_pt_isLoaded;
+	float	phpfcands_1624_pt_;
+	TBranch *phpfcands_1624_pt_branch;
+	bool phpfcands_1624_pt_isLoaded;
+	float	phpfcands_2430_pt_;
+	TBranch *phpfcands_2430_pt_branch;
+	bool phpfcands_2430_pt_isLoaded;
 	float	phpfcands_30in_pt_;
 	TBranch *phpfcands_30in_pt_branch;
 	bool phpfcands_30in_pt_isLoaded;
@@ -750,12 +705,12 @@ protected:
 	float	nupfcands_1316_pt_;
 	TBranch *nupfcands_1316_pt_branch;
 	bool nupfcands_1316_pt_isLoaded;
-	float	nupfcands_1625_pt_;
-	TBranch *nupfcands_1625_pt_branch;
-	bool nupfcands_1625_pt_isLoaded;
-	float	nupfcands_2530_pt_;
-	TBranch *nupfcands_2530_pt_branch;
-	bool nupfcands_2530_pt_isLoaded;
+	float	nupfcands_1624_pt_;
+	TBranch *nupfcands_1624_pt_branch;
+	bool nupfcands_1624_pt_isLoaded;
+	float	nupfcands_2430_pt_;
+	TBranch *nupfcands_2430_pt_branch;
+	bool nupfcands_2430_pt_isLoaded;
 	float	nupfcands_30in_pt_;
 	TBranch *nupfcands_30in_pt_branch;
 	bool nupfcands_30in_pt_isLoaded;
@@ -765,12 +720,12 @@ protected:
 	float	chpfcands_1316_phi_;
 	TBranch *chpfcands_1316_phi_branch;
 	bool chpfcands_1316_phi_isLoaded;
-	float	chpfcands_1625_phi_;
-	TBranch *chpfcands_1625_phi_branch;
-	bool chpfcands_1625_phi_isLoaded;
-	float	chpfcands_2530_phi_;
-	TBranch *chpfcands_2530_phi_branch;
-	bool chpfcands_2530_phi_isLoaded;
+	float	chpfcands_1624_phi_;
+	TBranch *chpfcands_1624_phi_branch;
+	bool chpfcands_1624_phi_isLoaded;
+	float	chpfcands_2430_phi_;
+	TBranch *chpfcands_2430_phi_branch;
+	bool chpfcands_2430_phi_isLoaded;
 	float	chpfcands_30in_phi_;
 	TBranch *chpfcands_30in_phi_branch;
 	bool chpfcands_30in_phi_isLoaded;
@@ -780,12 +735,12 @@ protected:
 	float	phpfcands_1316_phi_;
 	TBranch *phpfcands_1316_phi_branch;
 	bool phpfcands_1316_phi_isLoaded;
-	float	phpfcands_1625_phi_;
-	TBranch *phpfcands_1625_phi_branch;
-	bool phpfcands_1625_phi_isLoaded;
-	float	phpfcands_2530_phi_;
-	TBranch *phpfcands_2530_phi_branch;
-	bool phpfcands_2530_phi_isLoaded;
+	float	phpfcands_1624_phi_;
+	TBranch *phpfcands_1624_phi_branch;
+	bool phpfcands_1624_phi_isLoaded;
+	float	phpfcands_2430_phi_;
+	TBranch *phpfcands_2430_phi_branch;
+	bool phpfcands_2430_phi_isLoaded;
 	float	phpfcands_30in_phi_;
 	TBranch *phpfcands_30in_phi_branch;
 	bool phpfcands_30in_phi_isLoaded;
@@ -795,90 +750,45 @@ protected:
 	float	nupfcands_1316_phi_;
 	TBranch *nupfcands_1316_phi_branch;
 	bool nupfcands_1316_phi_isLoaded;
-	float	nupfcands_1625_phi_;
-	TBranch *nupfcands_1625_phi_branch;
-	bool nupfcands_1625_phi_isLoaded;
-	float	nupfcands_2530_phi_;
-	TBranch *nupfcands_2530_phi_branch;
-	bool nupfcands_2530_phi_isLoaded;
+	float	nupfcands_1624_phi_;
+	TBranch *nupfcands_1624_phi_branch;
+	bool nupfcands_1624_phi_isLoaded;
+	float	nupfcands_2430_phi_;
+	TBranch *nupfcands_2430_phi_branch;
+	bool nupfcands_2430_phi_isLoaded;
 	float	nupfcands_30in_phi_;
 	TBranch *nupfcands_30in_phi_branch;
 	bool nupfcands_30in_phi_isLoaded;
-	float	pfcandmet_pt05_pt_;
-	TBranch *pfcandmet_pt05_pt_branch;
-	bool pfcandmet_pt05_pt_isLoaded;
-	float	pfcandmet_pt10_pt_;
-	TBranch *pfcandmet_pt10_pt_branch;
-	bool pfcandmet_pt10_pt_isLoaded;
-	float	pfcandmet_pt15_pt_;
-	TBranch *pfcandmet_pt15_pt_branch;
-	bool pfcandmet_pt15_pt_isLoaded;
-	float	pfcandmet_pt20_pt_;
-	TBranch *pfcandmet_pt20_pt_branch;
-	bool pfcandmet_pt20_pt_isLoaded;
-	float	pfcandmet_pt25_pt_;
-	TBranch *pfcandmet_pt25_pt_branch;
-	bool pfcandmet_pt25_pt_isLoaded;
-	float	nupfcands_pt05_pt_;
-	TBranch *nupfcands_pt05_pt_branch;
-	bool nupfcands_pt05_pt_isLoaded;
-	float	nupfcands_pt10_pt_;
-	TBranch *nupfcands_pt10_pt_branch;
-	bool nupfcands_pt10_pt_isLoaded;
-	float	nupfcands_pt15_pt_;
-	TBranch *nupfcands_pt15_pt_branch;
-	bool nupfcands_pt15_pt_isLoaded;
-	float	nupfcands_pt20_pt_;
-	TBranch *nupfcands_pt20_pt_branch;
-	bool nupfcands_pt20_pt_isLoaded;
-	float	nupfcands_pt25_pt_;
-	TBranch *nupfcands_pt25_pt_branch;
-	bool nupfcands_pt25_pt_isLoaded;
-	float	pfcandmet_pt05_phi_;
-	TBranch *pfcandmet_pt05_phi_branch;
-	bool pfcandmet_pt05_phi_isLoaded;
-	float	pfcandmet_pt10_phi_;
-	TBranch *pfcandmet_pt10_phi_branch;
-	bool pfcandmet_pt10_phi_isLoaded;
-	float	pfcandmet_pt15_phi_;
-	TBranch *pfcandmet_pt15_phi_branch;
-	bool pfcandmet_pt15_phi_isLoaded;
-	float	pfcandmet_pt20_phi_;
-	TBranch *pfcandmet_pt20_phi_branch;
-	bool pfcandmet_pt20_phi_isLoaded;
-	float	pfcandmet_pt25_phi_;
-	TBranch *pfcandmet_pt25_phi_branch;
-	bool pfcandmet_pt25_phi_isLoaded;
-	float	nupfcands_pt05_phi_;
-	TBranch *nupfcands_pt05_phi_branch;
-	bool nupfcands_pt05_phi_isLoaded;
-	float	nupfcands_pt10_phi_;
-	TBranch *nupfcands_pt10_phi_branch;
-	bool nupfcands_pt10_phi_isLoaded;
-	float	nupfcands_pt15_phi_;
-	TBranch *nupfcands_pt15_phi_branch;
-	bool nupfcands_pt15_phi_isLoaded;
-	float	nupfcands_pt20_phi_;
-	TBranch *nupfcands_pt20_phi_branch;
-	bool nupfcands_pt20_phi_isLoaded;
-	float	nupfcands_pt25_phi_;
-	TBranch *nupfcands_pt25_phi_branch;
-	bool nupfcands_pt25_phi_isLoaded;
-	float	pfcandmet_0030_pt_;
-	TBranch *pfcandmet_0030_pt_branch;
-	bool pfcandmet_0030_pt_isLoaded;
-	float	pfcandmet_0030_phi_;
-	TBranch *pfcandmet_0030_phi_branch;
-	bool pfcandmet_0030_phi_isLoaded;
 	float	met_T1CHS_pt_;
 	TBranch *met_T1CHS_pt_branch;
 	bool met_T1CHS_pt_isLoaded;
 	float	met_T1CHS_phi_;
 	TBranch *met_T1CHS_phi_branch;
 	bool met_T1CHS_phi_isLoaded;
-	int	nFWjets_;
-	TBranch *nFWjets_branch;
-	bool nFWjets_isLoaded;
+	float	met_T1CHS_fromCORE_pt_;
+	TBranch *met_T1CHS_fromCORE_pt_branch;
+	bool met_T1CHS_fromCORE_pt_isLoaded;
+	float	met_T1CHS_fromCORE_phi_;
+	TBranch *met_T1CHS_fromCORE_phi_branch;
+	bool met_T1CHS_fromCORE_phi_isLoaded;
+	float	met_T1CHSNoHF_pt_;
+	TBranch *met_T1CHSNoHF_pt_branch;
+	bool met_T1CHSNoHF_pt_isLoaded;
+	float	met_T1CHSNoHF_phi_;
+	TBranch *met_T1CHSNoHF_phi_branch;
+	bool met_T1CHSNoHF_phi_isLoaded;
+	float	met_rawNoHF_pt_;
+	TBranch *met_rawNoHF_pt_branch;
+	bool met_rawNoHF_pt_isLoaded;
+	float	met_rawNoHF_phi_;
+	TBranch *met_rawNoHF_phi_branch;
+	bool met_rawNoHF_phi_isLoaded;
+	float	met_T1CHSNoHF_fromCORE_pt_;
+	TBranch *met_T1CHSNoHF_fromCORE_pt_branch;
+	bool met_T1CHSNoHF_fromCORE_pt_isLoaded;
+	float	met_T1CHSNoHF_fromCORE_phi_;
+	TBranch *met_T1CHSNoHF_fromCORE_phi_branch;
+	bool met_T1CHSNoHF_fromCORE_phi_isLoaded;
 	int	hyp_type_;
 	TBranch *hyp_type_branch;
 	bool hyp_type_isLoaded;
@@ -1973,81 +1883,6 @@ void Init(TTree *tree) {
 		nupfmet_all_phi_branch = tree->GetBranch("nupfmet_all_phi");
 		if (nupfmet_all_phi_branch) {nupfmet_all_phi_branch->SetAddress(&nupfmet_all_phi_);}
 	}
-	chpfcands_0013_sumet_branch = 0;
-	if (tree->GetBranch("chpfcands_0013_sumet") != 0) {
-		chpfcands_0013_sumet_branch = tree->GetBranch("chpfcands_0013_sumet");
-		if (chpfcands_0013_sumet_branch) {chpfcands_0013_sumet_branch->SetAddress(&chpfcands_0013_sumet_);}
-	}
-	chpfcands_1316_sumet_branch = 0;
-	if (tree->GetBranch("chpfcands_1316_sumet") != 0) {
-		chpfcands_1316_sumet_branch = tree->GetBranch("chpfcands_1316_sumet");
-		if (chpfcands_1316_sumet_branch) {chpfcands_1316_sumet_branch->SetAddress(&chpfcands_1316_sumet_);}
-	}
-	chpfcands_1625_sumet_branch = 0;
-	if (tree->GetBranch("chpfcands_1625_sumet") != 0) {
-		chpfcands_1625_sumet_branch = tree->GetBranch("chpfcands_1625_sumet");
-		if (chpfcands_1625_sumet_branch) {chpfcands_1625_sumet_branch->SetAddress(&chpfcands_1625_sumet_);}
-	}
-	chpfcands_2530_sumet_branch = 0;
-	if (tree->GetBranch("chpfcands_2530_sumet") != 0) {
-		chpfcands_2530_sumet_branch = tree->GetBranch("chpfcands_2530_sumet");
-		if (chpfcands_2530_sumet_branch) {chpfcands_2530_sumet_branch->SetAddress(&chpfcands_2530_sumet_);}
-	}
-	chpfcands_30in_sumet_branch = 0;
-	if (tree->GetBranch("chpfcands_30in_sumet") != 0) {
-		chpfcands_30in_sumet_branch = tree->GetBranch("chpfcands_30in_sumet");
-		if (chpfcands_30in_sumet_branch) {chpfcands_30in_sumet_branch->SetAddress(&chpfcands_30in_sumet_);}
-	}
-	phpfcands_0013_sumet_branch = 0;
-	if (tree->GetBranch("phpfcands_0013_sumet") != 0) {
-		phpfcands_0013_sumet_branch = tree->GetBranch("phpfcands_0013_sumet");
-		if (phpfcands_0013_sumet_branch) {phpfcands_0013_sumet_branch->SetAddress(&phpfcands_0013_sumet_);}
-	}
-	phpfcands_1316_sumet_branch = 0;
-	if (tree->GetBranch("phpfcands_1316_sumet") != 0) {
-		phpfcands_1316_sumet_branch = tree->GetBranch("phpfcands_1316_sumet");
-		if (phpfcands_1316_sumet_branch) {phpfcands_1316_sumet_branch->SetAddress(&phpfcands_1316_sumet_);}
-	}
-	phpfcands_1625_sumet_branch = 0;
-	if (tree->GetBranch("phpfcands_1625_sumet") != 0) {
-		phpfcands_1625_sumet_branch = tree->GetBranch("phpfcands_1625_sumet");
-		if (phpfcands_1625_sumet_branch) {phpfcands_1625_sumet_branch->SetAddress(&phpfcands_1625_sumet_);}
-	}
-	phpfcands_2530_sumet_branch = 0;
-	if (tree->GetBranch("phpfcands_2530_sumet") != 0) {
-		phpfcands_2530_sumet_branch = tree->GetBranch("phpfcands_2530_sumet");
-		if (phpfcands_2530_sumet_branch) {phpfcands_2530_sumet_branch->SetAddress(&phpfcands_2530_sumet_);}
-	}
-	phpfcands_30in_sumet_branch = 0;
-	if (tree->GetBranch("phpfcands_30in_sumet") != 0) {
-		phpfcands_30in_sumet_branch = tree->GetBranch("phpfcands_30in_sumet");
-		if (phpfcands_30in_sumet_branch) {phpfcands_30in_sumet_branch->SetAddress(&phpfcands_30in_sumet_);}
-	}
-	nupfcands_0013_sumet_branch = 0;
-	if (tree->GetBranch("nupfcands_0013_sumet") != 0) {
-		nupfcands_0013_sumet_branch = tree->GetBranch("nupfcands_0013_sumet");
-		if (nupfcands_0013_sumet_branch) {nupfcands_0013_sumet_branch->SetAddress(&nupfcands_0013_sumet_);}
-	}
-	nupfcands_1316_sumet_branch = 0;
-	if (tree->GetBranch("nupfcands_1316_sumet") != 0) {
-		nupfcands_1316_sumet_branch = tree->GetBranch("nupfcands_1316_sumet");
-		if (nupfcands_1316_sumet_branch) {nupfcands_1316_sumet_branch->SetAddress(&nupfcands_1316_sumet_);}
-	}
-	nupfcands_1625_sumet_branch = 0;
-	if (tree->GetBranch("nupfcands_1625_sumet") != 0) {
-		nupfcands_1625_sumet_branch = tree->GetBranch("nupfcands_1625_sumet");
-		if (nupfcands_1625_sumet_branch) {nupfcands_1625_sumet_branch->SetAddress(&nupfcands_1625_sumet_);}
-	}
-	nupfcands_2530_sumet_branch = 0;
-	if (tree->GetBranch("nupfcands_2530_sumet") != 0) {
-		nupfcands_2530_sumet_branch = tree->GetBranch("nupfcands_2530_sumet");
-		if (nupfcands_2530_sumet_branch) {nupfcands_2530_sumet_branch->SetAddress(&nupfcands_2530_sumet_);}
-	}
-	nupfcands_30in_sumet_branch = 0;
-	if (tree->GetBranch("nupfcands_30in_sumet") != 0) {
-		nupfcands_30in_sumet_branch = tree->GetBranch("nupfcands_30in_sumet");
-		if (nupfcands_30in_sumet_branch) {nupfcands_30in_sumet_branch->SetAddress(&nupfcands_30in_sumet_);}
-	}
 	chpfcands_0013_pt_branch = 0;
 	if (tree->GetBranch("chpfcands_0013_pt") != 0) {
 		chpfcands_0013_pt_branch = tree->GetBranch("chpfcands_0013_pt");
@@ -2058,15 +1893,15 @@ void Init(TTree *tree) {
 		chpfcands_1316_pt_branch = tree->GetBranch("chpfcands_1316_pt");
 		if (chpfcands_1316_pt_branch) {chpfcands_1316_pt_branch->SetAddress(&chpfcands_1316_pt_);}
 	}
-	chpfcands_1625_pt_branch = 0;
-	if (tree->GetBranch("chpfcands_1625_pt") != 0) {
-		chpfcands_1625_pt_branch = tree->GetBranch("chpfcands_1625_pt");
-		if (chpfcands_1625_pt_branch) {chpfcands_1625_pt_branch->SetAddress(&chpfcands_1625_pt_);}
+	chpfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_1624_pt") != 0) {
+		chpfcands_1624_pt_branch = tree->GetBranch("chpfcands_1624_pt");
+		if (chpfcands_1624_pt_branch) {chpfcands_1624_pt_branch->SetAddress(&chpfcands_1624_pt_);}
 	}
-	chpfcands_2530_pt_branch = 0;
-	if (tree->GetBranch("chpfcands_2530_pt") != 0) {
-		chpfcands_2530_pt_branch = tree->GetBranch("chpfcands_2530_pt");
-		if (chpfcands_2530_pt_branch) {chpfcands_2530_pt_branch->SetAddress(&chpfcands_2530_pt_);}
+	chpfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("chpfcands_2430_pt") != 0) {
+		chpfcands_2430_pt_branch = tree->GetBranch("chpfcands_2430_pt");
+		if (chpfcands_2430_pt_branch) {chpfcands_2430_pt_branch->SetAddress(&chpfcands_2430_pt_);}
 	}
 	chpfcands_30in_pt_branch = 0;
 	if (tree->GetBranch("chpfcands_30in_pt") != 0) {
@@ -2083,15 +1918,15 @@ void Init(TTree *tree) {
 		phpfcands_1316_pt_branch = tree->GetBranch("phpfcands_1316_pt");
 		if (phpfcands_1316_pt_branch) {phpfcands_1316_pt_branch->SetAddress(&phpfcands_1316_pt_);}
 	}
-	phpfcands_1625_pt_branch = 0;
-	if (tree->GetBranch("phpfcands_1625_pt") != 0) {
-		phpfcands_1625_pt_branch = tree->GetBranch("phpfcands_1625_pt");
-		if (phpfcands_1625_pt_branch) {phpfcands_1625_pt_branch->SetAddress(&phpfcands_1625_pt_);}
+	phpfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_1624_pt") != 0) {
+		phpfcands_1624_pt_branch = tree->GetBranch("phpfcands_1624_pt");
+		if (phpfcands_1624_pt_branch) {phpfcands_1624_pt_branch->SetAddress(&phpfcands_1624_pt_);}
 	}
-	phpfcands_2530_pt_branch = 0;
-	if (tree->GetBranch("phpfcands_2530_pt") != 0) {
-		phpfcands_2530_pt_branch = tree->GetBranch("phpfcands_2530_pt");
-		if (phpfcands_2530_pt_branch) {phpfcands_2530_pt_branch->SetAddress(&phpfcands_2530_pt_);}
+	phpfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("phpfcands_2430_pt") != 0) {
+		phpfcands_2430_pt_branch = tree->GetBranch("phpfcands_2430_pt");
+		if (phpfcands_2430_pt_branch) {phpfcands_2430_pt_branch->SetAddress(&phpfcands_2430_pt_);}
 	}
 	phpfcands_30in_pt_branch = 0;
 	if (tree->GetBranch("phpfcands_30in_pt") != 0) {
@@ -2108,15 +1943,15 @@ void Init(TTree *tree) {
 		nupfcands_1316_pt_branch = tree->GetBranch("nupfcands_1316_pt");
 		if (nupfcands_1316_pt_branch) {nupfcands_1316_pt_branch->SetAddress(&nupfcands_1316_pt_);}
 	}
-	nupfcands_1625_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_1625_pt") != 0) {
-		nupfcands_1625_pt_branch = tree->GetBranch("nupfcands_1625_pt");
-		if (nupfcands_1625_pt_branch) {nupfcands_1625_pt_branch->SetAddress(&nupfcands_1625_pt_);}
+	nupfcands_1624_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_1624_pt") != 0) {
+		nupfcands_1624_pt_branch = tree->GetBranch("nupfcands_1624_pt");
+		if (nupfcands_1624_pt_branch) {nupfcands_1624_pt_branch->SetAddress(&nupfcands_1624_pt_);}
 	}
-	nupfcands_2530_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_2530_pt") != 0) {
-		nupfcands_2530_pt_branch = tree->GetBranch("nupfcands_2530_pt");
-		if (nupfcands_2530_pt_branch) {nupfcands_2530_pt_branch->SetAddress(&nupfcands_2530_pt_);}
+	nupfcands_2430_pt_branch = 0;
+	if (tree->GetBranch("nupfcands_2430_pt") != 0) {
+		nupfcands_2430_pt_branch = tree->GetBranch("nupfcands_2430_pt");
+		if (nupfcands_2430_pt_branch) {nupfcands_2430_pt_branch->SetAddress(&nupfcands_2430_pt_);}
 	}
 	nupfcands_30in_pt_branch = 0;
 	if (tree->GetBranch("nupfcands_30in_pt") != 0) {
@@ -2133,15 +1968,15 @@ void Init(TTree *tree) {
 		chpfcands_1316_phi_branch = tree->GetBranch("chpfcands_1316_phi");
 		if (chpfcands_1316_phi_branch) {chpfcands_1316_phi_branch->SetAddress(&chpfcands_1316_phi_);}
 	}
-	chpfcands_1625_phi_branch = 0;
-	if (tree->GetBranch("chpfcands_1625_phi") != 0) {
-		chpfcands_1625_phi_branch = tree->GetBranch("chpfcands_1625_phi");
-		if (chpfcands_1625_phi_branch) {chpfcands_1625_phi_branch->SetAddress(&chpfcands_1625_phi_);}
+	chpfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_1624_phi") != 0) {
+		chpfcands_1624_phi_branch = tree->GetBranch("chpfcands_1624_phi");
+		if (chpfcands_1624_phi_branch) {chpfcands_1624_phi_branch->SetAddress(&chpfcands_1624_phi_);}
 	}
-	chpfcands_2530_phi_branch = 0;
-	if (tree->GetBranch("chpfcands_2530_phi") != 0) {
-		chpfcands_2530_phi_branch = tree->GetBranch("chpfcands_2530_phi");
-		if (chpfcands_2530_phi_branch) {chpfcands_2530_phi_branch->SetAddress(&chpfcands_2530_phi_);}
+	chpfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("chpfcands_2430_phi") != 0) {
+		chpfcands_2430_phi_branch = tree->GetBranch("chpfcands_2430_phi");
+		if (chpfcands_2430_phi_branch) {chpfcands_2430_phi_branch->SetAddress(&chpfcands_2430_phi_);}
 	}
 	chpfcands_30in_phi_branch = 0;
 	if (tree->GetBranch("chpfcands_30in_phi") != 0) {
@@ -2158,15 +1993,15 @@ void Init(TTree *tree) {
 		phpfcands_1316_phi_branch = tree->GetBranch("phpfcands_1316_phi");
 		if (phpfcands_1316_phi_branch) {phpfcands_1316_phi_branch->SetAddress(&phpfcands_1316_phi_);}
 	}
-	phpfcands_1625_phi_branch = 0;
-	if (tree->GetBranch("phpfcands_1625_phi") != 0) {
-		phpfcands_1625_phi_branch = tree->GetBranch("phpfcands_1625_phi");
-		if (phpfcands_1625_phi_branch) {phpfcands_1625_phi_branch->SetAddress(&phpfcands_1625_phi_);}
+	phpfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_1624_phi") != 0) {
+		phpfcands_1624_phi_branch = tree->GetBranch("phpfcands_1624_phi");
+		if (phpfcands_1624_phi_branch) {phpfcands_1624_phi_branch->SetAddress(&phpfcands_1624_phi_);}
 	}
-	phpfcands_2530_phi_branch = 0;
-	if (tree->GetBranch("phpfcands_2530_phi") != 0) {
-		phpfcands_2530_phi_branch = tree->GetBranch("phpfcands_2530_phi");
-		if (phpfcands_2530_phi_branch) {phpfcands_2530_phi_branch->SetAddress(&phpfcands_2530_phi_);}
+	phpfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("phpfcands_2430_phi") != 0) {
+		phpfcands_2430_phi_branch = tree->GetBranch("phpfcands_2430_phi");
+		if (phpfcands_2430_phi_branch) {phpfcands_2430_phi_branch->SetAddress(&phpfcands_2430_phi_);}
 	}
 	phpfcands_30in_phi_branch = 0;
 	if (tree->GetBranch("phpfcands_30in_phi") != 0) {
@@ -2183,130 +2018,20 @@ void Init(TTree *tree) {
 		nupfcands_1316_phi_branch = tree->GetBranch("nupfcands_1316_phi");
 		if (nupfcands_1316_phi_branch) {nupfcands_1316_phi_branch->SetAddress(&nupfcands_1316_phi_);}
 	}
-	nupfcands_1625_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_1625_phi") != 0) {
-		nupfcands_1625_phi_branch = tree->GetBranch("nupfcands_1625_phi");
-		if (nupfcands_1625_phi_branch) {nupfcands_1625_phi_branch->SetAddress(&nupfcands_1625_phi_);}
+	nupfcands_1624_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_1624_phi") != 0) {
+		nupfcands_1624_phi_branch = tree->GetBranch("nupfcands_1624_phi");
+		if (nupfcands_1624_phi_branch) {nupfcands_1624_phi_branch->SetAddress(&nupfcands_1624_phi_);}
 	}
-	nupfcands_2530_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_2530_phi") != 0) {
-		nupfcands_2530_phi_branch = tree->GetBranch("nupfcands_2530_phi");
-		if (nupfcands_2530_phi_branch) {nupfcands_2530_phi_branch->SetAddress(&nupfcands_2530_phi_);}
+	nupfcands_2430_phi_branch = 0;
+	if (tree->GetBranch("nupfcands_2430_phi") != 0) {
+		nupfcands_2430_phi_branch = tree->GetBranch("nupfcands_2430_phi");
+		if (nupfcands_2430_phi_branch) {nupfcands_2430_phi_branch->SetAddress(&nupfcands_2430_phi_);}
 	}
 	nupfcands_30in_phi_branch = 0;
 	if (tree->GetBranch("nupfcands_30in_phi") != 0) {
 		nupfcands_30in_phi_branch = tree->GetBranch("nupfcands_30in_phi");
 		if (nupfcands_30in_phi_branch) {nupfcands_30in_phi_branch->SetAddress(&nupfcands_30in_phi_);}
-	}
-	pfcandmet_pt05_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt05_pt") != 0) {
-		pfcandmet_pt05_pt_branch = tree->GetBranch("pfcandmet_pt05_pt");
-		if (pfcandmet_pt05_pt_branch) {pfcandmet_pt05_pt_branch->SetAddress(&pfcandmet_pt05_pt_);}
-	}
-	pfcandmet_pt10_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt10_pt") != 0) {
-		pfcandmet_pt10_pt_branch = tree->GetBranch("pfcandmet_pt10_pt");
-		if (pfcandmet_pt10_pt_branch) {pfcandmet_pt10_pt_branch->SetAddress(&pfcandmet_pt10_pt_);}
-	}
-	pfcandmet_pt15_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt15_pt") != 0) {
-		pfcandmet_pt15_pt_branch = tree->GetBranch("pfcandmet_pt15_pt");
-		if (pfcandmet_pt15_pt_branch) {pfcandmet_pt15_pt_branch->SetAddress(&pfcandmet_pt15_pt_);}
-	}
-	pfcandmet_pt20_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt20_pt") != 0) {
-		pfcandmet_pt20_pt_branch = tree->GetBranch("pfcandmet_pt20_pt");
-		if (pfcandmet_pt20_pt_branch) {pfcandmet_pt20_pt_branch->SetAddress(&pfcandmet_pt20_pt_);}
-	}
-	pfcandmet_pt25_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt25_pt") != 0) {
-		pfcandmet_pt25_pt_branch = tree->GetBranch("pfcandmet_pt25_pt");
-		if (pfcandmet_pt25_pt_branch) {pfcandmet_pt25_pt_branch->SetAddress(&pfcandmet_pt25_pt_);}
-	}
-	nupfcands_pt05_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_pt05_pt") != 0) {
-		nupfcands_pt05_pt_branch = tree->GetBranch("nupfcands_pt05_pt");
-		if (nupfcands_pt05_pt_branch) {nupfcands_pt05_pt_branch->SetAddress(&nupfcands_pt05_pt_);}
-	}
-	nupfcands_pt10_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_pt10_pt") != 0) {
-		nupfcands_pt10_pt_branch = tree->GetBranch("nupfcands_pt10_pt");
-		if (nupfcands_pt10_pt_branch) {nupfcands_pt10_pt_branch->SetAddress(&nupfcands_pt10_pt_);}
-	}
-	nupfcands_pt15_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_pt15_pt") != 0) {
-		nupfcands_pt15_pt_branch = tree->GetBranch("nupfcands_pt15_pt");
-		if (nupfcands_pt15_pt_branch) {nupfcands_pt15_pt_branch->SetAddress(&nupfcands_pt15_pt_);}
-	}
-	nupfcands_pt20_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_pt20_pt") != 0) {
-		nupfcands_pt20_pt_branch = tree->GetBranch("nupfcands_pt20_pt");
-		if (nupfcands_pt20_pt_branch) {nupfcands_pt20_pt_branch->SetAddress(&nupfcands_pt20_pt_);}
-	}
-	nupfcands_pt25_pt_branch = 0;
-	if (tree->GetBranch("nupfcands_pt25_pt") != 0) {
-		nupfcands_pt25_pt_branch = tree->GetBranch("nupfcands_pt25_pt");
-		if (nupfcands_pt25_pt_branch) {nupfcands_pt25_pt_branch->SetAddress(&nupfcands_pt25_pt_);}
-	}
-	pfcandmet_pt05_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt05_phi") != 0) {
-		pfcandmet_pt05_phi_branch = tree->GetBranch("pfcandmet_pt05_phi");
-		if (pfcandmet_pt05_phi_branch) {pfcandmet_pt05_phi_branch->SetAddress(&pfcandmet_pt05_phi_);}
-	}
-	pfcandmet_pt10_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt10_phi") != 0) {
-		pfcandmet_pt10_phi_branch = tree->GetBranch("pfcandmet_pt10_phi");
-		if (pfcandmet_pt10_phi_branch) {pfcandmet_pt10_phi_branch->SetAddress(&pfcandmet_pt10_phi_);}
-	}
-	pfcandmet_pt15_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt15_phi") != 0) {
-		pfcandmet_pt15_phi_branch = tree->GetBranch("pfcandmet_pt15_phi");
-		if (pfcandmet_pt15_phi_branch) {pfcandmet_pt15_phi_branch->SetAddress(&pfcandmet_pt15_phi_);}
-	}
-	pfcandmet_pt20_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt20_phi") != 0) {
-		pfcandmet_pt20_phi_branch = tree->GetBranch("pfcandmet_pt20_phi");
-		if (pfcandmet_pt20_phi_branch) {pfcandmet_pt20_phi_branch->SetAddress(&pfcandmet_pt20_phi_);}
-	}
-	pfcandmet_pt25_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_pt25_phi") != 0) {
-		pfcandmet_pt25_phi_branch = tree->GetBranch("pfcandmet_pt25_phi");
-		if (pfcandmet_pt25_phi_branch) {pfcandmet_pt25_phi_branch->SetAddress(&pfcandmet_pt25_phi_);}
-	}
-	nupfcands_pt05_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_pt05_phi") != 0) {
-		nupfcands_pt05_phi_branch = tree->GetBranch("nupfcands_pt05_phi");
-		if (nupfcands_pt05_phi_branch) {nupfcands_pt05_phi_branch->SetAddress(&nupfcands_pt05_phi_);}
-	}
-	nupfcands_pt10_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_pt10_phi") != 0) {
-		nupfcands_pt10_phi_branch = tree->GetBranch("nupfcands_pt10_phi");
-		if (nupfcands_pt10_phi_branch) {nupfcands_pt10_phi_branch->SetAddress(&nupfcands_pt10_phi_);}
-	}
-	nupfcands_pt15_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_pt15_phi") != 0) {
-		nupfcands_pt15_phi_branch = tree->GetBranch("nupfcands_pt15_phi");
-		if (nupfcands_pt15_phi_branch) {nupfcands_pt15_phi_branch->SetAddress(&nupfcands_pt15_phi_);}
-	}
-	nupfcands_pt20_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_pt20_phi") != 0) {
-		nupfcands_pt20_phi_branch = tree->GetBranch("nupfcands_pt20_phi");
-		if (nupfcands_pt20_phi_branch) {nupfcands_pt20_phi_branch->SetAddress(&nupfcands_pt20_phi_);}
-	}
-	nupfcands_pt25_phi_branch = 0;
-	if (tree->GetBranch("nupfcands_pt25_phi") != 0) {
-		nupfcands_pt25_phi_branch = tree->GetBranch("nupfcands_pt25_phi");
-		if (nupfcands_pt25_phi_branch) {nupfcands_pt25_phi_branch->SetAddress(&nupfcands_pt25_phi_);}
-	}
-	pfcandmet_0030_pt_branch = 0;
-	if (tree->GetBranch("pfcandmet_0030_pt") != 0) {
-		pfcandmet_0030_pt_branch = tree->GetBranch("pfcandmet_0030_pt");
-		if (pfcandmet_0030_pt_branch) {pfcandmet_0030_pt_branch->SetAddress(&pfcandmet_0030_pt_);}
-	}
-	pfcandmet_0030_phi_branch = 0;
-	if (tree->GetBranch("pfcandmet_0030_phi") != 0) {
-		pfcandmet_0030_phi_branch = tree->GetBranch("pfcandmet_0030_phi");
-		if (pfcandmet_0030_phi_branch) {pfcandmet_0030_phi_branch->SetAddress(&pfcandmet_0030_phi_);}
 	}
 	met_T1CHS_pt_branch = 0;
 	if (tree->GetBranch("met_T1CHS_pt") != 0) {
@@ -2318,10 +2043,45 @@ void Init(TTree *tree) {
 		met_T1CHS_phi_branch = tree->GetBranch("met_T1CHS_phi");
 		if (met_T1CHS_phi_branch) {met_T1CHS_phi_branch->SetAddress(&met_T1CHS_phi_);}
 	}
-	nFWjets_branch = 0;
-	if (tree->GetBranch("nFWjets") != 0) {
-		nFWjets_branch = tree->GetBranch("nFWjets");
-		if (nFWjets_branch) {nFWjets_branch->SetAddress(&nFWjets_);}
+	met_T1CHS_fromCORE_pt_branch = 0;
+	if (tree->GetBranch("met_T1CHS_fromCORE_pt") != 0) {
+		met_T1CHS_fromCORE_pt_branch = tree->GetBranch("met_T1CHS_fromCORE_pt");
+		if (met_T1CHS_fromCORE_pt_branch) {met_T1CHS_fromCORE_pt_branch->SetAddress(&met_T1CHS_fromCORE_pt_);}
+	}
+	met_T1CHS_fromCORE_phi_branch = 0;
+	if (tree->GetBranch("met_T1CHS_fromCORE_phi") != 0) {
+		met_T1CHS_fromCORE_phi_branch = tree->GetBranch("met_T1CHS_fromCORE_phi");
+		if (met_T1CHS_fromCORE_phi_branch) {met_T1CHS_fromCORE_phi_branch->SetAddress(&met_T1CHS_fromCORE_phi_);}
+	}
+	met_T1CHSNoHF_pt_branch = 0;
+	if (tree->GetBranch("met_T1CHSNoHF_pt") != 0) {
+		met_T1CHSNoHF_pt_branch = tree->GetBranch("met_T1CHSNoHF_pt");
+		if (met_T1CHSNoHF_pt_branch) {met_T1CHSNoHF_pt_branch->SetAddress(&met_T1CHSNoHF_pt_);}
+	}
+	met_T1CHSNoHF_phi_branch = 0;
+	if (tree->GetBranch("met_T1CHSNoHF_phi") != 0) {
+		met_T1CHSNoHF_phi_branch = tree->GetBranch("met_T1CHSNoHF_phi");
+		if (met_T1CHSNoHF_phi_branch) {met_T1CHSNoHF_phi_branch->SetAddress(&met_T1CHSNoHF_phi_);}
+	}
+	met_rawNoHF_pt_branch = 0;
+	if (tree->GetBranch("met_rawNoHF_pt") != 0) {
+		met_rawNoHF_pt_branch = tree->GetBranch("met_rawNoHF_pt");
+		if (met_rawNoHF_pt_branch) {met_rawNoHF_pt_branch->SetAddress(&met_rawNoHF_pt_);}
+	}
+	met_rawNoHF_phi_branch = 0;
+	if (tree->GetBranch("met_rawNoHF_phi") != 0) {
+		met_rawNoHF_phi_branch = tree->GetBranch("met_rawNoHF_phi");
+		if (met_rawNoHF_phi_branch) {met_rawNoHF_phi_branch->SetAddress(&met_rawNoHF_phi_);}
+	}
+	met_T1CHSNoHF_fromCORE_pt_branch = 0;
+	if (tree->GetBranch("met_T1CHSNoHF_fromCORE_pt") != 0) {
+		met_T1CHSNoHF_fromCORE_pt_branch = tree->GetBranch("met_T1CHSNoHF_fromCORE_pt");
+		if (met_T1CHSNoHF_fromCORE_pt_branch) {met_T1CHSNoHF_fromCORE_pt_branch->SetAddress(&met_T1CHSNoHF_fromCORE_pt_);}
+	}
+	met_T1CHSNoHF_fromCORE_phi_branch = 0;
+	if (tree->GetBranch("met_T1CHSNoHF_fromCORE_phi") != 0) {
+		met_T1CHSNoHF_fromCORE_phi_branch = tree->GetBranch("met_T1CHSNoHF_fromCORE_phi");
+		if (met_T1CHSNoHF_fromCORE_phi_branch) {met_T1CHSNoHF_fromCORE_phi_branch->SetAddress(&met_T1CHSNoHF_fromCORE_phi_);}
 	}
 	hyp_type_branch = 0;
 	if (tree->GetBranch("hyp_type") != 0) {
@@ -2556,76 +2316,46 @@ void GetEntry(unsigned int idx)
 		nupfmet_fwd_phi_isLoaded = false;
 		nupfmet_all_pt_isLoaded = false;
 		nupfmet_all_phi_isLoaded = false;
-		chpfcands_0013_sumet_isLoaded = false;
-		chpfcands_1316_sumet_isLoaded = false;
-		chpfcands_1625_sumet_isLoaded = false;
-		chpfcands_2530_sumet_isLoaded = false;
-		chpfcands_30in_sumet_isLoaded = false;
-		phpfcands_0013_sumet_isLoaded = false;
-		phpfcands_1316_sumet_isLoaded = false;
-		phpfcands_1625_sumet_isLoaded = false;
-		phpfcands_2530_sumet_isLoaded = false;
-		phpfcands_30in_sumet_isLoaded = false;
-		nupfcands_0013_sumet_isLoaded = false;
-		nupfcands_1316_sumet_isLoaded = false;
-		nupfcands_1625_sumet_isLoaded = false;
-		nupfcands_2530_sumet_isLoaded = false;
-		nupfcands_30in_sumet_isLoaded = false;
 		chpfcands_0013_pt_isLoaded = false;
 		chpfcands_1316_pt_isLoaded = false;
-		chpfcands_1625_pt_isLoaded = false;
-		chpfcands_2530_pt_isLoaded = false;
+		chpfcands_1624_pt_isLoaded = false;
+		chpfcands_2430_pt_isLoaded = false;
 		chpfcands_30in_pt_isLoaded = false;
 		phpfcands_0013_pt_isLoaded = false;
 		phpfcands_1316_pt_isLoaded = false;
-		phpfcands_1625_pt_isLoaded = false;
-		phpfcands_2530_pt_isLoaded = false;
+		phpfcands_1624_pt_isLoaded = false;
+		phpfcands_2430_pt_isLoaded = false;
 		phpfcands_30in_pt_isLoaded = false;
 		nupfcands_0013_pt_isLoaded = false;
 		nupfcands_1316_pt_isLoaded = false;
-		nupfcands_1625_pt_isLoaded = false;
-		nupfcands_2530_pt_isLoaded = false;
+		nupfcands_1624_pt_isLoaded = false;
+		nupfcands_2430_pt_isLoaded = false;
 		nupfcands_30in_pt_isLoaded = false;
 		chpfcands_0013_phi_isLoaded = false;
 		chpfcands_1316_phi_isLoaded = false;
-		chpfcands_1625_phi_isLoaded = false;
-		chpfcands_2530_phi_isLoaded = false;
+		chpfcands_1624_phi_isLoaded = false;
+		chpfcands_2430_phi_isLoaded = false;
 		chpfcands_30in_phi_isLoaded = false;
 		phpfcands_0013_phi_isLoaded = false;
 		phpfcands_1316_phi_isLoaded = false;
-		phpfcands_1625_phi_isLoaded = false;
-		phpfcands_2530_phi_isLoaded = false;
+		phpfcands_1624_phi_isLoaded = false;
+		phpfcands_2430_phi_isLoaded = false;
 		phpfcands_30in_phi_isLoaded = false;
 		nupfcands_0013_phi_isLoaded = false;
 		nupfcands_1316_phi_isLoaded = false;
-		nupfcands_1625_phi_isLoaded = false;
-		nupfcands_2530_phi_isLoaded = false;
+		nupfcands_1624_phi_isLoaded = false;
+		nupfcands_2430_phi_isLoaded = false;
 		nupfcands_30in_phi_isLoaded = false;
-		pfcandmet_pt05_pt_isLoaded = false;
-		pfcandmet_pt10_pt_isLoaded = false;
-		pfcandmet_pt15_pt_isLoaded = false;
-		pfcandmet_pt20_pt_isLoaded = false;
-		pfcandmet_pt25_pt_isLoaded = false;
-		nupfcands_pt05_pt_isLoaded = false;
-		nupfcands_pt10_pt_isLoaded = false;
-		nupfcands_pt15_pt_isLoaded = false;
-		nupfcands_pt20_pt_isLoaded = false;
-		nupfcands_pt25_pt_isLoaded = false;
-		pfcandmet_pt05_phi_isLoaded = false;
-		pfcandmet_pt10_phi_isLoaded = false;
-		pfcandmet_pt15_phi_isLoaded = false;
-		pfcandmet_pt20_phi_isLoaded = false;
-		pfcandmet_pt25_phi_isLoaded = false;
-		nupfcands_pt05_phi_isLoaded = false;
-		nupfcands_pt10_phi_isLoaded = false;
-		nupfcands_pt15_phi_isLoaded = false;
-		nupfcands_pt20_phi_isLoaded = false;
-		nupfcands_pt25_phi_isLoaded = false;
-		pfcandmet_0030_pt_isLoaded = false;
-		pfcandmet_0030_phi_isLoaded = false;
 		met_T1CHS_pt_isLoaded = false;
 		met_T1CHS_phi_isLoaded = false;
-		nFWjets_isLoaded = false;
+		met_T1CHS_fromCORE_pt_isLoaded = false;
+		met_T1CHS_fromCORE_phi_isLoaded = false;
+		met_T1CHSNoHF_pt_isLoaded = false;
+		met_T1CHSNoHF_phi_isLoaded = false;
+		met_rawNoHF_pt_isLoaded = false;
+		met_rawNoHF_phi_isLoaded = false;
+		met_T1CHSNoHF_fromCORE_pt_isLoaded = false;
+		met_T1CHSNoHF_fromCORE_phi_isLoaded = false;
 		hyp_type_isLoaded = false;
 		evt_type_isLoaded = false;
 	}
@@ -2850,76 +2580,46 @@ void LoadAllBranches()
 	if (nupfmet_fwd_phi_branch != 0) nupfmet_fwd_phi();
 	if (nupfmet_all_pt_branch != 0) nupfmet_all_pt();
 	if (nupfmet_all_phi_branch != 0) nupfmet_all_phi();
-	if (chpfcands_0013_sumet_branch != 0) chpfcands_0013_sumet();
-	if (chpfcands_1316_sumet_branch != 0) chpfcands_1316_sumet();
-	if (chpfcands_1625_sumet_branch != 0) chpfcands_1625_sumet();
-	if (chpfcands_2530_sumet_branch != 0) chpfcands_2530_sumet();
-	if (chpfcands_30in_sumet_branch != 0) chpfcands_30in_sumet();
-	if (phpfcands_0013_sumet_branch != 0) phpfcands_0013_sumet();
-	if (phpfcands_1316_sumet_branch != 0) phpfcands_1316_sumet();
-	if (phpfcands_1625_sumet_branch != 0) phpfcands_1625_sumet();
-	if (phpfcands_2530_sumet_branch != 0) phpfcands_2530_sumet();
-	if (phpfcands_30in_sumet_branch != 0) phpfcands_30in_sumet();
-	if (nupfcands_0013_sumet_branch != 0) nupfcands_0013_sumet();
-	if (nupfcands_1316_sumet_branch != 0) nupfcands_1316_sumet();
-	if (nupfcands_1625_sumet_branch != 0) nupfcands_1625_sumet();
-	if (nupfcands_2530_sumet_branch != 0) nupfcands_2530_sumet();
-	if (nupfcands_30in_sumet_branch != 0) nupfcands_30in_sumet();
 	if (chpfcands_0013_pt_branch != 0) chpfcands_0013_pt();
 	if (chpfcands_1316_pt_branch != 0) chpfcands_1316_pt();
-	if (chpfcands_1625_pt_branch != 0) chpfcands_1625_pt();
-	if (chpfcands_2530_pt_branch != 0) chpfcands_2530_pt();
+	if (chpfcands_1624_pt_branch != 0) chpfcands_1624_pt();
+	if (chpfcands_2430_pt_branch != 0) chpfcands_2430_pt();
 	if (chpfcands_30in_pt_branch != 0) chpfcands_30in_pt();
 	if (phpfcands_0013_pt_branch != 0) phpfcands_0013_pt();
 	if (phpfcands_1316_pt_branch != 0) phpfcands_1316_pt();
-	if (phpfcands_1625_pt_branch != 0) phpfcands_1625_pt();
-	if (phpfcands_2530_pt_branch != 0) phpfcands_2530_pt();
+	if (phpfcands_1624_pt_branch != 0) phpfcands_1624_pt();
+	if (phpfcands_2430_pt_branch != 0) phpfcands_2430_pt();
 	if (phpfcands_30in_pt_branch != 0) phpfcands_30in_pt();
 	if (nupfcands_0013_pt_branch != 0) nupfcands_0013_pt();
 	if (nupfcands_1316_pt_branch != 0) nupfcands_1316_pt();
-	if (nupfcands_1625_pt_branch != 0) nupfcands_1625_pt();
-	if (nupfcands_2530_pt_branch != 0) nupfcands_2530_pt();
+	if (nupfcands_1624_pt_branch != 0) nupfcands_1624_pt();
+	if (nupfcands_2430_pt_branch != 0) nupfcands_2430_pt();
 	if (nupfcands_30in_pt_branch != 0) nupfcands_30in_pt();
 	if (chpfcands_0013_phi_branch != 0) chpfcands_0013_phi();
 	if (chpfcands_1316_phi_branch != 0) chpfcands_1316_phi();
-	if (chpfcands_1625_phi_branch != 0) chpfcands_1625_phi();
-	if (chpfcands_2530_phi_branch != 0) chpfcands_2530_phi();
+	if (chpfcands_1624_phi_branch != 0) chpfcands_1624_phi();
+	if (chpfcands_2430_phi_branch != 0) chpfcands_2430_phi();
 	if (chpfcands_30in_phi_branch != 0) chpfcands_30in_phi();
 	if (phpfcands_0013_phi_branch != 0) phpfcands_0013_phi();
 	if (phpfcands_1316_phi_branch != 0) phpfcands_1316_phi();
-	if (phpfcands_1625_phi_branch != 0) phpfcands_1625_phi();
-	if (phpfcands_2530_phi_branch != 0) phpfcands_2530_phi();
+	if (phpfcands_1624_phi_branch != 0) phpfcands_1624_phi();
+	if (phpfcands_2430_phi_branch != 0) phpfcands_2430_phi();
 	if (phpfcands_30in_phi_branch != 0) phpfcands_30in_phi();
 	if (nupfcands_0013_phi_branch != 0) nupfcands_0013_phi();
 	if (nupfcands_1316_phi_branch != 0) nupfcands_1316_phi();
-	if (nupfcands_1625_phi_branch != 0) nupfcands_1625_phi();
-	if (nupfcands_2530_phi_branch != 0) nupfcands_2530_phi();
+	if (nupfcands_1624_phi_branch != 0) nupfcands_1624_phi();
+	if (nupfcands_2430_phi_branch != 0) nupfcands_2430_phi();
 	if (nupfcands_30in_phi_branch != 0) nupfcands_30in_phi();
-	if (pfcandmet_pt05_pt_branch != 0) pfcandmet_pt05_pt();
-	if (pfcandmet_pt10_pt_branch != 0) pfcandmet_pt10_pt();
-	if (pfcandmet_pt15_pt_branch != 0) pfcandmet_pt15_pt();
-	if (pfcandmet_pt20_pt_branch != 0) pfcandmet_pt20_pt();
-	if (pfcandmet_pt25_pt_branch != 0) pfcandmet_pt25_pt();
-	if (nupfcands_pt05_pt_branch != 0) nupfcands_pt05_pt();
-	if (nupfcands_pt10_pt_branch != 0) nupfcands_pt10_pt();
-	if (nupfcands_pt15_pt_branch != 0) nupfcands_pt15_pt();
-	if (nupfcands_pt20_pt_branch != 0) nupfcands_pt20_pt();
-	if (nupfcands_pt25_pt_branch != 0) nupfcands_pt25_pt();
-	if (pfcandmet_pt05_phi_branch != 0) pfcandmet_pt05_phi();
-	if (pfcandmet_pt10_phi_branch != 0) pfcandmet_pt10_phi();
-	if (pfcandmet_pt15_phi_branch != 0) pfcandmet_pt15_phi();
-	if (pfcandmet_pt20_phi_branch != 0) pfcandmet_pt20_phi();
-	if (pfcandmet_pt25_phi_branch != 0) pfcandmet_pt25_phi();
-	if (nupfcands_pt05_phi_branch != 0) nupfcands_pt05_phi();
-	if (nupfcands_pt10_phi_branch != 0) nupfcands_pt10_phi();
-	if (nupfcands_pt15_phi_branch != 0) nupfcands_pt15_phi();
-	if (nupfcands_pt20_phi_branch != 0) nupfcands_pt20_phi();
-	if (nupfcands_pt25_phi_branch != 0) nupfcands_pt25_phi();
-	if (pfcandmet_0030_pt_branch != 0) pfcandmet_0030_pt();
-	if (pfcandmet_0030_phi_branch != 0) pfcandmet_0030_phi();
 	if (met_T1CHS_pt_branch != 0) met_T1CHS_pt();
 	if (met_T1CHS_phi_branch != 0) met_T1CHS_phi();
-	if (nFWjets_branch != 0) nFWjets();
+	if (met_T1CHS_fromCORE_pt_branch != 0) met_T1CHS_fromCORE_pt();
+	if (met_T1CHS_fromCORE_phi_branch != 0) met_T1CHS_fromCORE_phi();
+	if (met_T1CHSNoHF_pt_branch != 0) met_T1CHSNoHF_pt();
+	if (met_T1CHSNoHF_phi_branch != 0) met_T1CHSNoHF_phi();
+	if (met_rawNoHF_pt_branch != 0) met_rawNoHF_pt();
+	if (met_rawNoHF_phi_branch != 0) met_rawNoHF_phi();
+	if (met_T1CHSNoHF_fromCORE_pt_branch != 0) met_T1CHSNoHF_fromCORE_pt();
+	if (met_T1CHSNoHF_fromCORE_phi_branch != 0) met_T1CHSNoHF_fromCORE_phi();
 	if (hyp_type_branch != 0) hyp_type();
 	if (evt_type_branch != 0) evt_type();
 }
@@ -5745,201 +5445,6 @@ void LoadAllBranches()
 		}
 		return nupfmet_all_phi_;
 	}
-	float &chpfcands_0013_sumet()
-	{
-		if (not chpfcands_0013_sumet_isLoaded) {
-			if (chpfcands_0013_sumet_branch != 0) {
-				chpfcands_0013_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch chpfcands_0013_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			chpfcands_0013_sumet_isLoaded = true;
-		}
-		return chpfcands_0013_sumet_;
-	}
-	float &chpfcands_1316_sumet()
-	{
-		if (not chpfcands_1316_sumet_isLoaded) {
-			if (chpfcands_1316_sumet_branch != 0) {
-				chpfcands_1316_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch chpfcands_1316_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			chpfcands_1316_sumet_isLoaded = true;
-		}
-		return chpfcands_1316_sumet_;
-	}
-	float &chpfcands_1625_sumet()
-	{
-		if (not chpfcands_1625_sumet_isLoaded) {
-			if (chpfcands_1625_sumet_branch != 0) {
-				chpfcands_1625_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch chpfcands_1625_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			chpfcands_1625_sumet_isLoaded = true;
-		}
-		return chpfcands_1625_sumet_;
-	}
-	float &chpfcands_2530_sumet()
-	{
-		if (not chpfcands_2530_sumet_isLoaded) {
-			if (chpfcands_2530_sumet_branch != 0) {
-				chpfcands_2530_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch chpfcands_2530_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			chpfcands_2530_sumet_isLoaded = true;
-		}
-		return chpfcands_2530_sumet_;
-	}
-	float &chpfcands_30in_sumet()
-	{
-		if (not chpfcands_30in_sumet_isLoaded) {
-			if (chpfcands_30in_sumet_branch != 0) {
-				chpfcands_30in_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch chpfcands_30in_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			chpfcands_30in_sumet_isLoaded = true;
-		}
-		return chpfcands_30in_sumet_;
-	}
-	float &phpfcands_0013_sumet()
-	{
-		if (not phpfcands_0013_sumet_isLoaded) {
-			if (phpfcands_0013_sumet_branch != 0) {
-				phpfcands_0013_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch phpfcands_0013_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			phpfcands_0013_sumet_isLoaded = true;
-		}
-		return phpfcands_0013_sumet_;
-	}
-	float &phpfcands_1316_sumet()
-	{
-		if (not phpfcands_1316_sumet_isLoaded) {
-			if (phpfcands_1316_sumet_branch != 0) {
-				phpfcands_1316_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch phpfcands_1316_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			phpfcands_1316_sumet_isLoaded = true;
-		}
-		return phpfcands_1316_sumet_;
-	}
-	float &phpfcands_1625_sumet()
-	{
-		if (not phpfcands_1625_sumet_isLoaded) {
-			if (phpfcands_1625_sumet_branch != 0) {
-				phpfcands_1625_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch phpfcands_1625_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			phpfcands_1625_sumet_isLoaded = true;
-		}
-		return phpfcands_1625_sumet_;
-	}
-	float &phpfcands_2530_sumet()
-	{
-		if (not phpfcands_2530_sumet_isLoaded) {
-			if (phpfcands_2530_sumet_branch != 0) {
-				phpfcands_2530_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch phpfcands_2530_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			phpfcands_2530_sumet_isLoaded = true;
-		}
-		return phpfcands_2530_sumet_;
-	}
-	float &phpfcands_30in_sumet()
-	{
-		if (not phpfcands_30in_sumet_isLoaded) {
-			if (phpfcands_30in_sumet_branch != 0) {
-				phpfcands_30in_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch phpfcands_30in_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			phpfcands_30in_sumet_isLoaded = true;
-		}
-		return phpfcands_30in_sumet_;
-	}
-	float &nupfcands_0013_sumet()
-	{
-		if (not nupfcands_0013_sumet_isLoaded) {
-			if (nupfcands_0013_sumet_branch != 0) {
-				nupfcands_0013_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_0013_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_0013_sumet_isLoaded = true;
-		}
-		return nupfcands_0013_sumet_;
-	}
-	float &nupfcands_1316_sumet()
-	{
-		if (not nupfcands_1316_sumet_isLoaded) {
-			if (nupfcands_1316_sumet_branch != 0) {
-				nupfcands_1316_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_1316_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_1316_sumet_isLoaded = true;
-		}
-		return nupfcands_1316_sumet_;
-	}
-	float &nupfcands_1625_sumet()
-	{
-		if (not nupfcands_1625_sumet_isLoaded) {
-			if (nupfcands_1625_sumet_branch != 0) {
-				nupfcands_1625_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_1625_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_1625_sumet_isLoaded = true;
-		}
-		return nupfcands_1625_sumet_;
-	}
-	float &nupfcands_2530_sumet()
-	{
-		if (not nupfcands_2530_sumet_isLoaded) {
-			if (nupfcands_2530_sumet_branch != 0) {
-				nupfcands_2530_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_2530_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_2530_sumet_isLoaded = true;
-		}
-		return nupfcands_2530_sumet_;
-	}
-	float &nupfcands_30in_sumet()
-	{
-		if (not nupfcands_30in_sumet_isLoaded) {
-			if (nupfcands_30in_sumet_branch != 0) {
-				nupfcands_30in_sumet_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_30in_sumet_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_30in_sumet_isLoaded = true;
-		}
-		return nupfcands_30in_sumet_;
-	}
 	float &chpfcands_0013_pt()
 	{
 		if (not chpfcands_0013_pt_isLoaded) {
@@ -5966,31 +5471,31 @@ void LoadAllBranches()
 		}
 		return chpfcands_1316_pt_;
 	}
-	float &chpfcands_1625_pt()
+	float &chpfcands_1624_pt()
 	{
-		if (not chpfcands_1625_pt_isLoaded) {
-			if (chpfcands_1625_pt_branch != 0) {
-				chpfcands_1625_pt_branch->GetEntry(index);
+		if (not chpfcands_1624_pt_isLoaded) {
+			if (chpfcands_1624_pt_branch != 0) {
+				chpfcands_1624_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch chpfcands_1625_pt_branch does not exist!\n");
+				printf("branch chpfcands_1624_pt_branch does not exist!\n");
 				exit(1);
 			}
-			chpfcands_1625_pt_isLoaded = true;
+			chpfcands_1624_pt_isLoaded = true;
 		}
-		return chpfcands_1625_pt_;
+		return chpfcands_1624_pt_;
 	}
-	float &chpfcands_2530_pt()
+	float &chpfcands_2430_pt()
 	{
-		if (not chpfcands_2530_pt_isLoaded) {
-			if (chpfcands_2530_pt_branch != 0) {
-				chpfcands_2530_pt_branch->GetEntry(index);
+		if (not chpfcands_2430_pt_isLoaded) {
+			if (chpfcands_2430_pt_branch != 0) {
+				chpfcands_2430_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch chpfcands_2530_pt_branch does not exist!\n");
+				printf("branch chpfcands_2430_pt_branch does not exist!\n");
 				exit(1);
 			}
-			chpfcands_2530_pt_isLoaded = true;
+			chpfcands_2430_pt_isLoaded = true;
 		}
-		return chpfcands_2530_pt_;
+		return chpfcands_2430_pt_;
 	}
 	float &chpfcands_30in_pt()
 	{
@@ -6031,31 +5536,31 @@ void LoadAllBranches()
 		}
 		return phpfcands_1316_pt_;
 	}
-	float &phpfcands_1625_pt()
+	float &phpfcands_1624_pt()
 	{
-		if (not phpfcands_1625_pt_isLoaded) {
-			if (phpfcands_1625_pt_branch != 0) {
-				phpfcands_1625_pt_branch->GetEntry(index);
+		if (not phpfcands_1624_pt_isLoaded) {
+			if (phpfcands_1624_pt_branch != 0) {
+				phpfcands_1624_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch phpfcands_1625_pt_branch does not exist!\n");
+				printf("branch phpfcands_1624_pt_branch does not exist!\n");
 				exit(1);
 			}
-			phpfcands_1625_pt_isLoaded = true;
+			phpfcands_1624_pt_isLoaded = true;
 		}
-		return phpfcands_1625_pt_;
+		return phpfcands_1624_pt_;
 	}
-	float &phpfcands_2530_pt()
+	float &phpfcands_2430_pt()
 	{
-		if (not phpfcands_2530_pt_isLoaded) {
-			if (phpfcands_2530_pt_branch != 0) {
-				phpfcands_2530_pt_branch->GetEntry(index);
+		if (not phpfcands_2430_pt_isLoaded) {
+			if (phpfcands_2430_pt_branch != 0) {
+				phpfcands_2430_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch phpfcands_2530_pt_branch does not exist!\n");
+				printf("branch phpfcands_2430_pt_branch does not exist!\n");
 				exit(1);
 			}
-			phpfcands_2530_pt_isLoaded = true;
+			phpfcands_2430_pt_isLoaded = true;
 		}
-		return phpfcands_2530_pt_;
+		return phpfcands_2430_pt_;
 	}
 	float &phpfcands_30in_pt()
 	{
@@ -6096,31 +5601,31 @@ void LoadAllBranches()
 		}
 		return nupfcands_1316_pt_;
 	}
-	float &nupfcands_1625_pt()
+	float &nupfcands_1624_pt()
 	{
-		if (not nupfcands_1625_pt_isLoaded) {
-			if (nupfcands_1625_pt_branch != 0) {
-				nupfcands_1625_pt_branch->GetEntry(index);
+		if (not nupfcands_1624_pt_isLoaded) {
+			if (nupfcands_1624_pt_branch != 0) {
+				nupfcands_1624_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch nupfcands_1625_pt_branch does not exist!\n");
+				printf("branch nupfcands_1624_pt_branch does not exist!\n");
 				exit(1);
 			}
-			nupfcands_1625_pt_isLoaded = true;
+			nupfcands_1624_pt_isLoaded = true;
 		}
-		return nupfcands_1625_pt_;
+		return nupfcands_1624_pt_;
 	}
-	float &nupfcands_2530_pt()
+	float &nupfcands_2430_pt()
 	{
-		if (not nupfcands_2530_pt_isLoaded) {
-			if (nupfcands_2530_pt_branch != 0) {
-				nupfcands_2530_pt_branch->GetEntry(index);
+		if (not nupfcands_2430_pt_isLoaded) {
+			if (nupfcands_2430_pt_branch != 0) {
+				nupfcands_2430_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch nupfcands_2530_pt_branch does not exist!\n");
+				printf("branch nupfcands_2430_pt_branch does not exist!\n");
 				exit(1);
 			}
-			nupfcands_2530_pt_isLoaded = true;
+			nupfcands_2430_pt_isLoaded = true;
 		}
-		return nupfcands_2530_pt_;
+		return nupfcands_2430_pt_;
 	}
 	float &nupfcands_30in_pt()
 	{
@@ -6161,31 +5666,31 @@ void LoadAllBranches()
 		}
 		return chpfcands_1316_phi_;
 	}
-	float &chpfcands_1625_phi()
+	float &chpfcands_1624_phi()
 	{
-		if (not chpfcands_1625_phi_isLoaded) {
-			if (chpfcands_1625_phi_branch != 0) {
-				chpfcands_1625_phi_branch->GetEntry(index);
+		if (not chpfcands_1624_phi_isLoaded) {
+			if (chpfcands_1624_phi_branch != 0) {
+				chpfcands_1624_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch chpfcands_1625_phi_branch does not exist!\n");
+				printf("branch chpfcands_1624_phi_branch does not exist!\n");
 				exit(1);
 			}
-			chpfcands_1625_phi_isLoaded = true;
+			chpfcands_1624_phi_isLoaded = true;
 		}
-		return chpfcands_1625_phi_;
+		return chpfcands_1624_phi_;
 	}
-	float &chpfcands_2530_phi()
+	float &chpfcands_2430_phi()
 	{
-		if (not chpfcands_2530_phi_isLoaded) {
-			if (chpfcands_2530_phi_branch != 0) {
-				chpfcands_2530_phi_branch->GetEntry(index);
+		if (not chpfcands_2430_phi_isLoaded) {
+			if (chpfcands_2430_phi_branch != 0) {
+				chpfcands_2430_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch chpfcands_2530_phi_branch does not exist!\n");
+				printf("branch chpfcands_2430_phi_branch does not exist!\n");
 				exit(1);
 			}
-			chpfcands_2530_phi_isLoaded = true;
+			chpfcands_2430_phi_isLoaded = true;
 		}
-		return chpfcands_2530_phi_;
+		return chpfcands_2430_phi_;
 	}
 	float &chpfcands_30in_phi()
 	{
@@ -6226,31 +5731,31 @@ void LoadAllBranches()
 		}
 		return phpfcands_1316_phi_;
 	}
-	float &phpfcands_1625_phi()
+	float &phpfcands_1624_phi()
 	{
-		if (not phpfcands_1625_phi_isLoaded) {
-			if (phpfcands_1625_phi_branch != 0) {
-				phpfcands_1625_phi_branch->GetEntry(index);
+		if (not phpfcands_1624_phi_isLoaded) {
+			if (phpfcands_1624_phi_branch != 0) {
+				phpfcands_1624_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch phpfcands_1625_phi_branch does not exist!\n");
+				printf("branch phpfcands_1624_phi_branch does not exist!\n");
 				exit(1);
 			}
-			phpfcands_1625_phi_isLoaded = true;
+			phpfcands_1624_phi_isLoaded = true;
 		}
-		return phpfcands_1625_phi_;
+		return phpfcands_1624_phi_;
 	}
-	float &phpfcands_2530_phi()
+	float &phpfcands_2430_phi()
 	{
-		if (not phpfcands_2530_phi_isLoaded) {
-			if (phpfcands_2530_phi_branch != 0) {
-				phpfcands_2530_phi_branch->GetEntry(index);
+		if (not phpfcands_2430_phi_isLoaded) {
+			if (phpfcands_2430_phi_branch != 0) {
+				phpfcands_2430_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch phpfcands_2530_phi_branch does not exist!\n");
+				printf("branch phpfcands_2430_phi_branch does not exist!\n");
 				exit(1);
 			}
-			phpfcands_2530_phi_isLoaded = true;
+			phpfcands_2430_phi_isLoaded = true;
 		}
-		return phpfcands_2530_phi_;
+		return phpfcands_2430_phi_;
 	}
 	float &phpfcands_30in_phi()
 	{
@@ -6291,31 +5796,31 @@ void LoadAllBranches()
 		}
 		return nupfcands_1316_phi_;
 	}
-	float &nupfcands_1625_phi()
+	float &nupfcands_1624_phi()
 	{
-		if (not nupfcands_1625_phi_isLoaded) {
-			if (nupfcands_1625_phi_branch != 0) {
-				nupfcands_1625_phi_branch->GetEntry(index);
+		if (not nupfcands_1624_phi_isLoaded) {
+			if (nupfcands_1624_phi_branch != 0) {
+				nupfcands_1624_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch nupfcands_1625_phi_branch does not exist!\n");
+				printf("branch nupfcands_1624_phi_branch does not exist!\n");
 				exit(1);
 			}
-			nupfcands_1625_phi_isLoaded = true;
+			nupfcands_1624_phi_isLoaded = true;
 		}
-		return nupfcands_1625_phi_;
+		return nupfcands_1624_phi_;
 	}
-	float &nupfcands_2530_phi()
+	float &nupfcands_2430_phi()
 	{
-		if (not nupfcands_2530_phi_isLoaded) {
-			if (nupfcands_2530_phi_branch != 0) {
-				nupfcands_2530_phi_branch->GetEntry(index);
+		if (not nupfcands_2430_phi_isLoaded) {
+			if (nupfcands_2430_phi_branch != 0) {
+				nupfcands_2430_phi_branch->GetEntry(index);
 			} else { 
-				printf("branch nupfcands_2530_phi_branch does not exist!\n");
+				printf("branch nupfcands_2430_phi_branch does not exist!\n");
 				exit(1);
 			}
-			nupfcands_2530_phi_isLoaded = true;
+			nupfcands_2430_phi_isLoaded = true;
 		}
-		return nupfcands_2530_phi_;
+		return nupfcands_2430_phi_;
 	}
 	float &nupfcands_30in_phi()
 	{
@@ -6329,292 +5834,6 @@ void LoadAllBranches()
 			nupfcands_30in_phi_isLoaded = true;
 		}
 		return nupfcands_30in_phi_;
-	}
-	float &pfcandmet_pt05_pt()
-	{
-		if (not pfcandmet_pt05_pt_isLoaded) {
-			if (pfcandmet_pt05_pt_branch != 0) {
-				pfcandmet_pt05_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt05_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt05_pt_isLoaded = true;
-		}
-		return pfcandmet_pt05_pt_;
-	}
-	float &pfcandmet_pt10_pt()
-	{
-		if (not pfcandmet_pt10_pt_isLoaded) {
-			if (pfcandmet_pt10_pt_branch != 0) {
-				pfcandmet_pt10_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt10_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt10_pt_isLoaded = true;
-		}
-		return pfcandmet_pt10_pt_;
-	}
-	float &pfcandmet_pt15_pt()
-	{
-		if (not pfcandmet_pt15_pt_isLoaded) {
-			if (pfcandmet_pt15_pt_branch != 0) {
-				pfcandmet_pt15_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt15_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt15_pt_isLoaded = true;
-		}
-		return pfcandmet_pt15_pt_;
-	}
-	float &pfcandmet_pt20_pt()
-	{
-		if (not pfcandmet_pt20_pt_isLoaded) {
-			if (pfcandmet_pt20_pt_branch != 0) {
-				pfcandmet_pt20_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt20_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt20_pt_isLoaded = true;
-		}
-		return pfcandmet_pt20_pt_;
-	}
-	float &pfcandmet_pt25_pt()
-	{
-		if (not pfcandmet_pt25_pt_isLoaded) {
-			if (pfcandmet_pt25_pt_branch != 0) {
-				pfcandmet_pt25_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt25_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt25_pt_isLoaded = true;
-		}
-		return pfcandmet_pt25_pt_;
-	}
-	float &nupfcands_pt05_pt()
-	{
-		if (not nupfcands_pt05_pt_isLoaded) {
-			if (nupfcands_pt05_pt_branch != 0) {
-				nupfcands_pt05_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt05_pt_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt05_pt_isLoaded = true;
-		}
-		return nupfcands_pt05_pt_;
-	}
-	float &nupfcands_pt10_pt()
-	{
-		if (not nupfcands_pt10_pt_isLoaded) {
-			if (nupfcands_pt10_pt_branch != 0) {
-				nupfcands_pt10_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt10_pt_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt10_pt_isLoaded = true;
-		}
-		return nupfcands_pt10_pt_;
-	}
-	float &nupfcands_pt15_pt()
-	{
-		if (not nupfcands_pt15_pt_isLoaded) {
-			if (nupfcands_pt15_pt_branch != 0) {
-				nupfcands_pt15_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt15_pt_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt15_pt_isLoaded = true;
-		}
-		return nupfcands_pt15_pt_;
-	}
-	float &nupfcands_pt20_pt()
-	{
-		if (not nupfcands_pt20_pt_isLoaded) {
-			if (nupfcands_pt20_pt_branch != 0) {
-				nupfcands_pt20_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt20_pt_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt20_pt_isLoaded = true;
-		}
-		return nupfcands_pt20_pt_;
-	}
-	float &nupfcands_pt25_pt()
-	{
-		if (not nupfcands_pt25_pt_isLoaded) {
-			if (nupfcands_pt25_pt_branch != 0) {
-				nupfcands_pt25_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt25_pt_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt25_pt_isLoaded = true;
-		}
-		return nupfcands_pt25_pt_;
-	}
-	float &pfcandmet_pt05_phi()
-	{
-		if (not pfcandmet_pt05_phi_isLoaded) {
-			if (pfcandmet_pt05_phi_branch != 0) {
-				pfcandmet_pt05_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt05_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt05_phi_isLoaded = true;
-		}
-		return pfcandmet_pt05_phi_;
-	}
-	float &pfcandmet_pt10_phi()
-	{
-		if (not pfcandmet_pt10_phi_isLoaded) {
-			if (pfcandmet_pt10_phi_branch != 0) {
-				pfcandmet_pt10_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt10_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt10_phi_isLoaded = true;
-		}
-		return pfcandmet_pt10_phi_;
-	}
-	float &pfcandmet_pt15_phi()
-	{
-		if (not pfcandmet_pt15_phi_isLoaded) {
-			if (pfcandmet_pt15_phi_branch != 0) {
-				pfcandmet_pt15_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt15_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt15_phi_isLoaded = true;
-		}
-		return pfcandmet_pt15_phi_;
-	}
-	float &pfcandmet_pt20_phi()
-	{
-		if (not pfcandmet_pt20_phi_isLoaded) {
-			if (pfcandmet_pt20_phi_branch != 0) {
-				pfcandmet_pt20_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt20_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt20_phi_isLoaded = true;
-		}
-		return pfcandmet_pt20_phi_;
-	}
-	float &pfcandmet_pt25_phi()
-	{
-		if (not pfcandmet_pt25_phi_isLoaded) {
-			if (pfcandmet_pt25_phi_branch != 0) {
-				pfcandmet_pt25_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_pt25_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_pt25_phi_isLoaded = true;
-		}
-		return pfcandmet_pt25_phi_;
-	}
-	float &nupfcands_pt05_phi()
-	{
-		if (not nupfcands_pt05_phi_isLoaded) {
-			if (nupfcands_pt05_phi_branch != 0) {
-				nupfcands_pt05_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt05_phi_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt05_phi_isLoaded = true;
-		}
-		return nupfcands_pt05_phi_;
-	}
-	float &nupfcands_pt10_phi()
-	{
-		if (not nupfcands_pt10_phi_isLoaded) {
-			if (nupfcands_pt10_phi_branch != 0) {
-				nupfcands_pt10_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt10_phi_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt10_phi_isLoaded = true;
-		}
-		return nupfcands_pt10_phi_;
-	}
-	float &nupfcands_pt15_phi()
-	{
-		if (not nupfcands_pt15_phi_isLoaded) {
-			if (nupfcands_pt15_phi_branch != 0) {
-				nupfcands_pt15_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt15_phi_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt15_phi_isLoaded = true;
-		}
-		return nupfcands_pt15_phi_;
-	}
-	float &nupfcands_pt20_phi()
-	{
-		if (not nupfcands_pt20_phi_isLoaded) {
-			if (nupfcands_pt20_phi_branch != 0) {
-				nupfcands_pt20_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt20_phi_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt20_phi_isLoaded = true;
-		}
-		return nupfcands_pt20_phi_;
-	}
-	float &nupfcands_pt25_phi()
-	{
-		if (not nupfcands_pt25_phi_isLoaded) {
-			if (nupfcands_pt25_phi_branch != 0) {
-				nupfcands_pt25_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch nupfcands_pt25_phi_branch does not exist!\n");
-				exit(1);
-			}
-			nupfcands_pt25_phi_isLoaded = true;
-		}
-		return nupfcands_pt25_phi_;
-	}
-	float &pfcandmet_0030_pt()
-	{
-		if (not pfcandmet_0030_pt_isLoaded) {
-			if (pfcandmet_0030_pt_branch != 0) {
-				pfcandmet_0030_pt_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_0030_pt_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_0030_pt_isLoaded = true;
-		}
-		return pfcandmet_0030_pt_;
-	}
-	float &pfcandmet_0030_phi()
-	{
-		if (not pfcandmet_0030_phi_isLoaded) {
-			if (pfcandmet_0030_phi_branch != 0) {
-				pfcandmet_0030_phi_branch->GetEntry(index);
-			} else { 
-				printf("branch pfcandmet_0030_phi_branch does not exist!\n");
-				exit(1);
-			}
-			pfcandmet_0030_phi_isLoaded = true;
-		}
-		return pfcandmet_0030_phi_;
 	}
 	float &met_T1CHS_pt()
 	{
@@ -6642,18 +5861,109 @@ void LoadAllBranches()
 		}
 		return met_T1CHS_phi_;
 	}
-	int &nFWjets()
+	float &met_T1CHS_fromCORE_pt()
 	{
-		if (not nFWjets_isLoaded) {
-			if (nFWjets_branch != 0) {
-				nFWjets_branch->GetEntry(index);
+		if (not met_T1CHS_fromCORE_pt_isLoaded) {
+			if (met_T1CHS_fromCORE_pt_branch != 0) {
+				met_T1CHS_fromCORE_pt_branch->GetEntry(index);
 			} else { 
-				printf("branch nFWjets_branch does not exist!\n");
+				printf("branch met_T1CHS_fromCORE_pt_branch does not exist!\n");
 				exit(1);
 			}
-			nFWjets_isLoaded = true;
+			met_T1CHS_fromCORE_pt_isLoaded = true;
 		}
-		return nFWjets_;
+		return met_T1CHS_fromCORE_pt_;
+	}
+	float &met_T1CHS_fromCORE_phi()
+	{
+		if (not met_T1CHS_fromCORE_phi_isLoaded) {
+			if (met_T1CHS_fromCORE_phi_branch != 0) {
+				met_T1CHS_fromCORE_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHS_fromCORE_phi_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHS_fromCORE_phi_isLoaded = true;
+		}
+		return met_T1CHS_fromCORE_phi_;
+	}
+	float &met_T1CHSNoHF_pt()
+	{
+		if (not met_T1CHSNoHF_pt_isLoaded) {
+			if (met_T1CHSNoHF_pt_branch != 0) {
+				met_T1CHSNoHF_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHSNoHF_pt_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHSNoHF_pt_isLoaded = true;
+		}
+		return met_T1CHSNoHF_pt_;
+	}
+	float &met_T1CHSNoHF_phi()
+	{
+		if (not met_T1CHSNoHF_phi_isLoaded) {
+			if (met_T1CHSNoHF_phi_branch != 0) {
+				met_T1CHSNoHF_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHSNoHF_phi_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHSNoHF_phi_isLoaded = true;
+		}
+		return met_T1CHSNoHF_phi_;
+	}
+	float &met_rawNoHF_pt()
+	{
+		if (not met_rawNoHF_pt_isLoaded) {
+			if (met_rawNoHF_pt_branch != 0) {
+				met_rawNoHF_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch met_rawNoHF_pt_branch does not exist!\n");
+				exit(1);
+			}
+			met_rawNoHF_pt_isLoaded = true;
+		}
+		return met_rawNoHF_pt_;
+	}
+	float &met_rawNoHF_phi()
+	{
+		if (not met_rawNoHF_phi_isLoaded) {
+			if (met_rawNoHF_phi_branch != 0) {
+				met_rawNoHF_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch met_rawNoHF_phi_branch does not exist!\n");
+				exit(1);
+			}
+			met_rawNoHF_phi_isLoaded = true;
+		}
+		return met_rawNoHF_phi_;
+	}
+	float &met_T1CHSNoHF_fromCORE_pt()
+	{
+		if (not met_T1CHSNoHF_fromCORE_pt_isLoaded) {
+			if (met_T1CHSNoHF_fromCORE_pt_branch != 0) {
+				met_T1CHSNoHF_fromCORE_pt_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHSNoHF_fromCORE_pt_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHSNoHF_fromCORE_pt_isLoaded = true;
+		}
+		return met_T1CHSNoHF_fromCORE_pt_;
+	}
+	float &met_T1CHSNoHF_fromCORE_phi()
+	{
+		if (not met_T1CHSNoHF_fromCORE_phi_isLoaded) {
+			if (met_T1CHSNoHF_fromCORE_phi_branch != 0) {
+				met_T1CHSNoHF_fromCORE_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch met_T1CHSNoHF_fromCORE_phi_branch does not exist!\n");
+				exit(1);
+			}
+			met_T1CHSNoHF_fromCORE_phi_isLoaded = true;
+		}
+		return met_T1CHSNoHF_fromCORE_phi_;
 	}
 	int &hyp_type()
 	{
@@ -6926,76 +6236,46 @@ namespace ZMet {
 	const float &nupfmet_fwd_phi();
 	const float &nupfmet_all_pt();
 	const float &nupfmet_all_phi();
-	const float &chpfcands_0013_sumet();
-	const float &chpfcands_1316_sumet();
-	const float &chpfcands_1625_sumet();
-	const float &chpfcands_2530_sumet();
-	const float &chpfcands_30in_sumet();
-	const float &phpfcands_0013_sumet();
-	const float &phpfcands_1316_sumet();
-	const float &phpfcands_1625_sumet();
-	const float &phpfcands_2530_sumet();
-	const float &phpfcands_30in_sumet();
-	const float &nupfcands_0013_sumet();
-	const float &nupfcands_1316_sumet();
-	const float &nupfcands_1625_sumet();
-	const float &nupfcands_2530_sumet();
-	const float &nupfcands_30in_sumet();
 	const float &chpfcands_0013_pt();
 	const float &chpfcands_1316_pt();
-	const float &chpfcands_1625_pt();
-	const float &chpfcands_2530_pt();
+	const float &chpfcands_1624_pt();
+	const float &chpfcands_2430_pt();
 	const float &chpfcands_30in_pt();
 	const float &phpfcands_0013_pt();
 	const float &phpfcands_1316_pt();
-	const float &phpfcands_1625_pt();
-	const float &phpfcands_2530_pt();
+	const float &phpfcands_1624_pt();
+	const float &phpfcands_2430_pt();
 	const float &phpfcands_30in_pt();
 	const float &nupfcands_0013_pt();
 	const float &nupfcands_1316_pt();
-	const float &nupfcands_1625_pt();
-	const float &nupfcands_2530_pt();
+	const float &nupfcands_1624_pt();
+	const float &nupfcands_2430_pt();
 	const float &nupfcands_30in_pt();
 	const float &chpfcands_0013_phi();
 	const float &chpfcands_1316_phi();
-	const float &chpfcands_1625_phi();
-	const float &chpfcands_2530_phi();
+	const float &chpfcands_1624_phi();
+	const float &chpfcands_2430_phi();
 	const float &chpfcands_30in_phi();
 	const float &phpfcands_0013_phi();
 	const float &phpfcands_1316_phi();
-	const float &phpfcands_1625_phi();
-	const float &phpfcands_2530_phi();
+	const float &phpfcands_1624_phi();
+	const float &phpfcands_2430_phi();
 	const float &phpfcands_30in_phi();
 	const float &nupfcands_0013_phi();
 	const float &nupfcands_1316_phi();
-	const float &nupfcands_1625_phi();
-	const float &nupfcands_2530_phi();
+	const float &nupfcands_1624_phi();
+	const float &nupfcands_2430_phi();
 	const float &nupfcands_30in_phi();
-	const float &pfcandmet_pt05_pt();
-	const float &pfcandmet_pt10_pt();
-	const float &pfcandmet_pt15_pt();
-	const float &pfcandmet_pt20_pt();
-	const float &pfcandmet_pt25_pt();
-	const float &nupfcands_pt05_pt();
-	const float &nupfcands_pt10_pt();
-	const float &nupfcands_pt15_pt();
-	const float &nupfcands_pt20_pt();
-	const float &nupfcands_pt25_pt();
-	const float &pfcandmet_pt05_phi();
-	const float &pfcandmet_pt10_phi();
-	const float &pfcandmet_pt15_phi();
-	const float &pfcandmet_pt20_phi();
-	const float &pfcandmet_pt25_phi();
-	const float &nupfcands_pt05_phi();
-	const float &nupfcands_pt10_phi();
-	const float &nupfcands_pt15_phi();
-	const float &nupfcands_pt20_phi();
-	const float &nupfcands_pt25_phi();
-	const float &pfcandmet_0030_pt();
-	const float &pfcandmet_0030_phi();
 	const float &met_T1CHS_pt();
 	const float &met_T1CHS_phi();
-	const int &nFWjets();
+	const float &met_T1CHS_fromCORE_pt();
+	const float &met_T1CHS_fromCORE_phi();
+	const float &met_T1CHSNoHF_pt();
+	const float &met_T1CHSNoHF_phi();
+	const float &met_rawNoHF_pt();
+	const float &met_rawNoHF_phi();
+	const float &met_T1CHSNoHF_fromCORE_pt();
+	const float &met_T1CHSNoHF_fromCORE_phi();
 	const int &hyp_type();
 	const int &evt_type();
 }
