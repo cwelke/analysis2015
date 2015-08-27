@@ -42,7 +42,7 @@ using namespace tas;
 // turn on to add debugging statements
 const bool verbose = false;
 // turn on to apply JEC from text files
-const bool applyJECfromFile = true;
+const bool applyJECfromFile = false;
 //turn on to veto transition region for leps and photons
 const bool vetoXitionRegion = false;
 //turn on to veto eta > 2.4 for leps and photons
@@ -63,6 +63,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   TBenchmark *bmark = new TBenchmark();
   bmark->Start("benchmark");
 
+  createAndInitMVA("../CORE"); // for electrons
+  
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
@@ -513,7 +515,13 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		lep_tightCharge  .push_back( vec_lep_tightCharge  .at(it->second));
 		i++;
       }
-        
+
+	  // if( evt != 6888914 ) continue;
+	  // if( evt == 6888914 ){
+	  // 	cout<<"lep1 pT: "<<lep_pt[0]<<"lep1 eta: "<<lep_eta[0]<<"lep1 flav: "<<lep_pdgId[0]<<endl;
+	  // 	cout<<"lep2 pT: "<<lep_pt[1]<<"lep2 eta: "<<lep_eta[1]<<"lep2 flav: "<<lep_pdgId[1]<<endl;
+	  // }
+	  
       if (verbose) cout << "before photons" << endl;
 
       //PHOTONS
@@ -883,23 +891,27 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j_eta30 = -1.0;
 	  }
 
-	  pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
-	  met_T1CHS_fromCORE_pt  = newMET.first;
-	  met_T1CHS_fromCORE_phi = newMET.second;
 
-	  pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
-	  met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
-      met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
+	  
+	  if (applyJECfromFile) {
+		pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
+		met_T1CHS_fromCORE_pt  = newMET.first;
+		met_T1CHS_fromCORE_phi = newMET.second;
+
+		pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+		met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
+		met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
+	  }
 
 	  met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
-      met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
+	  met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
 
 	  met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
-      met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
+	  met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
 
 	  met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
-      met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
-
+	  met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
+		
 	  // cout<<"CORE: "<<met_T1CHS_fromCORE_pt<<endl;
 	  // cout<<"METG: "<<met_T1CHS_pt<<endl<<endl;
 	  
