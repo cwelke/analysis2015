@@ -18,15 +18,21 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
   TChain* ch = new TChain("t");
   if ( sample == "data" ){
 
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_ee*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_em*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_mm*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_ph*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_ee*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_em*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_mm*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50ns17Jul_ph*.root" , iter.c_str() ));
 
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_ee*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_em*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_mm*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_ph*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_ee*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_em*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_mm*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_50nsPrompt_ph*.root" , iter.c_str() ));
+
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ee*.root" , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_em*.root" , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_mm*.root" , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ph*.root" , iter.c_str() ));
+  
   }
   
   else if ( sample == "All_MC" ){
@@ -36,8 +42,8 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
   }
 
   else if( sample == "zjets" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/dyjetsll_50ns_m1050nlo*.root"  , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/dyjetsll_50ns_m50nlo*.root"    , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/dyjetsll_25ns_m1050nlo*.root"  , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/dyjetsll_25ns_m50nlo*.root"    , iter.c_str() ));
   }
 
   else if( sample == "zjetsmlm" ){
@@ -49,7 +55,7 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
   }
 
   else if( sample == "ttbar" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/tt2lnu_50ns_php8*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/tt2lnu_25ns_php8*.root"         , iter.c_str() ));
   }
 
   else if( sample == "top" ){

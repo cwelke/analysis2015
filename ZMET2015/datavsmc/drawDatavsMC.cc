@@ -295,7 +295,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
 
   //MAKE PLOTS
-  float xmin = 50; float xmax = 200;
+  float xmin = 20; float xmax = 200;
   float ymin = 1e-1; float ymax = 1e2;
 
   int rebin = 5;
@@ -336,7 +336,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   if( TString(variable).Contains("met") ){
 	if( dilep == "em" ) rebin = 10;
 	else rebin = 5;
-	  xmin = 0;
+	  xmin = 00;
+	  xmax = 200;
 	  if( usefsbkg ){
 		xmax = 150;
 		rebin = 5;
@@ -375,6 +376,11 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	xmax = 3.2;
 	ymax = 1000;
 	rebin = 5;
+  }
+  if( TString(variable).Contains("metx") || TString(variable).Contains("mety") ){
+	xmin = -150;
+	xmax =  150;
+	rebin = 1;
   }
   if( variable == "pfcandmet_0030_pt" ){
 	xmin = 0;
@@ -416,9 +422,12 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // h_vvbkg->SetFillStyle(1001);
   // h_other->SetFillStyle(1001);
 
-  float norm_factor =   h_data->Integral(h_data->FindBin(81),h_data->FindBin(100)-1)/
-	(h_zjets->Integral(h_zjets->FindBin(81),h_zjets->FindBin(101)-1) +
-	 h_ttbar->Integral(h_ttbar->FindBin(81),h_ttbar->FindBin(101)-1));
+  float lomll = 60;
+  float himll = 120;
+  
+  float norm_factor =   h_data->Integral(h_data->FindBin(lomll),h_data->FindBin(himll)-1)/
+	(h_zjets->Integral(h_zjets->FindBin(lomll),h_zjets->FindBin(himll)-1) +
+	 h_ttbar->Integral(h_ttbar->FindBin(lomll),h_ttbar->FindBin(himll)-1));
   cout<<"Norm factor for Z+jets: "<<norm_factor<<endl;
 
   if( variable != "mll" ){
@@ -557,7 +566,8 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
-  drawCMSLatex( c1, luminosity*norm_factor );
+  if( luminosity*norm_factor < 0.0161 ) drawCMSLatex( c1, 0.0161 );
+  else                                  drawCMSLatex( c1, luminosity*norm_factor );
 
   if( usefsbkg ) {
 	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_fsbkg_%s.png", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));

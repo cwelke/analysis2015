@@ -38,9 +38,9 @@
 namespace std {} using namespace std;
 
 // Header files passed as explicit arguments
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/QuantFuncMathCore.h"
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/TLorentzVector.h"
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/Vector4D.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/QuantFuncMathCore.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/TLorentzVector.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/Vector4D.h"
 
 // Header files passed via #pragma extra_include
 
@@ -110,14 +110,14 @@ namespace ROOT {
 namespace {
   void TriggerDictionaryInitialization_LinkDef_out_Impl() {
     static const char* headers[] = {
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/QuantFuncMathCore.h",
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/TLorentzVector.h",
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/Vector4D.h",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/QuantFuncMathCore.h",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/TLorentzVector.h",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/Vector4D.h",
 0
     };
     static const char* includePaths[] = {
-"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2/include",
-"/home/users/cwelke/analysis2015/CMSSW_7_4_1_patch1/BabyMaker/dilepbabymaker/",
+"/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5/include",
+"/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-08_25ns/dilepbabymaker/",
 0
     };
     static const char* fwdDeclCode = 
@@ -126,9 +126,9 @@ R"DICTFWDDCLS(
 #pragma clang diagnostic ignored "-Wignored-attributes"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_Autoloading_Map;
-namespace ROOT{namespace Math{template <class ScalarType = double> class __attribute__((annotate("$clingAutoload$/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/Vector4D.h")))  PxPyPzE4D;
+namespace ROOT{namespace Math{template <class ScalarType = double> class __attribute__((annotate("$clingAutoload$/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/Vector4D.h")))  PxPyPzE4D;
 }}
-namespace ROOT{namespace Math{template <class CoordSystem> class __attribute__((annotate("$clingAutoload$/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/Vector4D.h")))  LorentzVector;
+namespace ROOT{namespace Math{template <class CoordSystem> class __attribute__((annotate("$clingAutoload$/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/Vector4D.h")))  LorentzVector;
 }}
 namespace std{template <typename _Tp> class __attribute__((annotate("$clingAutoload$string")))  allocator;
 }
@@ -140,9 +140,9 @@ namespace std{template <typename _Tp> class __attribute__((annotate("$clingAutol
 #endif
 
 #define _BACKWARD_BACKWARD_WARNING_H
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/QuantFuncMathCore.h"
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/TLorentzVector.h"
-#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-eccfad2//include/Math/Vector4D.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/QuantFuncMathCore.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/TLorentzVector.h"
+#include "/cvmfs/cms.cern.ch/slc6_amd64_gcc491/lcg/root/6.02.00-odfocd5//include/Math/Vector4D.h"
 
 #undef  _BACKWARD_BACKWARD_WARNING_H
 )DICTPAYLOAD";

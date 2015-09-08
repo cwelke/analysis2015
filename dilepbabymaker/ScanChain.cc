@@ -63,6 +63,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   TBenchmark *bmark = new TBenchmark();
   bmark->Start("benchmark");
 
+  createAndInitMVA("MVAinput", false); // for electrons
+
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
@@ -102,16 +104,21 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 	  if( TString(currentFile->GetTitle()).Contains("Run2015B") ){
 		// files for Data  
-        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L1FastJet_AK4PFchs.txt"   );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2Relative_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L3Absolute_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+        // jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L1FastJet_AK4PFchs.txt"   );
+		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2Relative_AK4PFchs.txt"  );
+		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L3Absolute_AK4PFchs.txt"  );
+		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+
+		//FOR NOW
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
 	  }else{
 
 		// files for Pythia8 MC  
-        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L1FastJet_AK4PFchs.txt"   );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L2Relative_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_MC_L3Absolute_AK4PFchs.txt"  );
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
 	  }
 	  
       jet_corrector_pfL1FastJetL2L3  = makeJetCorrector(jetcorr_filenames_pfL1FastJetL2L3);
@@ -195,12 +202,12 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
       HLT_SingleMu       = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
       HLT_DoubleEl_noiso = passHLTTriggerPattern("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
-      HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v");
-	  HLT_DoubleEl_DZ    = passHLTTriggerPattern("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+      HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_v");
+	  HLT_DoubleEl_DZ    = passHLTTriggerPattern("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
       HLT_MuEG           = (passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
-							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") );
-      HLT_MuEG_2         = (passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") );
+      HLT_MuEG_2         = (passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
+							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") );
       HLT_DoubleMu       = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
       HLT_DoubleMu_tk    = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
       HLT_Photons        = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
@@ -883,22 +890,23 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		mt2j_eta30 = -1.0;
 	  }
 
-	  pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
-	  met_T1CHS_fromCORE_pt  = newMET.first;
-	  met_T1CHS_fromCORE_phi = newMET.second;
+	  //remove for now until V08 samples are available
+	  // pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
+	  // met_T1CHS_fromCORE_pt  = newMET.first;
+	  // met_T1CHS_fromCORE_phi = newMET.second;
 
-	  pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
-	  met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
-      met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
+	  // pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+	  // met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
+      // met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
 
-	  met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
-      met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
+	  // met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
+      // met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
 
-	  met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
-      met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
+	  // met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
+      // met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
 
-	  met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
-      met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
+	  // met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
+      // met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
 
 	  // cout<<"CORE: "<<met_T1CHS_fromCORE_pt<<endl;
 	  // cout<<"METG: "<<met_T1CHS_pt<<endl<<endl;

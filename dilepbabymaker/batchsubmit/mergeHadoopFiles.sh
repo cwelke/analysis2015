@@ -19,20 +19,36 @@ if [ ! -d "merge_logs_${TAG}" ]; then
   mkdir merge_logs_${TAG}
 fi
 
-# done
-run data_50nsPrompt_ee
-run data_50nsPrompt_ph
-run data_50nsPrompt_mm
-run data_50nsPrompt_em
 
-run data_50ns17Jul_ee
-run data_50ns17Jul_ph
-run data_50ns17Jul_mm
-run data_50ns17Jul_em
+run data_25nsPrompt_ee
+run data_25nsPrompt_ph
+run data_25nsPrompt_mm
+run data_25nsPrompt_em
 
-run tt2lnu_50ns_php8		 
-run dyjetsll_50ns_m1050nlo
-run dyjetsll_50ns_m50nlo	 
+run dyjetsll_25ns_m1050nlo
+run dyjetsll_25ns_m50nlo	 
+run tt2lnu_25ns_php8
+run zjetsll_25ns_m50mlm  
+run gjets_25ns_ht40mlm  
+run gjets_25ns_ht100mlm  
+run gjets_25ns_ht200mlm  
+run gjets_25ns_ht400mlm  
+run gjets_25ns_ht600mlm  
+
+# # done
+# run data_50nsPrompt_ee
+# run data_50nsPrompt_ph
+# run data_50nsPrompt_mm
+# run data_50nsPrompt_em
+
+# run data_50ns17Jul_ee
+# run data_50ns17Jul_ph
+# run data_50ns17Jul_mm
+# run data_50ns17Jul_em
+
+# run tt2lnu_50ns_php8		 
+# run dyjetsll_50ns_m1050nlo
+# run dyjetsll_50ns_m50nlo	 
 
 # run wz_50ns_incl			 
 

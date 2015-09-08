@@ -29,7 +29,7 @@ using namespace duplicate_removal;
 const bool debug = false;
 
 const bool usejson              = true;
-const bool dovtxreweighting     = false;
+const bool dovtxreweighting     = true;
 const bool dotemplateprediction = false;
 
 templateLooper::templateLooper()
@@ -68,7 +68,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   }
   
   // do this once per job
-  const char* json_file = "../../json/json_270715_golden.txt";
+  // const char* json_file = "../../json/json_270715_golden.txt";
+
+  // const char* json_file = "json_25ns.txt";
+  const char* json_file = "json_25ns_remove.txt";
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
@@ -223,14 +226,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  // 						 zmet.HLT_DoubleEl_noiso() ||
 	  // 						 zmet.HLT_MuEG())           ) continue;
 
-	  if( !(zmet.HLT_DoubleMu()       ||
-			zmet.HLT_DoubleMu_tk()    ||
-			zmet.HLT_DoubleEl_DZ()    ||
-			zmet.HLT_DoubleEl_noiso() ||
-			// zmet.HLT_MuEG_2()         ||
-			zmet.HLT_MuEG()
+	  if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   ) && zmet.hyp_type() == 1 )  ||
+			(( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()) && zmet.hyp_type() == 0 )  ||
+			( zmet.HLT_MuEG() && zmet.hyp_type() == 2 )
 			)           ) continue;
 
+	  float rawmet_pt = zmet.met_rawPt();
+	  float rawmet_phi = zmet.met_rawPhi();
+	  
 	  // //ztomumu selection
 	  // if( zmet.hyp_type()                    != 1        ) continue; // require at least 2 good leptons
 	  // if( zmet.njets()                    < 1        ) continue; // require at least 2 good leptons
@@ -243,6 +246,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		fillHist( "event", "metgt1jet" , "inclusive", event_met_pt        , weight );
 	  }
 	  
+	  if( rawmet_pt < 1 ){
+		fillHist( "event", "mll_metlt1", "passtrig", zmet.dilmass()  , weight );	  
+	  }
+
+	  if( rawmet_pt > 1 ){
+		fillHist( "event", "mll_metgt1", "passtrig", zmet.dilmass()  , weight );	  
+	  }
+
 	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
 	  if( zmet.njets() > 1 ){
 		if( zmet.hyp_type() == 2 ) nem_2jets_mll += weight;	  
@@ -262,11 +273,97 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  fillHist( "event", "metphi" , "passtrig", event_met_ph        , weight );	  
 	  fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()   , weight );	  
 
-	  if( zmet.njets() == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
-	  if( zmet.njets() == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
-	  if( zmet.njets() >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
-	  if( zmet.njets() >= 2 ) fillHist( "event", "met_rawgt1jet", "passtrig", zmet.met_rawPt()   , weight );	  
+	  fillHist( "event", "metx", "passtrig", rawmet_pt*cos(rawmet_phi)   , weight );	  
+	  fillHist( "event", "mety", "passtrig", rawmet_pt*sin(rawmet_phi)   , weight );	  
 
+	  if( rawmet_pt > 0 ){
+	  	fillHist( "event", "metphir_pt0", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt0", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt > 1 ){
+	  	fillHist( "event", "metphir_pt1", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt1", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt > 2 ){
+	  	fillHist( "event", "metphir_pt2", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt2", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt > 3 ){
+	  	fillHist( "event", "metphir_pt3", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt3", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt > 4 ){
+	  	fillHist( "event", "metphir_pt4", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt4", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt > 5 ){
+	  	fillHist( "event", "metphir_pt5", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_pt5", "passtrig", rawmet_pt   , weight );	  
+	  }
+
+	  if( rawmet_pt < 1 ){
+	  	fillHist( "event", "metphir_ptlt1", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_ptlt1", "passtrig", rawmet_pt   , weight );	  
+	  	fillHist( "event", "zpt_metlt1", "passtrig", zmet.dilpt()   , weight );	  
+	  	if( rawmet_phi > 0.9 && rawmet_phi < 1.0 ){
+	  	  cout<<zmet.run()<<":"<<zmet.lumi()<<":"<<zmet.evt()<<endl;
+	  	}
+	  }
+	  if( rawmet_pt < 2 ){
+	  	fillHist( "event", "metphir_ptlt2", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_ptlt2", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt < 3 ){
+	  	fillHist( "event", "metphir_ptlt3", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_ptlt3", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt < 4 ){
+	  	fillHist( "event", "metphir_ptlt4", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_ptlt4", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  if( rawmet_pt < 5 ){
+	  	fillHist( "event", "metphir_ptlt5", "passtrig", rawmet_phi  , weight );	  
+	  	fillHist( "event", "met_raw_ptlt5", "passtrig", rawmet_pt   , weight );	  
+	  }
+	  
+	  // if( zmet.njets() == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
+	  // if( zmet.njets() == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
+	  // if( zmet.njets() >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
+	  // if( zmet.njets() >= 2 ) fillHist( "event", "met_rawgt1jet", "passtrig", zmet.met_rawPt()   , weight );	  
+
+	  fillHist( "event", "chpfcands_0013_pt", "passtrig", zmet.chpfcands_0013_pt()   , weight );
+	  fillHist( "event", "chpfcands_1316_pt", "passtrig", zmet.chpfcands_1316_pt()   , weight );
+	  fillHist( "event", "chpfcands_1625_pt", "passtrig", zmet.chpfcands_1624_pt()   , weight );
+	  fillHist( "event", "chpfcands_2530_pt", "passtrig", zmet.chpfcands_2430_pt()   , weight );
+	  fillHist( "event", "chpfcands_30in_pt", "passtrig", zmet.chpfcands_30in_pt()   , weight );
+	  fillHist( "event", "phpfcands_0013_pt", "passtrig", zmet.phpfcands_0013_pt()   , weight );
+	  fillHist( "event", "phpfcands_1316_pt", "passtrig", zmet.phpfcands_1316_pt()   , weight );
+	  fillHist( "event", "phpfcands_1625_pt", "passtrig", zmet.phpfcands_1624_pt()   , weight );
+	  fillHist( "event", "phpfcands_2530_pt", "passtrig", zmet.phpfcands_2430_pt()   , weight );
+	  fillHist( "event", "phpfcands_30in_pt", "passtrig", zmet.phpfcands_30in_pt()   , weight );
+	  fillHist( "event", "nupfcands_0013_pt", "passtrig", zmet.nupfcands_0013_pt()   , weight );
+	  fillHist( "event", "nupfcands_1316_pt", "passtrig", zmet.nupfcands_1316_pt()   , weight );
+	  fillHist( "event", "nupfcands_1625_pt", "passtrig", zmet.nupfcands_1624_pt()   , weight );
+	  fillHist( "event", "nupfcands_2530_pt", "passtrig", zmet.nupfcands_2430_pt()   , weight );
+	  fillHist( "event", "nupfcands_30in_pt", "passtrig", zmet.nupfcands_30in_pt()   , weight );
+
+	  fillHist( "event", "chpfcands_0013_phi", "passtrig", zmet.chpfcands_0013_phi()   , weight );
+	  fillHist( "event", "chpfcands_1316_phi", "passtrig", zmet.chpfcands_1316_phi()   , weight );
+	  fillHist( "event", "chpfcands_1625_phi", "passtrig", zmet.chpfcands_1624_phi()   , weight );
+	  fillHist( "event", "chpfcands_2530_phi", "passtrig", zmet.chpfcands_2430_phi()   , weight );
+	  fillHist( "event", "chpfcands_30in_phi", "passtrig", zmet.chpfcands_30in_phi()   , weight );
+	  fillHist( "event", "phpfcands_0013_phi", "passtrig", zmet.phpfcands_0013_phi()   , weight );
+	  fillHist( "event", "phpfcands_1316_phi", "passtrig", zmet.phpfcands_1316_phi()   , weight );
+	  fillHist( "event", "phpfcands_1625_phi", "passtrig", zmet.phpfcands_1624_phi()   , weight );
+	  fillHist( "event", "phpfcands_2530_phi", "passtrig", zmet.phpfcands_2430_phi()   , weight );
+	  fillHist( "event", "phpfcands_30in_phi", "passtrig", zmet.phpfcands_30in_phi()   , weight );
+	  fillHist( "event", "nupfcands_0013_phi", "passtrig", zmet.nupfcands_0013_phi()   , weight );
+	  fillHist( "event", "nupfcands_1316_phi", "passtrig", zmet.nupfcands_1316_phi()   , weight );
+	  fillHist( "event", "nupfcands_1625_phi", "passtrig", zmet.nupfcands_1624_phi()   , weight );
+	  fillHist( "event", "nupfcands_2530_phi", "passtrig", zmet.nupfcands_2430_phi()   , weight );
+	  fillHist( "event", "nupfcands_30in_phi", "passtrig", zmet.nupfcands_30in_phi()   , weight );
+
+	  
 	  // // MHTFW
 	  // LorentzVector MHTFB_p4(0,0,0,0);// =  - zmet.lep1.p4()  - zmet.lep2.p4()  - zmet.jet1.p4();
 	  // LorentzVector MHTFW_p4(0,0,0,0);// =  - zmet.lep1.p4()  - zmet.lep2.p4()  - zmet.jet1.p4();
@@ -362,9 +459,9 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 	  
 	  if( zmet.nlep() > 2 ){
-		float dphi = acos(cos(zmet.lep_p4()[2].phi()-event_met_ph));
-		float mt = sqrt(2*event_met_pt*zmet.lep_pt()[2]*cos(dphi));
-		fillHist( "event", "mt3", "passtrig", mt, weight );	  
+	  	float dphi = acos(cos(zmet.lep_p4()[2].phi()-event_met_ph));
+	  	float mt = sqrt(2*event_met_pt*zmet.lep_pt()[2]*cos(dphi));
+	  	fillHist( "event", "mt3", "passtrig", mt, weight );	  
 	  }
 	  
 	  if( event_met_pt < 50 && zmet.hyp_type() == 2 ) nem_2jets += weight;
@@ -383,17 +480,17 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   	  // fillHist( "event", "nupfcands_30in_phi" , "passtrig", zmet.nupfcands_30in_phi(), weight );	  
 	  // }
 
-	  fillHist( "event", "met_CORE"              , "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );	  
-	  fillHist( "event", "met_mettoolbox"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
-	  fillHist( "event", "met_mettoolboxNoHF"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
-	  fillHist( "event", "met_mettoolboxNoHFraw" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
+	  // fillHist( "event", "met_CORE"              , "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );	  
+	  // fillHist( "event", "met_mettoolbox"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
+	  // fillHist( "event", "met_mettoolboxNoHF"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
+	  // fillHist( "event", "met_mettoolboxNoHFraw" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
 
-	  if( zmet.njets() > 1 ) {
-		fillHist( "event", "met_COREgt1jet"              , "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );	  
-		fillHist( "event", "met_mettoolboxgt1jet"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
-		fillHist( "event", "met_mettoolboxNoHFgt1jet"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
-		fillHist( "event", "met_mettoolboxNoHFrawgt1jet" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
-	  }
+	  // if( zmet.njets() > 1 ) {
+	  // 	fillHist( "event", "met_COREgt1jet"              , "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );	  
+	  // 	fillHist( "event", "met_mettoolboxgt1jet"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
+	  // 	fillHist( "event", "met_mettoolboxNoHFgt1jet"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
+	  // 	fillHist( "event", "met_mettoolboxNoHFrawgt1jet" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
+	  // }
 	  
 	  
 	  //-~-~-~-~-~-~-~-~-~-//
@@ -558,6 +655,24 @@ void templateLooper::bookHistos(){
   // variable.push_back("nupfcands_2530_sumet" ); variable_bins.push_back(1000);
   // variable.push_back("nupfcands_30in_sumet" ); variable_bins.push_back(1000);
 
+  variable.push_back("met_raw_pt0"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_pt1"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_pt2"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_pt3"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_pt4"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_pt5"); variable_bins.push_back(500 );  
+
+  variable.push_back("met_raw_ptlt1"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_ptlt2"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_ptlt3"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_ptlt4"); variable_bins.push_back(500 );  
+  variable.push_back("met_raw_ptlt5"); variable_bins.push_back(500 );  
+
+  variable.push_back("zpt_metlt1"); variable_bins.push_back(1000 );  
+  variable.push_back("mll_metlt1"); variable_bins.push_back(500 );  
+  variable.push_back("mll_metgt1"); variable_bins.push_back(500 );  
+
+  
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
 	  for( unsigned int varind = 0; varind < variable.size(); varind++ ){
@@ -586,36 +701,54 @@ void templateLooper::bookHistos(){
   bookHist("h_templ_met", "h_templ_met", 500,0,500);
 
   vector <string> phivars;
-  phivars.push_back("metphi");
-  phivars.push_back("metphir");
-  phivars.push_back("metphi20");
-  phivars.push_back("metphi40");
-  phivars.push_back("metphi60");
-  phivars.push_back("mhtphi");
-  phivars.push_back( "chpfmet_trk_phi"     );
-  phivars.push_back( "chphpfmet_trk_phi"   );
-  phivars.push_back( "nunophpfmet_trk_phi" );
-  phivars.push_back( "nunophpfmet_fwd_phi" );
-  phivars.push_back( "nunophpfmet_all_phi" );
-  phivars.push_back( "nupfmet_trk_phi"     );
-  phivars.push_back( "nupfmet_fwd_phi"     );
-  phivars.push_back( "nupfmet_all_phi"     );
+  vector <float> axislimits;
 
-  phivars.push_back( "chpfcands_0013_phi"     );
-  phivars.push_back( "chpfcands_1316_phi"     );
-  phivars.push_back( "chpfcands_1625_phi"     );
-  phivars.push_back( "chpfcands_2530_phi"     );
-  phivars.push_back( "chpfcands_30in_phi"     );
-  phivars.push_back( "phpfcands_0013_phi"     );
-  phivars.push_back( "phpfcands_1316_phi"     );
-  phivars.push_back( "phpfcands_1625_phi"     );
-  phivars.push_back( "phpfcands_2530_phi"     );
-  phivars.push_back( "phpfcands_30in_phi"     );
-  phivars.push_back( "nupfcands_0013_phi"     );
-  phivars.push_back( "nupfcands_1316_phi"     );
-  phivars.push_back( "nupfcands_1625_phi"     );
-  phivars.push_back( "nupfcands_2530_phi"     );
-  phivars.push_back( "nupfcands_30in_phi"     );
+  phivars.push_back("metphi");               axislimits.push_back(3.2);
+  phivars.push_back("metphir");				 axislimits.push_back(3.2);
+  phivars.push_back("metphi20");			 axislimits.push_back(3.2);
+  phivars.push_back("metphi40");			 axislimits.push_back(3.2);
+  phivars.push_back("metphi60");			 axislimits.push_back(3.2);
+  phivars.push_back("mhtphi");               axislimits.push_back(3.2);
+  phivars.push_back( "chpfmet_trk_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "chphpfmet_trk_phi"   );axislimits.push_back(3.2);
+  phivars.push_back( "nunophpfmet_trk_phi" );axislimits.push_back(3.2);
+  phivars.push_back( "nunophpfmet_fwd_phi" );axislimits.push_back(3.2);
+  phivars.push_back( "nunophpfmet_all_phi" );axislimits.push_back(3.2);
+  phivars.push_back( "nupfmet_trk_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfmet_fwd_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfmet_all_phi"     );axislimits.push_back(3.2);
+
+  phivars.push_back( "chpfcands_0013_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "chpfcands_1316_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "chpfcands_1625_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "chpfcands_2530_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "chpfcands_30in_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "phpfcands_0013_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "phpfcands_1316_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "phpfcands_1625_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "phpfcands_2530_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "phpfcands_30in_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfcands_0013_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfcands_1316_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfcands_1625_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfcands_2530_phi"     );axislimits.push_back(3.2);
+  phivars.push_back( "nupfcands_30in_phi"     );axislimits.push_back(3.2);
+
+  phivars.push_back("metphir_pt0");axislimits.push_back(3.2);
+  phivars.push_back("metphir_pt1");axislimits.push_back(3.2);
+  phivars.push_back("metphir_pt2");axislimits.push_back(3.2);
+  phivars.push_back("metphir_pt3");axislimits.push_back(3.2);
+  phivars.push_back("metphir_pt4");axislimits.push_back(3.2);
+  phivars.push_back("metphir_pt5");axislimits.push_back(3.2);
+
+  phivars.push_back("metphir_ptlt1");axislimits.push_back(3.2);
+  phivars.push_back("metphir_ptlt2");axislimits.push_back(3.2);
+  phivars.push_back("metphir_ptlt3");axislimits.push_back(3.2);
+  phivars.push_back("metphir_ptlt4");axislimits.push_back(3.2);
+  phivars.push_back("metphir_ptlt5");axislimits.push_back(3.2);
+
+  phivars.push_back("metx");axislimits.push_back(250);
+  phivars.push_back("mety");axislimits.push_back(250);
 
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -634,8 +767,8 @@ void templateLooper::bookHistos(){
 					    selection.at(selind).c_str()
 						),
 				   200   ,
-				   -3.2  ,
-				   3.2   );
+				   -axislimits.at(varind) ,
+				    axislimits.at(varind)  );
 		}
 	  }
 	}
