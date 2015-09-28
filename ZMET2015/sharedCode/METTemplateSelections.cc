@@ -106,9 +106,9 @@ void METTemplates::setBins( const string selection )
   photon_htcuts.push_back(70);
   photon_htcuts.push_back(105);
   photon_htcuts.push_back(140);
-  // photon_htcuts.push_back(200);
-  // photon_htcuts.push_back(350);
-  // photon_htcuts.push_back(500);
+  photon_htcuts.push_back(200);
+  photon_htcuts.push_back(350);
+  photon_htcuts.push_back(500);
   // photon_htcuts.push_back(1000);
   // photon_htcuts.push_back(1500);
   // photon_htcuts.push_back(2000);

@@ -15,12 +15,12 @@ using namespace std;
 void compareMET( std::string iter = "", std::string region = "", float luminosity = 1.0 )
 {
 
-  string sample = "zjets";
+  string sample = "zjetsmlm";
   
   std::string filename = Form("../output/%s/%s%s_hists.root", iter.c_str(), sample.c_str(), region.c_str() );
   TFile *infile = new TFile(filename.c_str());
 
-  TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_2jets")->Clone("h_zll");
+  TH1F * h_zll = (TH1F*)infile->Get("h_ll_event_met_rawgt1jet_passtrig")->Clone("h_zll");
   TH1F * h_pho = (TH1F*)infile->Get("h_templ_met")->Clone("h_pho");
 
   h_zll->Scale(luminosity);
@@ -29,9 +29,9 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   //MAKE TABLES
   vector <float> metcut;
   metcut.push_back(0.0);
+  metcut.push_back(25);
   metcut.push_back(50);
-  metcut.push_back(150);
-  // metcut.push_back(100);
+  metcut.push_back(100);
   // metcut.push_back(150);
   // metcut.push_back(225);
   // metcut.push_back(300);
@@ -107,10 +107,15 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
 
   //MAKE PLOTS
 
-  int rebin = 10;
+  int rebin = 5;
   
   h_zll->Rebin(rebin);
   h_pho->Rebin(rebin);
+
+  float xmax = 200;
+  
+  updateoverflow( h_zll , xmax );
+  updateoverflow( h_pho , xmax );
 
   TCanvas * c1 = new TCanvas("c1","");
   c1->cd();
@@ -134,6 +139,7 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   h_zll->GetYaxis()->SetTitleOffset(1.5);
   h_zll->GetYaxis()->SetTitleSize(0.05);
   h_zll->GetYaxis()->SetTitle(Form("Events/%.0f GeV", (float)rebin));
+  h_zll->GetXaxis()->SetRangeUser(0,xmax);
   h_zll->GetYaxis()->SetRangeUser(2e-3*luminosity,3e4*luminosity);
   h_zll->SetMarkerStyle(8);
   h_zll->SetMarkerSize(0.75);
@@ -187,7 +193,7 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
 
   h_rat->Draw("e1x0");
 
-  TLine * xaxis = new TLine(0,1,500,1);
+  TLine * xaxis = new TLine(0,1,xmax,1);
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  

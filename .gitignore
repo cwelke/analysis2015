@@ -3,6 +3,8 @@
 *.o
 *.d
 *.so
+*.pcm
+*.cxx
 CORE
 Software
 Tools
@@ -12,4 +14,5 @@ dilepbabymaker/batchsubmit/log_merge_*
 dilepbabymaker/batchsubmit/submit_logs
 dilepbabymaker/batchsubmit/job_logs
 dilepbabymaker/batchsubmit/configs*
+dilepbabymaker/batchsubmit/job_input/jetCorrections/Summer15_*
 dilepbabymaker/*.root

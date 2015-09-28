@@ -66,7 +66,6 @@ class babyMaker {
   Int_t           nBJetLoose;
   Int_t           nMuons10;
   Int_t           nElectrons10;
-  Int_t           nTaus20;
   Int_t           nGammas20;
 
   Int_t           njets;
@@ -176,20 +175,6 @@ class babyMaker {
   std::vector <Int_t  > lep_islead     ;   //[nlep]
   std::vector <Int_t  > lep_istail     ;   //[nlep]
   
-//----- TAUS
-  Int_t           ntau;
-  std::vector <Float_t> tau_pt       ;   //[ntau]
-  std::vector <Float_t> tau_eta      ;   //[ntau]
-  std::vector <Float_t> tau_phi      ;   //[ntau]
-  std::vector <Float_t> tau_mass     ;   //[ntau]
-  std::vector <Int_t  > tau_charge   ;   //[ntau]
-  std::vector <Float_t> tau_dxy      ;   //[ntau]
-  std::vector <Float_t> tau_dz       ;   //[ntau]
-  std::vector <Int_t  > tau_idCI3hit ;   //[ntau]
-  std::vector <Float_t> tau_isoCI3hit;   //[ntau]
-  // std::vector <Float_t> tau_isoMVA2  ;   //[ntau]
-  // std::vector <Int_t  > tau_idMVA2   ;   //[ntau]
-  // std::vector <Int_t  > tau_mcMatchId;   //[ntau]
 
 //----- PHOTONS
   Int_t           ngamma;

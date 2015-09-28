@@ -17,7 +17,13 @@ cp ../json/json_270715_golden.txt .
 
 # ./processBaby test_data /hadoop/cms/store/group/snt/run2_data/Run2015C_DoubleEG_MINIAOD_PromptReco-v1/merged/V07-04-08/merged_ntuple_1.root
 
-./processBaby data_ee_missing /hadoop/cms/store/group/snt/run2_data/Run2015C_DoubleEG_MINIAOD_PromptReco-v1/merged/V07-04-08/merged_ntuple_88.root 
+# ./processBaby data_ee_missing /hadoop/cms/store/group/snt/run2_data/Run2015C_DoubleEG_MINIAOD_PromptReco-v1/merged/V07-04-08/merged_ntuple_88.root 
+
+# ./processBaby photon_mc /hadoop/cms/store/group/snt/run2_25ns/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/V07-04-08/merged_ntuple_1.root
+# ./processBaby photon_data /hadoop/cms/store/group/snt/run2_data/Run2015C_SinglePhoton_MINIAOD_PromptReco-v1/merged/V07-04-08/merged_ntuple_1.root
+
+# ./processBaby ee_data_1 /hadoop/cms/store/group/snt/run2_data/Run2015D_DoubleEG_MINIAOD_PromptReco-v3/merged/V07-04-09/merged_ntuple_1.root
+./processBaby me_data_1 /hadoop/cms/store/group/snt/run2_data/Run2015C_MuonEG_MINIAOD_PromptReco-v1/merged/V07-04-08/merged_ntuple_1.root
 
 # ./processBaby test_withnewrho /home/users/cwelke/MCNtupling/CMSSW_7_4_7_patch2_V07-04-08_dev/src/ntuple_postp.root
 

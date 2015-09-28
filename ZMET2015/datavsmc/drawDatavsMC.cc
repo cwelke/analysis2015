@@ -23,6 +23,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
   TH1F * h_ttbar = NULL;
+  TH1F * h_wz    = NULL;
+  TH1F * h_ww    = NULL;
+  TH1F * h_st    = NULL;
 
   // TH1F * h_fsbkg = NULL;
   // TH1F * h_other = NULL;
@@ -37,6 +40,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
 
   else           getBackground(  h_ttbar, iter, Form("ttbar%s", selection.c_str() ), variable, dilep, region );
+  getBackground(  h_st, iter, Form("st%s", selection.c_str() ), variable, dilep, region );
+  getBackground(  h_wz, iter, Form("wz%s", selection.c_str() ), variable, dilep, region );
+  getBackground(  h_ww, iter, Form("ww%s", selection.c_str() ), variable, dilep, region );
   // getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
   // getBackground(  h_other, iter, Form("ttv%s"   , selection.c_str() ), "met", "ll" );
   // getBackground(  h_vvbkg, iter, Form("vv%s"    , selection.c_str() ), "met", "ll" );
@@ -81,6 +87,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   else{
 	h_zjets->Scale(luminosity);
 	h_ttbar->Scale(luminosity);
+	h_st->Scale(luminosity);
+	h_ww->Scale(luminosity);
+	h_wz->Scale(luminosity);
   }
 
   if( printyields ){
@@ -392,6 +401,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_data->Rebin(rebin);
   h_zjets->Rebin(rebin);
   h_ttbar->Rebin(rebin);
+  h_st->Rebin(rebin);
+  h_wz->Rebin(rebin);
+  h_ww->Rebin(rebin);
   // h_vvbkg->Rebin(rebin);
   // h_other->Rebin(rebin);
 
@@ -414,11 +426,17 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   h_zjets->SetFillColor(kBlue);
   h_ttbar->SetFillColor(kYellow+1);
+  h_st->SetFillColor(kOrange-3);
+  h_wz->SetFillColor(kRed);
+  h_ww->SetFillColor(kGreen+1);
   // h_vvbkg->SetFillColor(kRed);
   // h_other->SetFillColor(kMagenta);
 
   h_zjets->SetFillStyle(1001);
   h_ttbar->SetFillStyle(1001);
+  h_st->SetFillStyle(1001);
+  h_wz->SetFillStyle(1001);
+  h_ww->SetFillStyle(1001);
   // h_vvbkg->SetFillStyle(1001);
   // h_other->SetFillStyle(1001);
 
@@ -427,7 +445,11 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   
   float norm_factor =   h_data->Integral(h_data->FindBin(lomll),h_data->FindBin(himll)-1)/
 	(h_zjets->Integral(h_zjets->FindBin(lomll),h_zjets->FindBin(himll)-1) +
-	 h_ttbar->Integral(h_ttbar->FindBin(lomll),h_ttbar->FindBin(himll)-1));
+	 h_ttbar->Integral(h_ttbar->FindBin(lomll),h_ttbar->FindBin(himll)-1) +
+	 h_st->Integral(h_st->FindBin(lomll),h_st->FindBin(himll)-1) +
+	 h_wz->Integral(h_wz->FindBin(lomll),h_wz->FindBin(himll)-1) +
+	 h_ww->Integral(h_ww->FindBin(lomll),h_ww->FindBin(himll)-1) 
+	 );
   cout<<"Norm factor for Z+jets: "<<norm_factor<<endl;
 
   if( variable != "mll" ){
@@ -447,10 +469,16 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   
   h_zjets->Scale(norm_factor);
   h_ttbar->Scale(norm_factor);
+  h_st->Scale(norm_factor);
+  h_wz->Scale(norm_factor);
+  h_ww->Scale(norm_factor);
   
   updateoverflow( h_data , xmax );
   updateoverflow( h_zjets, xmax );
   updateoverflow( h_ttbar, xmax );
+  updateoverflow( h_st, xmax );
+  updateoverflow( h_wz, xmax );
+  updateoverflow( h_ww, xmax );
   // updateoverflow( h_vvbkg, xmax );
   // updateoverflow( h_other, xmax );
 
@@ -458,7 +486,10 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   // stack->Add(h_other);
   // stack->Add(h_vvbkg);
+  stack->Add(h_ww);
+  stack->Add(h_st);
   stack->Add(h_ttbar);
+  stack->Add(h_wz);
   stack->Add(h_zjets);
   
   h_data->GetXaxis()->SetLabelSize(0);
@@ -502,7 +533,10 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   if( usefsbkg ){
   	l1->AddEntry( h_ttbar , "FS Bkg"       , "f");
   }else{
+	l1->AddEntry( h_wz , "WZ MC"       , "f");
 	l1->AddEntry( h_ttbar , "t#bar{t} MC"       , "f");
+	l1->AddEntry( h_st , "Single-top MC"       , "f");
+	l1->AddEntry( h_ww , "WW MC"       , "f");
   }
   // l1->AddEntry( h_vvbkg , "WZ+ZZ MC"            , "f");
   // l1->AddEntry( h_other , "Rare SM MC"          , "f");
@@ -522,6 +556,9 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   TH1F* h_rat = (TH1F*)h_data  -> Clone("h_rat");
   TH1F* h_den = (TH1F*)h_zjets -> Clone("h_den");
   h_den->Add(h_ttbar);
+  h_den->Add(h_st);
+  h_den->Add(h_wz);
+  h_den->Add(h_ww);
   // h_den->Add(h_other);
   // h_den->Add(h_vvbkg);
 
@@ -566,8 +603,10 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   xaxis->SetLineWidth(2);
   xaxis->Draw("same");  
  
-  if( luminosity*norm_factor < 0.0161 ) drawCMSLatex( c1, 0.0161 );
-  else                                  drawCMSLatex( c1, luminosity*norm_factor );
+  // if( luminosity*norm_factor < 0.0161 ) drawCMSLatex( c1, 0.0161 );
+  // else                                  drawCMSLatex( c1, luminosity*norm_factor );
+
+  drawCMSLatex( c1, luminosity*norm_factor );
 
   if( usefsbkg ) {
 	c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_%s_%s_signalregion%s_fsbkg_%s.png", iter.c_str(), variable.c_str(), dilep.c_str(), selection.c_str(), region.c_str() ));

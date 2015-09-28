@@ -68,7 +68,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_270715_golden.txt";
+  const char* json_file = "json_240915_DCSONLY_sntformat.txt";
   set_goodrun_file(json_file);
   
   // File Loop
@@ -103,19 +103,24 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       jetcorr_filenames_pfL1FastJetL2L3.clear();
 
 	  if( TString(currentFile->GetTitle()).Contains("Run2015B") ){
-		// files for Data  
-        // jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L1FastJet_AK4PFchs.txt"   );
-		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2Relative_AK4PFchs.txt"  );
-		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L3Absolute_AK4PFchs.txt"  );
-		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
-
-		//FOR NOW
+		// files for 50ns Data  
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L3Absolute_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+	  }
+	  
+	  if( TString(currentFile->GetTitle()).Contains("Run2015C") ){
+		// files for 25ns Data
         jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
 		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
 		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
-	  }else{
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
 
-		// files for Pythia8 MC  
+	  }
+	  
+	  else{
+		// files for 25ns MC  
         jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
 		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
 		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
@@ -811,7 +816,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 		  if(!isOverlapJetGamma) {
 		  	gamma_nJet40++;
-		  	if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.814) { //CSVv2IVFM
+		  	if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.89) { //CSVv2IVFM
 		  	  gamma_nBJet40++; 
 		  	}   
 		  } 
@@ -831,9 +836,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  		  jets_p4       .push_back(p4sCorrJets.at(iJet));
 		  ht+=p4sCorrJets.at(iJet).pt();
 		  njets++;
-          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.941) { nBJetTight++; }
-          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.814) { nBJetMedium++; }
-          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.423) { nBJetLoose++; }
+          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.970) { nBJetTight++; }
+          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.890) { nBJetMedium++; }
+          if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.605) { nBJetLoose++; }
 		}
 		if( p4sCorrJets.at(iJet).pt() > 40.0 && abs(p4sCorrJets.at(iJet).eta()) < 3.0 ){
  		  jets_eta30_p4       .push_back(p4sCorrJets.at(iJet));
@@ -864,7 +869,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         if( (jet_pt[njet] > 40.0) && (fabs(jet_eta[njet]) < 2.5) ){ 
           nJet40++;
 		  //CSVv2IVFM
-          if(jet_btagCSV[njet] >= 0.814) { nBJet40++; }
+          if(jet_btagCSV[njet] >= 0.890) { nBJet40++; }
         } // pt 40 eta 2.5
 
         njet++;
@@ -891,22 +896,22 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  }
 
 	  //remove for now until V08 samples are available
-	  // pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
-	  // met_T1CHS_fromCORE_pt  = newMET.first;
-	  // met_T1CHS_fromCORE_phi = newMET.second;
+	  pair<float,float> newMET = getT1CHSMET(jet_corrector_pfL1FastJetL2L3);
+	  met_T1CHS_fromCORE_pt  = newMET.first;
+	  met_T1CHS_fromCORE_phi = newMET.second;
 
-	  // pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
-	  // met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
-      // met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
+	  pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+	  met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
+      met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
 
-	  // met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
-      // met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
+	  met_T1CHS_pt  = cms3.evt_METToolbox_pfmet();
+      met_T1CHS_phi = cms3.evt_METToolbox_pfmetPhi();
 
-	  // met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
-      // met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
+	  met_T1CHSNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet();
+      met_T1CHSNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi();
 
-	  // met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
-      // met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
+	  met_rawNoHF_pt  = cms3.evt_METToolboxNoHF_pfmet_raw();
+      met_rawNoHF_phi = cms3.evt_METToolboxNoHF_pfmetPhi_raw();
 
 	  // cout<<"CORE: "<<met_T1CHS_fromCORE_pt<<endl;
 	  // cout<<"METG: "<<met_T1CHS_pt<<endl<<endl;
@@ -1115,37 +1120,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		jgb_raw = sqrt( dx*dx + dy*dy ) - cms3.photons_p4().at(0).pt();
 	  }
 	  
-	  if (verbose) cout << "before taus" << endl;
-
-      //TAUS
-      ntau = 0;
-      nTaus20 = 0;
-      for(unsigned int iTau = 0; iTau < cms3.taus_pf_p4().size(); iTau++){
-        if(     cms3.taus_pf_p4()                                        .at(iTau).pt()   < 20.0 ) continue; 
-        if(fabs(cms3.taus_pf_p4()                                        .at(iTau).eta()) > 2.3  ) continue; 
-		if (   !cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits", iTau)               ) continue; // HPS3 hits taus
-		if (   !cms3.passTauID("againstElectronLoose", iTau)               ) continue; // HPS3 hits taus
-		if (   !cms3.passTauID("againstMuonTight", iTau)               ) continue; // HPS3 hits taus
-        
-        tau_pt       .push_back(cms3.taus_pf_p4()     .at(iTau).pt());
-        tau_eta      .push_back(cms3.taus_pf_p4()     .at(iTau).eta());
-        tau_phi      .push_back(cms3.taus_pf_p4()     .at(iTau).phi());
-        tau_mass     .push_back(cms3.taus_pf_mass()   .at(iTau));
-        tau_charge   .push_back(cms3.taus_pf_charge() .at(iTau));
-        tau_dxy      .push_back(0); // could use the tau->dxy() function instead, but not sure what it does
-        tau_dz       .push_back(0); // not sure how to get this. 
-		tau_isoCI3hit.push_back(cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits", iTau));
-
-        int temp = 0;
-        if (cms3.passTauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  , iTau) ) temp = 1;
-        if (cms3.passTauID("byMediumCombinedIsolationDeltaBetaCorr3Hits" , iTau) ) temp = 2;
-        if (cms3.passTauID("byTightCombinedIsolationDeltaBetaCorr3Hits"  , iTau) ) temp = 3;
-        tau_idCI3hit.push_back(temp);
-        if(tau_pt[ntau] > 20) nTaus20++;
-        //tau_mcMatchId[ntau] = ; // Have to do this by hand unless we want to add tau_mc branches in CMS3 through the CandToGenAssMaker
-
-        ntau++;
-      }
 
       FillBabyNtuple();
 
@@ -1217,7 +1191,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("nBJetLoose", &nBJetLoose );
   BabyTree_->Branch("nMuons10", &nMuons10 );
   BabyTree_->Branch("nElectrons10", &nElectrons10 );
-  BabyTree_->Branch("nTaus20", &nTaus20 );
   BabyTree_->Branch("nGammas20", &nGammas20 );
 
   BabyTree_->Branch("met_pt", &met_pt );
@@ -1310,19 +1283,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("lep_islead"     , "std::vector< Int_t >"         , &lep_islead     );
   BabyTree_->Branch("lep_istail"     , "std::vector< Int_t >"         , &lep_istail     );
 
-  BabyTree_->Branch("ntau", &ntau, "ntau/I" );
-  BabyTree_->Branch("tau_pt"        , "std::vector <Float_t>" , &tau_pt       );
-  BabyTree_->Branch("tau_eta"       , "std::vector <Float_t>" , &tau_eta      );
-  BabyTree_->Branch("tau_phi"       , "std::vector <Float_t>" , &tau_phi      );
-  BabyTree_->Branch("tau_mass"      , "std::vector <Float_t>" , &tau_mass     );
-  BabyTree_->Branch("tau_charge"    , "std::vector <Int_t  >" , &tau_charge   );
-  BabyTree_->Branch("tau_dxy"       , "std::vector <Float_t>" , &tau_dxy      );
-  BabyTree_->Branch("tau_dz"        , "std::vector <Float_t>" , &tau_dz       );
-  BabyTree_->Branch("tau_idCI3hit"  , "std::vector <Int_t  >" , &tau_idCI3hit );
-  BabyTree_->Branch("tau_isoCI3hit" , "std::vector <Float_t>" , &tau_isoCI3hit);
-  // BabyTree_->Branch("tau_isoMVA2"   , "std::vector <Float_t>" , &tau_isoMVA2  );
-  // BabyTree_->Branch("tau_idMVA2"    , "std::vector <Int_t  >" , &tau_idMVA2   );
-  // BabyTree_->Branch("tau_mcMatchId" , "std::vector <Int_t  >" , &tau_mcMatchId);
 
   BabyTree_->Branch("ngamma"             , &ngamma        , "ngamma/I" );
   BabyTree_->Branch("gamma_p4"           , &gamma_p4    );
@@ -1500,7 +1460,6 @@ void babyMaker::InitBabyNtuple () {
   nBJetLoose = -999;
   nMuons10 = -999;
   nElectrons10 = -999;
-  nTaus20 = -999;
   nGammas20 = -999;
 
   njets  = -999;
@@ -1607,19 +1566,6 @@ void babyMaker::InitBabyNtuple () {
   lep_islead     .clear();   //[nlep]
   lep_istail     .clear();   //[nlep]
 
-  ntau = -999;
-  tau_pt       .clear();   //[ntau]
-  tau_eta      .clear();   //[ntau]
-  tau_phi      .clear();   //[ntau]
-  tau_mass     .clear();   //[ntau]
-  tau_charge   .clear();   //[ntau]
-  tau_dxy      .clear();   //[ntau]
-  tau_dz       .clear();   //[ntau]
-  tau_idCI3hit .clear();   //[ntau]
-  tau_isoCI3hit.clear();   //[ntau]
-  // tau_isoMVA2  .clear();   //[ntau]
-  // tau_idMVA2   .clear();   //[ntau]
-  // tau_mcMatchId.clear();   //[ntau]
 
   ngamma = -999;
   gamma_p4           .clear();   //[ngamma]
