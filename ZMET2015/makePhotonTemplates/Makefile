@@ -1,84 +1,160 @@
-# simple make file to compile the Z_looper
+#
+# stuff to make
+#
+ifndef ROOTSYS
+all:
+	@echo "ROOTSYS is not set. Please set ROOT environment properly"; echo
+else
 
-# low level stuff that independent of this project
-# ----------------------------------------------------------------------- #
+all: 	build
+help:
+	@echo "Available Targets:";\
+	cat Makefile | perl -ne 'printf("\t%-15s %s\n",$$1,$$2) if(/^(\S+):[^#]+(#.*)$$/)'
 
-# include ROOT friendly c++ variables
-include Makefile.arch
+ifndef VERBOSE
+  QUIET := @
+endif
 
-# conveniance command to make shared libs
-SHAREDLIB.cc = $(CXX) $(ROOTLIBS) $(CPPFLAGS) $(LDFLAGS) $(SOFLAGS) $(TARGET_ARCH) -fPIC -o
+#ROOFITINCLUDE = 
+#ifdef CMSSW_VERSION
+#	ROOFITINCLUDE = $(shell scramv1 tool info roofitcore | grep INCLUDE | sed 's/^INCLUDE=/-I/')
+#endif
 
-# ROOT is missing the GenVector in its default setup 
-LDFLAGS += -lGenVector -lEG -lTMVA -lMinuit -lMLP -lXMLIO -lTreePlayer -lMathMore
+CC = g++
+CMSROOT = ./
+INCLUDE = $(shell root-config --cflags) -I$(CMSROOT) -I$(CMSROOT)../sharedCode/
+CFLAGS = -Wall -Wno-unused-function -g -O2 -fPIC $(INCLUDE) $(EXTRACFLAGS)
+ROOTLIBS = $(shell root-config --ldflags --cflags --libs) -lTMVA #-lEG -lGenVector
 
-# CMS2 specific includes 
-# ----------------------------------------------------------------------- #
+DICTINCLUDE = $(ROOTSYS)/include/Math/QuantFuncMathCore.h $(ROOTSYS)/include/TLorentzVector.h $(ROOTSYS)/include/Math/Vector4D.h
+
+LINKER = g++
+LINKERFLAGS = $(shell root-config --ldflags --libs) -lEG -lGenVector -lTMVA
+# ifeq ($(shell root-config --platform),macosx)
+# 	LINKERFLAGS = -dynamiclib -undefined dynamic_lookup -Wl,-x -O -Xlinker -bind_at_load -flat_namespace $(shell root-config --libs) -lEG -lGenVector
+# endif
+
+DIR = ./
+
+SOURCES = makePhotonTemplates.cc runPhotonTemplates.cc ../../CORE/Tools/dorky/dorky.cc ../../CORE/Tools/goodrun.cc
+OBJECTS = $(SOURCES:.cc=.o)
+LIB = libmakePhotonTemplates.so
+
+SHAREDSOURCES = $(wildcard ../sharedCode/*.cc)
+SHAREDOBJECTS = $(SHAREDSOURCES:.cc=.o) 
+SHAREDLIB = libSharedCode.so
+
+DICT = LinkDef_out.o
+
+LIBS = $(LIB) $(SHAREDLIB) $(FWLIB) 
+
+EXE = makePhotonTemplates
+
+.PHONY: all help compile clean cms2env
+
+#
+# how to make it
+#
+
+libs:	$(LIBS)
+
+# $(LIB):	$(OBJECTS) 
+# 	echo "Linking $(LIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(OBJECTS) -o $@
+
+# $(SHAREDLIB):	$(SHAREDOBJECTS) 
+# 	echo "Linking $(SHAREDLIB)"; \
+# 	$(LINKER) $(LINKERFLAGS) -shared $(SHAREDOBJECTS) -o $@
 
 
-# cms2_tools  := ../Tools
-# CPPFLAGS  += -I$(cms2_tools) 
-# LDFLAGS   += -L$(cms2_tools) 
+$(SHAREDLIB): $(DICT) $(SHAREDOBJECTS)
+	$(QUIET) echo "Linking $@"; \
+	echo "$(LINKER) -shared -o $@ $(SHAREDOBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(SHAREDOBJECTS) $(DICT) $(LINKERFLAGS)
 
-# add looperTools support
-cwelke_tools  := ../looperTools
-CPPFLAGS  += -I$(cwelke_tools) 
-LDFLAGS   += -L$(cwelke_tools) 
+$(LIB):	$(DICT) $(OBJECTS)
+	$(QUIET) echo "Linking $@"; \
+	echo "$(LINKER) -shared -o $@ $(OBJECTS) $(DICT) $(LINKERFLAGS)"; \
+	$(LINKER) -shared -o $@ $(OBJECTS) $(DICT) $(LINKERFLAGS)
 
-# add sharedCode support
-cwelke_shared  := ../sharedCode
-CPPFLAGS  += -I$(cwelke_shared) 
-LDFLAGS   += -L$(cwelke_shared) 
+# $(FWLIB):
+# 	echo "making MiniFWLite"; \
+#         cd ../Software/MiniFWLite; \
+#         $(MAKE) -f Makefile; cd -; \
+# 	cp $(FWLIB) .;
 
-# create the dict.cc
-$(rootdict): $(headers)
-	$(call root-cint,$(rootdict),$(headers),$(include_dir),$(link_def),$(defines))
+LinkDef_out.cxx: LinkDef.h
+	$(QUIET) echo "Making CINT dictionaries"; \
+	rootcint -f LinkDef_out.cc -c -p $(DICTINCLUDE)  LinkDef.h; \
+	cat LinkDef_out.cc > LinkDef_out.cxx; rm LinkDef_out.cc
 
-# project specific variables 
-# ----------------------------------------------------------------------- #
+# LinkDef_out.cxx: LinkDef.h ScanChain.h
+# 	rootcint -f $@ -c $(INCLUDE) ScanChain.h $<
 
-lib := libmakePhotonTemplates.so
+# General rule for making object files
+# %.d:	%.cc
+# 	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
+#                      [ -s $@ ] || rm -f $@
+# %.d:	%.cxx
+# 	$(CC) -MM -MT $@ -MT ${@:.d=.o} $(CFLAGS) $< > $@; \
+#                      [ -s $@ ] || rm -f $@
 
-sources := makePhotonTemplates.cc                      \
-		   $(cwelke_shared)/ZMET.cc                    \
-		   $(cwelke_shared)/METTemplateSelections.cc   \
-		   $(cwelke_shared)/histTools.cc 
+# %.o: 	%.cc 
+# 	$(CC) $(CFLAGS) $< -c -o $@
 
-objects := $(subst .cc,.o,$(sources)) makePhotonTemplates_dict.o
+# %.o: 	%.cxx
+# 	$(CC) $(CFLAGS) $< -c -o $@
 
+# .PHONY: all
+# all:	$(LIBS)  
 
-# rules 
-# ----------------------------------------------------------------------- #
+# .PHONY: clean
 
-# all rule should be first
-.PHONY: all
-all: library 
+# the option "-Wl,-rpath,./" adds ./ to the runtime search path for libraries
+$(EXE):  $(LIBS)
+	$(QUIET) echo "Building $@"; \
+	echo "$(CC) -o $@ $(LIBS) $(ROOTLIBS) -Wl,-rpath,./"; \
+	$(CC) -o $@ $(LIBS) $(ROOTLIBS) -Wl,-rpath,./ 
 
-# for troubleshooting
-.PHONY: test
-test: 
-	@echo lib = $(lib)
-	@echo sources       = $(sources)
-	@echo objects       = $(objects)
-	@echo SHAREDLIB.cc  = $(SHAREDLIB.cc)
-	@echo cwelke_tools  = $(cwelke_tools)
-	@echo cwelke_shared = $(cwelke_shared)
-	@echo LDFLAGS       = $(LDFLAGS)
-	@echo CPPFLAGS      = $(CPPFLAGS)
+%.o: 	%.cc %.h
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
 
-# build the library 
-.PHONY: library
-library: $(lib)
+%.o: 	%.C %.h
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
 
-.PHONY: clean
+%.o: 	%.cc
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
+
+%.o: 	%.C
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
+
+%.o:    %.cxx 
+	$(QUIET) echo "Compiling $<"; \
+	$(CC) $(CFLAGS) $< -c -o $@
+
+libs:	$(LIBS)
+
+build:  $(EXE)
+
+b: build
+
 clean:
-	rm $(objects) $(lib) makePhotonTemplates_dict.{cc,h} 
+	rm -f \
+	LinkDef_out* \
+	*.o \
+	$(LIBS) \
+	$(EXE) \
+        ../sharedCode/*.o \
+		../sharedCode/*.d \
+        ../sharedCode/*.so 
 
-# actual rule to build the library
-$(lib) : $(objects)
-	$(SHAREDLIB.cc) $@ $^
+# test: 
+# 	@echo $(INCLUDE)
 
-# root to build the ROOT CINT dictionary
-makePhotonTemplates_dict.cc : makePhotonTemplates.h #Z_looper.h
-	rootcint -v3 -f $@ -c -DNDEBUG $^ LinkDef.h 
+# -include $(LIBDIR)/LinkDef_out.d
 
+endif

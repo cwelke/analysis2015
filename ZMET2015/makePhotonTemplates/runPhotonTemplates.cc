@@ -1,16 +1,13 @@
-// #include <string>
+#include <iostream>
 
-// // #include "makePhotonTemplates.C"
+#include "TChain.h"
+#include "TSystem.h"
+#include "TROOT.h"
+#include "TStyle.h"
 
-// #include "makePhotonTemplates.h"
+#include "makePhotonTemplates.h"
 
-// #include "TChain.h"
-// #include "TSystem.h"
-// #include "TROOT.h"
-// #include "TStyle.h"
-
-
-// using namespace std;
+using namespace std;
 
 void runPhotonTemplates( std::string selection = "", std::string iter = "", std::string sample = "" ){
 
@@ -20,7 +17,12 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
 
   TChain* ch = new TChain("t");
 
-  if ( sample == "All_MC" ){
+  if ( sample == "data" ){
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ph.root"      , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ph.root" , iter.c_str() ));
+  }
+
+  else if ( sample == "All_MC" ){
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_pt40_doubleEM.root");
 
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjet_ht100to200*.root", iter.c_str() ));
@@ -47,3 +49,18 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
 
 }
 
+int main(int argc, char **argv)
+{
+
+  if (argc < 4) {
+    std::cout << "USAGE: runTemplateLooper <selection> <iter> <sample>" << std::endl;
+    return 1;
+  }
+  
+  string selection(argv[1]); 
+  string iter(argv[2]); 
+  string sample(argv[3]); 
+  
+  runPhotonTemplates( selection, iter, sample );
+  return 0;
+}

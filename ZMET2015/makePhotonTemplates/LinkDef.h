@@ -1,17 +1,9 @@
-//------------------------------------------------------------------------//
-// root_tools' link_def.h Kelley 2011-05-01
-//------------------------------------------------------------------------//
-
-#ifdef __CINT__  // interpreter and ACLiC
-
+#ifdef __CINT__
 #pragma link off all globals;
 #pragma link off all classes;
-#pragma link off all functions; 
+#pragma link off all functions;
+#pragma link C++ nestedclasses;
 
-#pragma link C++ nestedclass;
-#pragma link C++ nestedtypedef;
+#pragma link C++ class std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >+; 
 
-// classes
-#pragma link C++ class makePhotonTemplates+;
-
-#endif // __CINT__
+#endif
