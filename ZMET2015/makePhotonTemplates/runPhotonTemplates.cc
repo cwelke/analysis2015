@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void runPhotonTemplates( std::string selection = "", std::string iter = "", std::string sample = "" ){
+void runPhotonTemplates( std::string selection = "", std::string iter = "", std::string sample = "", bool dohtreweighting = false ){
 
   gSystem->Load("libmakePhotonTemplates.so");
   gROOT ->SetStyle("Plain");
@@ -25,10 +25,11 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
   else if ( sample == "All_MC" ){
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_pt40_doubleEM.root");
 
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjet_ht100to200*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjet_ht200to400*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjet_ht400to600*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjet_ht600toinf*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht40mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht100mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht200mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht400mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht600mlm*.root", iter.c_str() ));
 
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_ht100to200.root"   );
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_ht200to400.root"   );
@@ -40,7 +41,7 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
 
   }
 
-  makePhotonTemplates* myLooper = new makePhotonTemplates();
+  makePhotonTemplates* myLooper = new makePhotonTemplates(dohtreweighting);
   myLooper->ScanChain( ch , iter , sample, selection );
 
   
@@ -52,15 +53,19 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
 int main(int argc, char **argv)
 {
 
-  if (argc < 4) {
-    std::cout << "USAGE: runTemplateLooper <selection> <iter> <sample>" << std::endl;
+  if (argc < 5) {
+    std::cout << "USAGE: runTemplateLooper <selection> <iter> <sample> <htreweighting>" << std::endl;
     return 1;
   }
   
   string selection(argv[1]); 
   string iter(argv[2]); 
   string sample(argv[3]); 
+  string dohtreweighting(argv[4]); 
+
+  bool doreweighting = false;
+  if( dohtreweighting == "dohtreweighting" )  doreweighting = true;
   
-  runPhotonTemplates( selection, iter, sample );
+  runPhotonTemplates( selection, iter, sample, doreweighting );
   return 0;
 }

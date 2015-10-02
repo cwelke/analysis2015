@@ -71,7 +71,7 @@ bool eventHasGoodPhoton()
   if( zmet.evt_type()                    != 2    ) return false; // photon + jets events
   if( zmet.gamma_pt().at(0)              < 22    ) return false; // photon pt > 22 GeV
   if( abs(zmet.gamma_p4().at(0).eta())   > 1.4 &&
-	  abs(zmet.gamma_p4().at(0).eta())   < 1.6   ) return false; // veto xition region
+  	  abs(zmet.gamma_p4().at(0).eta())   < 1.6   ) return false; // veto xition region
   if( abs(zmet.gamma_p4().at(0).eta())   > 2.4   ) return false; // photon in EC or EB
   if( zmet.gamma_hOverE().at(0)          > 0.1   ) return false; // H/E < 0.1	  
   if( zmet.matched_neutralemf()          < 0.7   ) return false; // jet neutral EM fraction cut
@@ -96,7 +96,7 @@ bool passPhotonTrigger()
 
 bool passPhotonTrigger22()
 {
-  if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 0   && zmet.gamma_pt().at(0) < 35  ) return true;
+  if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 25   && zmet.gamma_pt().at(0) < 35  ) return true;
   return false;
 }
 

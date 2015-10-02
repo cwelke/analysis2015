@@ -11,10 +11,18 @@ if [ ! -d "../output/$analysis_version/" ]; then
 fi
 
 # selection="_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data  &
+# # ./makePhotonTemplates $selection $analysis_version data  &
+# ./makePhotonTemplates $selection $analysis_version All_MC &
 
-selection="_rawMET"
-./makePhotonTemplates $selection $analysis_version All_MC  &
+# selection="_rawMET_bveto_SRB"
+# ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
+# selection="_rawMET_withb_SRB"
+# ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
+
+selection="_rawMET_bveto_SRB"
+./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
+selection="_rawMET_withb_SRB"
+./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
 
 # selection="_rawMET"
 # ./makePhotonTemplates $selection $analysis_version data  &

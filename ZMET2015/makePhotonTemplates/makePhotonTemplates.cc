@@ -29,11 +29,16 @@ using namespace duplicate_removal;
 
 const bool debug = false;
 const bool usejson = true;
-const bool dovtxreweighting = true;
-const bool dohtreweighting  = true;
+const bool dovtxreweighting = false;
 
 makePhotonTemplates::makePhotonTemplates()
 {
+  dohtreweighting = false;
+};
+
+makePhotonTemplates::makePhotonTemplates( bool htreweighting )
+{
+  dohtreweighting = htreweighting;
 };
 
 makePhotonTemplates::~makePhotonTemplates()
@@ -69,7 +74,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   TH1F * h_vtxweight_165 = NULL;
   TFile * f_vtx = NULL;
   if( dovtxreweighting ){
-	f_vtx = TFile::Open("../vtxreweighting/nvtx_ratio.root","READ");
+	f_vtx = TFile::Open("../vtxreweighting/nvtx_ratio_MC.root","READ");
 	h_vtxweight_22  = (TH1F*)f_vtx->Get("h_vtx_ratio_22") ->Clone( "h_vtxweight_22" );
 	h_vtxweight_30  = (TH1F*)f_vtx->Get("h_vtx_ratio_30") ->Clone( "h_vtxweight_30" );
 	h_vtxweight_36  = (TH1F*)f_vtx->Get("h_vtx_ratio_36") ->Clone( "h_vtxweight_36" );
@@ -89,14 +94,44 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	f_vtx->Close();
   }
   
+  // TH1F * h_htweight_22  = NULL;
+  // TH1F * h_htweight_30  = NULL;
+  // TH1F * h_htweight_36  = NULL;
+  // TH1F * h_htweight_50  = NULL;
+  // TH1F * h_htweight_75  = NULL;
+  // TH1F * h_htweight_90  = NULL;
+  // TH1F * h_htweight_120 = NULL;
+  // TH1F * h_htweight_165 = NULL;
+  // TFile * f_ht = NULL;
+  // if( dohtreweighting ){
+  // 	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_rawMET.root","READ");
+  // 	h_htweight_22  = (TH1F*)f_ht->Get("h_ht_ratio_22") ->Clone( "h_htweight_22" );
+  // 	h_htweight_30  = (TH1F*)f_ht->Get("h_ht_ratio_30") ->Clone( "h_htweight_30" );
+  // 	h_htweight_36  = (TH1F*)f_ht->Get("h_ht_ratio_36") ->Clone( "h_htweight_36" );
+  // 	h_htweight_50  = (TH1F*)f_ht->Get("h_ht_ratio_50") ->Clone( "h_htweight_50" );
+  // 	h_htweight_75  = (TH1F*)f_ht->Get("h_ht_ratio_75") ->Clone( "h_htweight_75" );
+  // 	h_htweight_90  = (TH1F*)f_ht->Get("h_ht_ratio_90") ->Clone( "h_htweight_90" );
+  // 	h_htweight_120 = (TH1F*)f_ht->Get("h_ht_ratio_120")->Clone( "h_htweight_120");
+  // 	h_htweight_165 = (TH1F*)f_ht->Get("h_ht_ratio_165")->Clone( "h_htweight_165");
+  // 	h_htweight_22 ->SetDirectory(rootdir);
+  // 	h_htweight_30 ->SetDirectory(rootdir);
+  // 	h_htweight_36 ->SetDirectory(rootdir);
+  // 	h_htweight_50 ->SetDirectory(rootdir);
+  // 	h_htweight_75 ->SetDirectory(rootdir);
+  // 	h_htweight_90 ->SetDirectory(rootdir);
+  // 	h_htweight_120->SetDirectory(rootdir);
+  // 	h_htweight_165->SetDirectory(rootdir);
+  // 	f_ht->Close();
+  // }
 
+    
   TH1F * h_htweight = NULL;
   TFile * f_ht = NULL;
   if( dohtreweighting ){
-	f_ht = TFile::Open("../vtxreweighting/ht_ratio_DATA.root","READ");
-	h_htweight = (TH1F*)f_ht->Get("h_ht_ratio")->Clone("h_htweight");
-	h_htweight->SetDirectory(rootdir);
-	f_ht->Close();
+  	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_nohtweight_rawMET.root","READ");
+  	h_htweight = (TH1F*)f_ht->Get("h_ht_ratio")->Clone("h_htweight");
+  	h_htweight->SetDirectory(rootdir);
+  	f_ht->Close();
   }
 
   TObjArray *listOfFiles = chain->GetListOfFiles();
@@ -126,7 +161,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
    
 	  zmet.GetEntry(event);
       ++nEventsTotal;
-
+	  
 	  if (nEventsTotal % 1000 == 0){ // progress feedback to user
 		if (isatty(1)){ // xterm magic from L. Vacavant and A. Cerri               
           printf("\015\033[32m ---> \033[1m\033[31m%4.1f%%"
@@ -135,6 +170,12 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
         }
       }
 
+	  // for testing SRA
+      if( zmet.njets() < 2   ) continue; // special selection for now
+      // if( zmet.ht()    < 600 ) continue; // special selection for now
+
+	  float evt_ht = zmet.ht();
+	  
 	  if ( zmet.isData() && usejson && !goodrun(zmet.run(), zmet.lumi()) ) continue;
 	  
 	  //-~-~-~-~-~-~-~-~-~-~-~-~-~-~//
@@ -195,20 +236,57 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
       if( zmet.isData() && zmet.nVert() == 0                       ) continue; // special selection for now
 	  if( zmet.isData() && !passPhotonTrigger()                    ) continue; // pass trigger for data
 	  
-	  if( dovtxreweighting ){
-		if( passPhotonTrigger22()  ) weight *= h_vtxweight_22  ->GetBinContent(h_vtxweight_22  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger30()  ) weight *= h_vtxweight_30  ->GetBinContent(h_vtxweight_30  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger36()  ) weight *= h_vtxweight_36  ->GetBinContent(h_vtxweight_36  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger50()  ) weight *= h_vtxweight_50  ->GetBinContent(h_vtxweight_50  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger75()  ) weight *= h_vtxweight_75  ->GetBinContent(h_vtxweight_75  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger90()  ) weight *= h_vtxweight_90  ->GetBinContent(h_vtxweight_90  ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger120() ) weight *= h_vtxweight_120 ->GetBinContent(h_vtxweight_120 ->FindBin(zmet.nVert()));
-		if( passPhotonTrigger165() ) weight *= h_vtxweight_165 ->GetBinContent(h_vtxweight_165 ->FindBin(zmet.nVert()));
-	  }
-	  if( zmet.isData() ){  
-		weight *= (float) getPrescale();
+	  // OTF jet cleaning :(
+	  // cout<<endl;
+	  int jetphoind = -99;
+	  for( size_t jetind = 0; jetind < zmet.jets_p4().size(); jetind++ ){
+		float drmin = 0.4;
+		float drjetpho = sqrt( pow(acos(cos(zmet.gamma_p4().at(0).phi()-zmet.jets_p4().at(jetind).phi())), 2) + pow(zmet.gamma_p4().at(0).eta()-zmet.jets_p4().at(jetind).eta(), 2));
+		if( drjetpho < drmin ){
+		  // cout<<"DR: "<<drjetpho<<endl;
+		  // cout<<"njets:  "<<zmet.njets()<<endl;
+		  // cout<<"jetind: "<<jetind<<endl;
+		  // cout<<"jetpt: "<<zmet.gamma_p4().at(0).pt()<<endl;
+		  // cout<<"phopt: "<<zmet.jets_p4().at(jetind).pt()<<endl;
+		  drmin = drjetpho;
+		  jetphoind = jetind;
+		}
+
+		if( jetphoind > 0 ) evt_ht -= zmet.jets_p4().at(jetphoind).pt();
 	  }
 
+	  if( !passSignalRegionSelection(selection) ) continue;
+	  if( evt_ht < 100 ) continue;
+
+	  if( dovtxreweighting ){
+	    if(      ( !zmet.isData() && zmet.gamma_pt().at(0) > 170 ) || passPhotonTrigger165() ) weight *= h_vtxweight_165 ->GetBinContent(h_vtxweight_165 ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_vtxweight_120 ->GetBinContent(h_vtxweight_120 ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_vtxweight_90  ->GetBinContent(h_vtxweight_90  ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_vtxweight_75  ->GetBinContent(h_vtxweight_75  ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_vtxweight_50  ->GetBinContent(h_vtxweight_50  ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_vtxweight_36  ->GetBinContent(h_vtxweight_36  ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_vtxweight_30  ->GetBinContent(h_vtxweight_30  ->FindBin(zmet.nVert()));
+		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_vtxweight_22  ->GetBinContent(h_vtxweight_22  ->FindBin(zmet.nVert()));
+	  }
+
+	  if( dohtreweighting ){
+	  	weight *= h_htweight->GetBinContent(h_htweight->FindBin(evt_ht));		
+	  }
+
+	  // if( dohtreweighting ){
+	  //   if(      ( !zmet.isData() && zmet.gamma_pt().at(0) > 170 ) || passPhotonTrigger165() ) weight *= h_htweight_165 ->GetBinContent(h_htweight_165 ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_htweight_120 ->GetBinContent(h_htweight_120 ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_htweight_90  ->GetBinContent(h_htweight_90  ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_htweight_75  ->GetBinContent(h_htweight_75  ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_htweight_50  ->GetBinContent(h_htweight_50  ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_htweight_36  ->GetBinContent(h_htweight_36  ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_htweight_30  ->GetBinContent(h_htweight_30  ->FindBin(evt_ht));
+	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_htweight_22  ->GetBinContent(h_htweight_22  ->FindBin(evt_ht));
+	  // }
+	  // if( zmet.isData() ){  
+	  // 	weight *= (float) getPrescale();
+	  // }
+	  
 	  //-~-~-~-~-~-~-~-~-//
 	  //Fill event  hists//
 	  //-~-~-~-~-~-~-~-~-//	  
@@ -217,7 +295,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  fillHist( "event", "met_raw", "passtrig", zmet.met_rawPt()     , weight );
 	  fillHist( "event", "ht"     , "passtrig", zmet.ht()            , weight );
 	  if( zmet.njets() > 0 ) 	  fillHist( "event", "htgt0jets"     , "passtrig", zmet.ht()            , weight );
-	  if( zmet.njets() > 1 ) 	  fillHist( "event", "htgt1jets"     , "passtrig", zmet.ht()            , weight );
+	  if( zmet.njets() > 1 ) 	  fillHist( "event", "htgt1jets"     , "passtrig", evt_ht            , weight );
 	  fillHist( "event", "ptg"    , "passtrig", zmet.gamma_pt().at(0), weight );	  
 	  fillHist( "event", "nVert"  , "passtrig", zmet.nVert()         , weight );	  
 	  fillHist( "event", "metphi" , "passtrig", event_met_ph         , weight );	  
@@ -226,17 +304,14 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  if( zmet.njets() == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
 	  if( zmet.njets() >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
 	  
-	  if( zmet.njets() < 2 ) continue;
-
-	  if( dohtreweighting ){
-		weight *= h_htweight->GetBinContent(h_htweight->FindBin(zmet.ht()));		
-	  }
-
+	  if( zmet.njets() < 2 ) continue;	  
+	  
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
       npass += weight;
-	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight );
+	  // mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight );
+	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), evt_ht, zmet.gamma_pt().at(0), event_met_pt, weight );
 
     } // end loop over events
   } // end loop over files
@@ -256,6 +331,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   string str_vtxweight = "";
   
   if( !dovtxreweighting ) str_vtxweight+= "_novtxweight";
+  if( !dohtreweighting ) str_vtxweight+= "_nohtweight";
 
   // make histos rootfile
   string outputfilename = 	Form("../output/%s/%s%s%s_templates.root",
@@ -309,7 +385,7 @@ void makePhotonTemplates::bookHistos(){
   variable.push_back("met_raw");   variable_bins.push_back(500 );  
   variable.push_back("ht");	       variable_bins.push_back(1000);  
   variable.push_back("htgt0jets"); variable_bins.push_back(1000);  
-  variable.push_back("htgt1jets"); variable_bins.push_back(1000);  
+  variable.push_back("htgt1jets"); variable_bins.push_back(3000);  
   variable.push_back("njets");     variable_bins.push_back(20  );  
   variable.push_back("nVert");     variable_bins.push_back(50 );  
   variable.push_back("met0jet");   variable_bins.push_back(500 );  

@@ -88,167 +88,25 @@ void METTemplates::setBins( const string selection )
   //set photon njets cuts
   photon_njetcuts.clear();
   photon_njetcuts.push_back(2);
-  photon_njetcuts.push_back(3);
+  // photon_njetcuts.push_back(3);
 
   //set event pT cuts
   photon_ptcuts.clear();
-  photon_ptcuts.push_back(22);
+  photon_ptcuts.push_back(25);
+  photon_ptcuts.push_back(35);
   photon_ptcuts.push_back(40);
   photon_ptcuts.push_back(60);
   photon_ptcuts.push_back(80);
   photon_ptcuts.push_back(100);
   photon_ptcuts.push_back(125);
   photon_ptcuts.push_back(170);
+  photon_ptcuts.push_back(225);
+  photon_ptcuts.push_back(300);
+  photon_ptcuts.push_back(500);
 
   //set event HT cuts
   photon_htcuts.clear();
   photon_htcuts.push_back(35);
-  photon_htcuts.push_back(70);
-  photon_htcuts.push_back(105);
-  photon_htcuts.push_back(140);
-  photon_htcuts.push_back(200);
-  photon_htcuts.push_back(350);
-  photon_htcuts.push_back(500);
-  // photon_htcuts.push_back(1000);
-  // photon_htcuts.push_back(1500);
-  // photon_htcuts.push_back(2000);
-
-  if( !TString(selection).Contains("bad") ) {
-	if( TString(selection).Contains("3jets") ) {
-	  if( TString(selection).Contains("edgec") ) {
-		photon_ptcuts.clear();
-		photon_ptcuts.push_back(45);
-		photon_ptcuts.push_back(50);
-		photon_ptcuts.push_back(75);
-		photon_ptcuts.push_back(90);
-		photon_ptcuts.push_back(135);
-		photon_ptcuts.push_back(175);
-		photon_htcuts.clear();
-		photon_htcuts.push_back(105);
-		photon_htcuts.push_back(140);
-		photon_htcuts.push_back(250);
-		photon_htcuts.push_back(400);
-	  }
-	  if( TString(selection).Contains("edgef") ) {
-		photon_ptcuts.clear();
-		photon_ptcuts.push_back(50);
-		photon_ptcuts.push_back(60);
-		photon_ptcuts.push_back(75);
-		photon_ptcuts.push_back(90);
-		photon_ptcuts.push_back(135);
-		photon_ptcuts.push_back(200);
-		photon_ptcuts.push_back(350);
-		photon_htcuts.clear();
-		photon_htcuts.push_back(105);
-		photon_htcuts.push_back(140);
-		photon_htcuts.push_back(250);
-		photon_htcuts.push_back(400);
-		photon_htcuts.push_back(600);
-		photon_htcuts.push_back(1000);
-	  }
-	}
-
-	if( TString(selection).Contains("2jets") ) {
-	  if( TString(selection).Contains("edgec") ) {
-		photon_ptcuts.clear();
-		photon_ptcuts.push_back(50);
-		photon_ptcuts.push_back(75);
-		photon_ptcuts.push_back(90);
-		photon_ptcuts.push_back(135);
-		photon_ptcuts.push_back(175);
-		photon_ptcuts.push_back(250);
-		photon_htcuts.clear();
-		photon_htcuts.push_back(70);
-		photon_htcuts.push_back(105);
-		photon_htcuts.push_back(140);
-		photon_htcuts.push_back(250);
-		photon_htcuts.push_back(400);
-		photon_htcuts.push_back(600);
-	  }
-	  if( TString(selection).Contains("edgef") ) {
-		photon_ptcuts.clear();
-		photon_ptcuts.push_back(50);
-		photon_ptcuts.push_back(75);
-		photon_ptcuts.push_back(90);
-		photon_ptcuts.push_back(135);
-		photon_ptcuts.push_back(175);
-		photon_ptcuts.push_back(250);
-		photon_htcuts.clear();
-		photon_htcuts.push_back(70);
-		photon_htcuts.push_back(105);
-		photon_htcuts.push_back(140);
-		photon_htcuts.push_back(250);
-		photon_htcuts.push_back(400);
-		photon_htcuts.push_back(600);
-		photon_htcuts.push_back(1000);
-	  }
-	}
-  }
-  
-  //set event HT cuts
-  if( TString(selection).Contains("bveto") ) {
-	if( TString(selection).Contains("SRA") ){
-	  photon_htcuts.push_back(600);
-	  // photon_htcuts.push_back(640);
-	  // photon_htcuts.push_back(680);
-	  // photon_htcuts.push_back(720);
-	  // photon_htcuts.push_back(760);
-	  // photon_htcuts.push_back(860);
-	  // photon_htcuts.push_back(900);
-	  // photon_htcuts.push_back(1100);
-	  // photon_htcuts.push_back(1500);
-	  // photon_htcuts.push_back(2000);
-
-	  // photon_htcuts.push_back(600);
-	  // photon_htcuts.push_back(635);
-	  // photon_htcuts.push_back(670);
-	  // photon_htcuts.push_back(705);
-	  // photon_htcuts.push_back(750);
-	  // photon_htcuts.push_back(800);
-	  // photon_htcuts.push_back(1000);
-	  // photon_htcuts.push_back(1200);
-	}
-  
-	if( TString(selection).Contains("SRB") ){
-	  photon_htcuts.push_back(140);
-	  photon_htcuts.push_back(175);
-	  photon_htcuts.push_back(210);
-	  photon_htcuts.push_back(245);
-	  photon_htcuts.push_back(300);
-	  photon_htcuts.push_back(500);
-	  photon_htcuts.push_back(750);
-	  photon_htcuts.push_back(1000);
-	  photon_htcuts.push_back(1200);
-	  photon_htcuts.push_back(1500);
-	}
-  }
-
-  //set event HT cuts
-  if( TString(selection).Contains("withb") ) {
-	if( TString(selection).Contains("SRA") ){
-	  photon_htcuts.push_back(600);
-	  photon_htcuts.push_back(635);
-	  photon_htcuts.push_back(670);
-	  photon_htcuts.push_back(705);
-	  photon_htcuts.push_back(750);
-	  photon_htcuts.push_back(800);
-	  photon_htcuts.push_back(1000);
-	  photon_htcuts.push_back(1200);
-	}
-
-	if( TString(selection).Contains("SRB") ){
-	  photon_htcuts.push_back(140);
-	  photon_htcuts.push_back(175);
-	  photon_htcuts.push_back(210);
-	  photon_htcuts.push_back(245);
-	  photon_htcuts.push_back(300);
-	  photon_htcuts.push_back(500);
-	  photon_htcuts.push_back(750);
-	  photon_htcuts.push_back(1000);
-	  photon_htcuts.push_back(1200);
-	  photon_htcuts.push_back(1500);
-	}
-  }
   
 }
 

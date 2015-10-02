@@ -9,11 +9,11 @@ using namespace std;
 void getReweightVtxHist()
 {
 
-  // TFile * f_data = TFile::Open("../output/V07-04-05_fixedL1METSubtraction/data_inclusive_hists.root"     , "READ");
-  // TFile * f_phot = TFile::Open("../output/V07-04-05_fixedL1METSubtraction/data_inclusive_templates.root" , "READ");
+  // TFile * f_data = TFile::Open("../output/V07-04-10/data_inclusive_novtxweight_hists.root" , "READ");
+  // TFile * f_phot = TFile::Open("../output/V07-04-10/data_inclusive_templates.root"         , "READ");
 
-  TFile * f_data = TFile::Open("../output/V07-04-09/zjetsmlm_inclusive_novtxweight_hists.root" , "READ");
-  TFile * f_phot = TFile::Open("../output/V07-04-09/All_MC_inclusive_templates.root"           , "READ");
+  TFile * f_data = TFile::Open("../output/V07-04-10/zjetsmlm_rawMET_novtxweight_hists.root"   , "READ");
+  TFile * f_phot = TFile::Open("../output/V07-04-10/All_MC_rawMET_novtxweight_templates.root" , "READ");
 
   TH1F * h_data = (TH1F*)f_data->Get("h_ll_event_nVert_passtrig")->Clone("h_data");
   TH1F * h_phot = (TH1F*)f_phot->Get("h_ph_event_nVert_passtrig")->Clone("h_phot");
@@ -44,16 +44,16 @@ void getReweightVtxHist()
   // h_phot_120 = (TH1F*) h_phot_120->Rebin(nbins, "h_phot_120_rebinned", bins);
   // h_phot_165 = (TH1F*) h_phot_165->Rebin(nbins, "h_phot_165_rebinned", bins);
 
-  h_data->Rebin(5);
-  h_phot->Rebin(5);
-  h_phot_22 ->Rebin(5);
-  h_phot_30 ->Rebin(5);
-  h_phot_36 ->Rebin(5);
-  h_phot_50 ->Rebin(5);
-  h_phot_75 ->Rebin(5);
-  h_phot_90 ->Rebin(5);
-  h_phot_120->Rebin(5);
-  h_phot_165->Rebin(5);
+  // h_data->Rebin(5);
+  // h_phot->Rebin(5);
+  // h_phot_22 ->Rebin(5);
+  // h_phot_30 ->Rebin(5);
+  // h_phot_36 ->Rebin(5);
+  // h_phot_50 ->Rebin(5);
+  // h_phot_75 ->Rebin(5);
+  // h_phot_90 ->Rebin(5);
+  // h_phot_120->Rebin(5);
+  // h_phot_165->Rebin(5);
 
   h_phot->Scale(1./h_phot->GetSumOfWeights());
   h_data->Scale(1./h_data->GetSumOfWeights());
