@@ -12,6 +12,8 @@
 
 using namespace std;
 
+void printYieldTable( vector <float> metcut, TH1F* h_zll, TH1F* h_pho );
+  
 void compareMET( std::string iter = "", std::string region = "", float luminosity = 1.0 )
 {
 
@@ -28,82 +30,19 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
 
   //MAKE TABLES
   vector <float> metcut;
+
   metcut.push_back(0.0);
-  metcut.push_back(25);
   metcut.push_back(50);
   metcut.push_back(100);
-  // metcut.push_back(150);
-  // metcut.push_back(225);
-  // metcut.push_back(300);
+  metcut.push_back(150);
+  printYieldTable( metcut, h_zll, h_pho );
+
+  metcut.clear();
+  metcut.push_back(150);
+  metcut.push_back(225);
+  metcut.push_back(300);
   metcut.push_back(-1);
-
-  vector <double> val_zjets;
-  vector <double> err_zjets;
-  vector <double> val_gjets;
-  vector <double> err_gjets;
-  vector <double> val_ratio;
-  vector <double> err_ratio;
-  
-  for( size_t i = 0; i < metcut.size(); i++ ){
-	val_zjets.push_back(0);
-	err_zjets.push_back(0);
-	val_gjets.push_back(0);
-	err_gjets.push_back(0);
-	val_ratio.push_back(0);
-	err_ratio.push_back(0);
-  }
-
-  for( size_t bini = 0; bini < metcut.size()-1; bini++ ){
-	if( bini < metcut.size()-1 ){
-	  val_zjets.at(bini) = h_zll->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
-	  val_gjets.at(bini) = h_pho->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_gjets.at(bini));
-	}
-	if( bini == metcut.size()-1 ){
-	  val_zjets.at(bini) = h_zll->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
-	  val_gjets.at(bini) = h_pho->IntegralAndError( metcut.at(bini), -1, err_gjets.at(bini));
-	}
-  }
-  
-  cout<<"$\\mathrm{E_{T}^{miss} [GeV]}$ &";
-  for( size_t bini = 0; bini < metcut.size()-2; bini++ ){
-	cout<<Form("%.0f - %.0f & ", metcut.at(bini), metcut.at(bini+1) );
-  }
-  cout<<Form("$\\geq$ %.0f \\\\", metcut.at(metcut.size()-2) );
-  cout<<endl;
-
-  cout<<"\\hline "<<endl;
-  cout<<"Z+jets& ";
-  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
-	if( bini < val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
-	if( bini == val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
-  }
-  cout<<endl;
-
-  cout<<"$\\mathrm{\\gamma+jets}$& ";
-  for( size_t bini = 0; bini < val_gjets.size()-1; bini++ ){
-	if( bini < val_gjets.size()-2 )
-	cout<<Form(" %.1f $\\pm$ %.1f & ", val_gjets.at(bini), err_gjets.at(bini));
-	if( bini == val_gjets.size()-2 )
-	cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_gjets.at(bini), err_gjets.at(bini));
-  }
-  cout<<endl<<"\\hline"<<endl;
-
-  for( size_t bini = 0; bini < val_ratio.size()-1; bini++ ){
-	val_ratio.at(bini) = val_zjets.at(bini)/val_gjets.at(bini);
-	err_ratio.at(bini) = err_mult( val_zjets.at(bini), val_gjets.at(bini), err_zjets.at(bini), err_gjets.at(bini), val_ratio.at(bini));
-  }
-  
-  cout<<"ratio& ";
-  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
-	if( bini < val_zjets.size()-2 )
-	  cout<<Form(" %.2f $\\pm$ %.2f & ", val_ratio.at(bini), err_ratio.at(bini));
-	if( bini == val_zjets.size()-2 )
-	  cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_ratio.at(bini), err_ratio.at(bini));
-  }
-  cout<<endl;
-
+  printYieldTable( metcut, h_zll, h_pho );
 
   //MAKE PLOTS
 
@@ -112,7 +51,7 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   h_zll->Rebin(rebin);
   h_pho->Rebin(rebin);
 
-  float xmax = 200;
+  float xmax = 350;
   
   updateoverflow( h_zll , xmax );
   updateoverflow( h_pho , xmax );
@@ -203,4 +142,87 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   c1->SaveAs(Form("../output/ZMET2015/%s/plots/Closure/h_met_closure%s.pdf", iter.c_str(), region.c_str() ));
   
   return;
+}
+
+
+void printYieldTable( vector <float> metcut, TH1F* h_zll, TH1F* h_pho )
+{
+
+  vector <double> val_zjets;
+  vector <double> err_zjets;
+  vector <double> val_gjets;
+  vector <double> err_gjets;
+  vector <double> val_ratio;
+  vector <double> err_ratio;
+  
+  for( size_t i = 0; i < metcut.size(); i++ ){
+	val_zjets.push_back(0);
+	err_zjets.push_back(0);
+	val_gjets.push_back(0);
+	err_gjets.push_back(0);
+	val_ratio.push_back(0);
+	err_ratio.push_back(0);
+  }
+
+  for( size_t bini = 0; bini < metcut.size()-1; bini++ ){
+	if( bini < metcut.size()-1 ){
+	  val_zjets.at(bini) = h_zll->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
+	  val_gjets.at(bini) = h_pho->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_gjets.at(bini));
+	}
+	if( bini == metcut.size()-1 ){
+	  if( metcut.at(bini+1) == -1 ){
+		val_zjets.at(bini) = h_zll->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
+		val_gjets.at(bini) = h_pho->IntegralAndError( metcut.at(bini), -1, err_gjets.at(bini));
+	  }
+	  else{
+		val_zjets.at(bini) = h_zll->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
+		val_gjets.at(bini) = h_pho->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_gjets.at(bini));
+	  }
+	}  
+  }
+  
+  cout<<"$\\mathrm{E_{T}^{miss} [GeV]}$ &";
+  for( size_t bini = 0; bini < metcut.size()-2; bini++ ){
+	cout<<Form("%.0f - %.0f & ", metcut.at(bini), metcut.at(bini+1) );
+  }
+  if( metcut.at(metcut.size()-1) == -1 ) cout<<Form("$\\geq$ %.0f \\\\", metcut.at(metcut.size()-2) );
+  else 	cout<<Form("%.0f - %.0f \\\\", metcut.at(metcut.size()-2), metcut.at(metcut.size()-1) );
+
+  cout<<endl;
+
+  cout<<"\\hline "<<endl;
+  cout<<"Z+jets& ";
+  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+	if( bini < val_zjets.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
+	if( bini == val_zjets.size()-2 )
+	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+  }
+  cout<<endl;
+
+  cout<<"$\\mathrm{\\gamma+jets}$& ";
+  for( size_t bini = 0; bini < val_gjets.size()-1; bini++ ){
+	if( bini < val_gjets.size()-2 )
+	cout<<Form(" %.1f $\\pm$ %.1f & ", val_gjets.at(bini), err_gjets.at(bini));
+	if( bini == val_gjets.size()-2 )
+	cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_gjets.at(bini), err_gjets.at(bini));
+  }
+  cout<<endl<<"\\hline"<<endl;
+
+  for( size_t bini = 0; bini < val_ratio.size()-1; bini++ ){
+	val_ratio.at(bini) = val_zjets.at(bini)/val_gjets.at(bini);
+	err_ratio.at(bini) = err_mult( val_zjets.at(bini), val_gjets.at(bini), err_zjets.at(bini), err_gjets.at(bini), val_ratio.at(bini));
+  }
+  
+  cout<<"ratio& ";
+  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+	if( bini < val_zjets.size()-2 )
+	  cout<<Form(" %.2f $\\pm$ %.2f & ", val_ratio.at(bini), err_ratio.at(bini));
+	if( bini == val_zjets.size()-2 )
+	  cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_ratio.at(bini), err_ratio.at(bini));
+  }
+  cout<<endl<<"\\hline"<<endl;
+
+  return;
+
 }

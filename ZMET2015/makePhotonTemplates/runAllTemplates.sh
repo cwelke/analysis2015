@@ -14,15 +14,27 @@ fi
 # # ./makePhotonTemplates $selection $analysis_version data  &
 # ./makePhotonTemplates $selection $analysis_version All_MC &
 
+# selection="_rawMET"
+# ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
 # selection="_rawMET_bveto_SRB"
 # ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
 # selection="_rawMET_withb_SRB"
 # ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
+# selection="_rawMET_bveto_SRA"
+# ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
+# selection="_rawMET_withb_SRA"
+# ./makePhotonTemplates $selection $analysis_version All_MC dontdohtreweighting &
 
-selection="_rawMET_bveto_SRB"
+# selection="_rawMET"
+# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
+# selection="_rawMET_bveto_SRB"
+# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
+# selection="_rawMET_withb_SRB"
+# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
+selection="_rawMET_bveto_SRA"
 ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
-selection="_rawMET_withb_SRB"
-./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
+# selection="_rawMET_withb_SRA"
+# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
 
 # selection="_rawMET"
 # ./makePhotonTemplates $selection $analysis_version data  &

@@ -54,6 +54,10 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
   else if( sample == "zjetsmlm" ){
   // ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/dyjetsll_25ns_m50nlo*.root"    , iter.c_str() ));
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zjetsll_25ns_m50mlm*.root"  , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zjetsllht100_25ns_m50mlm*.root"  , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zjetsllht200_25ns_m50mlm*.root"  , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zjetsllht400_25ns_m50mlm*.root"  , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zjetsllht600_25ns_m50mlm*.root"  , iter.c_str() ));
   }
 
   else if( sample == "zjinc" ){
@@ -77,19 +81,17 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wz3lnu_25ns_powp8*.root"         , iter.c_str() ));
   }
 
-  else if( sample == "top" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/t_*.root", iter.c_str() ));	
-  }
-
-  else if( sample == "vv" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wz_3lnu*.root", iter.c_str() ));	
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zz_4l*.root", iter.c_str() ));	
+  else if( sample == "vvv" ){
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wzz_25ns_nlo*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wwz_25ns_nlo*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/zzz_25ns_nlo*.root"         , iter.c_str() ));
   }
 
   else if( sample == "ttv" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/tth*.root", iter.c_str() ));	
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttw*.root", iter.c_str() ));	
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttv*.root", iter.c_str() ));	
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttw2q_25ns_nlo*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttwlnu_25ns_nlo*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttzllnunu_25ns_nlo*.root"         , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/ttzqq_25ns_nlo*.root"         , iter.c_str() ));
   }
   
   else if( sample == "FS_BG" ){

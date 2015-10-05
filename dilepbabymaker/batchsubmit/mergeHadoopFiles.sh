@@ -20,31 +20,49 @@ if [ ! -d "merge_logs_${TAG}" ]; then
 fi
 
 
-run data_25nsPrompt_ee
-run data_25nsPrompt_ph
-run data_25nsPrompt_mm
-run data_25nsPrompt_em
-
-run data_2015D25nsPrompt_ee
-run data_2015D25nsPrompt_ph
-run data_2015D25nsPrompt_mm
-run data_2015D25nsPrompt_em
-
-run dyjetsll_25ns_m1050nlo
-run dyjetsll_25ns_m50nlo	 
-run tt2lnu_25ns_php8
-
 run zjetsll_25ns_m50mlm  
+run zjetsllht100_25ns_m50mlm  
+run zjetsllht200_25ns_m50mlm  
+run zjetsllht400_25ns_m50mlm  
+run zjetsllht600_25ns_m50mlm  
 run gjets_25ns_ht40mlm  
 run gjets_25ns_ht100mlm  
 run gjets_25ns_ht200mlm  
 run gjets_25ns_ht400mlm  
 run gjets_25ns_ht600mlm  
 
+# run wz2l2q_25ns_nlo  
+# run zz2l2q_25ns_nlo  
+# run zz4l_25ns_php8  
+
+# run wwz_25ns_nlo  
+# run zzz_25ns_nlo  
+
+# run data_25nsPrompt_ee
+# run data_25nsPrompt_ph
+# run data_25nsPrompt_mm
+# run data_25nsPrompt_em
+
+# run data_2015D25nsPrompt_ee
+# run data_2015D25nsPrompt_ph
+# run data_2015D25nsPrompt_mm
+# run data_2015D25nsPrompt_em
+
+# run dyjetsll_25ns_m1050nlo
+# run dyjetsll_25ns_m50nlo	 
+# run tt2lnu_25ns_php8
+
 # run wz3lnu_25ns_powp8  	 
 # run ww2l2nu_25ns_powp8   
 # run sttwtop_25ns_powp8   
 # run sttwatop_25ns_powp8  
+
+# run ttwlnu_25ns_nlo 
+# run ttw2q_25ns_nlo 
+# run wzz_25ns_nlo  
+# run ttg_25ns_nlo  
+# run ttzqq_25ns_nlo  
+# run ttzllnunu_25ns_nlo  
 
 # # done
 # run data_50nsPrompt_ee
@@ -70,85 +88,3 @@ run gjets_25ns_ht600mlm
 # run dyjetsll_50ns_m50mlmht400600
 # run dyjetsll_50ns_m50mlmht600inf
 
-# #
-# # TTBAR
-# #
-
-# run ttall_msdecays
-
-# # # #
-# # # # DY+JETS
-# # # #
-
-# run dyjetsll_m50inc
-# run dyjetsll_ht100to200
-# run dyjetsll_ht200to400
-# run dyjetsll_ht400to600
-# run dyjetsll_ht600toinf
-# # # run dyjetsmm_ptz180
-
-# # #
-# # # SINGLE TOP
-# # #
-
-# # run t_bars
-# # run t_bart
-# # run t_tops
-# # run t_topt
-# run t_toptw
-# run t_bartw
-
-
-# #
-# # GAMMA + JETS
-# #
-
-# # run gjet_pt40_doubleEM
-# run gjet_ht100to200
-# run gjet_ht200to400
-# run gjet_ht400to600
-# run gjet_ht600toinf
-
-# # #
-# # # ALTERNATIVE TTBAR
-# # #
-
-# # #
-# # # W+JETS
-# # #
-
-# # # run wjets_lnu
-# # # run wjets_ht100to200
-# # # run wjets_ht200to400
-# # # run wjets_ht400to600
-# # # run wjets_ht600toinf
-# # # run wjets_enu
-# # # run wjets_mnu
-
-# # # #
-# # # # Z INVISIBLE
-# # # #
-
-# # # run zinv_ht100to200
-# # # run zinv_ht200to400
-# # # run zinv_ht400to600
-# # # run zinv_ht600toinf
-
-# #
-# # DIBOSON
-# #
-
-# run wz_3lnu
-# run zz_4l
-
-# # #
-# # # TRIBOSON
-# # #
-
-# # #
-# # # TTV
-# # #
-
-# run ttw
-# run ttz
-# run tth

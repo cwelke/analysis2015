@@ -114,15 +114,12 @@ class babyMaker {
   Int_t           Flag_trackingFailureFilter;
   Int_t           Flag_CSCTightHaloFilter;
   Int_t           Flag_HBHENoiseFilter;
+  Int_t           Flag_HBHEIsoNoiseFilter;
   Int_t           Flag_goodVertices;
   Int_t           Flag_eeBadScFilter;
   Int_t           Flag_METFilters;
 
 //----- TRIGGER (to be better defined)
-  Int_t           HLT_HT900;   
-  Int_t           HLT_MET170;
-  Int_t           HLT_ht350met120;   
-  Int_t           HLT_SingleMu;   
   Int_t           HLT_DoubleEl;   
   Int_t           HLT_DoubleEl_DZ;   
   Int_t           HLT_DoubleEl_noiso;   
@@ -130,16 +127,7 @@ class babyMaker {
   Int_t           HLT_MuEG_2;   
   Int_t           HLT_DoubleMu;   
   Int_t           HLT_DoubleMu_tk;   
-  Int_t           HLT_Photons;   
-  Int_t           HLT_Photon22;
-  Int_t           HLT_Photon30;
-  Int_t           HLT_Photon36;
-  Int_t           HLT_Photon50;
-  Int_t           HLT_Photon75;
-  Int_t           HLT_Photon90;
-  Int_t           HLT_Photon120;
-  Int_t           HLT_Photon175;
-  Int_t           HLT_Photon165_HE10;
+
   Int_t           HLT_Photon22_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon30_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon36_R9Id90_HE10_IsoM;
@@ -148,7 +136,6 @@ class babyMaker {
   Int_t           HLT_Photon90_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon120_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon165_R9Id90_HE10_IsoM;
-  Int_t           HLT_l1prescale;   
 
   //----- LEPTONS
   Int_t           nlep;
@@ -192,10 +179,6 @@ class babyMaker {
   std::vector <Int_t  >         gamma_idCutBased   ;   //[ngamma]
   std::vector <Int_t  >         gamma_mcMatchId    ;   //[ngamma]
   std::vector <Float_t>         gamma_genIso       ;   //[ngamma]
-
-  // event level vars recalculated for photon+jets control region
-  Int_t           gamma_nJet40;
-  Int_t           gamma_nBJet40;
 
 //----- GEN PARTICLES
   Int_t           ngenPart;
@@ -266,63 +249,6 @@ class babyMaker {
   std::vector <Int_t  >         jet_puId        ;   //[njet]
 
 //----- pfMETs
-  Float_t chpfmet_trk_pt;
-  Float_t chpfmet_trk_phi;
-
-  Float_t chpfmet_pv1_pt;
-  Float_t chpfmet_pv1_phi;
-
-  Float_t chphpfmet_trk_pt;
-  Float_t chphpfmet_trk_phi;
-
-  Float_t nupfmet_trk_pt;
-  Float_t nupfmet_trk_phi;
-  Float_t nupfmet_fwd_pt;
-  Float_t nupfmet_fwd_phi;  
-  Float_t nupfmet_all_pt;
-  Float_t nupfmet_all_phi;
-
-  Float_t nunophpfmet_trk_pt;
-  Float_t nunophpfmet_trk_phi;
-  Float_t nunophpfmet_fwd_pt;
-  Float_t nunophpfmet_fwd_phi;  
-  Float_t nunophpfmet_all_pt;
-  Float_t nunophpfmet_all_phi;
-
-  //pfcand vector sums
-  Float_t chpfcands_0013_pt;
-  Float_t chpfcands_1316_pt;
-  Float_t chpfcands_1624_pt;
-  Float_t chpfcands_2430_pt;
-  Float_t chpfcands_30in_pt;
-  Float_t phpfcands_0013_pt;
-  Float_t phpfcands_1316_pt;
-  Float_t phpfcands_1624_pt;
-  Float_t phpfcands_2430_pt;
-  Float_t phpfcands_30in_pt;
-  Float_t nupfcands_0013_pt;
-  Float_t nupfcands_1316_pt;
-  Float_t nupfcands_1624_pt;
-  Float_t nupfcands_2430_pt;
-  Float_t nupfcands_30in_pt;
-
-  Float_t chpfcands_0013_phi;
-  Float_t chpfcands_1316_phi;
-  Float_t chpfcands_1624_phi;
-  Float_t chpfcands_2430_phi;
-  Float_t chpfcands_30in_phi;
-  Float_t phpfcands_0013_phi;
-  Float_t phpfcands_1316_phi;
-  Float_t phpfcands_1624_phi;
-  Float_t phpfcands_2430_phi;
-  Float_t phpfcands_30in_phi;
-  Float_t nupfcands_0013_phi;
-  Float_t nupfcands_1316_phi;
-  Float_t nupfcands_1624_phi;
-  Float_t nupfcands_2430_phi;
-  Float_t nupfcands_30in_phi;
-
-  // lots of MET
   Float_t met_T1CHS_pt;
   Float_t met_T1CHS_phi;
   Float_t met_T1CHS_fromCORE_pt;

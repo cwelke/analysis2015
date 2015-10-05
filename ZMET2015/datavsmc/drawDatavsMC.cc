@@ -16,9 +16,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 {
 
   bool useedgebinning = true;
-  bool usetemplates   = false;
-  bool usefsbkg       = false;
-  bool printyields    = false;
+  bool usetemplates   = true;
+  bool usefsbkg       = true;
+  bool printyields    = true;
 
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
@@ -26,6 +26,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   TH1F * h_wz    = NULL;
   TH1F * h_ww    = NULL;
   TH1F * h_st    = NULL;
+  TH1F * h_vvv   = NULL;
+  TH1F * h_ttv   = NULL;
 
   // TH1F * h_fsbkg = NULL;
   // TH1F * h_other = NULL;
@@ -38,35 +40,34 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   if( usefsbkg ){
 	getBackground(  h_ttbar, iter, Form("data%s", selection.c_str() ),    "metgt1jet", "em", "inclusive" );
   }
-
   else           getBackground(  h_ttbar, iter, Form("ttbar%s", selection.c_str() ), variable, dilep, region );
-  getBackground(  h_st, iter, Form("st%s", selection.c_str() ), variable, dilep, region );
-  getBackground(  h_wz, iter, Form("wz%s", selection.c_str() ), variable, dilep, region );
-  getBackground(  h_ww, iter, Form("ww%s", selection.c_str() ), variable, dilep, region );
-  // getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
-  // getBackground(  h_other, iter, Form("ttv%s"   , selection.c_str() ), "met", "ll" );
-  // getBackground(  h_vvbkg, iter, Form("vv%s"    , selection.c_str() ), "met", "ll" );
-  // getBackground(  h_zjets, iter, "All_MC", "jzb", "ll" );
+
+  getBackground(                 h_st   , iter, Form("st%s"   , selection.c_str() ), variable, dilep, region );
+  getBackground(                 h_wz   , iter, Form("wz%s"   , selection.c_str() ), variable, dilep, region );
+  getBackground(                 h_ww   , iter, Form("ww%s"   , selection.c_str() ), variable, dilep, region );
+  getBackground(                 h_ttv  , iter, Form("vvv%s"  , selection.c_str() ), variable, dilep, region );
+  getBackground(                 h_vvv  , iter, Form("ttv%s"  , selection.c_str() ), variable, dilep, region );
+
   if( usetemplates ) getTemplateMET( h_zjets, iter, Form("data%s", selection.c_str() ) );
   else getBackground(  h_zjets, iter, Form("zjets%s", selection.c_str() ), variable, dilep, region );
-  // getTemplateMET( h_zjets, iter, Form("data%s", selection.c_str() ) );
 
-  // h_zjets->Scale(0.057);
-  // h_ttbar->Scale(0.057);
-
-  // h_data->Scale(luminosity);
-  // h_other->Scale(luminosity);
-  // h_vvbkg->Scale(luminosity);
-  // h_vvbkg->Scale(0);
+  h_st->Scale(luminosity);
+  h_ww->Scale(luminosity);
+  h_wz->Scale(luminosity);
+  h_ttv->Scale(luminosity);
+  h_vvv->Scale(luminosity);
 
   if( usetemplates ){
   
-	h_ttbar->Scale(0.14*1.01);
-	h_zjets->Scale(1./h_zjets->GetSumOfWeights());
+	h_ttbar->Scale(0.12*1.01);
+	// h_zjets->Scale(1./h_zjets->GetSumOfWeights());
 
 	float val_data  = h_data  -> Integral(1,49);
 	float val_ttbar = h_ttbar -> Integral(1,49);
 	float val_zjets = h_zjets -> Integral(1,49);
+	val_ttbar += h_wz  -> Integral(1,49);
+	val_ttbar += h_ttv -> Integral(1,49);
+	val_ttbar += h_vvv -> Integral(1,49);
 
 	cout<<"data:  "<<val_data<<endl;
 	cout<<"zjets: "<<val_zjets<<endl;
@@ -87,9 +88,6 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   else{
 	h_zjets->Scale(luminosity);
 	h_ttbar->Scale(luminosity);
-	h_st->Scale(luminosity);
-	h_ww->Scale(luminosity);
-	h_wz->Scale(luminosity);
   }
 
   if( printyields ){
@@ -98,21 +96,21 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   vector <float> metcut;
   if( variable == "mll" ){
   metcut.clear();
-  metcut.push_back(20);
-  metcut.push_back(70);
+  // metcut.push_back(20);
+  // metcut.push_back(70);
   metcut.push_back(81);
   metcut.push_back(101);
-  metcut.push_back(120);
-  metcut.push_back(165);
-  metcut.push_back(185);
+  // metcut.push_back(120);
+  // metcut.push_back(165);
+  // metcut.push_back(185);
   metcut.push_back(-1);
   }else{
   metcut.clear();
   metcut.push_back(0.0);
-  metcut.push_back(30);
-  metcut.push_back(60);
-  metcut.push_back(90);
-  metcut.push_back(120);
+  metcut.push_back(25);
+  metcut.push_back(50);
+  metcut.push_back(100);
+  metcut.push_back(150);
   metcut.push_back(-1);
   }
   // if( useedgebinning ){
@@ -135,11 +133,14 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   vector <double> val_fsbkg;
   vector <double> err_fsbkg;
 
-  // vector <double> val_other;
-  // vector <double> err_other;
+  vector <double> val_ttvbg;
+  vector <double> err_ttvbg;
 
-  // vector <double> val_vvbkg;
-  // vector <double> err_vvbkg;
+  vector <double> val_vvvbg;
+  vector <double> err_vvvbg;
+
+  vector <double> val_vvbkg;
+  vector <double> err_vvbkg;
 
   vector <double> val_allbg;
   vector <double> err_allbg;
@@ -154,10 +155,12 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   	err_zjets.push_back(0);
   	val_fsbkg.push_back(0);
   	err_fsbkg.push_back(0);
-  	// val_other.push_back(0);
-  	// err_other.push_back(0);
-  	// val_vvbkg.push_back(0);
-  	// err_vvbkg.push_back(0);
+  	val_ttvbg.push_back(0);
+  	err_ttvbg.push_back(0);
+  	val_vvvbg.push_back(0);
+  	err_vvvbg.push_back(0);
+  	val_vvbkg.push_back(0);
+  	err_vvbkg.push_back(0);
   	val_allbg.push_back(0);
   	err_allbg.push_back(0);
   	val_ratio.push_back(0);
@@ -169,15 +172,17 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_data .at(bini));
   	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_zjets.at(bini));
   	  val_fsbkg.at(bini) = h_ttbar->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_fsbkg.at(bini));
-  	  // val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_other.at(bini));
-  	  // val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvbkg.at(bini));
+  	  val_ttvbg.at(bini) = h_ttv  ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_ttvbg.at(bini));
+  	  val_vvvbg.at(bini) = h_vvv  ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvvbg.at(bini));
+  	  val_vvbkg.at(bini) = h_wz   ->IntegralAndError( metcut.at(bini), metcut.at(bini+1)-1, err_vvbkg.at(bini));
   	}
   	if( bini == metcut.size()-1 ){
   	  val_data .at(bini) = h_data ->IntegralAndError( metcut.at(bini), -1, err_data .at(bini));
   	  val_zjets.at(bini) = h_zjets->IntegralAndError( metcut.at(bini), -1, err_zjets.at(bini));
   	  val_fsbkg.at(bini) = h_ttbar->IntegralAndError( metcut.at(bini), -1, err_fsbkg.at(bini));
-  	  // val_other.at(bini) = h_other->IntegralAndError( metcut.at(bini), -1, err_other.at(bini));
-  	  // val_vvbkg.at(bini) = h_vvbkg->IntegralAndError( metcut.at(bini), -1, err_vvbkg.at(bini));
+  	  val_ttvbg.at(bini) = h_ttv  ->IntegralAndError( metcut.at(bini), -1, err_ttvbg.at(bini));
+  	  val_vvvbg.at(bini) = h_vvv  ->IntegralAndError( metcut.at(bini), -1, err_vvvbg.at(bini));
+  	  val_vvbkg.at(bini) = h_wz   ->IntegralAndError( metcut.at(bini), -1, err_vvbkg.at(bini));
   	}
   }
 
@@ -192,11 +197,18 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   // }
 
   for( size_t bini = 0; bini < metcut.size(); bini++ ){
-  	val_allbg.at(bini) = val_zjets.at(bini) + val_fsbkg.at(bini)
-	  // + val_other.at(bini) + val_vvbkg.at(bini)
+  	val_allbg.at(bini) =
+	  val_zjets.at(bini) +
+	  val_fsbkg.at(bini) +
+	  val_ttvbg.at(bini) +
+	  val_vvvbg.at(bini) +
+	  val_vvbkg.at(bini)
 	  ;
-  	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) + pow(err_fsbkg.at(bini), 2)
-							   // + pow(err_other.at(bini), 2) + pow(err_vvbkg.at(bini), 2)
+  	err_allbg.at(bini) = sqrt( pow(err_zjets.at(bini), 2) +
+							   pow(err_fsbkg.at(bini), 2) +
+							   pow(err_ttvbg.at(bini), 2) +
+							   pow(err_vvvbg.at(bini), 2) +
+							   pow(err_vvbkg.at(bini), 2)
 							   );
   	val_ratio.at(bini) = val_data .at(bini)/val_allbg.at(bini);
   	err_ratio.at(bini) = err_mult( val_data .at(bini), val_allbg.at(bini),
@@ -250,23 +262,33 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }
   cout<<endl;
 
-  // 	cout<<"WZ + ZZ bkg& ";
-  // 	for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
-  // 	  if( bini < val_vvbkg.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-  // 	  if( bini == val_vvbkg.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-  // 	}
-  // 	cout<<endl;
+  	cout<<"WZ + ZZ bkg& ";
+  	for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
+  	  if( bini < val_vvbkg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+  	  if( bini == val_vvbkg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+  	}
+  	cout<<endl;
 
-  // 	cout<<"rare SM BG& ";
-  // 	for( size_t bini = 0; bini < val_other.size()-1; bini++ ){
-  // 	  if( bini < val_other.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f & ", val_other.at(bini), err_other.at(bini));
-  // 	  if( bini == val_other.size()-2 )
-  // 		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_other.at(bini), err_other.at(bini));
-  // 	}
-  // 	cout<<endl;
+  	cout<<"ttv SM BG& ";
+  	for( size_t bini = 0; bini < val_ttvbg.size()-1; bini++ ){
+  	  if( bini < val_ttvbg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+  	  if( bini == val_ttvbg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+  	}
+  	cout<<endl;
+
+  	cout<<"vvv SM BG& ";
+  	for( size_t bini = 0; bini < val_vvvbg.size()-1; bini++ ){
+  	  if( bini < val_vvvbg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+  	  if( bini == val_vvvbg.size()-2 )
+  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+  	}
+  	cout<<endl;
+
   // }
   
   cout<<"\\hline "<<endl;
@@ -374,7 +396,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
     // ymax = 5e1;
 	rebin = 5;
   }
-  if( variable == "njets" || variable == "nFWjets" ){
+  if( variable == "nbjets" || variable == "njets" || variable == "nFWjets" ){
 	xmin = 0;
 	xmax = 10;
     ymax = 5e1;
@@ -404,6 +426,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_st->Rebin(rebin);
   h_wz->Rebin(rebin);
   h_ww->Rebin(rebin);
+  h_vvv->Rebin(rebin);
+  h_ttv->Rebin(rebin);
   // h_vvbkg->Rebin(rebin);
   // h_other->Rebin(rebin);
 
@@ -429,6 +453,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_st->SetFillColor(kOrange-3);
   h_wz->SetFillColor(kRed);
   h_ww->SetFillColor(kGreen+1);
+  h_ttv->SetFillColor(kViolet+2);
+  h_vvv->SetFillColor(kMagenta);
   // h_vvbkg->SetFillColor(kRed);
   // h_other->SetFillColor(kMagenta);
 
@@ -437,6 +463,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_st->SetFillStyle(1001);
   h_wz->SetFillStyle(1001);
   h_ww->SetFillStyle(1001);
+  h_vvv->SetFillStyle(1001);
+  h_ttv->SetFillStyle(1001);
   // h_vvbkg->SetFillStyle(1001);
   // h_other->SetFillStyle(1001);
 
@@ -448,7 +476,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	 h_ttbar->Integral(h_ttbar->FindBin(lomll),h_ttbar->FindBin(himll)-1) +
 	 h_st->Integral(h_st->FindBin(lomll),h_st->FindBin(himll)-1) +
 	 h_wz->Integral(h_wz->FindBin(lomll),h_wz->FindBin(himll)-1) +
-	 h_ww->Integral(h_ww->FindBin(lomll),h_ww->FindBin(himll)-1) 
+	 h_ww->Integral(h_ww->FindBin(lomll),h_ww->FindBin(himll)-1) +
+	 h_vvv->Integral(h_vvv->FindBin(lomll),h_vvv->FindBin(himll)-1) + 
+	 h_ttv->Integral(h_ttv->FindBin(lomll),h_ttv->FindBin(himll)-1) 
 	 );
   cout<<"Norm factor for Z+jets: "<<norm_factor<<endl;
 
@@ -472,6 +502,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_st->Scale(norm_factor);
   h_wz->Scale(norm_factor);
   h_ww->Scale(norm_factor);
+  h_vvv->Scale(norm_factor);
+  h_ttv->Scale(norm_factor);
   
   updateoverflow( h_data , xmax );
   updateoverflow( h_zjets, xmax );
@@ -479,6 +511,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   updateoverflow( h_st, xmax );
   updateoverflow( h_wz, xmax );
   updateoverflow( h_ww, xmax );
+  updateoverflow( h_ttv, xmax );
+  updateoverflow( h_vvv, xmax );
   // updateoverflow( h_vvbkg, xmax );
   // updateoverflow( h_other, xmax );
 
@@ -486,11 +520,25 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   // stack->Add(h_other);
   // stack->Add(h_vvbkg);
-  stack->Add(h_ww);
-  stack->Add(h_st);
-  stack->Add(h_ttbar);
+
+  stack->Add(h_ttv);
+  stack->Add(h_vvv);
+  if( usefsbkg ){
+	stack->Add(h_ttbar);
+  }
+  else{
+	stack->Add(h_ww);
+	stack->Add(h_st);
+	stack->Add(h_ttbar);
+  }
   stack->Add(h_wz);
-  stack->Add(h_zjets);
+  if( usetemplates ){
+	stack->Add(h_zjets);
+  }
+  else{
+	stack->Add(h_zjets);
+  }
+
   
   h_data->GetXaxis()->SetLabelSize(0);
   h_data->GetYaxis()->SetLabelSize(0.05);
@@ -524,22 +572,22 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   l1->SetLineColor(kWhite);    
   l1->SetShadowColor(kWhite);    
   l1->SetFillColor(kWhite);    
-  l1->AddEntry( h_data  , "data"              , "lpe");
+  l1->AddEntry( h_data    , "data"          , "lpe");
   if( usetemplates ){
-	l1->AddEntry( h_zjets , "MET Templates"      , "f");
+	l1->AddEntry( h_zjets , "MET Templates" , "f");
   }else{
-	l1->AddEntry( h_zjets , "Z+jets MC"         , "f");
+	l1->AddEntry( h_zjets , "Z+jets MC" , "f");
   }
+  l1->AddEntry( h_wz    , "WZ MC"     , "f");
   if( usefsbkg ){
   	l1->AddEntry( h_ttbar , "FS Bkg"       , "f");
   }else{
-	l1->AddEntry( h_wz , "WZ MC"       , "f");
 	l1->AddEntry( h_ttbar , "t#bar{t} MC"       , "f");
 	l1->AddEntry( h_st , "Single-top MC"       , "f");
 	l1->AddEntry( h_ww , "WW MC"       , "f");
   }
-  // l1->AddEntry( h_vvbkg , "WZ+ZZ MC"            , "f");
-  // l1->AddEntry( h_other , "Rare SM MC"          , "f");
+  l1->AddEntry( h_vvv , "VVV MC"       , "f");
+  l1->AddEntry( h_ttv , "t#bar{t}V MC"       , "f");
   l1->Draw("same");
   
   c1->cd();
@@ -555,10 +603,16 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
 
   TH1F* h_rat = (TH1F*)h_data  -> Clone("h_rat");
   TH1F* h_den = (TH1F*)h_zjets -> Clone("h_den");
-  h_den->Add(h_ttbar);
-  h_den->Add(h_st);
+  if( usefsbkg ){
+	h_den->Add(h_ttbar);
+  }else{
+	h_den->Add(h_ttbar);
+	h_den->Add(h_st);
+	h_den->Add(h_ww);
+  }
   h_den->Add(h_wz);
-  h_den->Add(h_ww);
+  h_den->Add(h_vvv);
+  h_den->Add(h_ttv);
   // h_den->Add(h_other);
   // h_den->Add(h_vvbkg);
 
@@ -587,6 +641,7 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   if( variable == "ht"                  ) h_rat->GetXaxis()->SetTitle("H_{T} GeV");
   if( TString(variable).Contains("pt")  ) h_rat->GetXaxis()->SetTitle("p_{T} GeV");
   if( variable == "njets"               ) h_rat->GetXaxis()->SetTitle("N_{jets}");  
+  if( variable == "nbjets"               ) h_rat->GetXaxis()->SetTitle("N_{b-jets}");  
   if( variable == "mll"                 ) h_rat->GetXaxis()->SetTitle("M_{\\ell\\ell} GeV");
   if( TString(variable).Contains("phi") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} #phi");
   if( TString(variable).Contains("_pt") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");

@@ -94,45 +94,44 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	f_vtx->Close();
   }
   
-  // TH1F * h_htweight_22  = NULL;
-  // TH1F * h_htweight_30  = NULL;
-  // TH1F * h_htweight_36  = NULL;
-  // TH1F * h_htweight_50  = NULL;
-  // TH1F * h_htweight_75  = NULL;
-  // TH1F * h_htweight_90  = NULL;
-  // TH1F * h_htweight_120 = NULL;
-  // TH1F * h_htweight_165 = NULL;
-  // TFile * f_ht = NULL;
-  // if( dohtreweighting ){
-  // 	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_rawMET.root","READ");
-  // 	h_htweight_22  = (TH1F*)f_ht->Get("h_ht_ratio_22") ->Clone( "h_htweight_22" );
-  // 	h_htweight_30  = (TH1F*)f_ht->Get("h_ht_ratio_30") ->Clone( "h_htweight_30" );
-  // 	h_htweight_36  = (TH1F*)f_ht->Get("h_ht_ratio_36") ->Clone( "h_htweight_36" );
-  // 	h_htweight_50  = (TH1F*)f_ht->Get("h_ht_ratio_50") ->Clone( "h_htweight_50" );
-  // 	h_htweight_75  = (TH1F*)f_ht->Get("h_ht_ratio_75") ->Clone( "h_htweight_75" );
-  // 	h_htweight_90  = (TH1F*)f_ht->Get("h_ht_ratio_90") ->Clone( "h_htweight_90" );
-  // 	h_htweight_120 = (TH1F*)f_ht->Get("h_ht_ratio_120")->Clone( "h_htweight_120");
-  // 	h_htweight_165 = (TH1F*)f_ht->Get("h_ht_ratio_165")->Clone( "h_htweight_165");
-  // 	h_htweight_22 ->SetDirectory(rootdir);
-  // 	h_htweight_30 ->SetDirectory(rootdir);
-  // 	h_htweight_36 ->SetDirectory(rootdir);
-  // 	h_htweight_50 ->SetDirectory(rootdir);
-  // 	h_htweight_75 ->SetDirectory(rootdir);
-  // 	h_htweight_90 ->SetDirectory(rootdir);
-  // 	h_htweight_120->SetDirectory(rootdir);
-  // 	h_htweight_165->SetDirectory(rootdir);
-  // 	f_ht->Close();
-  // }
-
-    
-  TH1F * h_htweight = NULL;
+  TH1F * h_htweight_22  = NULL;
+  TH1F * h_htweight_30  = NULL;
+  TH1F * h_htweight_36  = NULL;
+  TH1F * h_htweight_50  = NULL;
+  TH1F * h_htweight_75  = NULL;
+  TH1F * h_htweight_90  = NULL;
+  TH1F * h_htweight_120 = NULL;
+  TH1F * h_htweight_165 = NULL;
   TFile * f_ht = NULL;
   if( dohtreweighting ){
-  	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_nohtweight_rawMET.root","READ");
-  	h_htweight = (TH1F*)f_ht->Get("h_ht_ratio")->Clone("h_htweight");
-  	h_htweight->SetDirectory(rootdir);
+  	f_ht = TFile::Open(Form("../vtxreweighting/ht_ratio_MC_novtx_nohtweight%s.root", selection.c_str()),"READ");
+  	h_htweight_22  = (TH1F*)f_ht->Get("h_ht_ratio_22") ->Clone( "h_htweight_22" );
+  	h_htweight_30  = (TH1F*)f_ht->Get("h_ht_ratio_30") ->Clone( "h_htweight_30" );
+  	h_htweight_36  = (TH1F*)f_ht->Get("h_ht_ratio_36") ->Clone( "h_htweight_36" );
+  	h_htweight_50  = (TH1F*)f_ht->Get("h_ht_ratio_50") ->Clone( "h_htweight_50" );
+  	h_htweight_75  = (TH1F*)f_ht->Get("h_ht_ratio_75") ->Clone( "h_htweight_75" );
+  	h_htweight_90  = (TH1F*)f_ht->Get("h_ht_ratio_90") ->Clone( "h_htweight_90" );
+  	h_htweight_120 = (TH1F*)f_ht->Get("h_ht_ratio_120")->Clone( "h_htweight_120");
+  	h_htweight_165 = (TH1F*)f_ht->Get("h_ht_ratio_165")->Clone( "h_htweight_165");
+  	h_htweight_22 ->SetDirectory(rootdir);
+  	h_htweight_30 ->SetDirectory(rootdir);
+  	h_htweight_36 ->SetDirectory(rootdir);
+  	h_htweight_50 ->SetDirectory(rootdir);
+  	h_htweight_75 ->SetDirectory(rootdir);
+  	h_htweight_90 ->SetDirectory(rootdir);
+  	h_htweight_120->SetDirectory(rootdir);
+  	h_htweight_165->SetDirectory(rootdir);
   	f_ht->Close();
   }
+
+  // TH1F * h_htweight = NULL;
+  // TFile * f_ht = NULL;
+  // if( dohtreweighting ){
+  // 	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_nohtweight_rawMET.root","READ");
+  // 	h_htweight = (TH1F*)f_ht->Get("h_ht_ratio")->Clone("h_htweight");
+  // 	h_htweight->SetDirectory(rootdir);
+  // 	f_ht->Close();
+  // }
 
   TObjArray *listOfFiles = chain->GetListOfFiles();
   unsigned int nEventsChain = 0;
@@ -170,12 +169,6 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
         }
       }
 
-	  // for testing SRA
-      if( zmet.njets() < 2   ) continue; // special selection for now
-      // if( zmet.ht()    < 600 ) continue; // special selection for now
-
-	  float evt_ht = zmet.ht();
-	  
 	  if ( zmet.isData() && usejson && !goodrun(zmet.run(), zmet.lumi()) ) continue;
 	  
 	  //-~-~-~-~-~-~-~-~-~-~-~-~-~-~//
@@ -198,35 +191,17 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  }else if( !zmet.isData() ){
 		weight *= zmet.evt_scale1fb();
 	  }
-	  
+
+	  // define "global" event variables
 	  float event_met_pt = zmet.met_pt();
 	  float event_met_ph = zmet.met_phi();
 	  event_met_pt = zmet.met_rawPt();
 	  event_met_ph = zmet.met_rawPhi();	  
 
-	  if( selection == "_rawMET" ){
-		event_met_pt = zmet.met_rawPt();
-		event_met_ph = zmet.met_rawPhi();	  
-	  }
-	  else if( selection == "_rawMETNoHF" ){
-		event_met_pt = zmet.met_rawNoHF_pt();
-		event_met_ph = zmet.met_rawNoHF_phi();	  
-	  }
-	  else if( selection == "_T1MET" ){
-		event_met_pt = zmet.met_T1CHS_fromCORE_pt();
-		event_met_ph = zmet.met_T1CHS_fromCORE_phi();	  
-	  }
-	  else if( selection == "_METNoHF" ){
-		event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt();
-		event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();	  
-	  }
-	  else{
-		event_met_pt = zmet.met_pt();
-		event_met_ph = zmet.met_phi();	  
-	  }
-
-	  // event_met_pt = zmet.met_T1CHS_pt();
-	  // event_met_ph = zmet.met_T1CHS_phi();	  
+	  float evt_ht    = zmet.ht();
+	  float evt_njets = zmet.njets();
+	  
+	  if( evt_njets < 2 ) continue;	  
 
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
@@ -235,83 +210,66 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
       if( !usejson && zmet.isData() && !zmet.evt_passgoodrunlist() ) continue; // use json applied at babymaking
       if( zmet.isData() && zmet.nVert() == 0                       ) continue; // special selection for now
 	  if( zmet.isData() && !passPhotonTrigger()                    ) continue; // pass trigger for data
-	  
-	  // OTF jet cleaning :(
-	  // cout<<endl;
-	  int jetphoind = -99;
-	  for( size_t jetind = 0; jetind < zmet.jets_p4().size(); jetind++ ){
-		float drmin = 0.4;
-		float drjetpho = sqrt( pow(acos(cos(zmet.gamma_p4().at(0).phi()-zmet.jets_p4().at(jetind).phi())), 2) + pow(zmet.gamma_p4().at(0).eta()-zmet.jets_p4().at(jetind).eta(), 2));
-		if( drjetpho < drmin ){
-		  // cout<<"DR: "<<drjetpho<<endl;
-		  // cout<<"njets:  "<<zmet.njets()<<endl;
-		  // cout<<"jetind: "<<jetind<<endl;
-		  // cout<<"jetpt: "<<zmet.gamma_p4().at(0).pt()<<endl;
-		  // cout<<"phopt: "<<zmet.jets_p4().at(jetind).pt()<<endl;
-		  drmin = drjetpho;
-		  jetphoind = jetind;
-		}
 
-		if( jetphoind > 0 ) evt_ht -= zmet.jets_p4().at(jetphoind).pt();
+	  if( zmet.isData() ){  
+	  	weight *= (float) getPrescale();
 	  }
+	  
+	  // //-~-~-~-~-~-~-~-~-//
+	  // //Fill event  hists//
+	  // //-~-~-~-~-~-~-~-~-//	  
+	  // fillHist( "event", "njets"  , "passtrig", evt_njets         , weight );
+	  // fillHist( "event", "met"    , "passtrig", event_met_pt         , weight );
+	  // fillHist( "event", "met_raw", "passtrig", zmet.met_rawPt()     , weight );
+	  // fillHist( "event", "ht"     , "passtrig", evt_ht            , weight );
+	  // if( evt_njets > 0 ) 	  fillHist( "event", "htgt0jets"     , "passtrig", evt_ht            , weight );
+	  // fillHist( "event", "ptg"    , "passtrig", zmet.gamma_pt().at(0), weight );	  
+	  // fillHist( "event", "nVert"  , "passtrig", zmet.nVert()         , weight );	  
+	  // fillHist( "event", "metphi" , "passtrig", event_met_ph         , weight );	  
+	  // fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()    , weight );	  
+	  // if( evt_njets == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
+	  // if( evt_njets == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
+	  // if( evt_njets >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
+	  
 
+	  // everything after this is template specific
+	  if( evt_njets < 2 ) continue;	  	  
 	  if( !passSignalRegionSelection(selection) ) continue;
 	  if( evt_ht < 100 ) continue;
+	  fillHist( "event", "htgt1jets"     , "passtrig", evt_ht            , weight ); // this is for HT reweighting
 
 	  if( dovtxreweighting ){
 	    if(      ( !zmet.isData() && zmet.gamma_pt().at(0) > 170 ) || passPhotonTrigger165() ) weight *= h_vtxweight_165 ->GetBinContent(h_vtxweight_165 ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_vtxweight_120 ->GetBinContent(h_vtxweight_120 ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_vtxweight_90  ->GetBinContent(h_vtxweight_90  ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_vtxweight_75  ->GetBinContent(h_vtxweight_75  ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_vtxweight_50  ->GetBinContent(h_vtxweight_50  ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_vtxweight_36  ->GetBinContent(h_vtxweight_36  ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_vtxweight_30  ->GetBinContent(h_vtxweight_30  ->FindBin(zmet.nVert()));
-		else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_vtxweight_22  ->GetBinContent(h_vtxweight_22  ->FindBin(zmet.nVert()));
-	  }
-
-	  if( dohtreweighting ){
-	  	weight *= h_htweight->GetBinContent(h_htweight->FindBin(evt_ht));		
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_vtxweight_120 ->GetBinContent(h_vtxweight_120 ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_vtxweight_90  ->GetBinContent(h_vtxweight_90  ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_vtxweight_75  ->GetBinContent(h_vtxweight_75  ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_vtxweight_50  ->GetBinContent(h_vtxweight_50  ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_vtxweight_36  ->GetBinContent(h_vtxweight_36  ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_vtxweight_30  ->GetBinContent(h_vtxweight_30  ->FindBin(zmet.nVert()));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_vtxweight_22  ->GetBinContent(h_vtxweight_22  ->FindBin(zmet.nVert()));
 	  }
 
 	  // if( dohtreweighting ){
-	  //   if(      ( !zmet.isData() && zmet.gamma_pt().at(0) > 170 ) || passPhotonTrigger165() ) weight *= h_htweight_165 ->GetBinContent(h_htweight_165 ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_htweight_120 ->GetBinContent(h_htweight_120 ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_htweight_90  ->GetBinContent(h_htweight_90  ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_htweight_75  ->GetBinContent(h_htweight_75  ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_htweight_50  ->GetBinContent(h_htweight_50  ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_htweight_36  ->GetBinContent(h_htweight_36  ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_htweight_30  ->GetBinContent(h_htweight_30  ->FindBin(evt_ht));
-	  // 	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_htweight_22  ->GetBinContent(h_htweight_22  ->FindBin(evt_ht));
+	  // 	weight *= h_htweight->GetBinContent(h_htweight->FindBin(evt_ht));		
 	  // }
-	  // if( zmet.isData() ){  
-	  // 	weight *= (float) getPrescale();
-	  // }
-	  
-	  //-~-~-~-~-~-~-~-~-//
-	  //Fill event  hists//
-	  //-~-~-~-~-~-~-~-~-//	  
-	  fillHist( "event", "njets"  , "passtrig", zmet.njets()         , weight );
-	  fillHist( "event", "met"    , "passtrig", event_met_pt         , weight );
-	  fillHist( "event", "met_raw", "passtrig", zmet.met_rawPt()     , weight );
-	  fillHist( "event", "ht"     , "passtrig", zmet.ht()            , weight );
-	  if( zmet.njets() > 0 ) 	  fillHist( "event", "htgt0jets"     , "passtrig", zmet.ht()            , weight );
-	  if( zmet.njets() > 1 ) 	  fillHist( "event", "htgt1jets"     , "passtrig", evt_ht            , weight );
-	  fillHist( "event", "ptg"    , "passtrig", zmet.gamma_pt().at(0), weight );	  
-	  fillHist( "event", "nVert"  , "passtrig", zmet.nVert()         , weight );	  
-	  fillHist( "event", "metphi" , "passtrig", event_met_ph         , weight );	  
-	  fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()    , weight );	  
-	  if( zmet.njets() == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
-	  if( zmet.njets() == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
-	  if( zmet.njets() >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
-	  
-	  if( zmet.njets() < 2 ) continue;	  
+
+	  if( dohtreweighting ){
+	    if(      ( !zmet.isData() && zmet.gamma_pt().at(0) > 170 ) || passPhotonTrigger165() ) weight *= h_htweight_165 ->GetBinContent(h_htweight_165 ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 125 ) || passPhotonTrigger120() ) weight *= h_htweight_120 ->GetBinContent(h_htweight_120 ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 100 ) || passPhotonTrigger90()  ) weight *= h_htweight_90  ->GetBinContent(h_htweight_90  ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 80  ) || passPhotonTrigger75()  ) weight *= h_htweight_75  ->GetBinContent(h_htweight_75  ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 60  ) || passPhotonTrigger50()  ) weight *= h_htweight_50  ->GetBinContent(h_htweight_50  ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 40  ) || passPhotonTrigger36()  ) weight *= h_htweight_36  ->GetBinContent(h_htweight_36  ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 35  ) || passPhotonTrigger30()  ) weight *= h_htweight_30  ->GetBinContent(h_htweight_30  ->FindBin(evt_ht));
+	  	else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_htweight_22  ->GetBinContent(h_htweight_22  ->FindBin(evt_ht));
+	  }
 	  
 	  //-~-~-~-~-~-~-~-~-~-//
 	  //Fill Template hists//
 	  //-~-~-~-~-~-~-~-~-~-//	  
       npass += weight;
-	  // mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight );
-	  mettemplates.FillTemplate(mettemplate_hists, zmet.njets(), evt_ht, zmet.gamma_pt().at(0), event_met_pt, weight );
+	  // mettemplates.FillTemplate(mettemplate_hists, evt_njets, zmet.ht(), zmet.gamma_pt().at(0), event_met_pt, weight );
+	  mettemplates.FillTemplate(mettemplate_hists, evt_njets, evt_ht, zmet.gamma_pt().at(0), event_met_pt, weight );
 
     } // end loop over events
   } // end loop over files

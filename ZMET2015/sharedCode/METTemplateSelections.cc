@@ -100,9 +100,9 @@ void METTemplates::setBins( const string selection )
   photon_ptcuts.push_back(100);
   photon_ptcuts.push_back(125);
   photon_ptcuts.push_back(170);
-  photon_ptcuts.push_back(225);
-  photon_ptcuts.push_back(300);
-  photon_ptcuts.push_back(500);
+  // photon_ptcuts.push_back(225);
+  // photon_ptcuts.push_back(300);
+  // photon_ptcuts.push_back(500);
 
   //set event HT cuts
   photon_htcuts.clear();

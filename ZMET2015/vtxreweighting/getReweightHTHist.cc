@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void getReweightScheme(vector <double> &binning, string selection );
+
 void getReweightHTHist( string signalregion )
 {
 
@@ -46,59 +48,7 @@ void getReweightHTHist( string signalregion )
   // h_phot_165 = (TH1F*) h_phot_165->Rebin(nbins, "h_phot_165_rebinned", bins);
 
   vector <double> v_bin;
-  v_bin.push_back(0);
-  v_bin.push_back(35);
-  v_bin.push_back(40);
-  v_bin.push_back(45);
-  v_bin.push_back(50);
-  v_bin.push_back(55);
-  v_bin.push_back(60);
-  v_bin.push_back(65);
-  v_bin.push_back(70);
-  v_bin.push_back(80);
-  v_bin.push_back(90);
-
-  v_bin.push_back(100);
-  v_bin.push_back(105);
-  v_bin.push_back(110);
-  v_bin.push_back(115);
-  v_bin.push_back(120);
-  v_bin.push_back(125);
-  v_bin.push_back(130);
-  v_bin.push_back(135);
-  v_bin.push_back(140);
-  v_bin.push_back(145);
-  v_bin.push_back(150);
-  v_bin.push_back(160);
-  v_bin.push_back(170);
-  v_bin.push_back(180);
-  v_bin.push_back(190);
-
-  v_bin.push_back(200);
-  v_bin.push_back(225);
-  v_bin.push_back(250);
-  v_bin.push_back(275);
-  v_bin.push_back(300);
-  v_bin.push_back(325);
-  v_bin.push_back(350);
-  v_bin.push_back(400);
-  v_bin.push_back(450);
-  v_bin.push_back(500);
-  v_bin.push_back(600);
-  v_bin.push_back(700);
-  v_bin.push_back(800);
-  v_bin.push_back(900);
-  v_bin.push_back(1000);
-  v_bin.push_back(1100);
-  v_bin.push_back(1200);
-  v_bin.push_back(1300);
-  v_bin.push_back(1400);
-  v_bin.push_back(1500);
-  // v_bin.push_back(1750);
-  // v_bin.push_back(2000);
-  // v_bin.push_back(2500);
-  v_bin.push_back(3000);
-
+  getReweightScheme( v_bin, signalregion );
 
   int nbins = v_bin.size()-1;
   
@@ -200,5 +150,80 @@ void getReweightHTHist( string signalregion )
   file->Close();
 
   cout<<"Writing reweighting hists to file: "<<filename.c_str() <<endl;
+  return;
+}
+
+
+
+void getReweightScheme(vector <double> &binning, string selection )
+{
+
+  binning.clear();
+  if( TString(selection).Contains("bveto_SRA") ){
+	binning.push_back(0);
+	binning.push_back(600);
+	binning.push_back(625);
+	binning.push_back(650);
+	binning.push_back(675);
+	binning.push_back(700);
+	binning.push_back(750);
+	binning.push_back(800);
+	binning.push_back(900);
+	binning.push_back(1000);
+	binning.push_back(3000);
+
+  }
+
+  else{
+	binning.push_back(0);
+	binning.push_back(35);
+	binning.push_back(40);
+	binning.push_back(45);
+	binning.push_back(50);
+	binning.push_back(55);
+	binning.push_back(60);
+	binning.push_back(65);
+	binning.push_back(70);
+	binning.push_back(80);
+	binning.push_back(90);
+
+	binning.push_back(100);
+	binning.push_back(105);
+	binning.push_back(110);
+	binning.push_back(115);
+	binning.push_back(120);
+	binning.push_back(125);
+	binning.push_back(130);
+	binning.push_back(135);
+	binning.push_back(140);
+	binning.push_back(145);
+	binning.push_back(150);
+	binning.push_back(160);
+	binning.push_back(170);
+	binning.push_back(180);
+	binning.push_back(190);
+
+	binning.push_back(200);
+	binning.push_back(225);
+	binning.push_back(250);
+	binning.push_back(275);
+	binning.push_back(300);
+	binning.push_back(325);
+	binning.push_back(350);
+	binning.push_back(400);
+	binning.push_back(450);
+	binning.push_back(500);
+	binning.push_back(600);
+	binning.push_back(700);
+	binning.push_back(800);
+	binning.push_back(900);
+	binning.push_back(1000);
+	binning.push_back(1100);
+	binning.push_back(1200);
+	binning.push_back(1300);
+	binning.push_back(1400);
+	binning.push_back(1500);
+	binning.push_back(3000);
+  }
   return;
 }

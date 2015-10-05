@@ -68,7 +68,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_240915_DCSONLY_sntformat.txt";
+  const char* json_file = "json_golden_168pb_290915_sntformat.txt";
   set_goodrun_file(json_file);
   
   // File Loop
@@ -111,6 +111,15 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  }
 	  
 	  if( TString(currentFile->GetTitle()).Contains("Run2015C") ){
+		// files for 25ns Data
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+
+	  }
+	  
+	  if( TString(currentFile->GetTitle()).Contains("Run2015D") ){
 		// files for 25ns Data
         jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
 		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
@@ -196,36 +205,29 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       Flag_trackingFailureFilter                    = cms3.filt_trackingFailure();
       Flag_goodVertices                             = cms3.filt_goodVertices();
       Flag_eeBadScFilter                            = cms3.filt_eeBadSc();
-      Flag_CSCTightHaloFilter                       = cms3.filt_cscBeamHalo();      // note: in CMS3, filt_cscBeamHalo and evt_cscTightHaloId are the same
-      Flag_HBHENoiseFilter                          = cms3.filt_hbheNoise();      // note: in CMS3, filt_hbheNoise and evt_hbheFilter are the same
-      Flag_METFilters                               = cms3.filt_metfilter();      // necessary?
-
+      // note: in CMS3, filt_cscBeamHalo and evt_cscTightHaloId are the same
+      Flag_CSCTightHaloFilter                       = cms3.filt_cscBeamHalo();
+      // note: in CMS3, filt_hbheNoise and evt_hbheFilter are the same
+      //      Flag_HBHENoiseFilter                          = cms3.filt_hbheNoise();
+      // recompute HBHE noise filter decision using CORE to avoid maxZeros issue
+      if (!isData) Flag_HBHENoiseFilter             = cms3.filt_hbheNoise();
+      else if (TString(currentFile->GetTitle()).Contains("Run2015B")) Flag_HBHENoiseFilter = hbheNoiseFilter();
+      else                                                            Flag_HBHENoiseFilter = hbheNoiseFilter_25ns();
+      Flag_HBHEIsoNoiseFilter                       = hbheIsoNoiseFilter();
+      // necessary?
+      Flag_METFilters                               = cms3.filt_metfilter();
+	  
       //TRIGGER
-      HLT_HT900        = passHLTTriggerPattern("HLT_PFHT900_v");
-      HLT_MET170       = passHLTTriggerPattern("HLT_PFMET170_NoiseCleaned_v"); 
-      HLT_ht350met120  = passHLTTriggerPattern("HLT_PFHT350_PFMET120_NoiseCleaned_v"); 
-
-      HLT_SingleMu       = passHLTTriggerPattern("HLT_IsoMu20_eta2p1_IterTrk02_v") || passHLTTriggerPattern("HLT_IsoTkMu20_eta2p1_IterTrk02_v"); 
-      HLT_DoubleEl_noiso = passHLTTriggerPattern("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
-      HLT_DoubleEl       = passHLTTriggerPattern("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_v");
-	  HLT_DoubleEl_DZ    = passHLTTriggerPattern("HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+      HLT_DoubleEl_noiso = passHLTTriggerPattern( "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
+      HLT_DoubleEl       = passHLTTriggerPattern( "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_v");
+	  HLT_DoubleEl_DZ    = passHLTTriggerPattern( "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
       HLT_MuEG           = (passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") );
       HLT_MuEG_2         = (passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") );
-      HLT_DoubleMu       = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
-      HLT_DoubleMu_tk    = passHLTTriggerPattern("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
-      HLT_Photons        = passHLTTriggerPattern("HLT_Photon155_v"); // Need to add other photon triggers
+      HLT_DoubleMu       = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
+      HLT_DoubleMu_tk    = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
 
-	  HLT_Photon22					 = HLT_prescale(triggerName("HLT_Photon22_v"                  ));
-	  HLT_Photon30					 = HLT_prescale(triggerName("HLT_Photon30_v"                  ));
-	  HLT_Photon36					 = HLT_prescale(triggerName("HLT_Photon36_v"                  ));
-	  HLT_Photon50					 = HLT_prescale(triggerName("HLT_Photon50_v"                  ));
-	  HLT_Photon75					 = HLT_prescale(triggerName("HLT_Photon75_v"                  ));
-	  HLT_Photon90					 = HLT_prescale(triggerName("HLT_Photon90_v"                  ));
-	  HLT_Photon120				 	 = HLT_prescale(triggerName("HLT_Photon120_v"                 ));
-	  HLT_Photon175				 	 = HLT_prescale(triggerName("HLT_Photon175_v"                 ));
-	  HLT_Photon165_HE10			 = HLT_prescale(triggerName("HLT_Photon165_HE10_v"            ));
 	  HLT_Photon22_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon22_R9Id90_HE10_IsoM_v" ));
 	  HLT_Photon30_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon30_R9Id90_HE10_IsoM_v" ));
 	  HLT_Photon36_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon36_R9Id90_HE10_IsoM_v" ));
@@ -234,8 +236,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  HLT_Photon90_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon90_R9Id90_HE10_IsoM_v" ));
 	  HLT_Photon120_R9Id90_HE10_IsoM = HLT_prescale(triggerName("HLT_Photon120_R9Id90_HE10_IsoM_v"));
 	  HLT_Photon165_R9Id90_HE10_IsoM = HLT_prescale(triggerName("HLT_Photon165_R9Id90_HE10_IsoM_v"));
-
-	  // HLT_l1prescale; do I want to add this?
       
       if (verbose) cout << "before gen particles" << endl;
 
@@ -407,22 +407,18 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 		if( cms3.els_p4().at(iEl).pt() > 15.0 ){
 		  lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
-		  vec_lep_p4s      .push_back( cms3.els_p4().at(iEl)           );
-		  vec_lep_pt       .push_back( cms3.els_p4().at(iEl).pt()      );
-		  vec_lep_eta      .push_back( cms3.els_p4().at(iEl).eta()     ); //save eta, even though we use SCeta for ID
-		  vec_lep_phi      .push_back( cms3.els_p4().at(iEl).phi()     );
-		  vec_lep_mass     .push_back( cms3.els_mass().at(iEl)         );
-		  vec_lep_charge   .push_back( cms3.els_charge().at(iEl)       );
-		  vec_lep_pdgId    .push_back( cms3.els_charge().at(iEl)*(-11) );
-		  vec_lep_dxy      .push_back( cms3.els_dxyPV().at(iEl)        );
-		  vec_lep_dz       .push_back( cms3.els_dzPV().at(iEl)         );
-		  vec_lep_tightId  .push_back( eleTightID(iEl, ZMET)           );
-		  vec_lep_relIso03 .push_back( eleRelIso03(iEl, ZMET)          );
-		  vec_lep_relIso04 .push_back( 0                               );
-		  vec_lep_relIso03MREA .push_back( elMiniRelIso( iEl, true , 0.0, false, true ) );
-		  vec_lep_relIso03MRDB .push_back( elMiniRelIso( iEl, false, 0.0, true , false) );
-		  vec_lep_relIso03MRNC .push_back( elMiniRelIso( iEl, false, 0.0, false, false) );
-		  vec_lep_etaSC        .push_back( els_etaSC().at(iEl)         );
+		  vec_lep_p4s          .push_back( cms3.els_p4().at(iEl)           );
+		  vec_lep_pt           .push_back( cms3.els_p4().at(iEl).pt()      );
+		  vec_lep_eta          .push_back( cms3.els_p4().at(iEl).eta()     ); //save eta, even though we use SCeta for ID
+		  vec_lep_phi          .push_back( cms3.els_p4().at(iEl).phi()     );
+		  vec_lep_mass         .push_back( cms3.els_mass().at(iEl)         );
+		  vec_lep_charge       .push_back( cms3.els_charge().at(iEl)       );
+		  vec_lep_pdgId        .push_back( cms3.els_charge().at(iEl)*(-11) );
+		  vec_lep_dxy          .push_back( cms3.els_dxyPV().at(iEl)        );
+		  vec_lep_dz           .push_back( cms3.els_dzPV().at(iEl)         );
+		  vec_lep_tightId      .push_back( eleTightID(iEl, ZMET)           );
+		  vec_lep_relIso03MREA .push_back( elMiniRelIsoCMS3_EA( iEl )      );
+		  vec_lep_etaSC        .push_back( els_etaSC().at(iEl)             );
 
 		  // if( !isData){
 		  if (!isData && (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11 )) { // matched to a prunedGenParticle electron?
@@ -459,22 +455,18 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 		if( cms3.mus_p4().at(iMu).pt() > 15.0 ){
 		  lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
-		  vec_lep_p4s      .push_back ( cms3.mus_p4().at(iMu)           );
-		  vec_lep_pt       .push_back ( cms3.mus_p4().at(iMu).pt()      );
-		  vec_lep_eta      .push_back ( cms3.mus_p4().at(iMu).eta()     );
-		  vec_lep_phi      .push_back ( cms3.mus_p4().at(iMu).phi()     );
-		  vec_lep_mass     .push_back ( cms3.mus_mass().at(iMu)         );
-		  vec_lep_charge   .push_back ( cms3.mus_charge().at(iMu)       );
-		  vec_lep_pdgId    .push_back ( cms3.mus_charge().at(iMu)*(-13) );
-		  vec_lep_dxy      .push_back ( cms3.mus_dxyPV().at(iMu)        ); // this uses the silicon track. should we use best track instead?
-		  vec_lep_dz       .push_back ( cms3.mus_dzPV().at(iMu)         ); // this uses the silicon track. should we use best track instead?
-		  vec_lep_tightId  .push_back ( muTightID(iMu, ZMET)            );
-		  vec_lep_relIso03 .push_back ( muRelIso03(iMu, ZMET)           );
-		  vec_lep_relIso04 .push_back ( muRelIso04(iMu, ZMET)           );
+		  vec_lep_p4s          .push_back ( cms3.mus_p4().at(iMu)                       );
+		  vec_lep_pt           .push_back ( cms3.mus_p4().at(iMu).pt()                  );
+		  vec_lep_eta          .push_back ( cms3.mus_p4().at(iMu).eta()                 );
+		  vec_lep_phi          .push_back ( cms3.mus_p4().at(iMu).phi()                 );
+		  vec_lep_mass         .push_back ( cms3.mus_mass().at(iMu)                     );
+		  vec_lep_charge       .push_back ( cms3.mus_charge().at(iMu)                   );
+		  vec_lep_pdgId        .push_back ( cms3.mus_charge().at(iMu)*(-13)             );
+		  vec_lep_dxy          .push_back ( cms3.mus_dxyPV().at(iMu)                    );
+		  vec_lep_dz           .push_back ( cms3.mus_dzPV().at(iMu)                     );
+		  vec_lep_tightId      .push_back ( muTightID(iMu, ZMET)                        );
 		  vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, true , 0.5, false, true ) );
-		  vec_lep_relIso03MRDB .push_back( muMiniRelIso( iMu, false, 0.0, true , false) );
-		  vec_lep_relIso03MRNC .push_back( muMiniRelIso( iMu, false, 0.0, false, false) );
-		  vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()   );
+		  vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()                  );
 
 		  // if( !isData){
 		  if (!isData && (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13 )) { // matched to a prunedGenParticle electron?
@@ -502,23 +494,18 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       //now fill arrays from vectors, isotracks with largest pt first
       int i = 0;
       for(std::map<float, int>::reverse_iterator it = lep_pt_ordering.rbegin(); it!= lep_pt_ordering.rend(); ++it){
-		lep_p4         .push_back( vec_lep_p4s         .at(it->second));
-		lep_pt         .push_back( vec_lep_pt          .at(it->second));
-		lep_eta        .push_back( vec_lep_eta         .at(it->second));
-		lep_phi        .push_back( vec_lep_phi         .at(it->second));
-		lep_mass       .push_back( vec_lep_mass        .at(it->second));
-		lep_charge     .push_back( vec_lep_charge      .at(it->second));
-		lep_pdgId      .push_back( vec_lep_pdgId       .at(it->second));
-		lep_dz         .push_back( vec_lep_dz          .at(it->second));
-		lep_dxy        .push_back( vec_lep_dxy         .at(it->second));
-        lep_etaSC      .push_back( vec_lep_etaSC       .at(it->second));
-		// fix me
+		lep_p4           .push_back( vec_lep_p4s          .at(it->second));
+		lep_pt           .push_back( vec_lep_pt           .at(it->second));
+		lep_eta          .push_back( vec_lep_eta          .at(it->second));
+		lep_phi          .push_back( vec_lep_phi          .at(it->second));
+		lep_mass         .push_back( vec_lep_mass         .at(it->second));
+		lep_charge       .push_back( vec_lep_charge       .at(it->second));
+		lep_pdgId        .push_back( vec_lep_pdgId        .at(it->second));
+		lep_dz           .push_back( vec_lep_dz           .at(it->second));
+		lep_dxy          .push_back( vec_lep_dxy          .at(it->second));
+        lep_etaSC        .push_back( vec_lep_etaSC        .at(it->second));
 		lep_tightId      .push_back( vec_lep_tightId      .at(it->second));
-		lep_relIso03     .push_back( vec_lep_relIso03     .at(it->second));
 		lep_relIso03MREA .push_back( vec_lep_relIso03MREA .at(it->second));
-		lep_relIso03MRDB .push_back( vec_lep_relIso03MRDB .at(it->second));
-		lep_relIso03MRNC .push_back( vec_lep_relIso03MRNC .at(it->second));
-		lep_relIso04     .push_back( vec_lep_relIso04     .at(it->second));
 		lep_mcMatchId    .push_back( vec_lep_mcMatchId    .at(it->second));
 		lep_lostHits     .push_back( vec_lep_lostHits     .at(it->second));
 		lep_convVeto     .push_back( vec_lep_convVeto     .at(it->second));
@@ -531,27 +518,26 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       //PHOTONS
       ngamma = 0;
       nGammas20 = 0;
-      // to recalculate MET adding photons
-      float gamma_met_px  = met_pt * cos(met_phi);
-      float gamma_met_py  = met_pt * sin(met_phi);
 	  for(unsigned int iGamma = 0; iGamma < cms3.photons_p4().size(); iGamma++){
  		if( !passPhotonSelection_ZMET( iGamma ) )continue;
 
-		float pt  =                   cms3.photons_p4().at(iGamma).pt();
-		float eta =                   cms3.photons_p4().at(iGamma).eta();
-		float phi =                   cms3.photons_p4().at(iGamma).phi();
-		gamma_p4           .push_back(cms3.photons_p4().at(iGamma));
-		gamma_pt           .push_back(pt);
-		gamma_eta          .push_back(eta);
-		gamma_phi          .push_back(phi);
-		gamma_mass         .push_back(cms3.photons_mass().at(iGamma));
-		gamma_sigmaIetaIeta.push_back(cms3.photons_full5x5_sigmaIEtaIEta().at(iGamma));
-		gamma_chHadIso     .push_back(cms3.photons_chargedHadronIso().at(iGamma));
-		gamma_neuHadIso    .push_back(cms3.photons_neutralHadronIso().at(iGamma));
-		gamma_phIso        .push_back(cms3.photons_photonIso().at(iGamma));
-		gamma_r9           .push_back(cms3.photons_full5x5_r9().at(iGamma));
-		gamma_hOverE       .push_back(cms3.photons_full5x5_hOverEtowBC().at(iGamma));
-		gamma_idCutBased   .push_back(isTightPhoton(iGamma,HAD) ? 1 : 0); 		
+		float pt  = cms3.photons_p4().at(iGamma).pt();
+		float eta = cms3.photons_p4().at(iGamma).eta();
+		float phi = cms3.photons_p4().at(iGamma).phi();
+
+		gamma_p4           .push_back( cms3.photons_p4().at(iGamma) );
+		gamma_pt           .push_back( pt                           );
+		gamma_eta          .push_back( eta                          );
+		gamma_phi          .push_back( phi                          );
+
+		gamma_mass         .push_back( cms3.photons_mass().at(iGamma)                  );
+		gamma_sigmaIetaIeta.push_back( cms3.photons_full5x5_sigmaIEtaIEta().at(iGamma) );
+		gamma_chHadIso     .push_back( cms3.photons_chargedHadronIso().at(iGamma)      );
+		gamma_neuHadIso    .push_back( cms3.photons_neutralHadronIso().at(iGamma)      );
+		gamma_phIso        .push_back( cms3.photons_photonIso().at(iGamma)             );
+		gamma_r9           .push_back( cms3.photons_full5x5_r9().at(iGamma)            );
+		gamma_hOverE       .push_back( cms3.photons_full5x5_hOverEtowBC().at(iGamma)   );
+		gamma_idCutBased   .push_back( isTightPhoton(iGamma,HAD) ? 1 : 0               ); 		
 		if(gamma_pt[ngamma] > 20) nGammas20++;
 	
 		// Some work for truth-matching (should be integrated in CMS3 as for the leptons)
@@ -583,13 +569,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  }
 		}   
 
-		  // for photon+jets control regions
-		if (nGammas20==1) { // Only use the leading Loose photon. Otherwise mt2 will be affected by a bunch of tiny photons
-		  gamma_met_px += cms3.photons_p4().at(iGamma).px();
-		  gamma_met_py += cms3.photons_p4().at(iGamma).py();
-		}
-		// do not use photon in MT2 or MHT calculations!!
-        ngamma++;
+
+		ngamma++;
       }
 	
        
@@ -657,19 +638,17 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  double corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
 
 		  // apply new JEC to p4
-		  if( pfjet_p4_uncor.pt() > 10.0){ // don't correct jets with pT < 10 GeV
-			pfjet_p4_cor = pfjet_p4_uncor * corr;
-		  }
-
+		  pfjet_p4_cor = pfjet_p4_uncor * corr;
+		  
 		}
-
+		
 		p4sCorrJets.push_back(pfjet_p4_cor);
-
+		
 		if(p4sCorrJets.at(iJet).pt() < 10.0) continue; 
         if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
 		// note this uses the eta of the jet as stored in CMS3
 		//  chance for small discrepancies if JEC changes direction slightly..
-        if(!isLoosePFJetV2(iJet)) continue;
+        if(!isLoosePFJet_50nsV1(iJet)) continue;
 		passJets.push_back(iJet);
       }
 
@@ -680,26 +659,24 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  
  		float minDR = 0.3;
  		int minIndex = -1;
- 		// for(unsigned int passIdx = 0; passIdx < passJets.size(); passIdx++){ //loop through jets that passed baseline selections
- 		for(unsigned int passIdx = 0; passIdx < cms3.pfjets_p4().size(); passIdx++){ //loop through jets that passed baseline selections
+ 		for(unsigned int passIdx = 0; passIdx < passJets.size(); passIdx++){ //loop through jets that passed baseline selections
  	
  		  // int iJet = passJets.at(passIdx);
- 		  int iJet = passIdx;
+ 		  int iJet = passJets.at(passIdx);
  
- 		  if(pfjets_p4().at(iJet).pt() < 10.0       ) continue;
- 		  if(fabs(pfjets_p4().at(iJet).eta()) > 5.2 ) continue;
- 		  // if(!isLoosePFJet(iJet)                    ) continue;
+ 		  if(p4sCorrJets.at(iJet).pt() < 10.0       ) continue;
+ 		  if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2 ) continue;
  
  		  // float thisDR = DeltaR(p4sCorrJets.at(iJet).eta(), gamma_eta[iGamma], p4sCorrJets.at(iJet).phi(), gamma_phi[iGamma]);
  		  // float thisDR = DeltaR(pfjets_p4().at(iJet).eta(), gamma_eta[iGamma], pfjets_p4().at(iJet).phi(), gamma_phi[iGamma]);
- 		  float thisDR = ROOT::Math::VectorUtil::DeltaR(pfjets_p4().at(iJet), gamma_p4[iGamma]);
+ 		  float thisDR = ROOT::Math::VectorUtil::DeltaR(p4sCorrJets.at(iJet), gamma_p4[iGamma]);
  		  if(thisDR < minDR){
  			minDR = thisDR; 
  			minIndex = iJet;
  		  }
  		} // end jet loop
  		if( minIndex > -1 ){
- 		  matched_neutralemf = cms3.pfjets_neutralEmE().at(minIndex) / cms3.pfjets_p4().at(minIndex).energy();
+ 		  matched_neutralemf = cms3.pfjets_neutralEmE().at(minIndex) / p4sCorrJets.at(minIndex).energy();
  		}	  
  	  
  		if (verbose) cout << "before checking for photon/electron overlap" << endl;
@@ -724,9 +701,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
           int iJet = passJets.at(passIdx);
 
-          if(p4sCorrJets.at(iJet).pt() < 10.0) continue;
-          if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
-          if(!isLoosePFJetV2(iJet)) continue;
+          if(      p4sCorrJets.at(iJet).pt()    < 10.0 ) continue;
+          if( fabs(p4sCorrJets.at(iJet).eta() ) > 5.2  ) continue;
+          if( !isLoosePFJet_50nsV1(iJet)               ) continue;
 
           bool alreadyRemoved = false;
           for(unsigned int j=0; j<removedJets.size(); j++){
@@ -760,9 +737,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
           int iJet = passJets.at(passIdx);
 
-          if(p4sCorrJets.at(iJet).pt() < 30.0) continue;
-          if(fabs(p4sCorrJets.at(iJet).eta()) > 3.0) continue;
-          if(!isLoosePFJetV2(iJet)) continue;
+          if(      p4sCorrJets.at(iJet).pt()    < 35.0 ) continue;
+          if( fabs(p4sCorrJets.at(iJet).eta() ) > 3.0  ) continue;
+          if( !isLoosePFJet_50nsV1(iJet)               ) continue;
 
           bool alreadyRemoved = false;
           for(unsigned int j=0; j<removedJetsGamma.size(); j++){
@@ -794,33 +771,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  njets_eta30 = 0;
 	  ht_eta30    = 0;
 
-      gamma_nJet40 = 0;
-      gamma_nBJet40 = 0;
-
       if (verbose) cout << "before main jet loop" << endl;
       //now fill variables for jets that pass baseline selections and don't overlap with a lepton
       for(unsigned int passIdx = 0; passIdx < passJets.size(); passIdx++){
 
         int iJet = passJets.at(passIdx);
-
-		// fill gamma_XXX variables before checking for lepton overlap.
-        if( ( p4sCorrJets.at(iJet).pt() > 35.0) && (fabs(p4sCorrJets.at(iJet).eta()) < 2.4) ){ 
-		  //check against list of jets that overlap with a photon
-		  bool isOverlapJetGamma = false;
-		  for(unsigned int j=0; j<removedJetsGamma.size(); j++){
-		  	if(iJet == removedJetsGamma.at(j)){
-		  	  isOverlapJetGamma = true;
-		  	  break;
-		  	}
-		  }
-
-		  if(!isOverlapJetGamma) {
-		  	gamma_nJet40++;
-		  	if(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet) >= 0.89) { //CSVv2IVFM
-		  	  gamma_nBJet40++; 
-		  	}   
-		  } 
-        } // accept jets out to eta 5.2 for dphi
 
         //check against list of jets that overlap with a lepton
         bool isOverlapJet = false;
@@ -830,9 +785,19 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
             break;
           }
         }
-        if(isOverlapJet) continue;
+        if(evt_type == 0 && isOverlapJet) continue;
 
- 		if( p4sCorrJets.at(iJet).pt() > 35.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.4 ){
+        //check against list of jets that overlap with a photon for photon+jets events
+        bool isOverlapJetGamma = false;
+        for(unsigned int j=0; j<removedJetsGamma.size(); j++){
+          if(iJet == removedJetsGamma.at(j)){
+            isOverlapJetGamma = true;
+            break;
+          }
+        }
+        if(evt_type == 2 && isOverlapJetGamma) continue;
+
+		if( p4sCorrJets.at(iJet).pt() > 35.0 && abs(p4sCorrJets.at(iJet).eta()) < 2.4 ){
  		  jets_p4       .push_back(p4sCorrJets.at(iJet));
 		  ht+=p4sCorrJets.at(iJet).pt();
 		  njets++;
@@ -853,16 +818,15 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
         jet_mass     .push_back(cms3.pfjets_mass().at(iJet));
         jet_btagCSV  .push_back(cms3.pfjets_pfCombinedInclusiveSecondaryVertexV2BJetTag().at(iJet)); 
 		if( !isData){
-        jet_mcPt     .push_back(cms3.pfjets_mc_p4().at(iJet).pt());
+		  jet_mcPt     .push_back(cms3.pfjets_mc_p4().at(iJet).pt());
 		  jet_mcFlavour.push_back(cms3.pfjets_partonFlavour().at(iJet));
 		}
 		//jet_quarkGluonID
         jet_area .push_back(cms3.pfjets_area().at(iJet));
 		jet_rawPt.push_back(cms3.pfjets_p4().at(iJet).pt() * cms3.pfjets_undoJEC().at(iJet));
 
-        if(isTightPFJet(iJet))  jet_id.push_back(3);
-        else if(isMediumPFJet(iJet)) jet_id.push_back(2);
-        else jet_id.push_back(1); //required to be loose above
+        if(     isTightPFJet_50nsV1  (iJet)) jet_id.push_back(3);
+        else                               jet_id.push_back(1); //required to be loose above
 
         jet_puId.push_back(loosePileupJetId(iJet) ? 1 : 0);
 
@@ -915,159 +879,6 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 
 	  // cout<<"CORE: "<<met_T1CHS_fromCORE_pt<<endl;
 	  // cout<<"METG: "<<met_T1CHS_pt<<endl<<endl;
-	  
-  if( verbose ) cout<<" Before loop over pfcands " <<endl;
-	  
-	  LorentzVector chphpfmet_trk_p4(0,0,0,0);
-	  LorentzVector chpfmet_trk_p4(0,0,0,0);
-
-	  LorentzVector chpfmet_pv1_p4(0,0,0,0);
-
-	  LorentzVector nupfmet_trk_p4(0,0,0,0);
-	  LorentzVector nupfmet_fwd_p4(0,0,0,0);
-	  LorentzVector nupfmet_all_p4(0,0,0,0);
-
-	  LorentzVector nunophpfmet_trk_p4(0,0,0,0);
-	  LorentzVector nunophpfmet_fwd_p4(0,0,0,0);
-	  LorentzVector nunophpfmet_all_p4(0,0,0,0);
-	  
-	  LorentzVector chpfcands_0013_p4;
-	  LorentzVector chpfcands_1316_p4;
-	  LorentzVector chpfcands_1624_p4;
-	  LorentzVector chpfcands_2430_p4;
-	  LorentzVector chpfcands_30in_p4;
-	  LorentzVector phpfcands_0013_p4;
-	  LorentzVector phpfcands_1316_p4;
-	  LorentzVector phpfcands_1624_p4;
-	  LorentzVector phpfcands_2430_p4;
-	  LorentzVector phpfcands_30in_p4;
-	  LorentzVector nupfcands_0013_p4;
-	  LorentzVector nupfcands_1316_p4;
-	  LorentzVector nupfcands_1624_p4;
-	  LorentzVector nupfcands_2430_p4;
-	  LorentzVector nupfcands_30in_p4;
-
-	  for( size_t pfind = 0; pfind < cms3.pfcands_p4().size(); pfind++ ){
-
-		if( abs(cms3.pfcands_dz().at(pfind)) < 0.1&&abs(cms3.pfcands_charge().at(pfind))>0 ){ // charged cands from pv
-		  chpfmet_pv1_p4 -= cms3.pfcands_p4().at(pfind);
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
-		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) chpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) chpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) chpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) chpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0                                                 ) chpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // photon cands
-		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3 ) phpfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6 ) phpfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4 ) phpfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0 ) phpfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral had cands
-		  if(                                                 abs(cms3.pfcands_p4().at(pfind).eta()) < 1.3  ) nupfcands_0013_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.3 && abs(cms3.pfcands_p4().at(pfind).eta()) < 1.6  ) nupfcands_1316_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 1.6 && abs(cms3.pfcands_p4().at(pfind).eta()) < 2.4  ) nupfcands_1624_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_p4().at(pfind).eta()) > 2.4 && abs(cms3.pfcands_p4().at(pfind).eta()) < 3.0  ) nupfcands_2430_p4 -= cms3.pfcands_p4().at(pfind);
-		}
-
-		if( abs(cms3.pfcands_p4().at(pfind).eta()) > 3.0 && abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // HF cands have different particle ID
-		  if( abs(cms3.pfcands_particleId().at(pfind)) == 1 ) nupfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( abs(cms3.pfcands_particleId().at(pfind)) == 2 ) phpfcands_30in_p4 -= cms3.pfcands_p4().at(pfind);
-		}
-		
-		if( abs(cms3.pfcands_charge().at(pfind)) == 0 ){ // neutral cands
-		  nupfmet_all_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
-			nupfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		  if( cms3.pfcands_p4().at(pfind).eta() > 2.4 ){ // forward region
-			nupfmet_fwd_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) == 0 && abs(cms3.pfcands_particleId().at(pfind)) != 22 ){ // neutral cands
-		  nunophpfmet_all_p4 -= cms3.pfcands_p4().at(pfind);
-		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
-			nunophpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		  if( cms3.pfcands_p4().at(pfind).eta() > 2.4 ){ // forward region
-			nunophpfmet_fwd_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) > 0 ){ // charged cands
-		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){ // tracker region
-			chpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		}
-
-		if( abs(cms3.pfcands_charge().at(pfind)) > 0 || abs(cms3.pfcands_particleId().at(pfind)) == 22 ){ // charged cands + photons
-		  if( cms3.pfcands_p4().at(pfind).eta() < 2.4 ){
-			chphpfmet_trk_p4 -= cms3.pfcands_p4().at(pfind);
-		  }
-		}
-
-	  }
-	  
-	  chpfmet_trk_pt    = chpfmet_trk_p4.pt();
-	  chpfmet_trk_phi   = chpfmet_trk_p4.phi();
-
-	  chpfmet_pv1_pt    = chpfmet_pv1_p4.pt();
-	  chpfmet_pv1_phi   = chpfmet_pv1_p4.phi();
-
-	  chphpfmet_trk_pt    = chphpfmet_trk_p4.pt();
-	  chphpfmet_trk_phi   = chphpfmet_trk_p4.phi();
-	  
-	  nupfmet_trk_pt  = nupfmet_trk_p4.pt();
-	  nupfmet_fwd_pt  = nupfmet_fwd_p4.pt();
-	  nupfmet_all_pt  = nupfmet_all_p4.pt();
-	  nupfmet_trk_phi = nupfmet_trk_p4.phi();
-	  nupfmet_fwd_phi = nupfmet_fwd_p4.phi();
-	  nupfmet_all_phi = nupfmet_all_p4.phi();
-
-	  nunophpfmet_trk_pt  = nunophpfmet_trk_p4.pt();
-	  nunophpfmet_fwd_pt  = nunophpfmet_fwd_p4.pt();
-	  nunophpfmet_all_pt  = nunophpfmet_all_p4.pt();
-	  nunophpfmet_trk_phi = nunophpfmet_trk_p4.phi();
-	  nunophpfmet_fwd_phi = nunophpfmet_fwd_p4.phi();
-	  nunophpfmet_all_phi = nunophpfmet_all_p4.phi();
-
-	  chpfcands_0013_pt = chpfcands_0013_p4.pt();
-	  chpfcands_1316_pt = chpfcands_1316_p4.pt();
-	  chpfcands_1624_pt = chpfcands_1624_p4.pt();
-	  chpfcands_2430_pt = chpfcands_2430_p4.pt();
-	  chpfcands_30in_pt = chpfcands_30in_p4.pt();
-	  phpfcands_0013_pt = phpfcands_0013_p4.pt();
-	  phpfcands_1316_pt = phpfcands_1316_p4.pt();
-	  phpfcands_1624_pt = phpfcands_1624_p4.pt();
-	  phpfcands_2430_pt = phpfcands_2430_p4.pt();
-	  phpfcands_30in_pt = phpfcands_30in_p4.pt();
-	  nupfcands_0013_pt = nupfcands_0013_p4.pt();
-	  nupfcands_1316_pt = nupfcands_1316_p4.pt();
-	  nupfcands_1624_pt = nupfcands_1624_p4.pt();
-	  nupfcands_2430_pt = nupfcands_2430_p4.pt();
-	  nupfcands_30in_pt = nupfcands_30in_p4.pt();
-
-	  chpfcands_0013_phi = chpfcands_0013_p4.phi();
-	  chpfcands_1316_phi = chpfcands_1316_p4.phi();
-	  chpfcands_1624_phi = chpfcands_1624_p4.phi();
-	  chpfcands_2430_phi = chpfcands_2430_p4.phi();
-	  chpfcands_30in_phi = chpfcands_30in_p4.phi();
-	  phpfcands_0013_phi = phpfcands_0013_p4.phi();
-	  phpfcands_1316_phi = phpfcands_1316_p4.phi();
-	  phpfcands_1624_phi = phpfcands_1624_p4.phi();
-	  phpfcands_2430_phi = phpfcands_2430_p4.phi();
-	  phpfcands_30in_phi = phpfcands_30in_p4.phi();
-	  nupfcands_0013_phi = nupfcands_0013_p4.phi();
-	  nupfcands_1316_phi = nupfcands_1316_p4.phi();
-	  nupfcands_1624_phi = nupfcands_1624_p4.phi();
-	  nupfcands_2430_phi = nupfcands_2430_p4.phi();
-	  nupfcands_30in_phi = nupfcands_30in_p4.phi();
 	  
 	  float metx = 0.0;
 	  float mety = 0.0;
@@ -1218,13 +1029,11 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("Flag_trackingFailureFilter", &Flag_trackingFailureFilter );
   BabyTree_->Branch("Flag_CSCTightHaloFilter", &Flag_CSCTightHaloFilter );
   BabyTree_->Branch("Flag_HBHENoiseFilter", &Flag_HBHENoiseFilter );
+  BabyTree_->Branch("Flag_HBHEIsoNoiseFilter", &Flag_HBHEIsoNoiseFilter );
   BabyTree_->Branch("Flag_goodVertices", &Flag_goodVertices );
   BabyTree_->Branch("Flag_eeBadScFilter", &Flag_eeBadScFilter );
   BabyTree_->Branch("Flag_METFilters"   , &Flag_METFilters );
-  BabyTree_->Branch("HLT_HT900"         , &HLT_HT900 );
-  BabyTree_->Branch("HLT_MET170"        , &HLT_MET170 );
-  BabyTree_->Branch("HLT_ht350met120"   , &HLT_ht350met120 );
-  BabyTree_->Branch("HLT_SingleMu"      , &HLT_SingleMu );
+
   BabyTree_->Branch("HLT_DoubleEl"      , &HLT_DoubleEl );
   BabyTree_->Branch("HLT_DoubleEl_DZ"   , &HLT_DoubleEl_DZ );
   BabyTree_->Branch("HLT_DoubleEl_noiso", &HLT_DoubleEl_noiso );
@@ -1232,17 +1041,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_MuEG_2"        , &HLT_MuEG_2 );
   BabyTree_->Branch("HLT_DoubleMu"      , &HLT_DoubleMu );
   BabyTree_->Branch("HLT_DoubleMu_tk"   , &HLT_DoubleMu_tk );
-  BabyTree_->Branch("HLT_l1prescale"    , &HLT_l1prescale );
-  BabyTree_->Branch("HLT_Photons"       , &HLT_Photons );
-  BabyTree_->Branch("HLT_Photon22"                  , &HLT_Photon22                   );					 
-  BabyTree_->Branch("HLT_Photon30"                  , &HLT_Photon30                   );					 
-  BabyTree_->Branch("HLT_Photon36"                  , &HLT_Photon36                   );					 
-  BabyTree_->Branch("HLT_Photon50"                  , &HLT_Photon50                   );					 
-  BabyTree_->Branch("HLT_Photon75"                  , &HLT_Photon75                   );					 
-  BabyTree_->Branch("HLT_Photon90"                  , &HLT_Photon90                   );					 
-  BabyTree_->Branch("HLT_Photon120"                 , &HLT_Photon120                  );				 
-  BabyTree_->Branch("HLT_Photon175"                 , &HLT_Photon175                  );				 
-  BabyTree_->Branch("HLT_Photon165_HE10"            , &HLT_Photon165_HE10             );			 
   BabyTree_->Branch("HLT_Photon22_R9Id90_HE10_IsoM" , &HLT_Photon22_R9Id90_HE10_IsoM  ); 
   BabyTree_->Branch("HLT_Photon30_R9Id90_HE10_IsoM" , &HLT_Photon30_R9Id90_HE10_IsoM  ); 
   BabyTree_->Branch("HLT_Photon36_R9Id90_HE10_IsoM" , &HLT_Photon36_R9Id90_HE10_IsoM  ); 
@@ -1313,9 +1111,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("genPart_grandmaId", "std::vector <Int_t  >" , &genPart_grandmaId );
   BabyTree_->Branch("genPart_isp6status3"  , "std::vector <Bool_t  >" , &genPart_isp6status3  );
 
-  BabyTree_->Branch("gamma_nJet40", &gamma_nJet40 );
-  BabyTree_->Branch("gamma_nBJet40", &gamma_nBJet40 );
-
   BabyTree_->Branch("ngenLep", &ngenLep, "ngenLep/I" );
   BabyTree_->Branch("genLep_pt"      , "std::vector <Float_t>" , &genLep_pt      );
   BabyTree_->Branch("genLep_eta"     , "std::vector <Float_t>" , &genLep_eta     );
@@ -1363,60 +1158,6 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("jet_area"        , "std::vector <Float_t>" , &jet_area        );
   BabyTree_->Branch("jet_id"          , "std::vector <Int_t  >" , &jet_id          );
   BabyTree_->Branch("jet_puId"        , "std::vector <Int_t  >" , &jet_puId        );
-
-  BabyTree_->Branch("chpfmet_trk_pt"      , &chpfmet_trk_pt    );
-  BabyTree_->Branch("chpfmet_trk_phi"     , &chpfmet_trk_phi   );
-  BabyTree_->Branch("chpfmet_pv1_pt"      , &chpfmet_pv1_pt    );
-  BabyTree_->Branch("chpfmet_pv1_phi"     , &chpfmet_pv1_phi   );
-
-  BabyTree_->Branch("chphpfmet_trk_pt"      , &chphpfmet_trk_pt    );
-  BabyTree_->Branch("chphpfmet_trk_phi"     , &chphpfmet_trk_phi   );
-
-  BabyTree_->Branch("nunophpfmet_trk_pt"    , &nunophpfmet_trk_pt  );
-  BabyTree_->Branch("nunophpfmet_trk_phi"   , &nunophpfmet_trk_phi );
-  BabyTree_->Branch("nunophpfmet_fwd_pt"    , &nunophpfmet_fwd_pt  );
-  BabyTree_->Branch("nunophpfmet_fwd_phi"   , &nunophpfmet_fwd_phi );  
-  BabyTree_->Branch("nunophpfmet_all_pt"    , &nunophpfmet_all_pt  );
-  BabyTree_->Branch("nunophpfmet_all_phi"   , &nunophpfmet_all_phi );
-
-  BabyTree_->Branch("nupfmet_trk_pt"    , &nupfmet_trk_pt  );
-  BabyTree_->Branch("nupfmet_trk_phi"   , &nupfmet_trk_phi );
-  BabyTree_->Branch("nupfmet_fwd_pt"    , &nupfmet_fwd_pt  );
-  BabyTree_->Branch("nupfmet_fwd_phi"   , &nupfmet_fwd_phi );  
-  BabyTree_->Branch("nupfmet_all_pt"    , &nupfmet_all_pt  );
-  BabyTree_->Branch("nupfmet_all_phi"   , &nupfmet_all_phi );
-
-  BabyTree_->Branch("chpfcands_0013_pt"     , &chpfcands_0013_pt   );
-  BabyTree_->Branch("chpfcands_1316_pt"     , &chpfcands_1316_pt   );
-  BabyTree_->Branch("chpfcands_1624_pt"     , &chpfcands_1624_pt   );
-  BabyTree_->Branch("chpfcands_2430_pt"     , &chpfcands_2430_pt   );
-  BabyTree_->Branch("chpfcands_30in_pt"     , &chpfcands_30in_pt   );
-  BabyTree_->Branch("phpfcands_0013_pt"     , &phpfcands_0013_pt   );
-  BabyTree_->Branch("phpfcands_1316_pt"     , &phpfcands_1316_pt   );
-  BabyTree_->Branch("phpfcands_1624_pt"     , &phpfcands_1624_pt   );
-  BabyTree_->Branch("phpfcands_2430_pt"     , &phpfcands_2430_pt   );
-  BabyTree_->Branch("phpfcands_30in_pt"     , &phpfcands_30in_pt   );
-  BabyTree_->Branch("nupfcands_0013_pt"     , &nupfcands_0013_pt   );
-  BabyTree_->Branch("nupfcands_1316_pt"     , &nupfcands_1316_pt   );
-  BabyTree_->Branch("nupfcands_1624_pt"     , &nupfcands_1624_pt   );
-  BabyTree_->Branch("nupfcands_2430_pt"     , &nupfcands_2430_pt   );
-  BabyTree_->Branch("nupfcands_30in_pt"     , &nupfcands_30in_pt   );
-
-  BabyTree_->Branch("chpfcands_0013_phi"     , &chpfcands_0013_phi   );
-  BabyTree_->Branch("chpfcands_1316_phi"     , &chpfcands_1316_phi   );
-  BabyTree_->Branch("chpfcands_1624_phi"     , &chpfcands_1624_phi   );
-  BabyTree_->Branch("chpfcands_2430_phi"     , &chpfcands_2430_phi   );
-  BabyTree_->Branch("chpfcands_30in_phi"     , &chpfcands_30in_phi   );
-  BabyTree_->Branch("phpfcands_0013_phi"     , &phpfcands_0013_phi   );
-  BabyTree_->Branch("phpfcands_1316_phi"     , &phpfcands_1316_phi   );
-  BabyTree_->Branch("phpfcands_1624_phi"     , &phpfcands_1624_phi   );
-  BabyTree_->Branch("phpfcands_2430_phi"     , &phpfcands_2430_phi   );
-  BabyTree_->Branch("phpfcands_30in_phi"     , &phpfcands_30in_phi   );
-  BabyTree_->Branch("nupfcands_0013_phi"     , &nupfcands_0013_phi   );
-  BabyTree_->Branch("nupfcands_1316_phi"     , &nupfcands_1316_phi   );
-  BabyTree_->Branch("nupfcands_1624_phi"     , &nupfcands_1624_phi   );
-  BabyTree_->Branch("nupfcands_2430_phi"     , &nupfcands_2430_phi   );
-  BabyTree_->Branch("nupfcands_30in_phi"     , &nupfcands_30in_phi   );
 
   BabyTree_->Branch("met_T1CHS_pt"               , &met_T1CHS_pt               );
   BabyTree_->Branch("met_T1CHS_phi"              , &met_T1CHS_phi              );
@@ -1498,13 +1239,11 @@ void babyMaker::InitBabyNtuple () {
   Flag_trackingFailureFilter = -999;
   Flag_CSCTightHaloFilter = -999;
   Flag_HBHENoiseFilter = -999;
+  Flag_HBHEIsoNoiseFilter = -999;
   Flag_goodVertices = -999;
   Flag_eeBadScFilter = -999;
   Flag_METFilters = -999;
-  HLT_HT900          = -999;
-  HLT_MET170         = -999;
-  HLT_ht350met120    = -999;
-  HLT_SingleMu       = -999;   
+
   HLT_DoubleEl       = -999;   
   HLT_DoubleEl_DZ    = -999;   
   HLT_DoubleEl_noiso = -999;   
@@ -1512,17 +1251,7 @@ void babyMaker::InitBabyNtuple () {
   HLT_MuEG_2         = -999;   
   HLT_DoubleMu       = -999;   
   HLT_DoubleMu_tk    = -999;   
-  HLT_l1prescale     = -999;
-  HLT_Photons        = -999;   
-  HLT_Photon22                   = -999;					 
-  HLT_Photon30                   = -999;					 
-  HLT_Photon36                   = -999;					 
-  HLT_Photon50                   = -999;					 
-  HLT_Photon75                   = -999;					 
-  HLT_Photon90                   = -999;					 
-  HLT_Photon120                  = -999;				 
-  HLT_Photon175                  = -999;				 
-  HLT_Photon165_HE10             = -999;			 
+
   HLT_Photon22_R9Id90_HE10_IsoM  = -999; 
   HLT_Photon30_R9Id90_HE10_IsoM  = -999; 
   HLT_Photon36_R9Id90_HE10_IsoM  = -999; 
@@ -1646,66 +1375,7 @@ void babyMaker::InitBabyNtuple () {
   jet_id          .clear();   //[njet]
   jet_puId        .clear();   //[njet]
 
-
   //----- pfMETs
-  chpfmet_trk_pt    = -999;
-  chpfmet_trk_phi   = -999;
-
-  chpfmet_pv1_pt    = -999;
-  chpfmet_pv1_phi   = -999;
-
-  chphpfmet_trk_pt    = -999;
-  chphpfmet_trk_phi   = -999;
-
-  nupfmet_trk_pt  = -999;
-  nupfmet_trk_phi = -999;
-  nupfmet_fwd_pt  = -999;
-  nupfmet_fwd_phi = -999;  
-  nupfmet_all_pt  = -999;
-  nupfmet_all_phi = -999;
-
-  nunophpfmet_trk_pt  = -999;
-  nunophpfmet_trk_phi = -999;
-  nunophpfmet_fwd_pt  = -999;
-  nunophpfmet_fwd_phi = -999;  
-  nunophpfmet_all_pt  = -999;
-  nunophpfmet_all_phi = -999;
-
-  gamma_nJet40 = -999;
-  gamma_nBJet40 = -999;
-
-  chpfcands_0013_pt = -999;
-  chpfcands_1316_pt = -999;
-  chpfcands_1624_pt = -999;
-  chpfcands_2430_pt = -999;
-  chpfcands_30in_pt = -999;
-  phpfcands_0013_pt = -999;
-  phpfcands_1316_pt = -999;
-  phpfcands_1624_pt = -999;
-  phpfcands_2430_pt = -999;
-  phpfcands_30in_pt = -999;
-  nupfcands_0013_pt = -999;
-  nupfcands_1316_pt = -999;
-  nupfcands_1624_pt = -999;
-  nupfcands_2430_pt = -999;
-  nupfcands_30in_pt = -999;
-
-  chpfcands_0013_phi = -999;
-  chpfcands_1316_phi = -999;
-  chpfcands_1624_phi = -999;
-  chpfcands_2430_phi = -999;
-  chpfcands_30in_phi = -999;
-  phpfcands_0013_phi = -999;
-  phpfcands_1316_phi = -999;
-  phpfcands_1624_phi = -999;
-  phpfcands_2430_phi = -999;
-  phpfcands_30in_phi = -999;
-  nupfcands_0013_phi = -999;
-  nupfcands_1316_phi = -999;
-  nupfcands_1624_phi = -999;
-  nupfcands_2430_phi = -999;
-  nupfcands_30in_phi = -999;
-
   met_T1CHS_pt               = -999;
   met_T1CHS_phi              = -999;
   met_T1CHS_fromCORE_pt      = -999;
