@@ -10,28 +10,95 @@ if [ ! -d "../output/$analysis_version/" ]; then
 	mkdir -p ../output/$analysis_version/
 fi
 
-# selection="_inclusive"
-# ./runTemplateLooper $selection $analysis_version zjetsmlm &
 
-# selection="_rawMET"
-# ./runTemplateLooper $selection $analysis_version zjetsmlm &
+selection="_inclusive"
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
 
 selection="_rawMET_bveto_SRB"
-# ./runTemplateLooper $selection $analysis_version data  &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-./runTemplateLooper $selection $analysis_version zjetsmlm &
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
 selection="_rawMET_withb_SRB"
-# ./runTemplateLooper $selection $analysis_version data  &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-./runTemplateLooper $selection $analysis_version zjetsmlm &
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
 selection="_rawMET_bveto_SRA"
-# ./runTemplateLooper $selection $analysis_version data  &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-./runTemplateLooper $selection $analysis_version zjetsmlm &
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
 selection="_rawMET_withb_SRA"
-# ./runTemplateLooper $selection $analysis_version data  &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-./runTemplateLooper $selection $analysis_version zjetsmlm &
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
+selection="_rawMET_SR_ATLAS"
+./runTemplateLooper $selection $analysis_version data  
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar 
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
+# # selection="_inclusive"
+# # ./runTemplateLooper $selection $analysis_version zjetsmlm &
+
+# # selection="_rawMET"
+# # ./runTemplateLooper $selection $analysis_version zjetsmlm &
+
+# selection="_rawMET_bveto_SRB"
+# # ./runTemplateLooper $selection $analysis_version data  &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# ./runTemplateLooper $selection $analysis_version zjetsmlm &
+# selection="_rawMET_withb_SRB"
+# # ./runTemplateLooper $selection $analysis_version data  &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# ./runTemplateLooper $selection $analysis_version zjetsmlm &
+# selection="_rawMET_bveto_SRA"
+# # ./runTemplateLooper $selection $analysis_version data  &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# ./runTemplateLooper $selection $analysis_version zjetsmlm &
+# selection="_rawMET_withb_SRA"
+# # ./runTemplateLooper $selection $analysis_version data  &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# ./runTemplateLooper $selection $analysis_version zjetsmlm &
 
 
 # ./runTemplateLooper $selection $analysis_version data  &

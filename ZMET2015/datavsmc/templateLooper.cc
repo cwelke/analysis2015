@@ -30,9 +30,9 @@ using namespace duplicate_removal;
 const bool debug = false;
 
 const bool usejson              = true;
-const bool dovtxreweighting     = false;
-const bool dotemplateprediction = false;
-const bool dotemplatepredictionmc = true;
+const bool dovtxreweighting     = true;
+const bool dotemplateprediction = true;
+const bool dotemplatepredictionmc = false;
 
 templateLooper::templateLooper()
 {
@@ -65,7 +65,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   TH1F* currentMETTemplate = NULL;
   if( dotemplateprediction ){
 	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
-	mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
+	mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_novtxweight_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
 	mettemplates.setBins( selection );
   }
   if( dotemplatepredictionmc ){
@@ -79,8 +79,8 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
   // const char* json_file = "json_25ns.txt";
   // const char* json_file = "json_25ns_remove.txt";
-  const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt";
-  // const char* json_file = "../../json/json_240915_DCSONLY_sntformat.txt";
+  // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
+  const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
 		set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
@@ -185,27 +185,8 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  float event_met_pt = zmet.met_pt();
 	  float event_met_ph = zmet.met_phi();
 
-
-	  // if( selection == "_rawMET" ){
-		event_met_pt = zmet.met_rawPt();
-		event_met_ph = zmet.met_rawPhi();	  
-	  // }
-	  // else if( selection == "_rawMETNoHF" ){
-	  // 	event_met_pt = zmet.met_rawNoHF_pt();
-	  // 	event_met_ph = zmet.met_rawNoHF_phi();	  
-	  // }
-	  // else if( selection == "_T1MET" ){
-	  // 	event_met_pt = zmet.met_T1CHS_fromCORE_pt();
-	  // 	event_met_ph = zmet.met_T1CHS_fromCORE_phi();	  
-	  // }
-	  // else if( selection == "_METNoHF" ){
-	  // 	event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt();
-	  // 	event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();	  
-	  // }
-	  // else{
-	  // 	event_met_pt = zmet.met_pt();
-	  // 	event_met_ph = zmet.met_phi();	  
-	  // }
+	  event_met_pt = zmet.met_rawPt();
+	  event_met_ph = zmet.met_rawPhi();	  
 
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
@@ -225,7 +206,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 
 	  // // for closure only
 	  // if( zmet.njets() < 2   ) continue; // require at least 2 good leptons
-      if( zmet.ht()    < 100 ) continue; // special selection for now
+      // if( zmet.ht()    < 100 ) continue; // special selection for now
 	  if( !passSignalRegionSelection(selection) ) continue;
 	  
 	  //~-~-~-~-~-~-~-~-//
@@ -368,7 +349,9 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( zmet.njets()                        < 2         ) continue; // require at least 2 good jets
       npass += weight;
 
-	  fillHist( "event", "ht_gt1j"       , "passtrig", zmet.ht()           , weight );
+	  if( zmet.ht() > 100.0                                             ) fillHist( "event", "ht_gt1j"       , "passtrig", zmet.ht()           , weight );
+	  if( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) > 100.0 ) fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) , weight );
+
 	  fillHist( "event", "met_rawgt1jet" , "passtrig", event_met_pt        , weight );	  
 
 	  if( dotemplateprediction || dotemplatepredictionmc ){
@@ -463,7 +446,8 @@ void templateLooper::bookHistos(){
   variable.push_back("met_rawgt1jet"); variable_bins.push_back(500 );  
   variable.push_back("met_raw_vince"); variable_bins.push_back(500 );  
   variable.push_back("ht");	     variable_bins.push_back(1000);  
-  variable.push_back("ht_gt1j");	     variable_bins.push_back(3000);  
+  variable.push_back("ht_gt1j");	   variable_bins.push_back(3000);  
+  variable.push_back("atlas_ht_gt1j"); variable_bins.push_back(3000);  
   variable.push_back("mt3");     variable_bins.push_back(500);  
   variable.push_back("njets");   variable_bins.push_back(20  );  
   variable.push_back("nbjets");   variable_bins.push_back(20  );  
