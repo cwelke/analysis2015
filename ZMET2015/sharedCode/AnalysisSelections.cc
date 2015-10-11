@@ -29,19 +29,25 @@ bool passSignalRegionSelection( string selection )
   if( TString(selection).Contains("withb"          ) && zmet.nBJetMedium() < 1   ) return false; //at least 1 b-tag
   if( TString(selection).Contains("SRA"            ) && !((zmet.njets() == 2 ||
 														   zmet.njets() == 3  ) &&
-														  (zmet.ht()    > 600 )) ) return false; //high HT region
+														  (zmet.ht()    > 400 )) ) return false; //high HT region
   if( TString(selection).Contains("SRB"            ) && zmet.njets() < 4         ) return false; //large njets
   if( TString(selection).Contains("twojets"        ) && zmet.njets() > 2         ) return false; //exactly 2 jets
   if( TString(selection).Contains("2jets_inclusive") && zmet.njets() < 2         ) return false; //at least 2 jets
   if( TString(selection).Contains("3jets_inclusive") && zmet.njets() < 3         ) return false; //at least 3 jets
-
+  if( TString(selection).Contains("SR_ATLAS"       ) && 
+	  !( ( ( zmet.evt_type() == 0 && ( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) ) > 600 ) ||
+		   ( zmet.evt_type() == 2 && ( zmet.ht() + zmet.gamma_pt().at(0)                     ) > 600 ) ) &&
+		 ( zmet.njets() > 1       && ( ( acos( cos( zmet.met_rawPt() - zmet.jets_p4().at(0).phi() ) ) > 0.4  ) &&
+									   ( acos( cos( zmet.met_rawPt() - zmet.jets_p4().at(1).phi() ) ) > 0.4  ) ) ) )
+	  )return false; //ATLAS run I SR
+														 
   return true;
 }
 
 bool eventHas2GoodLeps()
 {
   if( zmet.nlep()                        < 2         ) return false; // require at least 2 good leptons
-  if( zmet.lep_pt().at(0)                < 25        ) return false; // leading lep pT > 25 GeV
+  if( zmet.lep_pt().at(0)                < 20        ) return false; // leading lep pT > 25 GeV
   if( zmet.lep_pt().at(1)                < 20        ) return false; // tailing lep pT > 20 GeV
   if( abs(zmet.lep_p4().at(0).eta())     > 2.4       ) return false; // eta < 2.4
   if( abs(zmet.lep_p4().at(1).eta())     > 2.4       ) return false; // eta < 2.4
