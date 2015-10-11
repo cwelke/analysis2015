@@ -59,7 +59,8 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   bookHistos();
 
   // do this once per job
-  const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt";
+  // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
+  const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
@@ -104,7 +105,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   TH1F * h_htweight_165 = NULL;
   TFile * f_ht = NULL;
   if( dohtreweighting ){
-  	f_ht = TFile::Open(Form("../vtxreweighting/ht_ratio_MC_novtx_nohtweight%s.root", selection.c_str()),"READ");
+  	f_ht = TFile::Open(Form("../vtxreweighting/ht_ratio_data_novtx_nohtweight%s.root", selection.c_str()),"READ");
   	h_htweight_22  = (TH1F*)f_ht->Get("h_ht_ratio_22") ->Clone( "h_htweight_22" );
   	h_htweight_30  = (TH1F*)f_ht->Get("h_ht_ratio_30") ->Clone( "h_htweight_30" );
   	h_htweight_36  = (TH1F*)f_ht->Get("h_ht_ratio_36") ->Clone( "h_htweight_36" );
@@ -127,7 +128,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   // TH1F * h_htweight = NULL;
   // TFile * f_ht = NULL;
   // if( dohtreweighting ){
-  // 	f_ht = TFile::Open("../vtxreweighting/ht_ratio_MC_novtx_nohtweight_rawMET.root","READ");
+  // 	f_ht = TFile::Open(Form("../vtxreweighting/ht_ratio_data_novtx_nohtweight%s.root", selection.c_str()),"READ");
   // 	h_htweight = (TH1F*)f_ht->Get("h_ht_ratio")->Clone("h_htweight");
   // 	h_htweight->SetDirectory(rootdir);
   // 	f_ht->Close();
@@ -215,6 +216,8 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  	weight *= (float) getPrescale();
 	  }
 	  
+	  if( TString(selection).Contains("SR_ATLAS") ) evt_ht += zmet.gamma_pt().at(0);
+
 	  // //-~-~-~-~-~-~-~-~-//
 	  // //Fill event  hists//
 	  // //-~-~-~-~-~-~-~-~-//	  

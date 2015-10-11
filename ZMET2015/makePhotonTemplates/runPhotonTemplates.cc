@@ -18,8 +18,8 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
   TChain* ch = new TChain("t");
 
   if ( sample == "data" ){
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ph.root"      , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ph.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ph*.root"      , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ph*.root" , iter.c_str() ));
   }
 
   else if ( sample == "All_MC" ){
