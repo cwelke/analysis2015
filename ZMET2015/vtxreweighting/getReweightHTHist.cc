@@ -14,11 +14,23 @@ void getReweightHTHist( string signalregion )
   // TFile * f_data = TFile::Open("../output/V07-04-10/data_inclusive_hists.root"     , "READ");
   // TFile * f_phot = TFile::Open("../output/V07-04-10/data_inclusive_templates.root" , "READ");
 
-  TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
-  TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
-  
-  TH1F * h_data = (TH1F*)f_data->Get("h_ll_event_ht_gt1j_passtrig")->Clone("h_data");
-  TH1F * h_phot = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig")->Clone("h_phot");
+  // TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
+  // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
+
+  TFile * f_data = TFile::Open(Form("../output/V07-04-10/data_%s_hists.root", signalregion.c_str() )   , "READ");
+  TFile * f_phot = TFile::Open(Form("../output/V07-04-10/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
+
+  TH1F * h_data = NULL;
+  TH1F * h_phot = NULL;
+
+  if( TString(signalregion).Contains("SR_ATLAS") ){
+	h_data = (TH1F*)f_data->Get("h_ll_event_atlas_ht_gt1j_passtrig")->Clone("h_data");  
+	h_phot = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig")->Clone("h_phot");  
+  }
+  else{
+	h_data = (TH1F*)f_data->Get("h_ll_event_ht_gt1j_passtrig")->Clone("h_data");  
+	h_phot = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig")->Clone("h_phot");  
+  }
 
   TH1F * h_phot_22  = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig22" )->Clone("h_phot_22");
   TH1F * h_phot_30  = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig30" )->Clone("h_phot_30");
@@ -124,7 +136,7 @@ void getReweightHTHist( string signalregion )
   h_ht_ratio_165-> Divide(h_phot_165);
 
 
-  string filename = Form("ht_ratio_MC_novtx_nohtweight_%s.root", signalregion.c_str() );
+  string filename = Form("ht_ratio_data_novtx_nohtweight_%s.root", signalregion.c_str() );
   
   TFile * file = TFile::Open( filename.c_str() ,"RECREATE");
   file->cd();
@@ -159,21 +171,36 @@ void getReweightScheme(vector <double> &binning, string selection )
 {
 
   binning.clear();
-  if( TString(selection).Contains("bveto_SRA") ){
+
+  if( TString(selection).Contains("SRA") ){
 	binning.push_back(0);
+	binning.push_back(400);
+	binning.push_back(425);
+	binning.push_back(450);
+	binning.push_back(475);
+	binning.push_back(500);
+	binning.push_back(550);
 	binning.push_back(600);
-	binning.push_back(625);
 	binning.push_back(650);
-	binning.push_back(675);
 	binning.push_back(700);
 	binning.push_back(750);
 	binning.push_back(800);
 	binning.push_back(900);
 	binning.push_back(1000);
 	binning.push_back(3000);
-
   }
 
+  else if( TString(selection).Contains("SR_ATLAS") ){
+	binning.push_back(0);
+	binning.push_back(600);
+	binning.push_back(700);
+	binning.push_back(800);
+	binning.push_back(900);
+	binning.push_back(1000);
+	binning.push_back(3000);
+  }
+
+  
   else{
 	binning.push_back(0);
 	binning.push_back(35);
@@ -225,5 +252,6 @@ void getReweightScheme(vector <double> &binning, string selection )
 	binning.push_back(1500);
 	binning.push_back(3000);
   }
+
   return;
 }
