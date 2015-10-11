@@ -20,16 +20,21 @@ if [ ! -d "merge_logs_${TAG}" ]; then
 fi
 
 
-run zjetsll_25ns_m50mlm  
-run zjetsllht100_25ns_m50mlm  
-run zjetsllht200_25ns_m50mlm  
-run zjetsllht400_25ns_m50mlm  
-run zjetsllht600_25ns_m50mlm  
-run gjets_25ns_ht40mlm  
-run gjets_25ns_ht100mlm  
-run gjets_25ns_ht200mlm  
-run gjets_25ns_ht400mlm  
-run gjets_25ns_ht600mlm  
+# run zjetsll_25ns_m50mlm  
+# run zjetsllht100_25ns_m50mlm  
+# run zjetsllht200_25ns_m50mlm  
+# run zjetsllht400_25ns_m50mlm  
+# run zjetsllht600_25ns_m50mlm  
+# run gjets_25ns_ht40mlm  
+# run gjets_25ns_ht100mlm  
+# run gjets_25ns_ht200mlm  
+# run gjets_25ns_ht400mlm  
+# run gjets_25ns_ht600mlm  
+
+run data_2015D25nsPrompt_ee
+run data_2015D25nsPrompt_ph
+run data_2015D25nsPrompt_mm
+run data_2015D25nsPrompt_em
 
 # run wz2l2q_25ns_nlo  
 # run zz2l2q_25ns_nlo  

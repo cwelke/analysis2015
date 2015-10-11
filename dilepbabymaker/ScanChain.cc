@@ -112,10 +112,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  
 	  if( TString(currentFile->GetTitle()).Contains("Run2015C") ){
 		// files for 25ns Data
-        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5ch1pv_DATA_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_DATA_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_DATA_L3Absolute_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV3M3_DATA_L2L3Residual_AK4PFchs.txt");
 
 	  }
 	  
@@ -228,6 +228,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       HLT_DoubleMu       = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
       HLT_DoubleMu_tk    = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
 
+      HLT_DoubleMu_nonDZ             = HLT_prescale(triggerName("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v"));	  
 	  HLT_Photon22_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon22_R9Id90_HE10_IsoM_v" ));
 	  HLT_Photon30_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon30_R9Id90_HE10_IsoM_v" ));
 	  HLT_Photon36_R9Id90_HE10_IsoM  = HLT_prescale(triggerName("HLT_Photon36_R9Id90_HE10_IsoM_v" ));
@@ -1041,6 +1042,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_MuEG_2"        , &HLT_MuEG_2 );
   BabyTree_->Branch("HLT_DoubleMu"      , &HLT_DoubleMu );
   BabyTree_->Branch("HLT_DoubleMu_tk"   , &HLT_DoubleMu_tk );
+  BabyTree_->Branch("HLT_DoubleMu_nonDZ"   , &HLT_DoubleMu_nonDZ );
   BabyTree_->Branch("HLT_Photon22_R9Id90_HE10_IsoM" , &HLT_Photon22_R9Id90_HE10_IsoM  ); 
   BabyTree_->Branch("HLT_Photon30_R9Id90_HE10_IsoM" , &HLT_Photon30_R9Id90_HE10_IsoM  ); 
   BabyTree_->Branch("HLT_Photon36_R9Id90_HE10_IsoM" , &HLT_Photon36_R9Id90_HE10_IsoM  ); 
@@ -1251,6 +1253,7 @@ void babyMaker::InitBabyNtuple () {
   HLT_MuEG_2         = -999;   
   HLT_DoubleMu       = -999;   
   HLT_DoubleMu_tk    = -999;   
+  HLT_DoubleMu_nonDZ    = -999;   
 
   HLT_Photon22_R9Id90_HE10_IsoM  = -999; 
   HLT_Photon30_R9Id90_HE10_IsoM  = -999; 

@@ -127,6 +127,7 @@ class babyMaker {
   Int_t           HLT_MuEG_2;   
   Int_t           HLT_DoubleMu;   
   Int_t           HLT_DoubleMu_tk;   
+  Int_t           HLT_DoubleMu_nonDZ;   
 
   Int_t           HLT_Photon22_R9Id90_HE10_IsoM;
   Int_t           HLT_Photon30_R9Id90_HE10_IsoM;
