@@ -20,21 +20,14 @@ void renormhists( TH1F * &h_data, TH1F * &h_rescaleme )
   return;
 }
 
-void getReweightHTHist( string signalregion )
+void getReweightHTHist_MC( string signalregion )
 {
-
-  // TFile * f_data = TFile::Open("../output/V07-04-10/data_inclusive_hists.root"     , "READ");
-  // TFile * f_phot = TFile::Open("../output/V07-04-10/data_inclusive_templates.root" , "READ");
 
   // TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
   // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
 
-  TFile * f_data = TFile::Open(Form("../output/V07-04-10/data_%s_hists.root", signalregion.c_str() )   , "READ");
-  TFile * f_phot = TFile::Open(Form("../output/V07-04-10/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
-  // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/data_%s_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
-
-  // TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
-  // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
+  TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
+  TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
 
   TH1F * h_data = NULL;
   TH1F * h_data_em = NULL;
@@ -117,7 +110,7 @@ void getReweightHTHist( string signalregion )
   TH1F * h_ht_ratio_120 = (TH1F*) h_data->Clone("h_ht_ratio_120");
   TH1F * h_ht_ratio_165 = (TH1F*) h_data->Clone("h_ht_ratio_165");
 
-  renormhists( h_ht_ratio    , h_phot     );
+  // renormhists( h_ht_ratio    , h_phot     );
   // renormhists( h_ht_ratio_22 , h_phot_22  );
   // renormhists( h_ht_ratio_30 , h_phot_30  );
   // renormhists( h_ht_ratio_36 , h_phot_36  );
@@ -136,23 +129,6 @@ void getReweightHTHist( string signalregion )
   h_ht_ratio_90 -> Divide(h_phot_90 );
   h_ht_ratio_120-> Divide(h_phot_120);
   h_ht_ratio_165-> Divide(h_phot_165);
-
-  // cout<<"sum of weights"<< h_phot_22 -> GetSumOfWeights() << endl;
-  // cout<<"sum of weights"<< h_phot_22 -> GetSumOfWeights() << endl;
-
-  // cout<<"sum of weights"<< h_ht_ratio_22 -> GetSumOfWeights() << endl;
-  // cout<<"sum of weights"<< h_ht_ratio_30 -> GetSumOfWeights() << endl;
-  // cout<<"sum of weights"<< h_ht_ratio_36 -> GetSumOfWeights() << endl;
-  // cout<<"sum of weights"<< h_ht_ratio_50 -> GetSumOfWeights() << endl;
-
-  // if( h_ht_ratio_22  -> GetSumOfWeights() < 1 ) h_ht_ratio_22  -> Scale( 1./ h_ht_ratio_22  -> GetSumOfWeights() );
-  // if( h_ht_ratio_30  -> GetSumOfWeights() < 1 ) h_ht_ratio_30  -> Scale( 1./ h_ht_ratio_30  -> GetSumOfWeights() );
-  // if( h_ht_ratio_36  -> GetSumOfWeights() < 1 ) h_ht_ratio_36  -> Scale( 1./ h_ht_ratio_36  -> GetSumOfWeights() );
-  // if( h_ht_ratio_50  -> GetSumOfWeights() < 1 ) h_ht_ratio_50  -> Scale( 1./ h_ht_ratio_50  -> GetSumOfWeights() );
-  // if( h_ht_ratio_75  -> GetSumOfWeights() < 1 ) h_ht_ratio_75  -> Scale( 1./ h_ht_ratio_75  -> GetSumOfWeights() );
-  // if( h_ht_ratio_90  -> GetSumOfWeights() < 1 ) h_ht_ratio_90  -> Scale( 1./ h_ht_ratio_90  -> GetSumOfWeights() );
-  // if( h_ht_ratio_120 -> GetSumOfWeights() < 1 ) h_ht_ratio_120 -> Scale( 1./ h_ht_ratio_120 -> GetSumOfWeights() );
-  // if( h_ht_ratio_165 -> GetSumOfWeights() < 1 ) h_ht_ratio_165 -> Scale( 1./ h_ht_ratio_165 -> GetSumOfWeights() );
 	   
   string filename = Form("ht_ratio_data_novtx_nohtweight_%s.root", signalregion.c_str() );
   
@@ -192,8 +168,8 @@ void getReweightScheme(vector <double> &binning, string selection )
 
   if( TString(selection).Contains("SRA") ){
 	binning.push_back(0);
-	binning.push_back(22);
-	binning.push_back(36);
+	// binning.push_back(22);
+	binning.push_back(33);
 	binning.push_back(50);
 	binning.push_back(75);
 	binning.push_back(90);
@@ -217,14 +193,15 @@ void getReweightScheme(vector <double> &binning, string selection )
 
   else if( TString(selection).Contains("SRB") ){
 	binning.push_back(0);
-	binning.push_back(22);
-	binning.push_back(36);
+	// binning.push_back(22);
+	binning.push_back(33);
 	binning.push_back(50);
 	binning.push_back(75);
 	binning.push_back(90);
 	binning.push_back(120);
 	binning.push_back(165);
-	// binning.push_back(200);
+	binning.push_back(200);
+	binning.push_back(300);
 	// binning.push_back(450);
 	// binning.push_back(500);
 	// binning.push_back(600);
@@ -242,8 +219,8 @@ void getReweightScheme(vector <double> &binning, string selection )
 
   else if( TString(selection).Contains("SR_ATLAS") ){
 	binning.push_back(0);
-	binning.push_back(22);
-	binning.push_back(36);
+	binning.push_back(33);
+	// binning.push_back(36);
 	binning.push_back(50);
 	binning.push_back(75);
 	binning.push_back(90);
@@ -251,7 +228,6 @@ void getReweightScheme(vector <double> &binning, string selection )
 	binning.push_back(165);
 	binning.push_back(200);
 	// binning.push_back(300);
-	// binning.push_back(350);
 	// binning.push_back(400);
 	// binning.push_back(500);
   	// binning.push_back(600);
@@ -262,18 +238,42 @@ void getReweightScheme(vector <double> &binning, string selection )
   	binning.push_back(3000);
   }
 
-  
-  else{
 
+  
+  else if( TString(selection).Contains("forward") && TString(selection).Contains("twojets") && !TString(selection).Contains("with2_twojets") ){
 	binning.push_back(0);
-	binning.push_back(22);
-	binning.push_back(36);
+	// binning.push_back(22);
+	binning.push_back(33);
+	// binning.push_back(36);
+	binning.push_back(60);
+	binning.push_back(3000);
+  }
+  
+  else if( TString(selection).Contains("inclusive") && !TString(selection).Contains("3jets_inclusive") ){
+	binning.push_back(0);
+	// binning.push_back(22);
+	binning.push_back(33);
+	// binning.push_back(36);
 	binning.push_back(50);
 	binning.push_back(75);
 	binning.push_back(90);
 	binning.push_back(120);
 	binning.push_back(165);
-	binning.push_back(250);
+	binning.push_back(3000);
+  }
+
+  
+  else if( TString(selection).Contains("twojets") && !TString(selection).Contains("with2_twojets") ){
+	binning.push_back(0);
+	// binning.push_back(22);
+	binning.push_back(33);
+	// binning.push_back(36);
+	binning.push_back(50);
+	binning.push_back(75);
+	binning.push_back(90);
+	binning.push_back(120);
+	// binning.push_back(165);
+	// binning.push_back(250);
 	// binning.push_back(300);
 	// binning.push_back(350);
 	// binning.push_back(400);
@@ -291,6 +291,63 @@ void getReweightScheme(vector <double> &binning, string selection )
 	// binning.push_back(1500);
 	binning.push_back(3000);
   }
+
+  else if( TString(selection).Contains("with2_twojets") ){
+	binning.push_back(0);
+	// binning.push_back(22);
+	// binning.push_back(33);
+	// binning.push_back(36);
+	binning.push_back(60);
+	binning.push_back(120);
+	// binning.push_back(165);
+	// binning.push_back(250);
+	// binning.push_back(300);
+	// binning.push_back(350);
+	// binning.push_back(400);
+	// binning.push_back(450);
+	// binning.push_back(500);
+	// binning.push_back(600);
+	// binning.push_back(700);
+	// binning.push_back(800);
+	// binning.push_back(900);
+	// binning.push_back(1000);
+	// binning.push_back(1100);
+	// binning.push_back(1200);
+	// binning.push_back(1300);
+	// binning.push_back(1400);
+	// binning.push_back(1500);
+	binning.push_back(3000);
+  }
+  
+  else{
+
+  	binning.push_back(0);
+	// binning.push_back(22);
+	binning.push_back(33);
+	// binning.push_back(36);
+	binning.push_back(50);
+	binning.push_back(75);
+	binning.push_back(90);
+	binning.push_back(120);
+	binning.push_back(165);
+	binning.push_back(200);
+	binning.push_back(300);
+	// binning.push_back(350);
+	// binning.push_back(400);
+	// binning.push_back(450);
+	// binning.push_back(500);
+	// binning.push_back(600);
+	// binning.push_back(700);
+	// binning.push_back(800);
+	// binning.push_back(900);
+	// binning.push_back(1000);
+	// binning.push_back(1100);
+	// binning.push_back(1200);
+	// binning.push_back(1300);
+	// binning.push_back(1400);
+	// binning.push_back(1500);
+	binning.push_back(3000);
+}
 
   return;
 }
