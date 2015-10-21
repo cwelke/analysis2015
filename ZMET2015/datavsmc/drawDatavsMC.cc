@@ -16,9 +16,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 {
 
   bool usetemplates   = true;
-  bool usefsbkg       = false;
-  bool applysysts     = false;
-  bool isblind        = false;
+  bool usefsbkg       = true;
+  bool applysysts     = true;
+  bool isblind        = true;
   bool printyields    = true;
 
   TH1F * h_data  = NULL;
@@ -62,7 +62,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		if( binind >= h_data->FindBin(225) ) h_data -> SetBinError( binind, 0 );
 	  }
 	}
-	else if( TString(selection).Contains("inclusive") && !TString(selection).Contains("3jets") ){
+	else if( TString(selection).Contains("twojets") && !TString(selection).Contains("3jets") ){
 	  for( int binind = 0; binind < h_data -> GetNbinsX()+1; binind++ ){
 		if( binind >= h_data->FindBin(150) ) h_data -> SetBinContent( binind, 0 );
 		if( binind >= h_data->FindBin(150) ) h_data -> SetBinError( binind, 0 );
@@ -82,6 +82,13 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_zz ->Scale(0);
   h_ttv->Scale(luminosity);
   h_vvv->Scale(luminosity);
+
+  // h_st ->Scale(0);
+  // h_ww ->Scale(0);
+  // h_wz ->Scale(0);
+  // h_zz ->Scale(0);
+  // h_ttv->Scale(0);
+  // h_vvv->Scale(0);
   
   if( usetemplates ){
   
@@ -133,41 +140,46 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  metcut.push_back(-1);
 
 	}else{
-	  // metcut.clear();
-	  // metcut.push_back(0.0);
-	  // metcut.push_back(50);
-	  // metcut.push_back(100);
-	  // metcut.push_back(150);
-	  // // metcut.push_back(225);
-	  // // metcut.push_back(300);
-	  // metcut.push_back(-1);
 
-	  metcut.clear();
-	  // metcut.push_back(0.0);
-	  // metcut.push_back(50);
-	  // metcut.push_back(-1);
-	  metcut.push_back(60);
-	  metcut.push_back(-1);
-	  metcut.push_back(70);
-	  metcut.push_back(-1);
-	  metcut.push_back(80);
-	  metcut.push_back(-1);
-	  metcut.push_back(90);
-	  metcut.push_back(-1);
-	  metcut.push_back(100);
-	  metcut.push_back(-1);
-	  metcut.push_back(110);
-	  metcut.push_back(-1);
-	  metcut.push_back(120);
-	  // metcut.push_back(-1);
-	  // metcut.push_back(130);
-	  // metcut.push_back(-1);
-	  // metcut.push_back(140);
-	  // metcut.push_back(-1);
-	  // metcut.push_back(150);
-	  // // metcut.push_back(225);
-	  // // metcut.push_back(300);
-	  metcut.push_back(-1);
+	  if( TString(selection).Contains("twojets"      ) ){
+		metcut.clear();
+		metcut.push_back(0.0);
+		metcut.push_back(50);
+		metcut.push_back(100);
+		metcut.push_back(150);
+		metcut.push_back(-1);
+
+	  }
+	  else if( TString(selection).Contains("3jets_inclusive"      ) ){
+		metcut.clear();
+		metcut.push_back(0.0);
+		metcut.push_back(50);
+		metcut.push_back(100);
+		metcut.push_back(-1);
+
+	  }
+	  else if( TString(selection).Contains("SR_ATLAS"      ) ){
+		metcut.clear();
+		metcut.push_back(0.0);
+		metcut.push_back(50);
+		metcut.push_back(100);
+		metcut.push_back(150);
+		metcut.push_back(225);
+		metcut.push_back(-1);
+
+	  }
+	  else{
+		metcut.clear();
+		metcut.push_back(0.0);
+		metcut.push_back(50);
+		metcut.push_back(100);
+		metcut.push_back(150);
+		metcut.push_back(225);
+		metcut.push_back(300);
+		metcut.push_back(-1);
+
+	  }
+
 	}
 
   
@@ -239,18 +251,123 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		// }
 		
 		if(       metcut.at(bini+1)   < 0   ){  
-		  if( TString(selection).Contains("SRA") )zsyst = 0.65;
-		  if( TString(selection).Contains("SRB") ||
-			  TString(selection).Contains("SR_ATLAS")   )zsyst = 0.25;
-		}else if( metcut.at(bini+1)-1 < 50  ){  zsyst = 0.01;
-		}else if( metcut.at(bini+1)-1 < 150 ){ zsyst = 0.10;
-		}else if( metcut.at(bini+1)-1 < 225 ){ zsyst = 0.25;
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.55;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.55;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.55;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.30;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.75;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.80;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.30;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.50;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.25;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.70;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.20;
+
+		}else if( metcut.at(bini+1)-1 < 50  ){  
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.01;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.01;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.05;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.01;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.02;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.10;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.01;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.01;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.03;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.01;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.02;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.05;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.01;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.01;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.01;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.02;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.02;
+
+
+		}else if( metcut.at(bini+1)-1 < 100 ){
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.06;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.06;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.05;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.02;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.05;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.01;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.02;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.02;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.06;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.04;
+
+		}else if( metcut.at(bini+1)-1 < 150 ){
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.25;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.30;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.80;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.03;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.06;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.04;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.10;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
+
+		}else if( metcut.at(bini+1)-1 < 225 ){ 
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.25;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.30;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.80;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.06;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.15;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.10;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.15;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
+
 		}else if( metcut.at(bini+1)-1 < 300 ){
-		  if( TString(selection).Contains("SRA") )zsyst = 0.45;
-		  if( TString(selection).Contains("SRB") )zsyst = 0.25;
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.25;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.30;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.80;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.10;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.20;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.25;
+		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.20;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.70;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
+
 		}
 
-		cout<<"zsyts for: "<<metcut.at(bini+1)<<" | "<< zsyst<<endl;
+		// cout<<"zsyts for: "<<metcut.at(bini+1)<<" | "<< zsyst<<endl;
 
 		
 	  }
@@ -270,7 +387,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		
 	  if( applysysts ){
 		err_zjets.at(bini) = sqrt( pow( err_zjets.at(bini), 2 ) + pow( val_zjets.at(bini)*zsyst, 2 ) );
-		err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.10, 2 ) );
+		// err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.20, 2 ) );
 		  
 		err_ttvbg.at(bini) = sqrt( pow( err_ttvbg.at(bini), 2 ) + pow( val_ttvbg.at(bini)*.50, 2 ) );
 		err_vvvbg.at(bini) = sqrt( pow( err_vvvbg.at(bini), 2 ) + pow( val_vvvbg.at(bini)*.50, 2 ) );
@@ -457,8 +574,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  xmin = 00;
 	  xmax = 200;
 	  if( usefsbkg ){
-		xmax = 200;
-		rebin = 10;
+		xmax = 250;
+		rebin = 25;
 	  }
 	  else
 		xmax = 200;
