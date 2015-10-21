@@ -4,6 +4,7 @@
 #include "AnalysisSelections.h"
 
 bool passBaselineSelections();
+bool passMETFilters();
 bool passSignalRegionSelection( std::string selection );
 bool eventHas2GoodLeps();
 bool eventHas3Jets();
@@ -18,6 +19,7 @@ bool passPhotonTrigger90();
 bool passPhotonTrigger120();
 bool passPhotonTrigger165();
 int  getPrescale();
+int getPrescaleNoBins();
 bool highHT_zjinc( std::string samplename );
 
 #endif

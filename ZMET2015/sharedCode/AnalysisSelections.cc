@@ -23,24 +23,46 @@ bool passBaselineSelections()
   return true;
 }
 
+bool passMETFilters()
+{
+
+  if( zmet.isData()                   ){
+	if (zmet.nVert() == 0               ) return false;
+	// MET filters (data and MC)	   
+	if (!zmet.Flag_goodVertices()       ) return false;
+	if (!zmet.Flag_CSCTightHaloFilter() ) return false;
+	if (!zmet.Flag_eeBadScFilter()      ) return false;
+	if (!zmet.Flag_HBHENoiseFilter()    ) return false;
+  }
+  return true;
+}
+
 bool passSignalRegionSelection( string selection )
 {
-  if( TString(selection).Contains("bveto"          ) && zmet.nBJetMedium() > 0   ) return false; //bveto
-  if( TString(selection).Contains("withb"          ) && zmet.nBJetMedium() < 1   ) return false; //at least 1 b-tag
   if( TString(selection).Contains("SRA"            ) && !((zmet.njets() == 2 ||
 														   zmet.njets() == 3  ) &&
 														  (zmet.ht()    > 400 )) ) return false; //high HT region
   if( TString(selection).Contains("SRB"            ) && zmet.njets() < 4         ) return false; //large njets
+  if( TString(selection).Contains("bveto"          ) && zmet.nBJetMedium() > 0   ) return false; //bveto
+  if( TString(selection).Contains("withb"          ) && zmet.nBJetMedium() < 1   ) return false; //at least 1 b-tag
+  if( TString(selection).Contains("with2"          ) && zmet.nBJetMedium() < 2   ) return false; //at least 1 b-tag
   if( TString(selection).Contains("twojets"        ) && zmet.njets() > 2         ) return false; //exactly 2 jets
   if( TString(selection).Contains("2jets_inclusive") && zmet.njets() < 2         ) return false; //at least 2 jets
   if( TString(selection).Contains("3jets_inclusive") && zmet.njets() < 3         ) return false; //at least 3 jets
   if( TString(selection).Contains("SR_ATLAS"       ) && 
 	  !( ( ( zmet.evt_type() == 0 && ( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) ) > 600 ) ||
 		   ( zmet.evt_type() == 2 && ( zmet.ht() + zmet.gamma_pt().at(0)                     ) > 600 ) ) &&
-		 ( zmet.njets() > 1       && ( ( acos( cos( zmet.met_rawPt() - zmet.jets_p4().at(0).phi() ) ) > 0.4  ) &&
-									   ( acos( cos( zmet.met_rawPt() - zmet.jets_p4().at(1).phi() ) ) > 0.4  ) ) ) )
+		 ( zmet.njets() > 1       && ( ( acos( cos( zmet.met_T1CHS_fromCORE_pt() - zmet.jets_p4().at(0).phi() ) ) > 0.4  ) &&
+									   ( acos( cos( zmet.met_T1CHS_fromCORE_pt() - zmet.jets_p4().at(1).phi() ) ) > 0.4  ) ) ) )
 	  )return false; //ATLAS run I SR
-														 
+  if( TString(selection).Contains("forward"        ) && !((zmet.evt_type() == 0 &&
+														   ((abs(zmet.lep_eta().at(0)) < 1.4 && abs(zmet.lep_eta().at(1)) > 1.6) ||
+															(abs(zmet.lep_eta().at(1)) < 1.4 && abs(zmet.lep_eta().at(0)) > 1.6) ) ) ||
+														  (zmet.evt_type() == 2 ) ) ) return false; //edge forward
+  if( TString(selection).Contains("central"        ) && !((zmet.evt_type() == 0 &&
+														   (abs(zmet.lep_eta().at(0)) < 1.4 && abs(zmet.lep_eta().at(1)) < 1.4  ) ) ||
+														  (zmet.evt_type() == 2 ) ) ) return false; //edge central
+  														 
   return true;
 }
 
@@ -102,49 +124,57 @@ bool passPhotonTrigger()
 
 bool passPhotonTrigger22()
 {
-  if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 25   && zmet.gamma_pt().at(0) < 35  ) return true;
+  // if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 25   && zmet.gamma_pt().at(0) < 35  ) return true;
+  if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) < 33  ) return true;
   return false;
 }
 
 bool passPhotonTrigger30()
 {
-  if( zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 35  && zmet.gamma_pt().at(0) < 40  ) return true;
+  // if( zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 35  && zmet.gamma_pt().at(0) < 40  ) return true;
+  if( zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 33 ) return true;
   return false;
 }
 
 bool passPhotonTrigger36()
 {
-  if( zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 40  && zmet.gamma_pt().at(0) < 60  ) return true;
+  // if( zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 40  && zmet.gamma_pt().at(0) < 60  ) return true;
+  if( zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 ) return true;
   return false;
 }
 
 bool passPhotonTrigger50()
 {
-  if( zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 60  && zmet.gamma_pt().at(0) < 80  ) return true;
+  // if( zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 60  && zmet.gamma_pt().at(0) < 80  ) return true;
+  if( zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 ) return true;
   return false;
 }
 
 bool passPhotonTrigger75()
 {
-  if( zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 80  && zmet.gamma_pt().at(0) < 100 ) return true;
+  // if( zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 80  && zmet.gamma_pt().at(0) < 100 ) return true;
+  if( zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 ) return true;
   return false;
 }
 
 bool passPhotonTrigger90()
 {
-  if( zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 100 && zmet.gamma_pt().at(0) < 125 ) return true;
+  // if( zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 100 && zmet.gamma_pt().at(0) < 125 ) return true;
+  if( zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 ) return true;
   return false;
 }
 
 bool passPhotonTrigger120()
 {
-  if( zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 125 && zmet.gamma_pt().at(0) < 170 ) return true;
+  // if( zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 125 && zmet.gamma_pt().at(0) < 170 ) return true;
+  if( zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 ) return true;
   return false;
 }
 
 bool passPhotonTrigger165()
 {
-  if( zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 170                                ) return true;
+  // if( zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 && zmet.gamma_pt().at(0) > 170                                ) return true;
+  if( zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 ) return true;
   return false;
 }
 
@@ -167,6 +197,29 @@ int getPrescale()
   else if( passPhotonTrigger90()  ) return zmet.HLT_Photon90_R9Id90_HE10_IsoM();
   else if( passPhotonTrigger120() ) return zmet.HLT_Photon120_R9Id90_HE10_IsoM();
   else if( passPhotonTrigger165() ) return zmet.HLT_Photon165_R9Id90_HE10_IsoM();
+  return -1; // should not get here
+}
+
+int getPrescaleNoBins()
+{
+  if( !( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 ||
+		 zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 || 
+		 zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 || 
+		 zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 ||
+		 zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 
+		 ) ) return 0;
+  if(      zmet.HLT_Photon165_R9Id90_HE10_IsoM() > 0 ) return zmet.HLT_Photon165_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon120_R9Id90_HE10_IsoM() > 0 ) return zmet.HLT_Photon120_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon90_R9Id90_HE10_IsoM()  > 0 ) return zmet.HLT_Photon90_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon75_R9Id90_HE10_IsoM()  > 0 ) return zmet.HLT_Photon75_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon50_R9Id90_HE10_IsoM()  > 0 ) return zmet.HLT_Photon50_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon36_R9Id90_HE10_IsoM()  > 0 ) return zmet.HLT_Photon36_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon30_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) > 33 ) return zmet.HLT_Photon30_R9Id90_HE10_IsoM();
+  else if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 && zmet.gamma_pt().at(0) < 33 ) return zmet.HLT_Photon22_R9Id90_HE10_IsoM();
+  // else if( zmet.HLT_Photon22_R9Id90_HE10_IsoM()  > 0 ) return 0;
   return -1; // should not get here
 }
 

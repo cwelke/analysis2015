@@ -92,21 +92,26 @@ void METTemplates::setBins( const string selection )
 
   //set event pT cuts
   photon_ptcuts.clear();
-  photon_ptcuts.push_back(25);
-  photon_ptcuts.push_back(35);
-  photon_ptcuts.push_back(40);
-  photon_ptcuts.push_back(60);
-  photon_ptcuts.push_back(80);
-  photon_ptcuts.push_back(100);
-  photon_ptcuts.push_back(125);
-  photon_ptcuts.push_back(170);
+  photon_ptcuts.push_back(0);
+  // photon_ptcuts.push_back(33);
+  // photon_ptcuts.push_back(36);
+  // photon_ptcuts.push_back(50);
+  // photon_ptcuts.push_back(75);
+  // photon_ptcuts.push_back(90);
+  // photon_ptcuts.push_back(120);
+  // photon_ptcuts.push_back(165);
   // photon_ptcuts.push_back(225);
   // photon_ptcuts.push_back(300);
   // photon_ptcuts.push_back(500);
 
   //set event HT cuts
   photon_htcuts.clear();
-  photon_htcuts.push_back(35);
+  photon_htcuts.push_back(0);
+  // photon_htcuts.push_back(70);
+  // photon_htcuts.push_back(105);
+  // photon_htcuts.push_back(140);
+  // photon_htcuts.push_back(250);
+  // photon_htcuts.push_back(500);
   
 }
 
