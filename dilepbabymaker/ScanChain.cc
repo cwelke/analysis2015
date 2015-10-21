@@ -63,12 +63,15 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   TBenchmark *bmark = new TBenchmark();
   bmark->Start("benchmark");
 
-  createAndInitMVA("MVAinput", false); // for electrons
+  cout<<"Creating MVA input for electrons."<<endl;
+  createAndInitMVA("MVAinput", true); // for electrons
+  // createAndInitMVA("MVAinput"); // for electrons
 
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_golden_168pb_290915_sntformat.txt";
+  const char* json_file = "json_600pb_131015_sntformat.txt";
+  cout<<"Setting grl: "<<json_file<<endl;
   set_goodrun_file(json_file);
   
   // File Loop
@@ -130,9 +133,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  
 	  else{
 		// files for 25ns MC  
-        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_MC_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_MC_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_MC_L3Absolute_AK4PFchs.txt"  );
 	  }
 	  
       jet_corrector_pfL1FastJetL2L3  = makeJetCorrector(jetcorr_filenames_pfL1FastJetL2L3);
@@ -165,9 +168,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       evt_xsec     = cms3.evt_xsec_incl();
       evt_kfactor  = cms3.evt_kfactor();
       evt_filter   = cms3.evt_filt_eff();
-	  if( !isData ){
-		nTrueInt     = cms3.puInfo_trueNumInteractions().at(0);
-	  }
+	  // if( !isData ){
+	  // 	nTrueInt     = cms3.puInfo_trueNumInteractions().at(0);
+	  // }
       rho          = cms3.evt_fixgridfastjet_all_rho(); //this one is used in JECs
       puWeight     =      1.;
 
@@ -225,7 +228,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") );
       HLT_MuEG_2         = (passHLTTriggerPattern("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") ||
 							passHLTTriggerPattern("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") );
-      HLT_DoubleMu       = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
+      HLT_MuEG_noiso     = passHLTTriggerPattern( "HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v"    );
+      HLT_DoubleMu_noiso = passHLTTriggerPattern( "HLT_Mu27_TkMu8_v"                       );
+      HLT_DoubleMu       = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v"  );
       HLT_DoubleMu_tk    = passHLTTriggerPattern( "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
 
       HLT_DoubleMu_nonDZ             = HLT_prescale(triggerName("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v"));	  
@@ -390,6 +395,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
       vector<int>  vec_lep_lostHits;
       vector<int>  vec_lep_convVeto;
       vector<int>  vec_lep_tightCharge;
+      vector<float>vec_lep_MVA;
       vector<float>vec_lep_etaSC;
 	  
 	  vector<LorentzVector> vec_lep_p4s;
@@ -404,9 +410,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  for(unsigned int iEl = 0; iEl < cms3.els_p4().size(); iEl++){
  	  	if( !passElectronSelection_ZMET( iEl ) ) continue;
 
+		// cout<<<<endl;
+		
         nElectrons10++;
 
-		if( cms3.els_p4().at(iEl).pt() > 15.0 ){
+		if( cms3.els_p4().at(iEl).pt() > 10.0 ){
 		  lep_pt_ordering[cms3.els_p4().at(iEl).pt()] = nlep;
 		  vec_lep_p4s          .push_back( cms3.els_p4().at(iEl)           );
 		  vec_lep_pt           .push_back( cms3.els_p4().at(iEl).pt()      );
@@ -420,6 +428,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  vec_lep_tightId      .push_back( eleTightID(iEl, ZMET)           );
 		  vec_lep_relIso03MREA .push_back( elMiniRelIsoCMS3_EA( iEl )      );
 		  vec_lep_etaSC        .push_back( els_etaSC().at(iEl)             );
+		  vec_lep_MVA          .push_back( getMVAoutput(iEl)               );
 
 		  // if( !isData){
 		  if (!isData && (cms3.els_mc3dr().at(iEl) < 0.2 && cms3.els_mc3idx().at(iEl) != -9999 && abs(cms3.els_mc3_id().at(iEl)) == 11 )) { // matched to a prunedGenParticle electron?
@@ -454,7 +463,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  	  	if( !passMuonSelection_ZMET( iMu ) ) continue;
 		nMuons10++;
 
-		if( cms3.mus_p4().at(iMu).pt() > 15.0 ){
+		
+		if( cms3.mus_p4().at(iMu).pt() > 10.0 ){
 		  lep_pt_ordering[cms3.mus_p4().at(iMu).pt()] = nlep;
 		  vec_lep_p4s          .push_back ( cms3.mus_p4().at(iMu)                       );
 		  vec_lep_pt           .push_back ( cms3.mus_p4().at(iMu).pt()                  );
@@ -466,8 +476,9 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  vec_lep_dxy          .push_back ( cms3.mus_dxyPV().at(iMu)                    );
 		  vec_lep_dz           .push_back ( cms3.mus_dzPV().at(iMu)                     );
 		  vec_lep_tightId      .push_back ( muTightID(iMu, ZMET)                        );
-		  vec_lep_relIso03MREA .push_back( muMiniRelIso( iMu, true , 0.5, false, true ) );
-		  vec_lep_etaSC        .push_back( cms3.mus_p4().at(iMu).eta()                  );
+		  vec_lep_relIso03MREA .push_back ( muMiniRelIso( iMu, true , 0.5, false, true ));
+		  vec_lep_etaSC        .push_back ( cms3.mus_p4().at(iMu).eta()                 );
+		  vec_lep_MVA          .push_back ( -99                                         );
 
 		  // if( !isData){
 		  if (!isData && (cms3.mus_mc3dr().at(iMu) < 0.2 && cms3.mus_mc3idx().at(iMu) != -9999 && abs(cms3.mus_mc3_id().at(iMu)) == 13 )) { // matched to a prunedGenParticle electron?
@@ -511,6 +522,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		lep_lostHits     .push_back( vec_lep_lostHits     .at(it->second));
 		lep_convVeto     .push_back( vec_lep_convVeto     .at(it->second));
 		lep_tightCharge  .push_back( vec_lep_tightCharge  .at(it->second));
+		lep_MVA          .push_back( vec_lep_MVA          .at(it->second));
 		i++;
       }
         
@@ -865,7 +877,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  met_T1CHS_fromCORE_pt  = newMET.first;
 	  met_T1CHS_fromCORE_phi = newMET.second;
 
-	  pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+	  // pair <float, float> newMET3p0 = getT1CHSMET3p0(jet_corrector_pfL1FastJetL2L3);
+	  pair <float, float> newMET3p0 = getT1CHSMET_fromMINIAOD(jet_corrector_pfL1FastJetL2L3);
 	  met_T1CHSNoHF_fromCORE_pt  = newMET3p0.first;
       met_T1CHSNoHF_fromCORE_phi = newMET3p0.second;
 
@@ -1039,8 +1052,10 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("HLT_DoubleEl_DZ"   , &HLT_DoubleEl_DZ );
   BabyTree_->Branch("HLT_DoubleEl_noiso", &HLT_DoubleEl_noiso );
   BabyTree_->Branch("HLT_MuEG"          , &HLT_MuEG );
+  BabyTree_->Branch("HLT_MuEG_noiso"    , &HLT_MuEG_noiso );
   BabyTree_->Branch("HLT_MuEG_2"        , &HLT_MuEG_2 );
   BabyTree_->Branch("HLT_DoubleMu"      , &HLT_DoubleMu );
+  BabyTree_->Branch("HLT_DoubleMu_noiso", &HLT_DoubleMu_noiso );
   BabyTree_->Branch("HLT_DoubleMu_tk"   , &HLT_DoubleMu_tk );
   BabyTree_->Branch("HLT_DoubleMu_nonDZ"   , &HLT_DoubleMu_nonDZ );
   BabyTree_->Branch("HLT_Photon22_R9Id90_HE10_IsoM" , &HLT_Photon22_R9Id90_HE10_IsoM  ); 
@@ -1080,6 +1095,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("lep_lostHits"   , "std::vector< Int_t >"         , &lep_lostHits   );
   BabyTree_->Branch("lep_convVeto"   , "std::vector< Int_t >"         , &lep_convVeto   );
   BabyTree_->Branch("lep_tightCharge", "std::vector< Int_t >"         , &lep_tightCharge);
+  BabyTree_->Branch("lep_MVA"        , "std::vector< Float_t >"       , &lep_MVA        );
   BabyTree_->Branch("lep_islead"     , "std::vector< Int_t >"         , &lep_islead     );
   BabyTree_->Branch("lep_istail"     , "std::vector< Int_t >"         , &lep_istail     );
 
@@ -1250,8 +1266,10 @@ void babyMaker::InitBabyNtuple () {
   HLT_DoubleEl_DZ    = -999;   
   HLT_DoubleEl_noiso = -999;   
   HLT_MuEG           = -999;   
+  HLT_MuEG_noiso     = -999;   
   HLT_MuEG_2         = -999;   
   HLT_DoubleMu       = -999;   
+  HLT_DoubleMu_noiso = -999;   
   HLT_DoubleMu_tk    = -999;   
   HLT_DoubleMu_nonDZ    = -999;   
 
@@ -1295,6 +1313,7 @@ void babyMaker::InitBabyNtuple () {
   lep_lostHits   .clear();   //[nlep]
   lep_convVeto   .clear();   //[nlep]
   lep_tightCharge.clear();   //[nlep]
+  lep_MVA        .clear();   //[nlep]
   lep_islead     .clear();   //[nlep]
   lep_istail     .clear();   //[nlep]
 

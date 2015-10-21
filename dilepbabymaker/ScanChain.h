@@ -124,8 +124,10 @@ class babyMaker {
   Int_t           HLT_DoubleEl_DZ;   
   Int_t           HLT_DoubleEl_noiso;   
   Int_t           HLT_MuEG;   
+  Int_t           HLT_MuEG_noiso;   
   Int_t           HLT_MuEG_2;   
   Int_t           HLT_DoubleMu;   
+  Int_t           HLT_DoubleMu_noiso;   
   Int_t           HLT_DoubleMu_tk;   
   Int_t           HLT_DoubleMu_nonDZ;   
 
@@ -160,6 +162,7 @@ class babyMaker {
   std::vector <Int_t  > lep_lostHits   ;   //[nlep]
   std::vector <Int_t  > lep_convVeto   ;   //[nlep]
   std::vector <Int_t  > lep_tightCharge;   //[nlep]
+  std::vector <Float_t> lep_MVA        ;   //[nlep]
   std::vector <Int_t  > lep_islead     ;   //[nlep]
   std::vector <Int_t  > lep_istail     ;   //[nlep]
   

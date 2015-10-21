@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DATADIR=$1
+COPYDIRBASE=$2
+
 while  ! voms-proxy-info -exist
 do echo "No Proxy found issuing \"voms-proxy-init -voms cms\""
    voms-proxy-init -hours 168 -voms cms
@@ -11,15 +14,13 @@ EXE="wrapper.sh"
 INPUT="wrapper.sh, job_input/input.tar.gz"
 # can add other US sites here if desired
 SITE="T2_US_UCSD"
-SUBMITLOGDIR="${PWD}/submit_logs"
-JOBLOGDIR="${PWD}/job_logs"
 PROXY=$(voms-proxy-info -path)
 USERNAME=$(whoami)
 
 othersites="T2_US_UCSD"
 
-LOGDIR=${PWD}/submit_logs
-OUTDIR=${PWD}/job_logs  
+LOGDIR="/data/tmp/$USER/$COPYDIRBASE/submit_logs"
+OUTDIR="/data/tmp/$USER/$COPYDIRBASE/job_logs"
 LOG="${LOGDIR}/condor_`date "+%m_%d_%Y"`.log"
 OUT="${OUTDIR}/1e.\$(Cluster).\$(Process).out"
 ERR="${OUTDIR}/1e.\$(Cluster).\$(Process).err"
@@ -46,8 +47,6 @@ gzip ${DIR}/job_input/input.tar
 cd ${DIR}
 
 
-DATADIR=$1
-COPYDIRBASE=$2
 COPYDIR=/hadoop/cms/store/user/${USERNAME}/dilepbabies/${COPYDIRBASE}
 echo "[writeConfig] running on dataset ${DATADIR}"
 echo "[writeConfig] copying output to ${COPYDIR}"
