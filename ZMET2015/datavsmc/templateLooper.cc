@@ -30,9 +30,9 @@ using namespace duplicate_removal;
 const bool debug = false;
 
 const bool usejson              = true;
-const bool dovtxreweighting     = true;
-const bool dotemplateprediction = true;
-const bool dotemplatepredictionmc = false;
+const bool dovtxreweighting     = false;
+const bool dotemplateprediction = false;
+const bool dotemplatepredictionmc = true;
 
 templateLooper::templateLooper()
 {
@@ -64,8 +64,8 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   METTemplates mettemplates( selection );
   TH1F* currentMETTemplate = NULL;
   if( dotemplateprediction ){
-	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data_inclusive_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
 	mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_novtxweight_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
+	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
 	mettemplates.setBins( selection );
   }
   if( dotemplatepredictionmc ){
@@ -80,8 +80,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   // const char* json_file = "json_25ns.txt";
   // const char* json_file = "json_25ns_remove.txt";
   // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
-  const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
-		set_goodrun_file(json_file);
+  // const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
+
+  const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt";
+
+  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10/json/json_150pb_141015_sntformat.txt";
+
+  set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
 
@@ -185,12 +190,16 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  float event_met_pt = zmet.met_pt();
 	  float event_met_ph = zmet.met_phi();
 
-	  event_met_pt = zmet.met_rawPt();
-	  event_met_ph = zmet.met_rawPhi();	  
+	  // event_met_pt = zmet.met_rawPt();
+	  // event_met_ph = zmet.met_rawPhi();	  
 
+	  event_met_pt = zmet.met_T1CHS_fromCORE_pt();
+	  event_met_ph = zmet.met_T1CHS_fromCORE_phi();
+	  
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
+	  // if( zmet.isData() && zmet.met_rawPt() < 0.1 ) continue;
 	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
 	  if( zmet.lep_pt().at(0)                < 20        ) continue; // leading lep pT > 25 GeV
 	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 20 GeV
@@ -202,12 +211,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( abs(zmet.lep_p4().at(1).eta())     > 1.4 &&
 	  	  abs(zmet.lep_p4().at(1).eta())     < 1.6       ) continue; // veto xition region
 	  if( zmet.dRll() < 0.1 ) continue;
-	  // if( zmet.dilpt() < 25 ) continue;
+	  // if( zmet.dilpt() < 22 ) continue;
 
 	  // // for closure only
 	  // if( zmet.njets() < 2   ) continue; // require at least 2 good leptons
       // if( zmet.ht()    < 100 ) continue; // special selection for now
 	  if( !passSignalRegionSelection(selection) ) continue;
+	  if( !passMETFilters() ) continue;
 	  
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
@@ -216,29 +226,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 			zmet.hyp_type() == 1 ||					     
 			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
 	  if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sign
+
       if( !usejson && zmet.isData() && !zmet.evt_passgoodrunlist()   ) continue;
 	  fillHist( "event", "mll"  , "inclusive", zmet.dilmass()  , weight );
 
 	  if( (zmet.dilmass() > 81 && zmet.dilmass() < 101) ){ // HT > 100
 		fillHist( "event", "nVert", "inclusive", zmet.nVert()  , weight );	  
 	  }
-
-      // if( isdata && !(templates.csc()==0 && 
-	  // 				  templates.hbhe()==1 && 
-	  // 				  templates.hcallaser()==1 && 
-	  // 				  templates.ecallaser()==1 && 
-	  // 				  templates.ecaltp()==1 && 
-	  // 				  templates.trkfail()==1 && 
-	  // 				  templates.eebadsc()==1 && 
-	  // 				  templates.hbhenew()==1) )                             continue; // MET filters
-
-	  // Flag_CSCTightHaloFilter
-	  // Flag_HBHENoiseFilter
-
-	  // if( zmet.isData() && !(zmet.HLT_DoubleMu() ||
-	  // 						 zmet.HLT_DoubleEl() ||
-	  // 						 zmet.HLT_DoubleEl_noiso() ||
-	  // 						 zmet.HLT_MuEG())           ) continue;
 
 	  if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   ) && zmet.hyp_type() == 1 )  ||
 			(( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()) && zmet.hyp_type() == 0 )  ||
@@ -259,6 +253,12 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( rawmet_pt > 150.0 ) fillHist( "event", "mll_metrawgt150" , "passtrig", zmet.dilmass() , weight );
 	  if( rawmet_pt > 225.0 ) fillHist( "event", "mll_metrawgt225" , "passtrig", zmet.dilmass() , weight );
 	  if( rawmet_pt > 300.0 ) fillHist( "event", "mll_metrawgt300" , "passtrig", zmet.dilmass() , weight );
+	  
+	  if( !(zmet.dilmass() > 71 && zmet.dilmass() < 111) ) continue; // HT > 100
+	  if( zmet.njets() > 1 ){
+		fillHist( "event", "metRaw_TopDiscovery", "passtrig", zmet.met_rawPt()             , weight );
+		fillHist( "event", "metT-1_TopDiscovery", "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );
+	  }
 	  
 	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
 	  if( zmet.njets() > 1 ){
@@ -349,8 +349,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( zmet.njets()                        < 2         ) continue; // require at least 2 good jets
       npass += weight;
 
-	  if( zmet.ht() > 100.0                                             ) fillHist( "event", "ht_gt1j"       , "passtrig", zmet.ht()           , weight );
-	  if( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) > 100.0 ) fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) , weight );
+	  // if( zmet.ht() > 100.0                                             ) fillHist( "event", "ht_gt1j"       , "passtrig", zmet.ht()           , weight );
+	  // if( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) > 100.0 ) fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) , weight );
+	  fillHist( "event", "ht_gt1j"       , "passtrig", zmet.dilpt(), weight );
+	  fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.dilpt(), weight );
 
 	  fillHist( "event", "met_rawgt1jet" , "passtrig", event_met_pt        , weight );	  
 
@@ -463,6 +465,9 @@ void templateLooper::bookHistos(){
   variable.push_back("mll_metrawgt150"); variable_bins.push_back(500 );  
   variable.push_back("mll_metrawgt225"); variable_bins.push_back(500 );  
   variable.push_back("mll_metrawgt300"); variable_bins.push_back(500 );  
+
+  variable.push_back("metT-1_TopDiscovery"); variable_bins.push_back(500 );  
+  variable.push_back("metRaw_TopDiscovery"); variable_bins.push_back(500 );  
   
   variable.push_back("met_CORE"); variable_bins.push_back(500 );  
   variable.push_back("met_COREgt1jet"); variable_bins.push_back(500 );  

@@ -9,28 +9,72 @@ if [ ! -d "../output/ZMET2015/$analysis_version/plots/Closure/" ]; then
 	cp ../index.php ../output/ZMET2015/$analysis_version/plots/Closure/
 fi
 
+# lumi=0.540 # golden json
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_raw\",     \"passtrig\" )"     
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_CORE\",    \"passtrig\" )" &    
+
+
 # root -b -q "compareMET.cc+( \"$analysis_version\", \"_inclusive\", 2.0 )"
 # root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMETNoHF\", 2.0 )"
 # root -b -q "compareMET.cc+( \"$analysis_version\", \"_T1MET\", 2.0 )"
 # root -b -q "compareMET.cc+( \"$analysis_version\", \"_METNoHF\", 2.0 )"
 
-# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_novtxweight\", 2.0 )"
-# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_bveto_SRB_novtxweight\", 2.0 )"
-# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_withb_SRB_novtxweight\", 2.0 )"
-# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_bveto_SRA_novtxweight\", 2.0 )"
-# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_withb_SRA_novtxweight\", 2.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_withb_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_with2_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_3jets_inclusive_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_withb_3jets_inclusive_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_central_with2_3jets_inclusive_novtxweight\", 1.0 )"
 
-lumi=0.116 # golden json
-lumi=0.209 # golden json
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_withb_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_with2_twojets_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_3jets_inclusive_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_withb_3jets_inclusive_novtxweight\", 1.0 )"
+root -b -q "compareMET.cc+( \"$analysis_version\", \"_forward_with2_3jets_inclusive_novtxweight\", 1.0 )"
 
-# lumi=2. # golden json
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRB\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRA\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_withb_SRB\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_withb_SRA\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_inclusive_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_3jets_inclusive_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_bveto_SRB_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_withb_SRB_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_bveto_SRA_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_withb_SRA_novtxweight\", 1.0 )"
+# root -b -q "compareMET.cc+( \"$analysis_version\", \"_rawMET_SR_ATLAS_novtxweight\" , 1.0 )"
 
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_SR_ATLAS\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# lumi=0.116 # golden json
+# lumi=0.209 # golden json
+
+# lumi=0.540 # golden json
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"mll\",       \"passtrig\" )"     
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"mll\",       \"passtrig\" )"     
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"mll\",       \"passtrig\" )"     
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"em\", \"mll\",       \"passtrig\" )"     
+# # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"ht\",       \"passtrig\" )"     
+
+
+# # lumi=0.480 # golden json
+# lumi=0.540 # golden json
+# # # lumi=2. # golden json
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_3jets_inclusive\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRB\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRA\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_withb_SRB\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_withb_SRA\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_SR_ATLAS\", \"ll\", \"met_rawgt1jet\",       \"passtrig\" )"  
+
+lumi=0.134 # golden json
+# # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"mll\",       \"passtrig\" )"  
+# # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"em\", \"mll\",       \"passtrig\" )"  
+
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"metRaw_TopDiscovery\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"metT-1_TopDiscovery\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_3jets_inclusive\", \"ll\", \"metRaw_TopDiscovery\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_3jets_inclusive\", \"ll\", \"metT-1_TopDiscovery\",       \"passtrig\" )"  
+
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"em\", \"metRaw_TopDiscovery\",       \"passtrig\" )"  
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"em\", \"metT-1_TopDiscovery\",       \"passtrig\" )"  
 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRB\", \"em\", \"mll\",       \"passtrig\" )"  
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_bveto_SRA\", \"em\", \"mll\",       \"passtrig\" )"  
@@ -53,8 +97,8 @@ root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_SR_ATLAS\"
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_withb_SRA\", \"em\", \"mll\",       \"passtrig\" )" 	   
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_rawMET_SR_ATLAS\", \"em\", \"mll\",       \"passtrig\" )" 	   
 
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nVert\",       \"passtrig\" )" 	   
-root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nVert\",       \"passtrig\" )" 	   
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nVert\",       \"passtrig\" )" 	   
+# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nVert\",       \"passtrig\" )" 	   
 
 # # lumi=0.225 # golden json
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"mll\",       \"passtrig\" )"     
@@ -113,12 +157,12 @@ lumi=0.0403 # golden json
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive_novtxweight\", \"ll\", \"met_CORE\",    \"passtrig\" )"  &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive_novtxweight\", \"ll\", \"nVert\",    \"passtrig\" )"  &
 
-# lumi=0.116 # golden json
+# lumi=0.510 # golden json
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"mll\",       \"passtrig\" )" 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"mll\",       \"passtrig\" )"  
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"mll\",       \"passtrig\" )"  
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"em\", \"mll\",       \"passtrig\" )" 
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nbjets\",          \"passtrig\" )"  &
+# # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nbjets\",          \"passtrig\" )"  &
 
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_raw\",        \"passtrig\" )"  &
 # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met\",            \"passtrig\" )"  &
@@ -263,116 +307,3 @@ lumi=0.1517 # ll
 # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"metphir_ptlt4\",       \"passtrig\" )" &
 # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"met_raw_ptlt5\",       \"passtrig\" )" &
 # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"metphir_ptlt5\",       \"passtrig\" )" &
-
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"zpt_metlt1\",       \"passtrig\" )" 
-
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"met_raw\",           \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"met\",               \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"metphi\",            \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"metphir\",           \"passtrig\" )" &
-
-# # # # lumi=0.0081
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"met_raw\",           \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"met\",               \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"metphi\",            \"passtrig\" )" &
-# # # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"metphir\",           \"passtrig\" )" &
-
-# # # # lumi=0.0151
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_0013_phi\",               \"passtrig\" )" 
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_1316_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_1625_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_2530_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_30in_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_0013_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_1316_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_1625_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_2530_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_30in_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_0013_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_1316_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_1625_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_2530_phi\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_30in_phi\",               \"passtrig\" )" &
-
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_0013_pt\",               \"passtrig\" )" 
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_1316_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_1625_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_2530_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"chpfcands_30in_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_0013_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_1316_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_1625_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_2530_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"phpfcands_30in_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_0013_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_1316_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_1625_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_2530_pt\",               \"passtrig\" )" &
-# root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ll\", \"nupfcands_30in_pt\",               \"passtrig\" )" &
-
-# # # lumi=0.0194
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_0013_phi\",               \"passtrig\" )" 
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_30in_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_0013_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_30in_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_0013_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_30in_phi\",               \"passtrig\" )" &
-
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_0013_pt\",               \"passtrig\" )" 
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"chpfcands_30in_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_0013_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"phpfcands_30in_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_0013_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"mm\", \"nupfcands_30in_pt\",               \"passtrig\" )" &
-
-# # # lumi=0.0146
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_0013_phi\",               \"passtrig\" )" 
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_30in_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_0013_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_30in_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_0013_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_1316_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_1625_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_2530_phi\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_30in_phi\",               \"passtrig\" )" &
-
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_0013_pt\",               \"passtrig\" )" 
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"chpfcands_30in_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_0013_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"phpfcands_30in_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_0013_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_1316_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_1625_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_2530_pt\",               \"passtrig\" )" &
-# # # root -b -q "drawDatavsMC.cc+( \"$analysis_version\", $lumi, \"_inclusive\", \"ee\", \"nupfcands_30in_pt\",               \"passtrig\" )" &
-

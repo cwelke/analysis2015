@@ -34,15 +34,23 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   metcut.push_back(0.0);
   metcut.push_back(50);
   metcut.push_back(100);
-  metcut.push_back(150);
+  metcut.push_back(-1);
   printYieldTable( metcut, h_zll, h_pho );
 
   metcut.clear();
+  metcut.push_back(0.0);
+  metcut.push_back(50);
+  metcut.push_back(100);
   metcut.push_back(150);
-  metcut.push_back(225);
-  metcut.push_back(300);
   metcut.push_back(-1);
   printYieldTable( metcut, h_zll, h_pho );
+
+  // metcut.clear();
+  // metcut.push_back(150);
+  // metcut.push_back(225);
+  // metcut.push_back(300);
+  // metcut.push_back(-1);
+  // printYieldTable( metcut, h_zll, h_pho );
 
   //MAKE PLOTS
 
@@ -51,7 +59,7 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   h_zll->Rebin(rebin);
   h_pho->Rebin(rebin);
 
-  float xmax = 350;
+  float xmax = 200;
   
   updateoverflow( h_zll , xmax );
   updateoverflow( h_pho , xmax );
@@ -194,18 +202,22 @@ void printYieldTable( vector <float> metcut, TH1F* h_zll, TH1F* h_pho )
   cout<<"Z+jets& ";
   for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
 	if( bini < val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
+	  if( val_zjets.at(bini) < 0.05 || err_zjets.at(bini) < 0.05 ) cout<<Form(" %.2f $\\pm$ %.2f & ", val_zjets.at(bini), err_zjets.at(bini));
+	  else                                                         cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
 	if( bini == val_zjets.size()-2 )
-	  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+	  if( val_zjets.at(bini) < 0.05 || err_zjets.at(bini) < 0.05 ) cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+	  else                                                         cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
   }
   cout<<endl;
 
   cout<<"$\\mathrm{\\gamma+jets}$& ";
   for( size_t bini = 0; bini < val_gjets.size()-1; bini++ ){
 	if( bini < val_gjets.size()-2 )
-	cout<<Form(" %.1f $\\pm$ %.1f & ", val_gjets.at(bini), err_gjets.at(bini));
+	  if( val_gjets.at(bini) < 0.05 || err_gjets.at(bini) < 0.05 ) cout<<Form(" %.2f $\\pm$ %.2f & ", val_gjets.at(bini), err_gjets.at(bini));
+	  else                                                         cout<<Form(" %.1f $\\pm$ %.1f & ", val_gjets.at(bini), err_gjets.at(bini));
 	if( bini == val_gjets.size()-2 )
-	cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_gjets.at(bini), err_gjets.at(bini));
+	  if( val_gjets.at(bini) < 0.05 || err_zjets.at(bini) < 0.05 ) cout<<Form(" %.2f $\\pm$ %.2f \\\\ ", val_gjets.at(bini), err_gjets.at(bini));
+	  else                                                         cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_gjets.at(bini), err_gjets.at(bini));
   }
   cout<<endl<<"\\hline"<<endl;
 
