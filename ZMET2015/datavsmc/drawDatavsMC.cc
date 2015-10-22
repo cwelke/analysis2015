@@ -15,11 +15,12 @@ using namespace std;
 void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string selection = "_inclusive", string dilep = "ll", string variable = "mll", string region = "passtrig" )
 {
 
-  bool usetemplates   = true;
-  bool usefsbkg       = true;
-  bool applysysts     = true;
-  bool isblind        = true;
-  bool printyields    = true;
+  bool useedgepreds   = false;
+  bool usetemplates   = false;
+  bool usefsbkg       = false;
+  bool applysysts     = false;
+  bool isblind        = false;
+  bool printyields    = false;
 
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
@@ -103,20 +104,22 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	val_ttbar += h_ttv -> Integral(1,50);
 	val_ttbar += h_vvv -> Integral(1,50);
 
-	cout<<"data:  "<<val_data<<endl;
-	cout<<"zjets: "<<val_zjets<<endl;
-	cout<<"ttbar: "<<val_ttbar<<endl;
+	// cout<<"data:  "<<val_data<<endl;
+	// cout<<"zjets: "<<val_zjets<<endl;
+	// cout<<"ttbar: "<<val_ttbar<<endl;
   
 	float scaleval = ((val_data-val_ttbar)/(val_zjets));
 	h_zjets->Scale(scaleval);
-  
+
+	cout<<"Scaling template prediction by: "<<scaleval<<endl;
+	
 	val_data  = h_data  -> Integral(1,50);
 	// val_ttbar = h_ttbar -> Integral(1,50);
 	val_zjets = h_zjets -> Integral(1,50);
 
-	cout<<"data:  "<<val_data<<endl;
-	cout<<"zjets: "<<val_zjets<<endl;
-	cout<<"ttbar: "<<val_ttbar<<endl;
+	// cout<<"data:  "<<val_data<<endl;
+	// cout<<"zjets: "<<val_zjets<<endl;
+	// cout<<"ttbar: "<<val_ttbar<<endl;
 
   }
   else{
@@ -142,6 +145,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	}else{
 
 	  if( TString(selection).Contains("twojets"      ) ){
+		useedgepreds = true;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -151,6 +155,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
 	  }
 	  else if( TString(selection).Contains("3jets_inclusive"      ) ){
+		useedgepreds = true;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -159,6 +164,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
 	  }
 	  else if( TString(selection).Contains("SR_ATLAS"      ) ){
+		useedgepreds = false;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -169,6 +175,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
 	  }
 	  else{
+		useedgepreds = false;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -437,16 +444,34 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	cout<<endl;
 
 	cout<<"\\hline "<<endl;
-	cout<<"Z+jets& ";
-	for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
-	  if( metcut.at(bini) == -1 ) continue;
-	  if( bini < val_zjets.size()-2 )
-		cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
-	  if( bini == val_zjets.size()-2 )
-		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
-	}
-	cout<<endl;
+	
+	if( useedgepreds ){
+	  cout<<"Z background& ";
+	  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+		if( metcut.at(bini) == -1 ) continue;
+		if( bini < val_zjets.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini) + val_vvbkg.at(bini) + val_ttvbg.at(bini) + val_vvvbg.at(bini),
+					 sqrt( pow(err_zjets.at(bini),2) + pow(err_vvbkg.at(bini),2) + pow(err_ttvbg.at(bini),2) + pow(err_vvvbg.at(bini),2)));
+		if( bini == val_zjets.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini) + val_vvbkg.at(bini) + val_ttvbg.at(bini) + val_vvvbg.at(bini),
+					 sqrt( pow(err_zjets.at(bini),2) + pow(err_vvbkg.at(bini),2) + pow(err_ttvbg.at(bini),2) + pow(err_vvvbg.at(bini),2)));
+	  }
+	  cout<<endl;
 
+	}
+	else{
+	  cout<<"Z+jets& ";
+	  for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+		if( metcut.at(bini) == -1 ) continue;
+		if( bini < val_zjets.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_zjets.at(bini), err_zjets.at(bini));
+		if( bini == val_zjets.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_zjets.at(bini), err_zjets.at(bini));
+	  }
+	  cout<<endl;
+
+	}
+	
 	cout<<"FS bkg& ";
 	for( size_t bini = 0; bini < val_fsbkg.size()-1; bini++ ){
 	  if( metcut.at(bini) == -1 ) continue;
@@ -457,40 +482,47 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	}
 	cout<<endl;
 
-  	cout<<"WZ + ZZ bkg& ";
-  	for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
-	  if( metcut.at(bini) == -1 ) continue;
-  	  if( bini < val_vvbkg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-  	  if( bini == val_vvbkg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
-  	}
-  	cout<<endl;
+	if( useedgepreds ){
+	  cout<<"\\hline "<<endl;
 
-  	cout<<"ttv SM BG& ";
-  	for( size_t bini = 0; bini < val_ttvbg.size()-1; bini++ ){
-	  if( metcut.at(bini) == -1 ) continue;
-  	  if( bini < val_ttvbg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini), err_ttvbg.at(bini));
-  	  if( bini == val_ttvbg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini), err_ttvbg.at(bini));
-  	}
-  	cout<<endl;
+	}
+	else{
+	  
+	  cout<<"WZ + ZZ bkg& ";
+	  for( size_t bini = 0; bini < val_vvbkg.size()-1; bini++ ){
+		if( metcut.at(bini) == -1 ) continue;
+		if( bini < val_vvbkg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+		if( bini == val_vvbkg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvbkg.at(bini), err_vvbkg.at(bini));
+	  }
+	  cout<<endl;
 
-  	cout<<"vvv SM BG& ";
-  	for( size_t bini = 0; bini < val_vvvbg.size()-1; bini++ ){
-	  if( metcut.at(bini) == -1 ) continue;
-  	  if( bini < val_vvvbg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvvbg.at(bini), err_vvvbg.at(bini));
-  	  if( bini == val_vvvbg.size()-2 )
-  		cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvvbg.at(bini), err_vvvbg.at(bini));
-  	}
-  	cout<<endl;
+	  cout<<"ttv SM BG& ";
+	  for( size_t bini = 0; bini < val_ttvbg.size()-1; bini++ ){
+		if( metcut.at(bini) == -1 ) continue;
+		if( bini < val_ttvbg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+		if( bini == val_ttvbg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+	  }
+	  cout<<endl;
 
-	// }
-  
-	cout<<"\\hline "<<endl;
-	cout<<"total BG& ";
+	  cout<<"vvv SM BG& ";
+	  for( size_t bini = 0; bini < val_vvvbg.size()-1; bini++ ){
+		if( metcut.at(bini) == -1 ) continue;
+		if( bini < val_vvvbg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+		if( bini == val_vvvbg.size()-2 )
+		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+	  }
+	  cout<<endl;
+
+	  cout<<"\\hline "<<endl;
+
+	}
+
+  	cout<<"total BG& ";
 	for( size_t bini = 0; bini < val_allbg.size()-1; bini++ ){
 	  if( metcut.at(bini) == -1 ) continue;
 	  if( bini < val_allbg.size()-2 )
@@ -574,7 +606,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  xmin = 00;
 	  xmax = 200;
 	  if( usefsbkg ){
-		xmax = 250;
+		xmax = 200;
 		rebin = 25;
 	  }
 	  else

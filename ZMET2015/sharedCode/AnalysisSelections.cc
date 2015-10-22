@@ -57,7 +57,8 @@ bool passSignalRegionSelection( string selection )
 	  )return false; //ATLAS run I SR
   if( TString(selection).Contains("forward"        ) && !((zmet.evt_type() == 0 &&
 														   ((abs(zmet.lep_eta().at(0)) < 1.4 && abs(zmet.lep_eta().at(1)) > 1.6) ||
-															(abs(zmet.lep_eta().at(1)) < 1.4 && abs(zmet.lep_eta().at(0)) > 1.6) ) ) ||
+															(abs(zmet.lep_eta().at(1)) < 1.4 && abs(zmet.lep_eta().at(0)) > 1.6) ||
+															(abs(zmet.lep_eta().at(0)) > 1.6 && abs(zmet.lep_eta().at(1)) > 1.6) ) ) ||
 														  (zmet.evt_type() == 2 ) ) ) return false; //edge forward
   if( TString(selection).Contains("central"        ) && !((zmet.evt_type() == 0 &&
 														   (abs(zmet.lep_eta().at(0)) < 1.4 && abs(zmet.lep_eta().at(1)) < 1.4  ) ) ||

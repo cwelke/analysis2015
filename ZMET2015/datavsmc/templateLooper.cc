@@ -30,9 +30,9 @@ using namespace duplicate_removal;
 const bool debug = false;
 
 const bool usejson              = true;
-const bool dovtxreweighting     = false;
-const bool dotemplateprediction = false;
-const bool dotemplatepredictionmc = true;
+const bool dovtxreweighting     = true;
+const bool dotemplateprediction = true;
+const bool dotemplatepredictionmc = false;
 
 templateLooper::templateLooper()
 {
@@ -81,10 +81,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   // const char* json_file = "json_25ns_remove.txt";
   // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
   // const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
-
-  const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt";
-
+  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt";
   // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10/json/json_150pb_141015_sntformat.txt";
+
+  const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
 
   set_goodrun_file(json_file);
 
@@ -248,21 +248,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		fillHist( "event", "metgt1jet" , "inclusive", event_met_pt        , weight );
 	  }
 
-	  if( rawmet_pt > 50.0  ) fillHist( "event", "mll_metrawgt50"  , "passtrig", zmet.dilmass() , weight );
-	  if( rawmet_pt > 100.0 ) fillHist( "event", "mll_metrawgt100" , "passtrig", zmet.dilmass() , weight );
-	  if( rawmet_pt > 150.0 ) fillHist( "event", "mll_metrawgt150" , "passtrig", zmet.dilmass() , weight );
-	  if( rawmet_pt > 225.0 ) fillHist( "event", "mll_metrawgt225" , "passtrig", zmet.dilmass() , weight );
-	  if( rawmet_pt > 300.0 ) fillHist( "event", "mll_metrawgt300" , "passtrig", zmet.dilmass() , weight );
-	  
-	  if( !(zmet.dilmass() > 71 && zmet.dilmass() < 111) ) continue; // HT > 100
-	  if( zmet.njets() > 1 ){
-		fillHist( "event", "metRaw_TopDiscovery", "passtrig", zmet.met_rawPt()             , weight );
-		fillHist( "event", "metT-1_TopDiscovery", "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );
-	  }
-	  
 	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
 	  if( zmet.njets() > 1 ){
 		if( zmet.hyp_type() == 2 ) nem_2jets_mll += weight;	  
+	  }
+
+	  if( zmet.hyp_type()==2 && zmet.evt_type()==0 && ((event_met_pt > 150 && zmet.njets() == 2) || (event_met_pt > 100 && zmet.njets() >= 3)) ){
+		// cout<<zmet.run()<<" | "<< zmet.lumi()<<" | "<<zmet.evt()<<endl;
+		cout<<zmet.evt()<<" | "<<zmet.rho()<<" | "<<event_met_pt<<" | "<< zmet.met_pt()<<" | "<< zmet.met_T1CHSNoHF_fromCORE_pt()<<" | "<<zmet.jet_pt().at(0)<<" | "<<zmet.jet_pt().at(1)<<endl;
 	  }
 	  
 	  //-~-~-~-~-~-~-~-~-//
@@ -297,26 +290,24 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  
 	  if( zmet.nlep() > 2 ){
 	  	fillHist( "event", "mt3", "threelep", mt, weight );	  
-
-		fillHist( "event", "njets"                 , "threelep", zmet.njets()        , weight );
-		fillHist( "event", "nbjets"                , "threelep", zmet.nBJetMedium()  , weight );
-		fillHist( "event", "met"                   , "threelep", event_met_pt        , weight );
-		fillHist( "event", "met_raw"               , "threelep", zmet.met_rawPt()    , weight );
-		fillHist( "event", "ht"                    , "threelep", zmet.ht()           , weight );
-		fillHist( "event", "ptl1"                  , "threelep", zmet.lep_pt().at(0) , weight );	  
-		fillHist( "event", "ptl2"                  , "threelep", zmet.lep_pt().at(1) , weight );	  
-		fillHist( "event", "nVert"                 , "threelep", zmet.nVert()        , weight );	  
-		fillHist( "event", "ptdil"                 , "threelep", zmet.dilpt()        , weight );	  
-		fillHist( "event", "metphi"                , "threelep", event_met_ph        , weight );	  
-		fillHist( "event", "metphir"               , "threelep", zmet.met_rawPhi()   , weight );	  
-		fillHist( "event", "met_mettoolbox"        , "threelep", zmet.met_T1CHS_pt()          , weight );	  
-		fillHist( "event", "met_mettoolboxNoHF"    , "threelep", zmet.met_T1CHSNoHF_pt()      , weight );	  
-		fillHist( "event", "met_mettoolboxNoHFraw" , "threelep", zmet.met_rawNoHF_pt()        , weight );	  	  
-		fillHist( "event", "met_CORE"              , "threelep", zmet.met_T1CHS_fromCORE_pt()     , weight );	  
-		fillHist( "event", "met3p0_CORE"           , "threelep", zmet.met_T1CHSNoHF_fromCORE_pt() , weight );	  
-		fillHist( "event", "met3p0_raw"            , "threelep", zmet.met_rawNoHF_pt()            , weight );	  
-		fillHist( "event", "met3p0_raw_phi"        , "threelep", zmet.met_rawNoHF_phi()           , weight );	  
-
+	  	fillHist( "event", "njets"                 , "threelep", zmet.njets()        , weight );
+	  	fillHist( "event", "nbjets"                , "threelep", zmet.nBJetMedium()  , weight );
+	  	fillHist( "event", "met"                   , "threelep", event_met_pt        , weight );
+	  	fillHist( "event", "met_raw"               , "threelep", zmet.met_rawPt()    , weight );
+	  	fillHist( "event", "ht"                    , "threelep", zmet.ht()           , weight );
+	  	fillHist( "event", "ptl1"                  , "threelep", zmet.lep_pt().at(0) , weight );	  
+	  	fillHist( "event", "ptl2"                  , "threelep", zmet.lep_pt().at(1) , weight );	  
+	  	fillHist( "event", "nVert"                 , "threelep", zmet.nVert()        , weight );	  
+	  	fillHist( "event", "ptdil"                 , "threelep", zmet.dilpt()        , weight );	  
+	  	fillHist( "event", "metphi"                , "threelep", event_met_ph        , weight );	  
+	  	fillHist( "event", "metphir"               , "threelep", zmet.met_rawPhi()   , weight );	  
+	  	fillHist( "event", "met_mettoolbox"        , "threelep", zmet.met_T1CHS_pt()          , weight );	  
+	  	fillHist( "event", "met_mettoolboxNoHF"    , "threelep", zmet.met_T1CHSNoHF_pt()      , weight );	  
+	  	fillHist( "event", "met_mettoolboxNoHFraw" , "threelep", zmet.met_rawNoHF_pt()        , weight );	  	  
+	  	fillHist( "event", "met_CORE"              , "threelep", zmet.met_T1CHS_fromCORE_pt()     , weight );	  
+	  	fillHist( "event", "met3p0_CORE"           , "threelep", zmet.met_T1CHSNoHF_fromCORE_pt() , weight );	  
+	  	fillHist( "event", "met3p0_raw"            , "threelep", zmet.met_rawNoHF_pt()            , weight );	  
+	  	fillHist( "event", "met3p0_raw_phi"        , "threelep", zmet.met_rawNoHF_phi()           , weight );	  
 	  }
 	  
 	  if( event_met_pt < 50 && zmet.hyp_type() == 2 ) nem_2jets += weight;

@@ -63,10 +63,12 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
   // const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb with bad data
 
-  const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt"; // updated, need more cms3
+  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt"; // updated, need more cms3
 
   // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10/json/json_150pb_141015_sntformat.txt";
 
+  const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
+  
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");

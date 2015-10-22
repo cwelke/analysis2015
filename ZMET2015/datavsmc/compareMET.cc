@@ -31,24 +31,26 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   //MAKE TABLES
   vector <float> metcut;
 
-  metcut.push_back(0.0);
-  metcut.push_back(50);
-  metcut.push_back(100);
-  metcut.push_back(-1);
-  printYieldTable( metcut, h_zll, h_pho );
+  // metcut.push_back(0.0);
+  // metcut.push_back(50);
+  // metcut.push_back(100);
+  // metcut.push_back(-1);
+  // printYieldTable( metcut, h_zll, h_pho );
 
   metcut.clear();
   metcut.push_back(0.0);
   metcut.push_back(50);
   metcut.push_back(100);
   metcut.push_back(150);
+  metcut.push_back(150);
+  metcut.push_back(225);
   metcut.push_back(-1);
   printYieldTable( metcut, h_zll, h_pho );
 
   // metcut.clear();
   // metcut.push_back(150);
   // metcut.push_back(225);
-  // metcut.push_back(300);
+  // // metcut.push_back(300);
   // metcut.push_back(-1);
   // printYieldTable( metcut, h_zll, h_pho );
 
@@ -59,7 +61,7 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   h_zll->Rebin(rebin);
   h_pho->Rebin(rebin);
 
-  float xmax = 200;
+  float xmax = 350;
   
   updateoverflow( h_zll , xmax );
   updateoverflow( h_pho , xmax );

@@ -36,10 +36,6 @@ fi
 # selection="_forward_with2_3jets_inclusive"
 # ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
 
-# selection="_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
-# selection="_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
 # selection="_rawMET_bveto_SRB"
 # ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
 # selection="_rawMET_withb_SRB"
@@ -64,23 +60,25 @@ fi
 # selection="_central_with2_3jets_inclusive"
 # ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
 
-# selection="_forward_twojets"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_forward_withb_twojets"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_forward_with2_twojets"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_forward_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_forward_withb_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_forward_with2_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_twojets"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_withb_twojets"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_with2_twojets"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_3jets_inclusive"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_withb_3jets_inclusive"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+selection="_forward_with2_3jets_inclusive"
+./makePhotonTemplates $selection $analysis_version data dohtreweighting &
 
-# selection="_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
-# selection="_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
+
+# selection="_rawMET_SRB"
+# ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
+# selection="_rawMET_SRA"
+# ./makePhotonTemplates $selection $analysis_version data dontdohtreweighting &
+
 # selection="_rawMET_bveto_SRB"
 # ./makePhotonTemplates $selection $analysis_version data dohtreweighting &
 # selection="_rawMET_withb_SRB"
@@ -155,10 +153,6 @@ fi
 # selection="_forward_with2_3jets_inclusive"
 # ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
 
-# selection="_inclusive"
-# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
-# selection="_3jets_inclusive"
-# ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
 # selection="_rawMET_bveto_SRB"
 # ./makePhotonTemplates $selection $analysis_version All_MC dohtreweighting &
 # selection="_rawMET_withb_SRB"

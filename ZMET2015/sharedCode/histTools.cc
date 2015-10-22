@@ -63,7 +63,8 @@ void drawCMSLatex( TCanvas * &canvas, float luminosity )
 
   canvas->cd();
   TLatex *lumitex = NULL;
-  lumitex = new TLatex(0.66,0.955, Form("%.1f pb^{-1} (13 TeV)", luminosity*1000) );    
+  lumitex = new TLatex(0.66,0.955, Form("%.1f fb^{-1} (13 TeV)", luminosity) );    
+  // lumitex = new TLatex(0.66,0.955, Form("%.1f pb^{-1} (13 TeV)", luminosity*1000) );    
   // lumitex = new TLatex(0.66,0.955, Form("few pb^{-1} (13 TeV)") );    
   lumitex->SetNDC();    
   lumitex->SetTextSize(0.04);    
@@ -117,6 +118,7 @@ void getBackground( TH1F* &backgroundhist, std::string iter, std::string bgfilep
 void getTemplateMET( TH1F* &methist, std::string iter, std::string bgfileprefix )
 {
   std::string filename = Form("../output/%s/%s_hists.root", iter.c_str(), bgfileprefix.c_str() );
+  cout<<"Getting template MET from "<<filename<<endl;
   TFile *infile = TFile::Open(filename.c_str(),"READ");
   methist = dynamic_cast<TH1F*>(infile->Get("h_templ_met")->Clone(Form("methist_%s", bgfileprefix.c_str())));  
   return;
