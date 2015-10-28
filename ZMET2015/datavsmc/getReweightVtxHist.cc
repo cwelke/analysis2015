@@ -9,8 +9,8 @@ using namespace std;
 void getReweightVtxHist()
 {
 
-  TFile * f_data = TFile::Open("../output/V07-04-11/data_inclusive_novtxweight_hists.root"  , "READ");
-  TFile * f_zjet = TFile::Open("../output/V07-04-11/zjets_inclusive_novtxweight_hists.root" , "READ");
+  TFile * f_data = TFile::Open("../output/V07-04-12/data_inclusive_novtxweight_hists.root"  , "READ");
+  TFile * f_zjet = TFile::Open("../output/V07-04-12/zjets_inclusive_novtxweight_hists.root" , "READ");
 
   TH1F * h_data = (TH1F*)f_data->Get("h_ll_event_nVert_passtrig")->Clone("h_data");
   TH1F * h_zjet = (TH1F*)f_zjet->Get("h_ll_event_nVert_passtrig")->Clone("h_zjet");

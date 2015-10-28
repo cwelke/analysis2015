@@ -20,7 +20,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   bool usefsbkg       = false;
   bool applysysts     = false;
   bool isblind        = false;
-  bool printyields    = false;
+  bool printyields    = true;
 
   TH1F * h_data  = NULL;
   TH1F * h_zjets = NULL;
@@ -80,7 +80,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_st ->Scale(luminosity);
   h_ww ->Scale(luminosity);
   h_wz ->Scale(luminosity);
-  h_zz ->Scale(0);
+  h_zz ->Scale(luminosity);
   h_ttv->Scale(luminosity);
   h_vvv->Scale(luminosity);
 
@@ -96,13 +96,15 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	// h_ttbar->Scale(0.13);
 	// h_zjets->Scale(1./h_zjets->GetSumOfWeights());
 
-	float val_data  = h_data  -> Integral(1,50);
-	float val_ttbar = h_ttbar -> Integral(1,50);
-	float val_zjets = h_zjets -> Integral(1,50);
-	val_ttbar += h_wz  -> Integral(1,50);
-	val_ttbar += h_zz  -> Integral(1,50);
-	val_ttbar += h_ttv -> Integral(1,50);
-	val_ttbar += h_vvv -> Integral(1,50);
+	float normmethigh = 50;
+	
+	float val_data  = h_data  -> Integral(1,normmethigh);
+	float val_ttbar = h_ttbar -> Integral(1,normmethigh);
+	float val_zjets = h_zjets -> Integral(1,normmethigh);
+	val_ttbar += h_wz  -> Integral(1,normmethigh);
+	val_ttbar += h_zz  -> Integral(1,normmethigh);
+	val_ttbar += h_ttv -> Integral(1,normmethigh);
+	val_ttbar += h_vvv -> Integral(1,normmethigh);
 
 	// cout<<"data:  "<<val_data<<endl;
 	// cout<<"zjets: "<<val_zjets<<endl;
@@ -113,9 +115,9 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
 	cout<<"Scaling template prediction by: "<<scaleval<<endl;
 	
-	val_data  = h_data  -> Integral(1,50);
-	// val_ttbar = h_ttbar -> Integral(1,50);
-	val_zjets = h_zjets -> Integral(1,50);
+	val_data  = h_data  -> Integral(1,normmethigh);
+	// val_ttbar = h_ttbar -> Integral(1,normmethigh);
+	val_zjets = h_zjets -> Integral(1,normmethigh);
 
 	// cout<<"data:  "<<val_data<<endl;
 	// cout<<"zjets: "<<val_zjets<<endl;
@@ -141,7 +143,42 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  // metcut.push_back(165);
 	  // metcut.push_back(185);
 	  metcut.push_back(-1);
+	}
+	
+	else if( variable == "njets" || TString(variable).Contains("njt") ){
+	  metcut.clear();
+	  metcut.push_back(0);
+	  // metcut.push_back(1);
+	  // metcut.push_back(2);
+	  // metcut.push_back(3);
+	  // metcut.push_back(4);
+	  metcut.push_back(-1);
+	}
+	
+	else if( TString(selection).Contains("CR") && (variable == "met" || variable == "metall") ){
+	  metcut.clear();
+	  metcut.push_back(0);
+	  metcut.push_back(-1);
 
+	  if( TString(selection).Contains("CR3") && variable == "metall" ){
+		metcut.clear();
+		metcut.push_back(0);
+		metcut.push_back(50);
+		metcut.push_back(100);
+		metcut.push_back(150);
+		metcut.push_back(-1);
+	  }
+
+	  if( TString(selection).Contains("CR4") && variable == "metall" ){
+		metcut.clear();
+		metcut.push_back(0);
+		metcut.push_back(10);
+		metcut.push_back(20);
+		metcut.push_back(30);
+		metcut.push_back(40);
+		metcut.push_back(-1);
+	  }
+	  
 	}else{
 
 	  if( TString(selection).Contains("twojets"      ) ){
@@ -602,16 +639,31 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   if( TString(variable).Contains("met") ){
 	if( dilep == "em" ) rebin = 10;
-	else rebin = 5;
-	  xmin = 00;
+	else rebin = 10;
+	xmin = 00;
+	xmax = 200;
+	if( usefsbkg ){
+	  xmax = 350;
+	  rebin = 25;
+	}
+	else{
 	  xmax = 200;
-	  if( usefsbkg ){
-		xmax = 200;
-		rebin = 25;
+	  if( variable == "metall" ){
+
+		if( TString(selection).Contains("CR3") ){
+		  xmax = 150;
+		  rebin = 10;
+		  ymax = 2e0;
+		}
+
+		if( TString(selection).Contains("CR4") ){
+		  xmax = 50;
+		  rebin = 10;
+		  ymax = 2e0;
+		}
+
 	  }
-	  else
-		xmax = 200;
-	  ymax = 5e1;
+	}
   }
 
   if( variable == "ht" || TString(variable).Contains("sumet") ){
@@ -632,11 +684,26 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
     // ymax = 5e1;
 	rebin = 5;
   }
-  if( variable == "nbjets" || variable == "njets" || variable == "nFWjets" ){
+  if( variable == "nbjets" || variable == "njets" || variable == "nFWjets" || TString(variable).Contains("njt") ){
 	xmin = 0;
 	xmax = 10;
     ymax = 5e1;
 	rebin = 1;
+
+	if( TString(selection).Contains("CR3") ){
+	  xmin = 0;
+	  xmax = 5;
+	  ymax = 3e0;
+	  rebin = 1;
+	}
+
+	if( TString(selection).Contains("CR4") ){
+	  xmin = 0;
+	  xmax = 5;
+	  ymax = 2e0;
+	  rebin = 1;
+	}
+
   }
   if( TString(variable).Contains("phi") || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" ){
 	xmin = -3.2;
@@ -679,7 +746,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   pad->SetLeftMargin(0.18);
   pad->Draw();
   pad->cd();
-  if( !(TString(variable).Contains("phi") || variable == "nVert" || variable == "mhtphi" || dilep == "em" || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir") ){
+  if( !(TString(variable).Contains("phi") || variable == "nVert" || variable == "mhtphi" || dilep == "em" || variable == "metphi" || variable == "metphi20" || variable == "metphi40" || variable == "metphi60" || variable == "metphir" || TString(variable).Contains("njt") || variable == "metall") ){
 	pad->SetLogy();
   }
   
@@ -799,7 +866,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	h_data->GetYaxis()->SetRangeUser(0, h_data->GetMaximum()*1.4 );  
   }
 
-if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Events", (2*3.14159)/200*(float)rebin));
+  if( TString(variable).Contains("njets") || TString(variable).Contains("njt") )h_data->GetYaxis()->SetTitle("Events");
   
   h_data->GetXaxis()->SetRangeUser(xmin, xmax);
   h_data->SetMarkerStyle(8);
@@ -885,7 +952,7 @@ if( TString(variable).Contains("njets") )h_data->GetYaxis()->SetTitle(Form("Even
   if( TString(variable).Contains("mhtphi") ) h_rat->GetXaxis()->SetTitle("H_{T} Phi");
   if( variable == "ht"                  ) h_rat->GetXaxis()->SetTitle("H_{T} GeV");
   if( TString(variable).Contains("pt")  ) h_rat->GetXaxis()->SetTitle("p_{T} GeV");
-  if( variable == "njets"               ) h_rat->GetXaxis()->SetTitle("N_{jets}");  
+  if( variable == "njets"  || TString(variable).Contains("njt") ) h_rat->GetXaxis()->SetTitle("N_{jets}");  
   if( variable == "nbjets"               ) h_rat->GetXaxis()->SetTitle("N_{b-jets}");  
   if( variable == "mll"                 ) h_rat->GetXaxis()->SetTitle("M_{\\ell\\ell} GeV");
   if( TString(variable).Contains("phi") ) h_rat->GetXaxis()->SetTitle("E_{T}^{miss} #phi");

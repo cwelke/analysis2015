@@ -81,6 +81,8 @@ class babyMaker {
   Float_t         dRll;
 
   Float_t         matched_neutralemf; // neutral em fraction for jet closest to photon within dR = .1
+  Float_t         matched_emf;        // neutral + charged em fraction for jet closest to photon within dR = .1
+
   Bool_t          elveto; // Reject photons which have electron of pT > 10 GeV within dR < 0.2
 
   // update

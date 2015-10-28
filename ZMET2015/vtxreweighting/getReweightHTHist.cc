@@ -28,22 +28,22 @@ void getReweightHTHist( string signalregion )
 
  
 
-  // if( TString(signalregion).Contains("withb_SRB") ){
-  if( TString(signalregion).Contains("SRB") ){
+  // // if( TString(signalregion).Contains("withb_SRB") ){
+  // if( TString(signalregion).Contains("SRB") ){
 
-	f_data = TFile::Open("../output/V07-04-11/data_rawMET_SRB_novtxweight_hists.root"        , "READ");			  
-	f_phot = TFile::Open("../output/V07-04-11/data_rawMET_SRB_novtxweight_nohtweight_templates.root" , "READ");
-  }
-  else if( TString(signalregion).Contains("SRA") ){
+  // 	f_data = TFile::Open("../output/V07-04-12/data_rawMET_SRB_novtxweight_hists.root"        , "READ");			  
+  // 	f_phot = TFile::Open("../output/V07-04-12/data_rawMET_SRB_novtxweight_nohtweight_templates.root" , "READ");
+  // }
+  // else if( TString(signalregion).Contains("SRA") ){
 
-	f_data = TFile::Open("../output/V07-04-11/data_rawMET_SRA_novtxweight_hists.root"        , "READ");			  
-	f_phot = TFile::Open("../output/V07-04-11/data_rawMET_SRA_novtxweight_nohtweight_templates.root" , "READ");
-  }
+  // 	f_data = TFile::Open("../output/V07-04-12/data_rawMET_SRA_novtxweight_hists.root"        , "READ");			  
+  // 	f_phot = TFile::Open("../output/V07-04-12/data_rawMET_SRA_novtxweight_nohtweight_templates.root" , "READ");
+  // }
 
-  else{
-	f_data = TFile::Open(Form("../output/V07-04-11/data_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");			  
-	f_phot = TFile::Open(Form("../output/V07-04-11/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
-  }
+  // else{
+	f_data = TFile::Open(Form("../output/V07-04-12/data_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");			  
+	f_phot = TFile::Open(Form("../output/V07-04-12/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
+  // }
   
   // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/data_%s_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
 
@@ -221,8 +221,8 @@ void getReweightScheme(vector <double> &binning, string selection )
 	  binning.push_back(140);
 	  binning.push_back(150);
 	  binning.push_back(200);
-	  binning.push_back(250);
-	  binning.push_back(350);
+	  // binning.push_back(250);
+	  // binning.push_back(350);
 	  binning.push_back(3000);
 	}
 
@@ -242,14 +242,14 @@ void getReweightScheme(vector <double> &binning, string selection )
   
   else if( TString(selection).Contains("SR_ATLAS") ){
 	binning.push_back(0);
-	binning.push_back(33);
+	// binning.push_back(33);
 	binning.push_back(50);
-	binning.push_back(75);
-	binning.push_back(90);
+	// binning.push_back(75);
+	// binning.push_back(90);
 	binning.push_back(120);
 	binning.push_back(165);
-	binning.push_back(200);
-	binning.push_back(300);
+	// binning.push_back(200);
+	// binning.push_back(300);
   	binning.push_back(3000);
   }
 

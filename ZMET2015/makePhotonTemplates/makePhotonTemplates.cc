@@ -206,8 +206,8 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  float event_met_ph = zmet.met_phi();
 	  event_met_pt = zmet.met_rawPt();
 	  event_met_ph = zmet.met_rawPhi();	  
-	  event_met_pt = zmet.met_T1CHS_fromCORE_pt();
-	  event_met_ph = zmet.met_T1CHS_fromCORE_phi();
+	  event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt(); // use miniAOD jets with 15 GeV
+	  event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();
 
 	  float evt_ht    = zmet.ht();
 

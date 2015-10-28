@@ -14,6 +14,28 @@ fi
 ## for studies ##
 #################
 
+selection="_CR3lep"
+./runTemplateLooper $selection $analysis_version data  &
+./runTemplateLooper $selection $analysis_version zjets &
+./runTemplateLooper $selection $analysis_version ttbar &
+./runTemplateLooper $selection $analysis_version st &
+./runTemplateLooper $selection $analysis_version ww &
+./runTemplateLooper $selection $analysis_version wz &
+./runTemplateLooper $selection $analysis_version zz &
+./runTemplateLooper $selection $analysis_version ttv &
+./runTemplateLooper $selection $analysis_version vvv &
+
+# selection="_CR4lep"
+# ./runTemplateLooper $selection $analysis_version data  &
+# ./runTemplateLooper $selection $analysis_version zjets &
+# ./runTemplateLooper $selection $analysis_version ttbar &
+# ./runTemplateLooper $selection $analysis_version st &
+# ./runTemplateLooper $selection $analysis_version ww &
+# ./runTemplateLooper $selection $analysis_version wz &
+# ./runTemplateLooper $selection $analysis_version zz &
+# ./runTemplateLooper $selection $analysis_version ttv &
+# ./runTemplateLooper $selection $analysis_version vvv &
+
 # selection="_inclusive"
 # ./runTemplateLooper $selection $analysis_version data  &
 # ./runTemplateLooper $selection $analysis_version zjets &
@@ -138,16 +160,16 @@ fi
 
 
 
-selection="_forward_twojets"
-./runTemplateLooper $selection $analysis_version data &
-# ./runTemplateLooper $selection $analysis_version zjets &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-# ./runTemplateLooper $selection $analysis_version st &
-# ./runTemplateLooper $selection $analysis_version ww &
-# ./runTemplateLooper $selection $analysis_version wz &
-# ./runTemplateLooper $selection $analysis_version zz &
-# ./runTemplateLooper $selection $analysis_version ttv &
-# ./runTemplateLooper $selection $analysis_version vvv &
+# selection="_forward_twojets"
+# ./runTemplateLooper $selection $analysis_version data &
+# # ./runTemplateLooper $selection $analysis_version zjets &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# # ./runTemplateLooper $selection $analysis_version st &
+# # ./runTemplateLooper $selection $analysis_version ww &
+# # ./runTemplateLooper $selection $analysis_version wz &
+# # ./runTemplateLooper $selection $analysis_version zz &
+# # ./runTemplateLooper $selection $analysis_version ttv &
+# # ./runTemplateLooper $selection $analysis_version vvv &
 
 # selection="_forward_withb_twojets"
 # ./runTemplateLooper $selection $analysis_version data &
@@ -171,16 +193,16 @@ selection="_forward_twojets"
 # # ./runTemplateLooper $selection $analysis_version ttv &
 # # ./runTemplateLooper $selection $analysis_version vvv &
 
-selection="_forward_3jets_inclusive"
-./runTemplateLooper $selection $analysis_version data &
-# ./runTemplateLooper $selection $analysis_version zjets &
-# ./runTemplateLooper $selection $analysis_version ttbar &
-# ./runTemplateLooper $selection $analysis_version st &
-# ./runTemplateLooper $selection $analysis_version ww &
-# ./runTemplateLooper $selection $analysis_version wz &
-# ./runTemplateLooper $selection $analysis_version zz &
-# ./runTemplateLooper $selection $analysis_version ttv &
-# ./runTemplateLooper $selection $analysis_version vvv &
+# selection="_forward_3jets_inclusive"
+# ./runTemplateLooper $selection $analysis_version data &
+# # ./runTemplateLooper $selection $analysis_version zjets &
+# # ./runTemplateLooper $selection $analysis_version ttbar &
+# # ./runTemplateLooper $selection $analysis_version st &
+# # ./runTemplateLooper $selection $analysis_version ww &
+# # ./runTemplateLooper $selection $analysis_version wz &
+# # ./runTemplateLooper $selection $analysis_version zz &
+# # ./runTemplateLooper $selection $analysis_version ttv &
+# # ./runTemplateLooper $selection $analysis_version vvv &
 
 # selection="_forward_withb_3jets_inclusive"
 # ./runTemplateLooper $selection $analysis_version data &

@@ -28,7 +28,10 @@ cp ../json/json_270715_golden.txt .
 # ./processBaby test_data /hadoop/cms/store/group/snt/run2_data/Run2015D_DoubleEG_MINIAOD_PromptReco-v3/merged/V07-04-09/merged_ntuple_1.root
 
 
-./processBaby edge_sync /home/users/cwelke/MCNtupling/CMSSW_7_4_14_CMS3_V07-04-11/src/ntuple_pp.root
+# ./processBaby edge_sync /home/users/cwelke/MCNtupling/CMSSW_7_4_14_CMS3_V07-04-11/src/ntuple_pp.root
+
+# ./processBaby data_ph /hadoop/cms/store/group/snt/run2_data/Run2015D_SinglePhoton_MINIAOD_05Oct2015-v1/merged//V07-04-11/merged_ntuple_1.root
+./processBaby mc_ph /hadoop/cms/store/group/snt/run2_25ns_MiniAODv2/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/V07-04-11/merged_ntuple_1.root
 
 # ./processBaby test_zjnunu /hadoop/cms/store/group/snt/run2_25ns_MiniAODv2/ZJetsToNuNu_HT-400To600_13TeV-madgraph_RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/V07-04-10/merged_ntuple_1.root
 

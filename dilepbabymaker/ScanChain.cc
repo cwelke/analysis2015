@@ -124,10 +124,11 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  
 	  if( TString(currentFile->GetTitle()).Contains("Run2015D") ){
 		// files for 25ns Data
-        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L1FastJet_AK4PFchs.txt"   );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L2Relative_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV2_MC_L3Absolute_AK4PFchs.txt"  );
-		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
+        jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5ch1pv_DATA_L1FastJet_AK4PFchs.txt"   );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_DATA_L2Relative_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV5_DATA_L3Absolute_AK4PFchs.txt"  );
+		jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_25nsV3M3_DATA_L2L3Residual_AK4PFchs.txt");
+		// jetcorr_filenames_pfL1FastJetL2L3.push_back  ("jetCorrections/Summer15_50nsV4_DATA_L2L3Residual_AK4PFchs.txt");
 
 	  }
 	  
@@ -632,12 +633,15 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 	  
       //JETS
       //correct jets and check baseline selections
-      vector<LorentzVector> p4sCorrJets; // store corrected p4 for ALL jets, so indices match CMS3 ntuple
-      vector<int> passJets; //index of jets that pass baseline selections
+      vector < LorentzVector> p4sCorrJets; // store corrected p4 for ALL jets, so indices match CMS3 ntuple
+      vector < double       > jet_corrfactor; // store correction for ALL jets, and indices match CMS3 ntuple
+      vector < int          > passJets; //index of jets that pass baseline selections
+
       for(unsigned int iJet = 0; iJet < cms3.pfjets_p4().size(); iJet++){
 
 		LorentzVector pfjet_p4_cor = cms3.pfjets_p4().at(iJet);
 
+		double corr = 1.0;
 		if (applyJECfromFile) {
 
 		  // get uncorrected jet p4 to use as input for corrections
@@ -648,7 +652,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  jet_corrector_pfL1FastJetL2L3->setJetA  ( cms3.pfjets_area().at(iJet)       );
 		  jet_corrector_pfL1FastJetL2L3->setJetPt ( pfjet_p4_uncor.pt()               );
 		  jet_corrector_pfL1FastJetL2L3->setJetEta( pfjet_p4_uncor.eta()              );
-		  double corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
+		  corr = jet_corrector_pfL1FastJetL2L3->getCorrection();
 
 		  // apply new JEC to p4
 		  pfjet_p4_cor = pfjet_p4_uncor * corr;
@@ -656,7 +660,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		}
 		
 		p4sCorrJets.push_back(pfjet_p4_cor);
-		
+		jet_corrfactor.push_back(corr);
+  
 		if(p4sCorrJets.at(iJet).pt() < 10.0) continue; 
         if(fabs(p4sCorrJets.at(iJet).eta()) > 5.2) continue;
 		// note this uses the eta of the jet as stored in CMS3
@@ -689,7 +694,8 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  		  }
  		} // end jet loop
  		if( minIndex > -1 ){
- 		  matched_neutralemf = cms3.pfjets_neutralEmE().at(minIndex) / p4sCorrJets.at(minIndex).energy();
+ 		  matched_neutralemf = ( cms3.pfjets_neutralEmE().at(minIndex)                                         ) / (p4sCorrJets.at(minIndex).energy()/jet_corrfactor.at(minIndex));
+ 		  matched_emf        = ( cms3.pfjets_neutralEmE().at(minIndex) + cms3.pfjets_chargedEmE().at(minIndex) ) / (p4sCorrJets.at(minIndex).energy()/jet_corrfactor.at(minIndex));
  		}	  
  	  
  		if (verbose) cout << "before checking for photon/electron overlap" << endl;
@@ -798,7 +804,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
             break;
           }
         }
-        if(evt_type == 0 && isOverlapJet) continue;
+        if(( evt_type == 0 || evt_type == 1 ) && isOverlapJet) continue;
 
         //check against list of jets that overlap with a photon for photon+jets events
         bool isOverlapJetGamma = false;
@@ -1072,6 +1078,7 @@ void babyMaker::MakeBabyNtuple(const char *BabyFilename){
   BabyTree_->Branch("dRll"   , &dRll );
 
   BabyTree_->Branch("matched_neutralemf", &matched_neutralemf );
+  BabyTree_->Branch("matched_emf"       , &matched_emf );
   BabyTree_->Branch("elveto", &elveto );
 
   BabyTree_->Branch("nlep", &nlep, "nlep/I" );
@@ -1287,6 +1294,7 @@ void babyMaker::InitBabyNtuple () {
   dRll    = -999;
  
   matched_neutralemf = -999.0;
+  matched_emf = -999.0;
   elveto = false;  
  
   hyp_type = -999;

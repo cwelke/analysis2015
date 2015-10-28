@@ -31,7 +31,7 @@ const bool debug = false;
 
 const bool usejson              = true;
 const bool dovtxreweighting     = true;
-const bool dotemplateprediction = true;
+const bool dotemplateprediction = false;
 const bool dotemplatepredictionmc = false;
 
 templateLooper::templateLooper()
@@ -193,8 +193,11 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  // event_met_pt = zmet.met_rawPt();
 	  // event_met_ph = zmet.met_rawPhi();	  
 
-	  event_met_pt = zmet.met_T1CHS_fromCORE_pt();
-	  event_met_ph = zmet.met_T1CHS_fromCORE_phi();
+	  // event_met_pt = zmet.met_T1CHS_fromCORE_pt();
+	  // event_met_ph = zmet.met_T1CHS_fromCORE_phi();
+
+	  // event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt(); // use miniAOD jets with 15 GeV
+	  // event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();
 	  
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
@@ -222,10 +225,10 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
-	  if( !(zmet.hyp_type() == 0 ||					     
-			zmet.hyp_type() == 1 ||					     
-			zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
-	  if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sign
+	  // if( !(zmet.hyp_type() == 0 ||					     
+	  // 		zmet.hyp_type() == 1 ||					     
+	  // 		zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
+	  // if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sign
 
       if( !usejson && zmet.isData() && !zmet.evt_passgoodrunlist()   ) continue;
 	  fillHist( "event", "mll"  , "inclusive", zmet.dilmass()  , weight );
@@ -234,11 +237,19 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		fillHist( "event", "nVert", "inclusive", zmet.nVert()  , weight );	  
 	  }
 
-	  if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   ) && zmet.hyp_type() == 1 )  ||
-			(( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()) && zmet.hyp_type() == 0 )  ||
-			( zmet.HLT_MuEG() && zmet.hyp_type() == 2 )
-			)           ) continue;
-
+	  if( TString(selection).Contains("CR") && zmet.evt_type() != 2 ){
+		if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   || zmet.HLT_DoubleMu_noiso() )) ||
+			  (( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()                             )) ||
+			  (( zmet.HLT_MuEG()        || zmet.HLT_MuEG_noiso()                                 ))
+			  )           ) continue;
+	  }else{
+	  
+		if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   || zmet.HLT_DoubleMu_noiso() ) && zmet.hyp_type() == 1 ) ||
+			  (( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()                             ) && zmet.hyp_type() == 0 ) ||
+			  (( zmet.HLT_MuEG()        || zmet.HLT_MuEG_noiso()                                 ) && zmet.hyp_type() == 2 )
+			  )           ) continue;
+	  }
+		  
 	  float rawmet_pt = zmet.met_rawPt();
 	  // float rawmet_phi = zmet.met_rawPhi();
 
@@ -248,16 +259,37 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		fillHist( "event", "metgt1jet" , "inclusive", event_met_pt        , weight );
 	  }
 
-	  if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
+	  if( !(TString(selection).Contains("CR") && zmet.evt_type() != 2) ){
+		if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
+	  }
+
 	  if( zmet.njets() > 1 ){
 		if( zmet.hyp_type() == 2 ) nem_2jets_mll += weight;	  
 	  }
 
-	  if( zmet.hyp_type()==2 && zmet.evt_type()==0 && ((event_met_pt > 150 && zmet.njets() == 2) || (event_met_pt > 100 && zmet.njets() >= 3)) ){
-		// cout<<zmet.run()<<" | "<< zmet.lumi()<<" | "<<zmet.evt()<<endl;
-		cout<<zmet.evt()<<" | "<<zmet.rho()<<" | "<<event_met_pt<<" | "<< zmet.met_pt()<<" | "<< zmet.met_T1CHSNoHF_fromCORE_pt()<<" | "<<zmet.jet_pt().at(0)<<" | "<<zmet.jet_pt().at(1)<<endl;
-	  }
+	  // for sync
+	  // if( zmet.hyp_type()==2 && zmet.evt_type()==0 && ((zmet.met_pt() > 150 && zmet.njets() == 2) || (zmet.met_pt() > 100 && zmet.njets() >= 3)) ){
+	  // 	// cout<<zmet.run()<<" | "<< zmet.lumi()<<" | "<<zmet.evt()<<endl;
+	  // 	cout<<zmet.evt()<<" | "<<zmet.rho()<<" | "<<event_met_pt<<" | "<< zmet.met_pt()<<" | "<< zmet.met_T1CHSNoHF_fromCORE_pt()<<" | "<<zmet.jet_pt().at(0)<<" | "<<zmet.jet_pt().at(1)<<endl;
+	  // }
 	  
+	  // for CRs
+	  if( TString(selection).Contains("CR") && zmet.evt_type() != 2 ){
+		int njets_cr = 0;
+		for( int jetind = 0; jetind < zmet.jets_p4().size(); jetind++ ){
+		  bool foundmatch = false;
+		  for( int lepind = 0; lepind < zmet.lep_p4().size(); lepind++ ){
+			if(  sqrt( pow(zmet.jets_p4().at(jetind).eta() - zmet.lep_p4().at(lepind).eta(), 2) + pow(acos(cos(zmet.jets_p4().at(jetind).phi() - zmet.lep_p4().at(lepind).phi())), 2) ) < 0.4 ){ 
+			  foundmatch = true;
+			}
+		  }
+		  if( !foundmatch ) njets_cr++;
+		}
+		fillUnderOverFlow(event_hists.at( "h_ll_event_njtall_passtrig" ), njets_cr, weight );
+		if( event_met_pt > 50 ) fillUnderOverFlow(event_hists.at( "h_ll_event_njtm50_passtrig" ), njets_cr, weight );
+		fillUnderOverFlow(event_hists.at( "h_ll_event_metall_passtrig" ), event_met_pt, weight );
+	  }
+
 	  //-~-~-~-~-~-~-~-~-//
 	  //Fill event  hists//
 	  //-~-~-~-~-~-~-~-~-//	  
@@ -283,55 +315,13 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  fillHist( "event", "met3p0_raw"    , "passtrig", zmet.met_rawNoHF_pt()            , weight );	  
 	  fillHist( "event", "met3p0_raw_phi", "passtrig", zmet.met_rawNoHF_phi()           , weight );	  
 
-	  float dphi = acos(cos(zmet.lep_p4()[2].phi()-event_met_ph));
-	  float mt = sqrt(2*event_met_pt*zmet.lep_pt()[2]*cos(dphi));
-	  
-	  fillHist( "event", "mt3", "passtrig", mt, weight );	  
-	  
-	  if( zmet.nlep() > 2 ){
-	  	fillHist( "event", "mt3", "threelep", mt, weight );	  
-	  	fillHist( "event", "njets"                 , "threelep", zmet.njets()        , weight );
-	  	fillHist( "event", "nbjets"                , "threelep", zmet.nBJetMedium()  , weight );
-	  	fillHist( "event", "met"                   , "threelep", event_met_pt        , weight );
-	  	fillHist( "event", "met_raw"               , "threelep", zmet.met_rawPt()    , weight );
-	  	fillHist( "event", "ht"                    , "threelep", zmet.ht()           , weight );
-	  	fillHist( "event", "ptl1"                  , "threelep", zmet.lep_pt().at(0) , weight );	  
-	  	fillHist( "event", "ptl2"                  , "threelep", zmet.lep_pt().at(1) , weight );	  
-	  	fillHist( "event", "nVert"                 , "threelep", zmet.nVert()        , weight );	  
-	  	fillHist( "event", "ptdil"                 , "threelep", zmet.dilpt()        , weight );	  
-	  	fillHist( "event", "metphi"                , "threelep", event_met_ph        , weight );	  
-	  	fillHist( "event", "metphir"               , "threelep", zmet.met_rawPhi()   , weight );	  
-	  	fillHist( "event", "met_mettoolbox"        , "threelep", zmet.met_T1CHS_pt()          , weight );	  
-	  	fillHist( "event", "met_mettoolboxNoHF"    , "threelep", zmet.met_T1CHSNoHF_pt()      , weight );	  
-	  	fillHist( "event", "met_mettoolboxNoHFraw" , "threelep", zmet.met_rawNoHF_pt()        , weight );	  	  
-	  	fillHist( "event", "met_CORE"              , "threelep", zmet.met_T1CHS_fromCORE_pt()     , weight );	  
-	  	fillHist( "event", "met3p0_CORE"           , "threelep", zmet.met_T1CHSNoHF_fromCORE_pt() , weight );	  
-	  	fillHist( "event", "met3p0_raw"            , "threelep", zmet.met_rawNoHF_pt()            , weight );	  
-	  	fillHist( "event", "met3p0_raw_phi"        , "threelep", zmet.met_rawNoHF_phi()           , weight );	  
-	  }
-	  
+	  	  
 	  if( event_met_pt < 50 && zmet.hyp_type() == 2 ) nem_2jets += weight;
 		  
 	  if( zmet.hyp_type() == 0 ) nee += weight;
 	  if( zmet.hyp_type() == 1 ) nmm += weight;
 	  if( zmet.hyp_type() == 2 ) nem += weight;	  
 	  if( zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ) nll += weight;
-
-	  // if( zmet.phpfcands_30in_pt() > 0 ){	 
-  	  // fillHist( "event", "phpfcands_30in_pt"  , "passtrig", zmet.phpfcands_30in_pt() , weight );	  
-  	  // fillHist( "event", "phpfcands_30in_phi" , "passtrig", zmet.phpfcands_30in_phi(), weight );	  
-	  // }
-	  // if( zmet.nupfcands_30in_pt() > 0 ){	 
-  	  // fillHist( "event", "nupfcands_30in_pt"  , "passtrig", zmet.nupfcands_30in_pt() , weight );	  
-  	  // fillHist( "event", "nupfcands_30in_phi" , "passtrig", zmet.nupfcands_30in_phi(), weight );	  
-	  // }
-
-	  // if( zmet.njets() > 1 ) {
-	  // 	fillHist( "event", "met_COREgt1jet"              , "passtrig", zmet.met_T1CHS_fromCORE_pt() , weight );	  
-	  // 	fillHist( "event", "met_mettoolboxgt1jet"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
-	  // 	fillHist( "event", "met_mettoolboxNoHFgt1jet"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
-	  // 	fillHist( "event", "met_mettoolboxNoHFrawgt1jet" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
-	  // }
 	  
 	  
 	  //-~-~-~-~-~-~-~-~-~-//
@@ -417,14 +407,9 @@ void templateLooper::bookHistos(){
   leptype.push_back("ll");
   vector <string> object;
   object.push_back("event");
-  // object.push_back("templ");
-  // object.push_back("lep1");
-  // object.push_back("lep2");
-  // object.push_back("dilep");
   vector <string> selection;
   selection.push_back("inclusive");
   selection.push_back("passtrig");
-  selection.push_back("threelep");
 
   vector <string> variable;      vector <float> variable_bins;
 
@@ -432,33 +417,16 @@ void templateLooper::bookHistos(){
   variable.push_back("ptl2");    variable_bins.push_back(1000);  
   variable.push_back("ptdil");   variable_bins.push_back(1000);  
   variable.push_back("met");     variable_bins.push_back(500 );  
-  // variable.push_back("met_phi"); variable_bins.push_back(500 );  
-  // variable.push_back("met_phir");variable_bins.push_back(500 );  
   variable.push_back("met_raw"); variable_bins.push_back(500 );  
   variable.push_back("met3p0_raw"); variable_bins.push_back(500 );  
   variable.push_back("met_rawgt1jet"); variable_bins.push_back(500 );  
-  variable.push_back("met_raw_vince"); variable_bins.push_back(500 );  
   variable.push_back("ht");	     variable_bins.push_back(1000);  
   variable.push_back("ht_gt1j");	   variable_bins.push_back(3000);  
   variable.push_back("atlas_ht_gt1j"); variable_bins.push_back(3000);  
-  variable.push_back("mt3");     variable_bins.push_back(500);  
   variable.push_back("njets");   variable_bins.push_back(20  );  
   variable.push_back("nbjets");   variable_bins.push_back(20  );  
   variable.push_back("mll");     variable_bins.push_back(300 );  
   variable.push_back("nVert");   variable_bins.push_back(50 );  
-  variable.push_back("MHTFW");   variable_bins.push_back(1000 );  
-  variable.push_back("MHTBA");   variable_bins.push_back(1000 );  
-  variable.push_back("MHTFB");   variable_bins.push_back(1000 );  
-  variable.push_back("MHTFBgt1jet");   variable_bins.push_back(1000 );
-
-  variable.push_back("mll_metrawgt50"); variable_bins.push_back(500 );  
-  variable.push_back("mll_metrawgt100"); variable_bins.push_back(500 );  
-  variable.push_back("mll_metrawgt150"); variable_bins.push_back(500 );  
-  variable.push_back("mll_metrawgt225"); variable_bins.push_back(500 );  
-  variable.push_back("mll_metrawgt300"); variable_bins.push_back(500 );  
-
-  variable.push_back("metT-1_TopDiscovery"); variable_bins.push_back(500 );  
-  variable.push_back("metRaw_TopDiscovery"); variable_bins.push_back(500 );  
   
   variable.push_back("met_CORE"); variable_bins.push_back(500 );  
   variable.push_back("met_COREgt1jet"); variable_bins.push_back(500 );  
@@ -466,7 +434,6 @@ void templateLooper::bookHistos(){
   variable.push_back("met3p0_CORE"); variable_bins.push_back(500 );  
   variable.push_back("met3p0_COREgt1jet"); variable_bins.push_back(500 );  
 
-  variable.push_back("met3p5_pt");  variable_bins.push_back(500 );  
 
   variable.push_back("met_mettoolbox"); variable_bins.push_back(500 );  
   variable.push_back("met_mettoolboxgt1jet"); variable_bins.push_back(500 );  
@@ -477,10 +444,7 @@ void templateLooper::bookHistos(){
   variable.push_back("met_mettoolboxNoHFraw"); variable_bins.push_back(500 );  
   variable.push_back("met_mettoolboxNoHFrawgt1jet"); variable_bins.push_back(500 );  
   
-  variable.push_back("met0jet");  variable_bins.push_back(500 );  
-  variable.push_back("met1jet");  variable_bins.push_back(500 );  
   variable.push_back("metgt1jet");variable_bins.push_back(500 );  
-
   
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -514,16 +478,8 @@ void templateLooper::bookHistos(){
 
   phivars.push_back("metphi");               axislimits.push_back(3.2);
   phivars.push_back("metphir");				 axislimits.push_back(3.2);
-  phivars.push_back("metphi20");			 axislimits.push_back(3.2);
-  phivars.push_back("metphi40");			 axislimits.push_back(3.2);
-  phivars.push_back("metphi60");			 axislimits.push_back(3.2);
-  phivars.push_back("mhtphi");               axislimits.push_back(3.2);
 
   phivars.push_back( "met3p0_raw_phi"      );axislimits.push_back(3.2); 
-  phivars.push_back( "met3p5_phi"          );axislimits.push_back(3.2);  
-
-  phivars.push_back("metx");axislimits.push_back(250);
-  phivars.push_back("mety");axislimits.push_back(250);
 
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -553,8 +509,10 @@ void templateLooper::bookHistos(){
   bookHist("h_ee_event_drll_2jets", "h_ee_event_drll_2jets", 500,0,5);
   bookHist("h_mm_event_drll_2jets", "h_mm_event_drll_2jets", 500,0,5);
   bookHist("h_em_event_drll_2jets", "h_em_event_drll_2jets", 500,0,5);
-  // need to add hists for calculating FS BG
 
+  bookHist("h_ll_event_njtall_passtrig", "h_ll_event_njtall_passtrig", 10,0,10);
+  bookHist("h_ll_event_njtm50_passtrig", "h_ll_event_njtm50_passtrig", 10,0,10);
+  bookHist("h_ll_event_metall_passtrig", "h_ll_event_metall_passtrig", 200,0,200);
 
 }
 

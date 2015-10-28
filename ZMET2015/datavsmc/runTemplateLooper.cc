@@ -33,9 +33,14 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
 	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_mm*.root" , iter.c_str() ));
 	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_25nsPrompt_ph*.root" , iter.c_str() ));
 
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ee*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_em*.root" , iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_mm*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ee*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_em*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_mm*.root" , iter.c_str() ));
+	// // ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ph*.root" , iter.c_str() ));
+
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25ns05Oct2015_ee*.root" , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25ns05Oct2015_em*.root" , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25ns05Oct2015_mm*.root" , iter.c_str() ));
 	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPrompt_ph*.root" , iter.c_str() ));
 
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPromptv4_ee*.root" , iter.c_str() ));
@@ -89,7 +94,7 @@ void runTemplateLooper( std::string selection = "", std::string iter = "", std::
 
   else if( sample == "wz" ){
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wz3lnu_25ns_powp8*.root"     , iter.c_str() ));
-	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wz2l2q_25ns_nlo*.root"       , iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/wz2l2q_25ns_nlo*.root"       , iter.c_str() ));
   }
 
   else if( sample == "zz" ){
