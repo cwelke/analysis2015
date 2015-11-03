@@ -70,7 +70,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   MakeBabyNtuple( Form("%s.root", baby_name.c_str()) );
 
   // do this once per job
-  const char* json_file = "json_600pb_131015_sntformat.txt";
+  const char* json_file = "Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt";
   cout<<"Setting grl: "<<json_file<<endl;
   set_goodrun_file(json_file);
   
@@ -447,8 +447,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  // if( cms3.els_p4().at(iEl).pt() < 20.0 ) continue;
 		}
 
-		p4sLeptonsForJetCleaning.push_back(cms3.els_p4().at(iEl));
-
+		if( cms3.els_p4().at(iEl).pt() > 15.0 ){
+		  p4sLeptonsForJetCleaning.push_back(cms3.els_p4().at(iEl));
+		}
+		
       }
 
 	  // if( nlep > 1 ) cout<<"2 electrons pass this event"<<endl<<endl;
@@ -498,7 +500,10 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
 		  // if( cms3.mus_p4().at(iMu).pt() < 20.0 ) continue;
 		}
 
-		p4sLeptonsForJetCleaning.push_back(cms3.mus_p4().at(iMu));
+		if( cms3.mus_p4().at(iMu).pt() > 15.0 ){
+		  p4sLeptonsForJetCleaning.push_back(cms3.mus_p4().at(iMu));
+		}
+
       }
 
 	  if (verbose) cout<<" before ordering"<<endl;
@@ -675,7 +680,7 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  	  for(int iGamma = 0; iGamma < ngamma; iGamma++){
  		if (iGamma>0) continue; // Only care about leading photon.
  
- 		float minDR = 0.3;
+ 		float minDR = 0.4;
  		int minIndex = -1;
  		for(unsigned int passIdx = 0; passIdx < passJets.size(); passIdx++){ //loop through jets that passed baseline selections
  	
@@ -693,10 +698,28 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
  			minIndex = iJet;
  		  }
  		} // end jet loop
+
+		// get emf of jet closest to photon
  		if( minIndex > -1 ){
  		  matched_neutralemf = ( cms3.pfjets_neutralEmE().at(minIndex)                                         ) / (p4sCorrJets.at(minIndex).energy()/jet_corrfactor.at(minIndex));
  		  matched_emf        = ( cms3.pfjets_neutralEmE().at(minIndex) + cms3.pfjets_chargedEmE().at(minIndex) ) / (p4sCorrJets.at(minIndex).energy()/jet_corrfactor.at(minIndex));
- 		}	  
+ 		}else{
+
+		  for(unsigned int jetind = 0; jetind < cms3.pfjets_p4().size(); jetind++){ //loop through jets that passed baseline selections
+
+			float thisDR = ROOT::Math::VectorUtil::DeltaR(cms3.pfjets_p4().at(jetind), gamma_p4[iGamma]);
+			if(thisDR < minDR){
+			  minDR = thisDR; 
+			  minIndex = jetind;
+			}
+		  }
+
+		  if( minIndex > -1 ){
+			matched_neutralemf = ( cms3.pfjets_neutralEmE().at(minIndex)                                         ) / (cms3.pfjets_p4().at(minIndex).energy()*cms3.pfjets_undoJEC().at(minIndex));
+			matched_emf        = ( cms3.pfjets_neutralEmE().at(minIndex) + cms3.pfjets_chargedEmE().at(minIndex) ) / (cms3.pfjets_p4().at(minIndex).energy()*cms3.pfjets_undoJEC().at(minIndex));
+		  }
+		}
+		
  	  
  		if (verbose) cout << "before checking for photon/electron overlap" << endl;
  		//	  elveto
