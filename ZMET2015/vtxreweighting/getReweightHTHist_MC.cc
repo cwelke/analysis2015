@@ -26,8 +26,8 @@ void getReweightHTHist_MC( string signalregion )
   // TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
   // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
 
-  TFile * f_data = TFile::Open(Form("../output/V07-04-11/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
-  TFile * f_phot = TFile::Open(Form("../output/V07-04-11/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
+  TFile * f_data = TFile::Open(Form("../output/V07-04-13/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
+  TFile * f_phot = TFile::Open(Form("../output/V07-04-13/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
 
   TH1F * h_data = NULL;
   TH1F * h_data_em = NULL;
@@ -244,8 +244,13 @@ void getReweightScheme(vector <double> &binning, string selection )
 	binning.push_back(0);
 	// binning.push_back(22);
 	binning.push_back(33);
-	// binning.push_back(36);
-	binning.push_back(60);
+	binning.push_back(36);
+	binning.push_back(50);
+	binning.push_back(75);
+	binning.push_back(90);
+	binning.push_back(120);
+	binning.push_back(165);
+	binning.push_back(300);
 	binning.push_back(3000);
   }
   
@@ -253,12 +258,13 @@ void getReweightScheme(vector <double> &binning, string selection )
 	binning.push_back(0);
 	// binning.push_back(22);
 	binning.push_back(33);
-	// binning.push_back(36);
+	binning.push_back(36);
 	binning.push_back(50);
 	binning.push_back(75);
 	binning.push_back(90);
 	binning.push_back(120);
 	binning.push_back(165);
+	binning.push_back(300);
 	binning.push_back(3000);
   }
 

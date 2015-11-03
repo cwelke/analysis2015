@@ -433,6 +433,11 @@ void ZMET::Init(TTree *tree) {
 		matched_neutralemf_branch = tree->GetBranch("matched_neutralemf");
 		if (matched_neutralemf_branch) {matched_neutralemf_branch->SetAddress(&matched_neutralemf_);}
 	}
+	matched_emf_branch = 0;
+	if (tree->GetBranch("matched_emf") != 0) {
+		matched_emf_branch = tree->GetBranch("matched_emf");
+		if (matched_emf_branch) {matched_emf_branch->SetAddress(&matched_emf_);}
+	}
 	elveto_branch = 0;
 	if (tree->GetBranch("elveto") != 0) {
 		elveto_branch = tree->GetBranch("elveto");
@@ -1029,6 +1034,7 @@ void ZMET::GetEntry(unsigned int idx)
 		dilpt_isLoaded = false;
 		dRll_isLoaded = false;
 		matched_neutralemf_isLoaded = false;
+		matched_emf_isLoaded = false;
 		elveto_isLoaded = false;
 		nlep_isLoaded = false;
 		lep_p4_isLoaded = false;
@@ -1222,6 +1228,7 @@ void ZMET::LoadAllBranches()
 	if (dilpt_branch != 0) dilpt();
 	if (dRll_branch != 0) dRll();
 	if (matched_neutralemf_branch != 0) matched_neutralemf();
+	if (matched_emf_branch != 0) matched_emf();
 	if (elveto_branch != 0) elveto();
 	if (nlep_branch != 0) nlep();
 	if (lep_p4_branch != 0) lep_p4();
@@ -2371,6 +2378,19 @@ void ZMET::LoadAllBranches()
 			matched_neutralemf_isLoaded = true;
 		}
 		return matched_neutralemf_;
+	}
+	const float &ZMET::matched_emf()
+	{
+		if (not matched_emf_isLoaded) {
+			if (matched_emf_branch != 0) {
+				matched_emf_branch->GetEntry(index);
+			} else { 
+				printf("branch matched_emf_branch does not exist!\n");
+				exit(1);
+			}
+			matched_emf_isLoaded = true;
+		}
+		return matched_emf_;
 	}
 	const bool &	ZMET::elveto()
 	{
@@ -3878,6 +3898,7 @@ namespace ZMet {
 	const float &dilpt() { return zmet.dilpt(); }
 	const float &dRll() { return zmet.dRll(); }
 	const float &matched_neutralemf() { return zmet.matched_neutralemf(); }
+	const float &matched_emf() { return zmet.matched_emf(); }
 	const bool &elveto() { return zmet.elveto(); }
 	const int &nlep() { return zmet.nlep(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4() { return zmet.lep_p4(); }

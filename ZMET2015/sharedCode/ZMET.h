@@ -261,6 +261,9 @@ protected:
 	float	matched_neutralemf_;
 	TBranch *matched_neutralemf_branch;
 	bool matched_neutralemf_isLoaded;
+	float	matched_emf_;
+	TBranch *matched_emf_branch;
+	bool matched_emf_isLoaded;
 	bool	elveto_;
 	TBranch *elveto_branch;
 	bool elveto_isLoaded;
@@ -669,6 +672,7 @@ void LoadAllBranches();
 	const float &dilpt();
 	const float &dRll();
 	const float &matched_neutralemf();
+	const float &matched_emf();
 	const bool &	elveto();
 	const int &nlep();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4();
@@ -866,6 +870,7 @@ namespace ZMet {
 	const float &dilpt();
 	const float &dRll();
 	const float &matched_neutralemf();
+	const float &matched_emf();
 	const bool &elveto();
 	const int &nlep();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &lep_p4();

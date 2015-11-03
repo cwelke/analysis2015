@@ -174,7 +174,7 @@ bool eventHasGoodPhoton()
   if( abs(zmet.gamma_p4().at(0).eta())   > 2.4   ) return false; // photon in EC or EB
   if( zmet.gamma_hOverE().at(0)          > 0.1   ) return false; // H/E < 0.1	  
   // if( zmet.matched_neutralemf()          < 0.7   ) return false; // jet neutral EM fraction cut
-  if( zmet.matched_neutralemf()          < 0.9   ) return false; // jet neutral EM fraction cut
+  if( zmet.matched_emf()                 < 0.7   ) return false; // jet neutral EM fraction cut
   if( acos( cos( zmet.gamma_phi().at(0)			 
 				 - zmet.met_phi() ) )    < 0.14  ) return false; // kill photons aligned with MET
   if( zmet.elveto()                              ) return false; // veto pixel match
