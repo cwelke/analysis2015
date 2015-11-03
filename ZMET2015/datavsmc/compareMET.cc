@@ -50,13 +50,13 @@ void compareMET( std::string iter = "", std::string region = "", float luminosit
   // metcut.clear();
   // metcut.push_back(150);
   // metcut.push_back(225);
-  // // metcut.push_back(300);
+  // metcut.push_back(300);
   // metcut.push_back(-1);
   // printYieldTable( metcut, h_zll, h_pho );
 
   //MAKE PLOTS
 
-  int rebin = 5;
+  int rebin = 10;
   
   h_zll->Rebin(rebin);
   h_pho->Rebin(rebin);

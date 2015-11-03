@@ -31,7 +31,7 @@ const bool debug = false;
 
 const bool usejson              = true;
 const bool dovtxreweighting     = true;
-const bool dotemplateprediction = false;
+const bool dotemplateprediction = true;
 const bool dotemplatepredictionmc = false;
 
 templateLooper::templateLooper()
@@ -149,6 +149,28 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  	}
 	  }	
 
+	  if( dotemplateprediction && (sample == "vvv" || sample == "ttv") ){
+		bool hasrealmet = false;
+		bool realzpair  = false;
+		for( size_t genind = 0; genind < zmet.genPart_motherId().size(); genind++ ){
+		  if( (abs(zmet.genPart_motherId().at(genind)) == 24 || zmet.genPart_motherId().at(genind) == 23) &&
+			  zmet.genPart_status().at(genind) == 23 &&
+			  (abs(zmet.genPart_pdgId().at(genind))==12 ||
+			   abs(zmet.genPart_pdgId().at(genind))==14 ||
+			   abs(zmet.genPart_pdgId().at(genind))==16) ){
+			// cout<<"mom "<<zmet.genPart_motherId().at(genind) << " | stat "<< zmet.genPart_status().at(genind) <<  " | id "<< zmet.genPart_pdgId().at(genind) << endl;
+			hasrealmet = true;
+		  }
+		  if( zmet.genPart_motherId().at(genind) == 23 &&
+			  zmet.genPart_status().at(genind) == 23 &&
+			  (abs(zmet.genPart_pdgId().at(genind))==11 ||
+			   abs(zmet.genPart_pdgId().at(genind))==13) ){
+		  }
+		  realzpair = true;
+		}
+		if( !hasrealmet || !realzpair ) continue;
+	  }
+	  	  
 	  // if( zmet.isData() && !(zmet.run() == 251244 ||
 	  // 						 zmet.run() == 251252 ||
 	  // 						 zmet.run() == 251251) ) continue;
@@ -342,22 +364,20 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		  currentMETTemplate = mettemplates.pickTemplate( mettemplate_hists, zmet.njets(), zmet.ht(), zmet.dilpt() );
 		  mettemplates.countTemplate( zmet.njets(), zmet.ht(), zmet.dilpt(), weight );
 		  try
-			{
-			  event_hists.at( "h_templ_met" ) -> Add( currentMETTemplate, weight );		
-			}
+		  	{
+		  	  event_hists.at( "h_templ_met" ) -> Add( currentMETTemplate, weight );		
+		  	}
 		  catch(exception &e)
-			{
-			  cout<<"Hist: h_templ_met Does not exist!"<<endl;
-			  exit(1);
-			}
+		  	{
+		  	  cout<<"Hist: h_templ_met Does not exist!"<<endl;
+		  	  exit(1);
+		  	}
 		}
 	  }
 
     } // end loop over events
   } // end loop over files
-
-
-
+  
   cout << npass       << " events passing selection" << endl;
   cout << nDuplicates << " duplicate events in data" << endl;
   cout << nee         << " ee events passing selection" << endl;
@@ -381,6 +401,7 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   string vtxstring = "";
   if( !dovtxreweighting ) vtxstring = "_novtxweight";
   
+
   // make histos rootfile
   string outputfilename = 	Form("../output/%s/%s%s%s_hists.root",
 								 iter.c_str(),

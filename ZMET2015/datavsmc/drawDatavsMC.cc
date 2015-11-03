@@ -6,6 +6,7 @@
 #include "TPad.h"
 #include "TLatex.h"
 #include "THStack.h"
+#include "TStyle.h"
 
 #include <iostream>
 
@@ -16,10 +17,11 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 {
 
   bool useedgepreds   = false;
-  bool usetemplates   = false;
-  bool usefsbkg       = false;
-  bool applysysts     = false;
-  bool isblind        = false;
+  bool combineMCbgs   = false;
+  bool usetemplates   = true;
+  bool usefsbkg       = true;
+  bool applysysts     = true;
+  bool isblind        = true;
   bool printyields    = true;
 
   TH1F * h_data  = NULL;
@@ -93,7 +95,15 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   
   if( usetemplates ){
   
-	// h_ttbar->Scale(0.13);
+	if( TString(selection).Contains("central"      ) ){
+	  h_ttbar->Scale(1.014);
+	}
+	if( TString(selection).Contains("forward"      ) ){
+	  h_ttbar->Scale(1.049);
+	}
+	if( TString(selection).Contains("SR"      ) ){
+	  h_ttbar->Scale(1.026);
+	}
 	// h_zjets->Scale(1./h_zjets->GetSumOfWeights());
 
 	float normmethigh = 50;
@@ -128,11 +138,39 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	h_zjets->Scale(luminosity);
 	  if( !usefsbkg ) h_ttbar->Scale(luminosity);
   }
+  
+	vector <float> metcut;
+
+	vector <double> val_data;
+	vector <double> err_data;
+
+	vector <double> val_zjets;
+	vector <double> err_zjets;
+
+	vector <double> val_fsbkg;
+	vector <double> err_fsbkg;
+
+	vector <double> val_ttvbg;
+	vector <double> err_ttvbg;
+
+	vector <double> val_vvvbg;
+	vector <double> err_vvvbg;
+
+	vector <double> val_zzbkg;
+	vector <double> err_zzbkg;
+
+	vector <double> val_vvbkg;
+	vector <double> err_vvbkg;
+
+	vector <double> val_allbg;
+	vector <double> err_allbg;
+
+	vector <double> val_ratio;
+	vector <double> err_ratio;
 
   if( printyields ){
   
 	//MAKE TABLES
-	vector <float> metcut;
 	if( variable == "mll" ){
 	  metcut.clear();
 	  // metcut.push_back(20);
@@ -202,6 +240,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  }
 	  else if( TString(selection).Contains("SR_ATLAS"      ) ){
 		useedgepreds = false;
+		combineMCbgs = true;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -213,6 +252,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  }
 	  else{
 		useedgepreds = false;
+		combineMCbgs = true;
 		metcut.clear();
 		metcut.push_back(0.0);
 		metcut.push_back(50);
@@ -225,35 +265,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  }
 
 	}
-
-  
-	vector <double> val_data;
-	vector <double> err_data;
-
-	vector <double> val_zjets;
-	vector <double> err_zjets;
-
-	vector <double> val_fsbkg;
-	vector <double> err_fsbkg;
-
-	vector <double> val_ttvbg;
-	vector <double> err_ttvbg;
-
-	vector <double> val_vvvbg;
-	vector <double> err_vvvbg;
-
-	vector <double> val_zzbkg;
-	vector <double> err_zzbkg;
-
-	vector <double> val_vvbkg;
-	vector <double> err_vvbkg;
-
-	vector <double> val_allbg;
-	vector <double> err_allbg;
-
-	vector <double> val_ratio;
-	vector <double> err_ratio;
-  
+    
 	for( size_t i = 0; i < metcut.size(); i++ ){
 	  val_data.push_back(0);
 	  err_data.push_back(0);
@@ -295,23 +307,23 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		// }
 		
 		if(       metcut.at(bini+1)   < 0   ){  
-		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.55;
-		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.55;
-		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.55;
-		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.30;
-		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.75;
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.35;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.40;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.20;
+		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.50;
 		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.80;
-		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
-		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.10;
-		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.15;
-		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
-		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
-		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
-		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.30;
-		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.50;
+		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.15;
+		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.15;
+		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.25;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.15;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.25;
+		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.40;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.35;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.40;
 		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.25;
-		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.70;
-		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.20;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.50;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
 
 		}else if( metcut.at(bini+1)-1 < 50  ){  
 		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.01;
@@ -334,23 +346,23 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
 
 		}else if( metcut.at(bini+1)-1 < 100 ){
-		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.06;
-		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.06;
+		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.01;
+		  if( TString(selection).Contains("central_withb_twojets") )zsyst = 0.05;
 		  if( TString(selection).Contains("central_with2_twojets") )zsyst = 0.15;
-		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.05;
+		  if( TString(selection).Contains("forward_twojets"      ) )zsyst = 0.03;
 		  if( TString(selection).Contains("forward_withb_twojets") )zsyst = 0.10;
-		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.35;
+		  if( TString(selection).Contains("forward_with2_twojets") )zsyst = 0.30;
 		  if( TString(selection).Contains("central_3jets_inclusive"      ) )zsyst = 0.05;
 		  if( TString(selection).Contains("central_withb_3jets_inclusive") )zsyst = 0.05;
 		  if( TString(selection).Contains("central_with2_3jets_inclusive") )zsyst = 0.10;
-		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.02;
-		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.05;
+		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
+		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.10;
 		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.10;
-		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.01;
-		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.02;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.04;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.03;
 		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.02;
-		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.06;
-		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.04;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.03;
+		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.02;
 
 		}else if( metcut.at(bini+1)-1 < 150 ){
 		  if( TString(selection).Contains("central_twojets"      ) )zsyst = 0.10;
@@ -365,8 +377,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
 		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
 		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
-		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.03;
-		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.06;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.04;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.05;
 		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.04;
 		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.10;
 		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
@@ -384,10 +396,10 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
 		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
 		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
-		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.06;
-		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.15;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.05;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.10;
 		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.10;
-		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.15;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.10;
 		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
 
 		}else if( metcut.at(bini+1)-1 < 300 ){
@@ -403,10 +415,10 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		  if( TString(selection).Contains("forward_3jets_inclusive"      ) )zsyst = 0.10;
 		  if( TString(selection).Contains("forward_withb_3jets_inclusive") )zsyst = 0.40;
 		  if( TString(selection).Contains("forward_with2_3jets_inclusive") )zsyst = 0.60;
-		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.20;
-		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.25;
+		  if( TString(selection).Contains("bveto_SRA"            ) )zsyst = 0.15;
+		  if( TString(selection).Contains("withb_SRA"            ) )zsyst = 0.30;
 		  if( TString(selection).Contains("bveto_SRB"            ) )zsyst = 0.20;
-		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.70;
+		  if( TString(selection).Contains("withb_SRB"            ) )zsyst = 0.50;
 		  if( TString(selection).Contains("SR_ATLAS"             ) )zsyst = 0.10;
 
 		}
@@ -431,7 +443,16 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 		
 	  if( applysysts ){
 		err_zjets.at(bini) = sqrt( pow( err_zjets.at(bini), 2 ) + pow( val_zjets.at(bini)*zsyst, 2 ) );
-		// err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.20, 2 ) );
+
+		if( TString(selection).Contains("central"      ) ){
+		  err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.06, 2 ) );
+		}
+		if( TString(selection).Contains("forward"      ) ){
+		  err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.08, 2 ) );
+		}
+		if( TString(selection).Contains("SR"      ) ){
+		  err_fsbkg.at(bini) = sqrt( pow( err_fsbkg.at(bini), 2 ) + pow( val_fsbkg.at(bini)*.05, 2 ) );
+		}
 		  
 		err_ttvbg.at(bini) = sqrt( pow( err_ttvbg.at(bini), 2 ) + pow( val_ttvbg.at(bini)*.50, 2 ) );
 		err_vvvbg.at(bini) = sqrt( pow( err_vvvbg.at(bini), 2 ) + pow( val_vvvbg.at(bini)*.50, 2 ) );
@@ -535,30 +556,46 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	  }
 	  cout<<endl;
 
-	  cout<<"ttv SM BG& ";
-	  for( size_t bini = 0; bini < val_ttvbg.size()-1; bini++ ){
-		if( metcut.at(bini) == -1 ) continue;
-		if( bini < val_ttvbg.size()-2 )
-		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini), err_ttvbg.at(bini));
-		if( bini == val_ttvbg.size()-2 )
-		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini), err_ttvbg.at(bini));
-	  }
-	  cout<<endl;
+	  if( combineMCbgs ){
+		cout<<"Rare SM BG& ";
+		for( size_t bini = 0; bini < val_zjets.size()-1; bini++ ){
+		  if( metcut.at(bini) == -1 ) continue;
+		  if( bini < val_zjets.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini) + val_vvvbg.at(bini),
+					   sqrt( pow(err_ttvbg.at(bini),2) + pow(err_vvvbg.at(bini),2)));
+		  if( bini == val_zjets.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini) + val_vvvbg.at(bini),
+					   sqrt( pow(err_ttvbg.at(bini),2) + pow(err_vvvbg.at(bini),2)));
+		}
+		cout<<endl;
 
-	  cout<<"vvv SM BG& ";
-	  for( size_t bini = 0; bini < val_vvvbg.size()-1; bini++ ){
-		if( metcut.at(bini) == -1 ) continue;
-		if( bini < val_vvvbg.size()-2 )
-		  cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvvbg.at(bini), err_vvvbg.at(bini));
-		if( bini == val_vvvbg.size()-2 )
-		  cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvvbg.at(bini), err_vvvbg.at(bini));
 	  }
-	  cout<<endl;
+	  else{
+		cout<<"ttv SM BG& ";
+		for( size_t bini = 0; bini < val_ttvbg.size()-1; bini++ ){
+		  if( metcut.at(bini) == -1 ) continue;
+		  if( bini < val_ttvbg.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f & ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+		  if( bini == val_ttvbg.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_ttvbg.at(bini), err_ttvbg.at(bini));
+		}
+		cout<<endl;
 
+		cout<<"vvv SM BG& ";
+		for( size_t bini = 0; bini < val_vvvbg.size()-1; bini++ ){
+		  if( metcut.at(bini) == -1 ) continue;
+		  if( bini < val_vvvbg.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f & ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+		  if( bini == val_vvvbg.size()-2 )
+			cout<<Form(" %.1f $\\pm$ %.1f \\\\ ", val_vvvbg.at(bini), err_vvvbg.at(bini));
+		}
+		cout<<endl;
+	  }
+		
 	  cout<<"\\hline "<<endl;
 
 	}
-
+  
   	cout<<"total BG& ";
 	for( size_t bini = 0; bini < val_allbg.size()-1; bini++ ){
 	  if( metcut.at(bini) == -1 ) continue;
@@ -644,7 +681,14 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	xmax = 200;
 	if( usefsbkg ){
 	  xmax = 350;
-	  rebin = 25;
+	  rebin = 10;
+
+	  if( TString(selection).Contains("central") || TString(selection).Contains("forward") ){
+
+		rebin = 10;
+		xmax = 200;
+	  }
+		
 	}
 	else{
 	  xmax = 200;
@@ -832,6 +876,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   stack->Add(h_ttv);
   stack->Add(h_vvv);
+  stack->Add(h_wz);
+  stack->Add(h_zz);
   if( usefsbkg ){
 	stack->Add(h_ttbar);
   }
@@ -840,8 +886,6 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	stack->Add(h_st);
 	stack->Add(h_ttbar);
   }
-  stack->Add(h_wz);
-  stack->Add(h_zz);
   if( usetemplates ){
 	stack->Add(h_zjets);
   }
@@ -872,7 +916,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_data->SetMarkerStyle(8);
   h_data->SetMarkerSize(0.75);
 
-  h_data->Draw("e1");
+  h_data->Draw("x0e1");
   stack->Draw("samehist");
   h_data->Draw("samex0e1");
   
@@ -888,8 +932,6 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   }else{
 	l1->AddEntry( h_zjets , "Z+jets MC" , "f");
   }
-  l1->AddEntry( h_zz    , "ZZ MC"     , "f");
-  l1->AddEntry( h_wz    , "WZ MC"     , "f");
   if( usefsbkg ){
   	l1->AddEntry( h_ttbar , "FS Bkg"       , "f");
   }else{
@@ -897,6 +939,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 	l1->AddEntry( h_st , "Single-top MC"       , "f");
 	l1->AddEntry( h_ww , "WW MC"       , "f");
   }
+  l1->AddEntry( h_wz    , "WZ MC"     , "f");
+  l1->AddEntry( h_zz    , "ZZ MC"     , "f");
   l1->AddEntry( h_vvv , "VVV MC"       , "f");
   l1->AddEntry( h_ttv , "t#bar{t}V MC"       , "f");
   l1->Draw("same");
@@ -913,6 +957,7 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   rat_pad->SetGridy();
 
   TH1F* h_rat = (TH1F*)h_data  -> Clone("h_rat");
+  TH1F* h_unc = (TH1F*)h_data  -> Clone("h_unc");
   TH1F* h_den = (TH1F*)h_zjets -> Clone("h_den");
   if( usefsbkg ){
 	h_den->Add(h_ttbar);
@@ -935,6 +980,32 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
   h_rat->GetYaxis()->SetRangeUser(0.01,2.0);
   // }
 
+  for( int binind = 1; binind < h_unc->GetNbinsX()+1; binind++ ){
+	h_unc->SetBinContent(binind,1.0);
+	float binlowedge = h_unc->GetBinLowEdge(binind);
+	float uncertainty = 0.0;
+	
+	for( size_t errind = 0; errind < metcut.size()-1; errind++ ){
+
+	  if( binlowedge < metcut.at(errind+1) ){
+		uncertainty = err_allbg.at(errind)/val_allbg.at(errind);
+		// cout<<"binlow: "<<binlowedge<<" | metlow: "<<metcut.at(errind)<<" | uncertainty: "<<uncertainty<<endl;
+		break;
+	  }  
+
+	}
+	if( uncertainty == 0.0 ){
+	  uncertainty = err_allbg.at(err_allbg.size()-2)/val_allbg.at(err_allbg.size()-2);
+	}
+
+	h_unc->SetBinError(binind,uncertainty);
+
+  }
+
+  h_unc->SetFillColor(kBlue+1);
+  h_unc->SetFillStyle(3004);
+  h_unc->SetMarkerSize(0);
+  
   h_rat->GetYaxis()->SetLabelSize(0.12);
   h_rat->GetXaxis()->SetLabelSize(0.12);
   h_rat->GetYaxis()->SetNdivisions(5);
@@ -965,6 +1036,8 @@ void drawDatavsMC( std::string iter = "", float luminosity = 1.0, const string s
 
   h_rat->Draw("e0x0");
   h_rat->Draw("e1x0same");
+  gStyle->SetErrorX(0.5);
+  h_unc->Draw("sameE2");
 
   TLine * xaxis = new TLine(xmin,1,xmax,1);
   xaxis->SetLineWidth(2);
