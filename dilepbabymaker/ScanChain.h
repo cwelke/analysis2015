@@ -254,7 +254,39 @@ class babyMaker {
   std::vector <Int_t  >         jet_id          ;   //[njet]
   std::vector <Int_t  >         jet_puId        ;   //[njet]
 
-//----- pfMETs
+  //----- pfMETs
+  Float_t chpfcands_0013_pt;
+  Float_t chpfcands_1316_pt;
+  Float_t chpfcands_1624_pt;
+  Float_t chpfcands_2430_pt;
+  Float_t chpfcands_30in_pt;
+  Float_t phpfcands_0013_pt;
+  Float_t phpfcands_1316_pt;
+  Float_t phpfcands_1624_pt;
+  Float_t phpfcands_2430_pt;
+  Float_t phpfcands_30in_pt;
+  Float_t nupfcands_0013_pt;
+  Float_t nupfcands_1316_pt;
+  Float_t nupfcands_1624_pt;
+  Float_t nupfcands_2430_pt;
+  Float_t nupfcands_30in_pt;
+
+  Float_t chpfcands_0013_phi;
+  Float_t chpfcands_1316_phi;
+  Float_t chpfcands_1624_phi;
+  Float_t chpfcands_2430_phi;
+  Float_t chpfcands_30in_phi;
+  Float_t phpfcands_0013_phi;
+  Float_t phpfcands_1316_phi;
+  Float_t phpfcands_1624_phi;
+  Float_t phpfcands_2430_phi;
+  Float_t phpfcands_30in_phi;
+  Float_t nupfcands_0013_phi;
+  Float_t nupfcands_1316_phi;
+  Float_t nupfcands_1624_phi;
+  Float_t nupfcands_2430_phi;
+  Float_t nupfcands_30in_phi;
+
   Float_t met_T1CHS_pt;
   Float_t met_T1CHS_phi;
   Float_t met_T1CHS_fromCORE_pt;
