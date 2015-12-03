@@ -10,11 +10,17 @@
 #include "TFile.h"
 #include "TChain.h"
 #include "TTree.h"
-//#include "TH1F.h"
+#include "TH2.h"
+
 #include "Math/LorentzVector.h"
 #include "Math/GenVector/LorentzVector.h"
 
+#include "../CORE/Tools/btagsf/BTagCalibrationStandalone.h"
+
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
+
+class BTagCalibration;
+class BTagCalibrationReader;
 
 class babyMaker {
 
@@ -38,7 +44,30 @@ class babyMaker {
   TFile *BabyFile_;
   TTree *BabyTree_;
 
+  float getBtagEffFromFile(float pt, float eta, int mcFlavour, bool isFastsim);
+  
+  // for btag SFs
+  BTagCalibration* calib;
+  BTagCalibrationReader* reader_heavy;
+  BTagCalibrationReader* reader_heavy_UP;
+  BTagCalibrationReader* reader_heavy_DN;
+  BTagCalibrationReader* reader_light;
+  BTagCalibrationReader* reader_light_UP;
+  BTagCalibrationReader* reader_light_DN;
 
+  TH2D* h_btag_eff_b;
+  TH2D* h_btag_eff_c;
+  TH2D* h_btag_eff_udsg;
+  
+  BTagCalibration* calib_fastsim;
+  BTagCalibrationReader* reader_fastsim;
+  BTagCalibrationReader* reader_fastsim_UP;
+  BTagCalibrationReader* reader_fastsim_DN;
+
+  TH2D* h_btag_eff_b_fastsim;
+  TH2D* h_btag_eff_c_fastsim;
+  TH2D* h_btag_eff_udsg_fastsim;
+  
   //baby ntuple variables
 
   Int_t           run;
@@ -61,15 +90,31 @@ class babyMaker {
 
   Int_t           nJet40;
   Int_t           nBJet40;
+
   Int_t           nBJetTight;
   Int_t           nBJetMedium;
   Int_t           nBJetLoose;
+
+  Int_t           nBJetTight_up;
+  Int_t           nBJetMedium_up;
+  Int_t           nBJetLoose_up;
+
+  Int_t           nBJetTight_dn;
+  Int_t           nBJetMedium_dn;
+  Int_t           nBJetLoose_dn;
+
   Int_t           nMuons10;
   Int_t           nElectrons10;
   Int_t           nGammas20;
 
   Int_t           njets;
+  Int_t           njets_up;
+  Int_t           njets_dn;
+
   Float_t         ht;
+  Float_t         ht_up;
+  Float_t         ht_dn;
+
   Float_t         gen_ht;
   Int_t           njets_eta30;
   Float_t         ht_eta30;
@@ -240,7 +285,14 @@ class babyMaker {
   Int_t           njet;
   std::vector <LorentzVector>   jet_p4;
   std::vector <LorentzVector>   jets_p4;
+  std::vector <LorentzVector>   jets_up_p4;
+  std::vector <LorentzVector>   jets_dn_p4;
   std::vector <LorentzVector>   jets_eta30_p4;
+  std::vector <Int_t  >         jets_mcFlavour   ;
+  std::vector <Int_t  >         jets_mcHadronFlav;
+  std::vector <Float_t>         jets_quarkGluonID;
+
+
   std::vector <Float_t>         jet_pt          ;   //[njet]
   std::vector <Float_t>         jet_eta         ;   //[njet]
   std::vector <Float_t>         jet_phi         ;   //[njet]
@@ -249,11 +301,19 @@ class babyMaker {
   std::vector <Float_t>         jet_rawPt       ;   //[njet]
   std::vector <Float_t>         jet_mcPt        ;   //[njet]
   std::vector <Int_t  >         jet_mcFlavour   ;   //[njet]
+  std::vector <Int_t  >         jet_mcHadronFlav;   //[njet]
   std::vector <Float_t>         jet_quarkGluonID;   //[njet]
   std::vector <Float_t>         jet_area        ;   //[njet]
   std::vector <Int_t  >         jet_id          ;   //[njet]
   std::vector <Int_t  >         jet_puId        ;   //[njet]
 
+  //----- weights for b-tag SF  
+  Float_t         weight_btagsf;
+  Float_t         weight_btagsf_heavy_UP;
+  Float_t         weight_btagsf_light_UP;
+  Float_t         weight_btagsf_heavy_DN;
+  Float_t         weight_btagsf_light_DN;
+  
   //----- pfMETs
   Float_t chpfcands_0013_pt;
   Float_t chpfcands_1316_pt;
@@ -291,13 +351,19 @@ class babyMaker {
   Float_t met_T1CHS_phi;
   Float_t met_T1CHS_fromCORE_pt;
   Float_t met_T1CHS_fromCORE_phi;
-  Float_t met_T1CHSNoHF_pt;
-  Float_t met_T1CHSNoHF_phi;
-  Float_t met_rawNoHF_pt;
-  Float_t met_rawNoHF_phi;
-  Float_t met_T1CHSNoHF_fromCORE_pt;
-  Float_t met_T1CHSNoHF_fromCORE_phi;
+  Float_t met_T1CHS_miniAOD_CORE_pt;
+  Float_t met_T1CHS_miniAOD_CORE_phi;
+  Float_t met_T1CHS_miniAOD_CORE_up_pt;
+  Float_t met_T1CHS_miniAOD_CORE_up_phi;
+  Float_t met_T1CHS_miniAOD_CORE_dn_pt;
+  Float_t met_T1CHS_miniAOD_CORE_dn_phi;
 
+  // SUSY variables
+  Int_t mass_gluino;
+  Int_t mass_LSP;
+
+  Float_t isrboost;
+  
 };
 
 #endif
