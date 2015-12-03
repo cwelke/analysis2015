@@ -1,6 +1,8 @@
 #! /bin/bash
 
 # export analysis_version="V00-00-17"
+export analysis_version="V07-04-13"
+export analysis_version="V07-04-13_fixedleptons"
 export analysis_version="V07-04-13_fixedleptons_alldata_updatedJECS"
 echo "Analysis version = $analysis_version"
 localdirectory=`pwd`
