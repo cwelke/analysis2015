@@ -23,6 +23,7 @@
 
 #include "../../CORE/Tools/dorky/dorky.h"
 #include "../../CORE/Tools/goodrun.h"
+#include "../../CORE/Tools/badEventFilter.h"
 
 using namespace std;
 using namespace duplicate_removal;
@@ -30,15 +31,18 @@ using namespace duplicate_removal;
 const bool debug = false;
 const bool usejson = true;
 bool dovtxreweighting = false;
+bool dovtxreweightingformc = false;
 
 makePhotonTemplates::makePhotonTemplates()
 {
   dohtreweighting = false;
+  doptreweighting = false;
 };
 
-makePhotonTemplates::makePhotonTemplates( bool htreweighting )
+makePhotonTemplates::makePhotonTemplates( bool htreweighting, bool ptreweighting )
 {
   dohtreweighting = htreweighting;
+  doptreweighting = ptreweighting;
 };
 
 makePhotonTemplates::~makePhotonTemplates()
@@ -49,7 +53,35 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 
   // if( zmet.isData() )        cout << "Running on Data."        << endl;
   // else                       cout << "Running on MC.  "        << endl;
+
+  float n_allphotons   = 0;
+  float n_loosephotons = 0;
+  float n_tightphotons = 0;
   
+  float e_allphotons   = 0;
+  float e_loosephotons = 0;
+  float e_tightphotons = 0;
+  
+  float allmet_nobreq   = 0;
+  float allmet_hasrealb = 0;
+  float endmet_nobreq   = 0;
+  float endmet_hasrealb = 0;
+
+  float allmet_btag_nobreq   = 0;
+  float allmet_btag_hasrealb = 0;
+  float endmet_btag_nobreq   = 0;
+  float endmet_btag_hasrealb = 0;
+
+  float unc_endmet_nobreq        = 0;
+  float unc_endmet_hasrealb      = 0;
+  float unc_endmet_btag_nobreq   = 0;
+  float unc_endmet_btag_hasrealb = 0;
+
+  float unc_allmet_nobreq        = 0;
+  float unc_allmet_hasrealb      = 0;
+  float unc_allmet_btag_nobreq   = 0;
+  float unc_allmet_btag_hasrealb = 0;
+
 
   cout<<selection<<endl;
   
@@ -59,6 +91,39 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   mettemplates.bookMETHists(mettemplate_hists);  
   bookHistos();
 
+  eventFilter metFilterTxt;
+  if ( TString(sample).Contains("data") ) {
+    cout<<"Loading bad event files ..."<<endl;
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleEG_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleMuon_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/HTMHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/HTMHT_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/JetHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/JetHT_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MET_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MET_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MuonEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MuonEG_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleElectron_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleElectron_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleMuon_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SinglePhoton_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SinglePhoton_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_DoubleEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_DoubleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_HTMHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_JetHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_MET_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_MuonEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SingleElectron_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SingleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SinglePhoton_csc2015.txt");
+    cout<<" ... finished!"<<endl;
+  }
+
   // do this once per job
   // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
   // const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb with bad data
@@ -67,8 +132,9 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 
   // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10/json/json_150pb_141015_sntformat.txt";
 
-  const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
-  
+  // const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
+  const char* json_file = "/nfs-3/userdata/cwelke/analysis/CMSSW_7_4_14/V07-04-13/ZMET2015/datavsmc/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 2.1 fb-1
+
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
@@ -102,7 +168,15 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	h_vtxweight_165->SetDirectory(rootdir);
 	f_vtx->Close();
   }
-  
+
+	TH1F * h_vtxweight = NULL;
+  if( dovtxreweightingformc ){
+	f_vtx = TFile::Open("nvtx_ratio.root","READ");
+	h_vtxweight = (TH1F*)f_vtx->Get("h_vtx_ratio")->Clone("h_vtxweight");
+	h_vtxweight->SetDirectory(rootdir);
+	f_vtx->Close();
+  }
+
   // TH1F * h_htweight_22  = NULL;
   // TH1F * h_htweight_30  = NULL;
   // TH1F * h_htweight_36  = NULL;
@@ -142,6 +216,15 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   	f_ht->Close();
   }
 
+  TH1F * h_ptweight = NULL;
+  TFile * f_pt = NULL;
+  if( doptreweighting ){
+  	f_pt = TFile::Open(Form("../vtxreweighting/pt_ratio_data_novtx_nohtweight%s.root", selection.c_str()),"READ");
+  	h_ptweight = (TH1F*)f_pt->Get("h_pt_ratio")->Clone("h_ptweight");
+  	h_ptweight->SetDirectory(rootdir);
+  	f_pt->Close();
+  }
+
   TObjArray *listOfFiles = chain->GetListOfFiles();
   unsigned int nEventsChain = 0;
   unsigned int nEvents = chain->GetEntries();
@@ -166,7 +249,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	cout<<"Processing File: "<<TString(currentFile->GetTitle())<<endl;
 
     for (unsigned int event = 0 ; event < nEvents; ++event){
-   
+
 	  zmet.GetEntry(event);
       ++nEventsTotal;
 	  
@@ -204,11 +287,12 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  // define "global" event variables
 	  float event_met_pt = zmet.met_pt();
 	  float event_met_ph = zmet.met_phi();
-	  event_met_pt = zmet.met_rawPt();
-	  event_met_ph = zmet.met_rawPhi();	  
-	  event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt(); // use miniAOD jets with 15 GeV
-	  event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();
 
+	  if( zmet.isData() ){
+		event_met_pt = zmet.met_T1CHS_miniAOD_CORE_pt();
+		event_met_ph = zmet.met_T1CHS_miniAOD_CORE_phi();
+	  }
+	  
 	  float evt_ht    = zmet.ht();
 
 	  float evt_njets = zmet.njets();
@@ -231,6 +315,12 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  if( !passSignalRegionSelection(selection) ) continue;
 	  if( !passMETFilters() ) continue;
 
+	  if (zmet.isData() && metFilterTxt.eventFails(zmet.run(), zmet.lumi(), zmet.evt())) {
+		//cout<<"Found bad event in data: "<<t.run<<", "<<t.lumi<<", "<<t.evt<<endl;
+		continue;
+      }	  
+	  if( TString(selection).Contains("withtightb") && zmet.nBJetTight() < 1 ) continue;
+
 	  // cout<<getPrescaleNoBins()<<endl;
 	  // cout<<"165 pscale: "<<zmet.HLT_Photon165_R9Id90_HE10_IsoM()<<endl;
 	  // cout<<"30 pscale:  "<<zmet.HLT_Photon30_R9Id90_HE10_IsoM()<<endl;
@@ -239,23 +329,13 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  	weight *= (float) getPrescaleNoBins();
 	  }
 	  
+	  n_allphotons += weight;
+	  e_allphotons += weight*weight;
+	  // if( !isLoosePhoton(0) ) continue;
+	  if( isLoosePhoton(0) ){ n_loosephotons += weight; e_loosephotons += weight*weight;}
+	  if( isTightPhoton(0) ){ n_tightphotons += weight;	e_tightphotons += weight*weight;}
+	  
 	  // if( TString(selection).Contains("SR_ATLAS") ) evt_ht += zmet.gamma_pt().at(0);
-
-	  //-~-~-~-~-~-~-~-~-//
-	  //Fill event  hists//
-	  //-~-~-~-~-~-~-~-~-//	  
-	  fillHist( "event", "njets"  , "passtrig", evt_njets         , weight );
-	  fillHist( "event", "met"    , "passtrig", event_met_pt         , weight );
-	  fillHist( "event", "met_raw", "passtrig", zmet.met_rawPt()     , weight );
-	  fillHist( "event", "ht"     , "passtrig", evt_ht            , weight );
-	  if( evt_njets > 0 ) 	  fillHist( "event", "htgt0jets"     , "passtrig", evt_ht            , weight );
-	  fillHist( "event", "ptg"    , "passtrig", zmet.gamma_pt().at(0), weight );	  
-	  fillHist( "event", "nVert"  , "passtrig", zmet.nVert()         , weight );	  
-	  fillHist( "event", "metphi" , "passtrig", event_met_ph         , weight );	  
-	  fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()    , weight );	  
-	  if( evt_njets == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
-	  if( evt_njets == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
-	  if( evt_njets >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
 	  
 
 
@@ -278,14 +358,98 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
 	  	// else if( ( !zmet.isData() && zmet.gamma_pt().at(0) > 25  ) || passPhotonTrigger22()  ) weight *= h_vtxweight_22  ->GetBinContent(h_vtxweight_22  ->FindBin(zmet.nVert()));
 	  }
 
+
+	  
 	  // if( TString(selection).Contains("SR_ATLAS") ) fillHist( "event", "htgt1jets", "passtrig", zmet.gamma_pt().at(0) + evt_ht, weight ); // this is for HT reweighting
 	  // else                                          fillHist( "event", "htgt1jets", "passtrig", zmet.gamma_pt().at(0)         , weight ); // this is for HT reweighting
 
 	  fillHist( "event", "htgt1jets", "passtrig", zmet.gamma_pt().at(0)         , weight ); // this is for HT reweighting
 												
 	  if( dohtreweighting ){
-	  	weight *= h_htweight->GetBinContent(h_htweight->FindBin(zmet.gamma_pt().at(0)));		
+		float minpt = min(2999.0,(double)zmet.gamma_pt().at(0));
+	  	weight *= h_htweight->GetBinContent(h_htweight->FindBin(minpt));		
 	  }
+	  fillHist( "event", "ht_highbin", "passtrig", evt_ht            , weight );
+
+	  if( doptreweighting ){
+		float minht = min(2999.0,(double)evt_ht);
+	  	weight *= h_ptweight->GetBinContent(h_ptweight->FindBin( minht ));		
+	  }
+
+	  if( !zmet.isData() && dovtxreweightingformc ){
+		// cout<<h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));
+		weight *= h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));		
+		// weight *= h_vtxweight->GetBinContent(zmet.nVert());		
+	  }
+
+	  
+	  // if( TString(selection).Contains("tail") ){
+	  if( true ){
+
+		// if( evt_ht < 200 ) continue;
+		
+		float btagcount = zmet.nBJetMedium();
+		if( TString(selection).Contains("withtightb") ) btagcount = zmet.nBJetTight();
+
+		if( !zmet.isData() && btagcount > 0 ) {
+		  bool hasrealb = false;
+		  for( int jetind = 0; jetind < zmet.njets(); jetind++ ){
+			if( abs(zmet.jet_mcFlavour().at(jetind)) == 5 ) hasrealb = true;
+			if( hasrealb ) break;
+		  }		
+
+			allmet_nobreq += weight;
+			unc_allmet_nobreq += weight*weight;
+		
+		  if( hasrealb ){
+			allmet_hasrealb += weight;
+			unc_allmet_hasrealb += weight*weight;
+		  }
+
+		  if( event_met_pt > 100 ){
+			  endmet_nobreq     += weight;
+			  unc_endmet_nobreq += weight*weight;		
+		
+			if( hasrealb ) endmet_hasrealb     += weight;		
+			if( hasrealb ) unc_endmet_hasrealb += weight*weight;		
+		  }
+
+		}
+		
+		if( btagcount == 0 ){
+		  allmet_btag_nobreq     += weight;
+		  unc_allmet_btag_nobreq += weight*weight;
+		}
+
+		if( btagcount > 0 ){
+		  allmet_btag_hasrealb     += weight;
+		  unc_allmet_btag_hasrealb += weight*weight;
+		}
+		
+		if( event_met_pt > 100 ){
+		  if( btagcount == 0 ) endmet_btag_nobreq       += weight;
+		  if( btagcount == 0 ) unc_endmet_btag_nobreq   += weight*weight;		
+		  if( btagcount > 0  ) endmet_btag_hasrealb     += weight;		
+		  if( btagcount > 0  ) unc_endmet_btag_hasrealb += weight*weight;		
+		}		
+
+	  }	 
+	  
+	  //-~-~-~-~-~-~-~-~-//
+	  //Fill event  hists//
+	  //-~-~-~-~-~-~-~-~-//	  
+	  fillHist( "event", "njets"  , "passtrig", evt_njets         , weight );
+	  fillHist( "event", "met"    , "passtrig", event_met_pt         , weight );
+	  fillHist( "event", "met_raw", "passtrig", zmet.met_rawPt()     , weight );
+	  fillHist( "event", "ht"     , "passtrig", evt_ht            , weight );
+	  if( evt_njets > 0 ) 	  fillHist( "event", "htgt0jets"     , "passtrig", evt_ht            , weight );
+	  fillHist( "event", "ptg"    , "passtrig", zmet.gamma_pt().at(0), weight );	  
+	  fillHist( "event", "nVert"  , "passtrig", zmet.nVert()         , weight );	  
+	  fillHist( "event", "metphi" , "passtrig", event_met_ph         , weight );	  
+	  fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()    , weight );	  
+	  if( evt_njets == 0 ) fillHist( "event", "met0jet"   , "passtrig", event_met_pt        , weight );
+	  if( evt_njets == 1 ) fillHist( "event", "met1jet"   , "passtrig", event_met_pt        , weight );
+	  if( evt_njets >= 2 ) fillHist( "event", "metgt1jet" , "passtrig", event_met_pt        , weight );
 
 	  // if( dohtreweighting ){
 	  // 	float evt_pt = zmet.gamma_pt().at(0);
@@ -322,6 +486,35 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   cout << npass       << " events passing selection" << endl;
   cout << nDuplicates << " duplicate events in data" << endl;
   // cout << "em events at low MET : "     << nem_2jets*10 << endl;
+
+  float unc_endmet_nobreq_binomial   = err_binomial( endmet_nobreq  , allmet_nobreq  , sqrt(unc_endmet_nobreq  ), sqrt(unc_allmet_nobreq  ));
+  float unc_endmet_hasrealb_binomial = err_binomial( endmet_hasrealb, allmet_hasrealb, sqrt(unc_endmet_hasrealb), sqrt(unc_allmet_hasrealb));
+
+  cout<<"fraction in tail with no b-req: "<< 100*endmet_nobreq  /allmet_nobreq   << " | " << 100*unc_endmet_nobreq_binomial   <<endl;	
+  cout<<"fraction in tail with 1 real b: "<< 100*endmet_hasrealb/allmet_hasrealb << " | " << 100*unc_endmet_hasrealb_binomial <<endl;
+
+  float unc_endmet_btag_nobreq_binomial   = err_binomial( endmet_btag_nobreq  , allmet_btag_nobreq  , sqrt(unc_endmet_btag_nobreq  ), sqrt(unc_allmet_btag_nobreq  ));
+  float unc_endmet_btag_hasrealb_binomial = err_binomial( endmet_btag_hasrealb, allmet_btag_hasrealb, sqrt(unc_endmet_btag_hasrealb), sqrt(unc_allmet_btag_hasrealb));
+
+  cout<<endl<<"fraction in tail with no b-tags: "<< 100*endmet_btag_nobreq  /allmet_btag_nobreq    << " | " << 100*unc_endmet_btag_nobreq_binomial   <<endl;	
+  cout<<      "fraction in tail with b-tags   : "<< 100*endmet_btag_hasrealb/allmet_btag_hasrealb  << " | " << 100*unc_endmet_btag_hasrealb_binomial <<endl;
+
+  cout<<endl<<"all MET b-veto : "<< allmet_btag_nobreq    << " | " << sqrt(unc_allmet_btag_nobreq  )   <<endl;	
+  cout<<endl<<"MET>100 b-veto : "<< endmet_btag_nobreq    << " | " << sqrt(unc_endmet_btag_nobreq  )   <<endl;	
+
+  cout<<endl<<"all MET w b-tag: "<< allmet_btag_hasrealb    << " | " << sqrt(unc_allmet_btag_hasrealb  )   <<endl;	
+  cout<<endl<<"MET>100 w b-tag: "<< endmet_btag_hasrealb    << " | " << sqrt(unc_endmet_btag_hasrealb  )   <<endl;	
+
+  float unc_loose_all = err_binomial( n_loosephotons, n_allphotons, sqrt(e_loosephotons), sqrt(e_allphotons));
+  float unc_tight_loose = err_binomial( n_tightphotons, n_loosephotons, sqrt(e_tightphotons), sqrt(e_loosephotons));
+
+  cout<<"nall  : "<<n_allphotons<<endl;
+  cout<<"nloose: "<<n_loosephotons<<endl;
+  cout<<"ntight: "<<n_tightphotons<<endl;
+  cout<<"loose/all  : "<<(float)n_loosephotons/(float)n_allphotons<<" +\- "<<unc_loose_all<<endl;
+  cout<<"tight/loose: "<<(float)n_tightphotons/(float)n_loosephotons<<" +\- "<<unc_tight_loose<<endl;
+
+
   
   mettemplates.NormalizeTemplates(mettemplate_hists);
 
@@ -333,6 +526,7 @@ void makePhotonTemplates::ScanChain ( TChain * chain , const string iter , const
   
   if( !dovtxreweighting ) str_vtxweight+= "_novtxweight";
   if( !dohtreweighting ) str_vtxweight+= "_nohtweight";
+  if( doptreweighting ) str_vtxweight+= "_ptweight";
 
   // make histos rootfile
   string outputfilename = 	Form("../output/%s/%s%s%s_templates.root",
@@ -385,6 +579,7 @@ void makePhotonTemplates::bookHistos(){
   variable.push_back("metphir");   variable_bins.push_back(500 );  
   variable.push_back("met_raw");   variable_bins.push_back(500 );  
   variable.push_back("ht");	       variable_bins.push_back(1000);  
+  variable.push_back("ht_highbin");variable_bins.push_back(1500);  
   variable.push_back("htgt0jets"); variable_bins.push_back(1000);  
   variable.push_back("htgt1jets"); variable_bins.push_back(3000);  
   variable.push_back("njets");     variable_bins.push_back(20  );  

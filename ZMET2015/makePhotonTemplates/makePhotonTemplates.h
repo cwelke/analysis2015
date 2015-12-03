@@ -11,7 +11,7 @@ class makePhotonTemplates
 public:
 
   makePhotonTemplates();
-  makePhotonTemplates( bool htreweighting );
+  makePhotonTemplates( bool htreweighting, bool ptreweighting );
   ~makePhotonTemplates();
   void ScanChain (TChain * chain,const std::string iter,const std::string sample, const std::string selection);
   void bookHistos();
@@ -19,6 +19,7 @@ public:
   void fillHist( std::string obj, std::string var, std::string sel, float value, float weight );
 
   bool dohtreweighting;
+  bool doptreweighting;
 
 private:
 

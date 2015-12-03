@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void runPhotonTemplates( std::string selection = "", std::string iter = "", std::string sample = "", bool dohtreweighting = false ){
+void runPhotonTemplates( std::string selection = "", std::string iter = "", std::string sample = "", bool dohtreweighting = false , bool doptreweighting = false ){
 
   gSystem->Load("libmakePhotonTemplates.so");
   gROOT ->SetStyle("Plain");
@@ -18,19 +18,24 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
   TChain* ch = new TChain("t");
 
   if ( sample == "data" ){
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015C25ns05Oct2015_ph*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25ns05Oct2015_ph*.root" , iter.c_str() ));
+	// ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPromptv4_ph*.root"  , iter.c_str() ));
+
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015C25ns05Oct2015_ph*.root" , iter.c_str() ));
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25ns05Oct2015_ph*.root" , iter.c_str() ));
 	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/data_2015D25nsPromptv4_ph*.root"  , iter.c_str() ));
-  }
+
+	}
 
   else if ( sample == "All_MC" ){
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_pt40_doubleEM.root");
 
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht40mlm*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht100mlm*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht200mlm*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht400mlm*.root", iter.c_str() ));
-	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/%s/gjets_25ns_ht600mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/V07-04-13/gjets_25ns_ht40mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/V07-04-13/gjets_25ns_ht100mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/V07-04-13/gjets_25ns_ht200mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/V07-04-13/gjets_25ns_ht400mlm*.root", iter.c_str() ));
+	ch->Add(Form("/nfs-6/userdata/cwelke/ZMETbabies/V07-04-13/gjets_25ns_ht600mlm*.root", iter.c_str() ));
 
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_ht100to200.root"   );
 	// ch->Add("/nfs-7/userdata/cwelke/ZMETbabies/V00-00-01/gjet_ht200to400.root"   );
@@ -42,7 +47,7 @@ void runPhotonTemplates( std::string selection = "", std::string iter = "", std:
 
   }
 
-  makePhotonTemplates* myLooper = new makePhotonTemplates(dohtreweighting);
+  makePhotonTemplates* myLooper = new makePhotonTemplates(dohtreweighting, doptreweighting);
   myLooper->ScanChain( ch , iter , sample, selection );
 
   
@@ -65,8 +70,13 @@ int main(int argc, char **argv)
   string dohtreweighting(argv[4]); 
 
   bool doreweighting = false;
+  bool doptreweighting = false;
   if( dohtreweighting == "dohtreweighting" )  doreweighting = true;
+  if( dohtreweighting == "doptreweighting" ){
+	doreweighting = true;
+	doptreweighting = true;
+  }
   
-  runPhotonTemplates( selection, iter, sample, doreweighting );
+  runPhotonTemplates( selection, iter, sample, doreweighting, doptreweighting );
   return 0;
 }

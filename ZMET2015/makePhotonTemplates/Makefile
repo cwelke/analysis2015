@@ -36,7 +36,8 @@ LINKERFLAGS = $(shell root-config --ldflags --libs) -lEG -lGenVector -lTMVA
 
 DIR = ./
 
-SOURCES = makePhotonTemplates.cc runPhotonTemplates.cc ../../CORE/Tools/dorky/dorky.cc ../../CORE/Tools/goodrun.cc
+SOURCES = makePhotonTemplates.cc runPhotonTemplates.cc ../../CORE/Tools/dorky/dorky.cc ../../CORE/Tools/goodrun.cc ../../CORE/Tools/badEventFilter.cc
+
 OBJECTS = $(SOURCES:.cc=.o)
 LIB = libmakePhotonTemplates.so
 
