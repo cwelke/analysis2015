@@ -10,6 +10,8 @@
 #include "TDirectory.h"
 #include "TFile.h"
 #include "TH1F.h"
+#include "TH2F.h"
+#include "TH3.h"
 #include "TMath.h"
 
 #include "Math/VectorUtil.h"
@@ -23,6 +25,7 @@
 
 #include "../../CORE/Tools/dorky/dorky.h"
 #include "../../CORE/Tools/goodrun.h"
+#include "../../CORE/Tools/badEventFilter.h"
 
 using namespace std;
 using namespace duplicate_removal;
@@ -31,8 +34,24 @@ const bool debug = false;
 
 const bool usejson              = true;
 const bool dovtxreweighting     = true;
-const bool dotemplateprediction = true;
+const bool dotemplateprediction = false;
 const bool dotemplatepredictionmc = false;
+
+// Used for MC, to calculate nominal values
+const bool doscalefactors       = true;
+
+// these are for deriving signal systematics
+bool doisrboost  = true;
+bool heavy_up    = false;
+bool light_up    = false;
+bool jes_up      = false;
+bool jes_dn      = false;
+bool dofastsim   = true;
+bool doleptonid  = true;
+bool doleptoniso = true;
+
+float nlosplit = 0.0;
+float nhisplit = 0.0;
 
 templateLooper::templateLooper()
 {
@@ -55,17 +74,70 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   double nem_2jets = 0;
   double nem_2jets_mll = 0;
 
+  float allmet_nobreq = 0;
+  float allmet_hasrealb = 0;
+  float endmet_nobreq = 0;
+  float endmet_hasrealb = 0;
+
+  float allmet_btag_nobreq = 0;
+  float allmet_btag_hasrealb = 0;
+  float endmet_btag_nobreq = 0;
+  float endmet_btag_hasrealb = 0;
+
+  float unc_endmet_nobreq        = 0;
+  float unc_endmet_hasrealb      = 0;
+  float unc_endmet_btag_nobreq   = 0;
+  float unc_endmet_btag_hasrealb = 0;
+  
+  float unc_allmet_nobreq        = 0;
+  float unc_allmet_hasrealb      = 0;
+  float unc_allmet_btag_nobreq   = 0;
+  float unc_allmet_btag_hasrealb = 0;
+
   cout<<selection<<endl;
   
   bookHistos();
+
+  eventFilter metFilterTxt;
+  if ( TString(sample).Contains("data") ) {
+    cout<<"Loading bad event files ..."<<endl;
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleEG_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/DoubleMuon_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/HTMHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/HTMHT_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/JetHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/JetHT_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MET_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MET_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MuonEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/MuonEG_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleElectron_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleElectron_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SingleMuon_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SinglePhoton_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/SinglePhoton_ecalscn1043093.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_DoubleEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_DoubleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_HTMHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_JetHT_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_MET_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_MuonEG_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SingleElectron_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SingleMuon_csc2015.txt");
+    metFilterTxt.loadBadEventList("/nfs-6/userdata/mt2utils/eventlist_SinglePhoton_csc2015.txt");
+    cout<<" ... finished!"<<endl;
+  }
 
   double npass = 0;
 
   METTemplates mettemplates( selection );
   TH1F* currentMETTemplate = NULL;
   if( dotemplateprediction ){
+	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_novtxweight_ptweight_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
 	mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_novtxweight_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
-	// mettemplates.loadTemplatesFromFile( Form("../output/%s/data%s_templates.root", iter.c_str(), selection.c_str()), mettemplate_hists );
 	mettemplates.setBins( selection );
   }
   if( dotemplatepredictionmc ){
@@ -75,17 +147,21 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   }
   
   // do this once per job
-  // const char* json_file = "../../json/json_270715_golden.txt";
+  
+  // these are for deriving signal systematics
+  if( TString(selection).Contains("noisr")       ) doisrboost  = false;
+  if( TString(selection).Contains("heavy_UP")    ) heavy_up    = true;
+  if( TString(selection).Contains("light_UP")    ) light_up    = true;
+  if( TString(selection).Contains("jes_up")      ) jes_up      = true;
+  if( TString(selection).Contains("jes_dn")      ) jes_dn      = true;
+  if( TString(selection).Contains("nofastsim")   ) dofastsim   = false;
+  if( TString(selection).Contains("noleptonid")  ) doleptonid  = false;
+  if( TString(selection).Contains("noleptoniso") ) doleptoniso = false;
 
-  // const char* json_file = "json_25ns.txt";
-  // const char* json_file = "json_25ns_remove.txt";
-  // const char* json_file = "../../json/json_golden_168pb_290915_sntformat.txt"; // 116 pb
-  // const char* json_file = "../../json/json_225pb_091015_sntformat.txt"; // 225 pb
-  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10_datadriven/CORE/Tools/json_600pb_131015_sntformat.txt";
-  // const char* json_file = "/home/users/cwelke/analysis2015/CMSSW_7_4_7_patch2_dilepbabymaker/V07-04-10/json/json_150pb_141015_sntformat.txt";
-
-  const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
-
+  // which json do you use?
+  // const char* json_file = "/home/users/olivito/mt2_74x_dev/MT2Analysis/babymaker/jsons/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 1.3 fb
+  const char* json_file = "Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_snt.txt"; // 2.1 fb
+  
   set_goodrun_file(json_file);
 
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
@@ -93,12 +169,70 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   TH1F * h_vtxweight = NULL;
   TFile * f_vtx = NULL;
   if( dovtxreweighting ){
-	f_vtx = TFile::Open("nvtx_ratio.root","READ");
-	h_vtxweight = (TH1F*)f_vtx->Get("h_vtx_ratio")->Clone("h_vtxweight");
+	// f_vtx = TFile::Open("nvtx_ratio.root","READ");
+	// h_vtxweight = (TH1F*)f_vtx->Get("h_vtx_ratio")->Clone("h_vtxweight");
+	f_vtx = TFile::Open("puWeights_nTrueInt.root","READ");
+	h_vtxweight = (TH1F*)f_vtx->Get("weights")->Clone("h_vtxweight");
 	h_vtxweight->SetDirectory(rootdir);
 	f_vtx->Close();
   }
-  
+
+  TFile * f_sfweights = NULL;
+  TH2D * h_isrweights = NULL;
+  TH2D * h_bsfweights = NULL;
+  TH2D * h_bsfweights_heavy_UP = NULL;
+  TH2D * h_bsfweights_light_UP = NULL;
+  TH2D * h_eleweights = NULL;
+  TH2D * h_muoweights = NULL;
+
+  TH2D * h_eleweights_id = NULL;
+  TH2D * h_muoweights_id = NULL;
+  TH2D * h_eleweightsiso = NULL;
+  TH2D * h_muoweightsiso = NULL;
+
+  if( doscalefactors ){
+	f_sfweights  = TFile::Open("nsig_weights_T5ZZ.root","READ");
+
+	h_isrweights = (TH2D*)f_sfweights->Get("h_avg_weight_isr")   ->Clone("h_isrweights");
+	h_bsfweights = (TH2D*)f_sfweights->Get("h_avg_weight_btagsf")->Clone("h_bsfweights");
+	h_bsfweights_heavy_UP = (TH2D*)f_sfweights->Get("h_avg_weight_btagsf_heavy_UP")->Clone("h_bsfweights_heavy_UP");
+	h_bsfweights_light_UP = (TH2D*)f_sfweights->Get("h_avg_weight_btagsf_light_UP")->Clone("h_bsfweights_light_UP");
+
+	h_isrweights->SetDirectory(rootdir);
+	h_bsfweights->SetDirectory(rootdir);
+	h_bsfweights_heavy_UP->SetDirectory(rootdir);
+	h_bsfweights_light_UP->SetDirectory(rootdir);
+
+	f_sfweights->Close();
+
+	// for FS to Fullsim
+	f_sfweights  = TFile::Open("sf_el_tight_mini01.root","READ");
+	h_eleweights = (TH2D*)f_sfweights->Get("histo2D")   ->Clone("h_eleweights");
+	h_eleweights->SetDirectory(rootdir);
+	f_sfweights->Close();
+	f_sfweights  = TFile::Open("sf_mu_mediumID_mini02.root","READ");
+	h_muoweights = (TH2D*)f_sfweights->Get("histo2D")   ->Clone("h_muoweights");
+	h_muoweights->SetDirectory(rootdir);
+	f_sfweights->Close();
+
+	// for Fullsim to Data
+	f_sfweights  = TFile::Open("kinematicBinSFele.root","READ");
+	h_eleweights_id = (TH2D*)f_sfweights->Get("MVATight_and_TightIP2D_and_TightIP3D") -> Clone("h_eleweights_id");
+	h_eleweightsiso = (TH2D*)f_sfweights->Get("MiniIso0p1_vs_AbsEta")                 -> Clone("h_eleweightsiso");
+	h_eleweights_id->SetDirectory(rootdir);
+	h_eleweightsiso->SetDirectory(rootdir);
+	f_sfweights->Close();
+	f_sfweights  = TFile::Open("TnP_MuonID_NUM_MediumID_DENOM_generalTracks_VAR_map_pt_eta.root","READ");
+	h_muoweights_id = (TH2D*)f_sfweights->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_tag_combRelIsoPF04dBeta_bin0_&_tag_pt_bin0_&_tag_IsoMu20_pass")   ->Clone("h_muoweights_id");
+	h_muoweights_id->SetDirectory(rootdir);
+	f_sfweights->Close();
+	f_sfweights  = TFile::Open("TnP_MuonID_NUM_MiniIsoTight_DENOM_LooseID_VAR_map_pt_eta.root","READ");
+	h_muoweightsiso = (TH2D*)f_sfweights->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_tag_combRelIsoPF04dBeta_bin0_&_tag_pt_bin0_&_PF_pass_&_tag_IsoMu20_pass")   ->Clone("h_muoweightsiso");
+	h_muoweightsiso->SetDirectory(rootdir);
+	f_sfweights->Close();
+	
+  }
+
   TObjArray *listOfFiles = chain->GetListOfFiles();
   unsigned int nEventsChain = 0;
   unsigned int nEvents = chain->GetEntries();
@@ -122,13 +256,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
     nEvents = tree->GetEntries();	
 	cout<<"Processing File: "<<TString(currentFile->GetTitle())<<endl;
 
+	
     for (unsigned int event = 0 ; event < nEvents; ++event){
    
 	  zmet.GetEntry(event);
       ++nEventsTotal;
 
 	  if (nEventsTotal % 1000 == 0){ // progress feedback to user
-		if (isatty(1)){ // xterm magic from L. Vacavant and A. Cerri               
+	  	if (isatty(1)){ // xterm magic from L. Vacavant and A. Cerri               
           printf("\015\033[32m ---> \033[1m\033[31m%4.1f%%"
                  "\033[0m\033[32m <---\033[0m\015", (float)nEventsTotal/(nEventsChain*0.01));
           fflush(stdout);
@@ -143,9 +278,6 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( sample == "zjetsmlm" ){
 	  	if( !TString(currentFile->GetTitle()).Contains("llht") ){
 	  	  if( zmet.gen_ht()    > 100 ) continue;
-	  	  // if( zmet.met_rawPt() > 100 ) continue;
-	  	  // }else if( TString(currentFile->GetTitle()).Contains("dyjetsll") ){
-	  	//   if( zmet.gen_ht() < 100 ) continue;
 	  	}
 	  }	
 
@@ -171,10 +303,6 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		if( !hasrealmet || !realzpair ) continue;
 	  }
 	  	  
-	  // if( zmet.isData() && !(zmet.run() == 251244 ||
-	  // 						 zmet.run() == 251252 ||
-	  // 						 zmet.run() == 251251) ) continue;
-
 	  if ( zmet.isData() && usejson && !goodrun(zmet.run(), zmet.lumi()) ) continue;
 
 	  //-~-~-~-~-~-~-~-~-~-~-~-~-~-~//
@@ -201,30 +329,90 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		weight = 1.0;
 	  }else if( !zmet.isData() ){
 		weight *= zmet.evt_scale1fb();
+	  	if( TString(currentFile->GetTitle()).Contains("t5zz") ){
+		  weight *= 2.11;
+		}
 	  }
 	  
 	  if( !zmet.isData() && dovtxreweighting ){
-		// cout<<h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));
-		weight *= h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nVert()));		
-		// weight *= h_vtxweight->GetBinContent(zmet.nVert());		
+	  	// if( !TString(currentFile->GetTitle()).Contains("t5zz") ){
+		  weight *= h_vtxweight->GetBinContent(h_vtxweight->FindBin(zmet.nTrueInt()));		
+		// }
 	  }
-
+	  
 	  float event_met_pt = zmet.met_pt();
 	  float event_met_ph = zmet.met_phi();
 
-	  // event_met_pt = zmet.met_rawPt();
-	  // event_met_ph = zmet.met_rawPhi();	  
+	  // float event_ht    = zmet.ht();
+	  // float event_njets = zmet.njets();
 
-	  // event_met_pt = zmet.met_T1CHS_fromCORE_pt();
-	  // event_met_ph = zmet.met_T1CHS_fromCORE_phi();
+	  // if( jes_up ){
+	  // 	event_ht    = zmet.ht_up();
+	  // 	event_njets = zmet.njets_up();
 
-	  // event_met_pt = zmet.met_T1CHSNoHF_fromCORE_pt(); // use miniAOD jets with 15 GeV
-	  // event_met_ph = zmet.met_T1CHSNoHF_fromCORE_phi();
+	  // }else if( jes_dn ){
+	  // 	event_ht    = zmet.ht_dn();
+	  // 	event_njets = zmet.njets_dn();
+
+	  // }
+
+	  if( TString(currentFile->GetTitle()).Contains("t5zz") ){
+		// if( zmet.met_T1CHS_miniAOD_CORE_pt() > 6500 ) continue;
+
+		// if( !(zmet.mass_gluino() == 1050 && zmet.mass_LSP() == 800) ) continue;
+	  	// if( (zmet.mass_gluino() == 1050 && zmet.mass_LSP() == 850) ){
+	  	// // if( zmet.met_T1CHS_miniAOD_CORE_pt() > 6500 && zmet.met_pt() < 6500 ){
+	  	//   cout<<"miniAOD met: "<<zmet.met_pt()<<" | rawMET: "<<zmet.met_rawPt()<<" | COREMET: "<<zmet.met_T1CHS_miniAOD_CORE_pt()<<endl;
+	  	// }
+	  	if( zmet.met_T1CHS_miniAOD_CORE_pt() < 6500 ){
+		  if( jes_up ){
+			event_met_pt = zmet.met_T1CHS_miniAOD_CORE_up_pt();
+			event_met_ph = zmet.met_T1CHS_miniAOD_CORE_up_phi();
+
+		  }else if( jes_dn ){
+			event_met_pt = zmet.met_T1CHS_miniAOD_CORE_dn_pt();
+			event_met_ph = zmet.met_T1CHS_miniAOD_CORE_dn_phi();
+
+		  }else{
+			event_met_pt = zmet.met_T1CHS_miniAOD_CORE_pt();
+			event_met_ph = zmet.met_T1CHS_miniAOD_CORE_phi();
+		  }
+	  	}else if( zmet.met_pt() > 6500 ){
+	  	  // cout<<"miniAOD met: "<<zmet.met_pt()<<" | rawMET: "<<zmet.met_rawPt()<<endl;
+	  	  // cout<<zmet.evt_xsec()<<endl;
+	  	  // cout<<zmet.evt_nEvts()<<endl;
+	  	  // cout<<zmet.evt_scale1fb()<<endl;
+	  	  // cout<<zmet.nTrueInt()<<endl;
+	  	  continue;
+	  	}
+
+	  }else{
+		if( jes_up ){
+		  event_met_pt = zmet.met_T1CHS_miniAOD_CORE_up_pt();
+		  event_met_ph = zmet.met_T1CHS_miniAOD_CORE_up_phi();
+
+		}else if( jes_dn ){
+		  event_met_pt = zmet.met_T1CHS_miniAOD_CORE_dn_pt();
+		  event_met_ph = zmet.met_T1CHS_miniAOD_CORE_dn_phi();
+
+		}else{
+		  event_met_pt = zmet.met_T1CHS_miniAOD_CORE_pt();
+		  event_met_ph = zmet.met_T1CHS_miniAOD_CORE_phi();
+		}
+		
+	  }
+	  
+	  if( TString(currentFile->GetTitle()).Contains("t5zz") ){
+		if( TString(sample).Contains("signal1100200") && !(zmet.mass_gluino() == 1000 && zmet.mass_LSP() == 800) ) continue;
+		if( TString(selection).Contains("losplit") && !(zmet.mass_gluino() == 1000 && zmet.mass_LSP() == 800) ) continue;
+		if( event_met_pt > 225 ) nlosplit += weight;
+		if( TString(selection).Contains("hisplit") && !(zmet.mass_gluino() == 1050 && zmet.mass_LSP() == 400) ) continue;
+		if( event_met_pt > 225 ) nhisplit += weight;
+	  }
 	  
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
-	  // if( zmet.isData() && zmet.met_rawPt() < 0.1 ) continue;
 	  if( zmet.nlep()                        < 2         ) continue; // require at least 2 good leptons
 	  if( zmet.lep_pt().at(0)                < 20        ) continue; // leading lep pT > 25 GeV
 	  if( zmet.lep_pt().at(1)                < 20        ) continue; // tailing lep pT > 20 GeV
@@ -239,19 +427,100 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  // if( zmet.dilpt() < 22 ) continue;
 
 	  // // for closure only
-	  // if( zmet.njets() < 2   ) continue; // require at least 2 good leptons
-      // if( zmet.ht()    < 100 ) continue; // special selection for now
 	  if( !passSignalRegionSelection(selection) ) continue;
 	  if( !passMETFilters() ) continue;
+
+	  if (zmet.isData() && metFilterTxt.eventFails(zmet.run(), zmet.lumi(), zmet.evt())) {
+		//cout<<"Found bad event in data: "<<t.run<<", "<<t.lumi<<", "<<t.evt<<endl;
+		continue;
+      }	  
+	  if( TString(selection).Contains("withtightb") && zmet.nBJetTight() < 1 ) continue;
 	  
 	  //~-~-~-~-~-~-~-~-//
       // event selection// 
 	  //~-~-~-~-~-~-~-~-//
-	  // if( !(zmet.hyp_type() == 0 ||					     
-	  // 		zmet.hyp_type() == 1 ||					     
-	  // 		zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
-	  // if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sign
+	  if( !(zmet.hyp_type() == 0 ||          
+	  		zmet.hyp_type() == 1 ||          
+	  		zmet.hyp_type() == 2 )                       ) continue; // require explicit dilepton event
+	  if( !(zmet.evt_type() == 0 )                       ) continue; // require opposite sig
 
+	  float lepton_SF = 1.0;
+	  // float weightbefore = weight;
+	  // float weightafter = weight;
+	  
+	  // deal with other event weights
+	  if( !zmet.isData() && doscalefactors ){
+
+		// btag sf variation
+		if(heavy_up){
+		  weight *= zmet.weight_btagsf_heavy_UP();		
+		  weight *= 1./h_bsfweights_heavy_UP->GetBinContent(h_bsfweights_heavy_UP->FindBin( zmet.mass_gluino(), zmet.mass_LSP() ));
+
+		}else if(light_up){
+		  weight *= zmet.weight_btagsf_light_UP();		
+		  weight *= 1./h_bsfweights_light_UP->GetBinContent(h_bsfweights_light_UP->FindBin( zmet.mass_gluino(), zmet.mass_LSP() ));
+
+		}else{
+		  weight *= zmet.weight_btagsf();		
+		  weight *= 1./h_bsfweights->GetBinContent(h_bsfweights->FindBin( zmet.mass_gluino(), zmet.mass_LSP() ));
+		}
+		
+		if( doisrboost ){
+		  if(      zmet.isrboost() > 400. && zmet.isrboost() < 600. ) weight *= 0.85;
+		  else if( zmet.isrboost() > 600.                           ) weight *= 0.70;
+		  weight *= 1./h_isrweights->GetBinContent(h_isrweights->FindBin( zmet.mass_gluino(), zmet.mass_LSP() ));
+		}
+
+		float min_leppt1  = min( 75.0, (double)zmet.lep_pt().at(0));
+		float min_leppt2  = min( 75.0, (double)zmet.lep_pt().at(1));
+		float abs_lepeta1 = abs(zmet.lep_eta().at(0));
+		float abs_lepeta2 = abs(zmet.lep_eta().at(1));
+
+		// trigger scale factors for SF
+		if( zmet.hyp_type() == 0 ) weight *= 0.939;
+		if( zmet.hyp_type() == 1 ) weight *= 0.929;
+		
+		// fullsim to data scale factors
+		if( doleptonid ){
+		  if( abs(zmet.lep_pdgId().at(0)) == 11 ) lepton_SF *= h_eleweights_id->GetBinContent(h_eleweights_id->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 11 ) lepton_SF *= h_eleweights_id->GetBinContent(h_eleweights_id->FindBin( min_leppt2, abs_lepeta2 ));
+		  if( abs(zmet.lep_pdgId().at(0)) == 13 ) lepton_SF *= h_muoweights_id->GetBinContent(h_muoweights_id->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 13 ) lepton_SF *= h_muoweights_id->GetBinContent(h_muoweights_id->FindBin( min_leppt2, abs_lepeta2 ));
+		}
+		
+		if( doleptoniso ){
+		  if( abs(zmet.lep_pdgId().at(0)) == 11 ) lepton_SF *= h_eleweightsiso->GetBinContent(h_eleweightsiso->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 11 ) lepton_SF *= h_eleweightsiso->GetBinContent(h_eleweightsiso->FindBin( min_leppt2, abs_lepeta2 ));
+		  if( abs(zmet.lep_pdgId().at(0)) == 13 ) lepton_SF *= h_muoweightsiso->GetBinContent(h_muoweightsiso->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 13 ) lepton_SF *= h_muoweightsiso->GetBinContent(h_muoweightsiso->FindBin( min_leppt2, abs_lepeta2 ));
+		}
+  
+		if( dofastsim && TString(currentFile->GetTitle()).Contains("t5zz") ){
+		  if( abs(zmet.lep_pdgId().at(0)) == 11 ) lepton_SF *= h_eleweights->GetBinContent(h_eleweights->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 11 ) lepton_SF *= h_eleweights->GetBinContent(h_eleweights->FindBin( min_leppt2, abs_lepeta2 ));
+		  if( abs(zmet.lep_pdgId().at(0)) == 13 ) lepton_SF *= h_muoweights->GetBinContent(h_muoweights->FindBin( min_leppt1, abs_lepeta1 ));
+		  if( abs(zmet.lep_pdgId().at(1)) == 13 ) lepton_SF *= h_muoweights->GetBinContent(h_muoweights->FindBin( min_leppt2, abs_lepeta2 ));
+		}
+		
+		weight *= lepton_SF;
+		
+		// if( abs(zmet.lep_pdgId().at(0)) == 11 ) weight *= h_eleweights->GetBinContent(h_eleweights->FindBin( zmet.lep_pt().at(0), zmet.lep_eta().at(0), zmet.nVert() ));
+		// if( abs(zmet.lep_pdgId().at(1)) == 11 ) weight *= h_eleweights->GetBinContent(h_eleweights->FindBin( zmet.lep_pt().at(1), zmet.lep_eta().at(1), zmet.nVert() ));
+
+		// if( abs(zmet.lep_pdgId().at(0)) == 13 ) weight *= h_muoweights->GetBinContent(h_muoweights->FindBin( zmet.lep_pt().at(0), zmet.lep_eta().at(0), zmet.nVert() ));
+		// if( abs(zmet.lep_pdgId().at(1)) == 13 ) weight *= h_muoweights->GetBinContent(h_muoweights->FindBin( zmet.lep_pt().at(1), zmet.lep_eta().at(1), zmet.nVert() ));
+
+		if( zmet.mass_gluino() == 1400 && zmet.mass_LSP() == 400 ) weight*=2;
+		
+		// weightafter = weight;
+ 
+	  }
+
+	  // cout<<"weight before: "<<weightbefore<<endl;
+	  // cout<<"btag sf      : "<<zmet.weight_btagsf()<<endl;
+	  // cout<<"lepton SF    : "<<lepton_SF<<endl;
+	  // cout<<"weight after:  "<<weightafter<<endl;
+	  
       if( !usejson && zmet.isData() && !zmet.evt_passgoodrunlist()   ) continue;
 	  fillHist( "event", "mll"  , "inclusive", zmet.dilmass()  , weight );
 
@@ -265,23 +534,50 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 			  (( zmet.HLT_MuEG()        || zmet.HLT_MuEG_noiso()                                 ))
 			  )           ) continue;
 	  }else{
-	  
-		if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   || zmet.HLT_DoubleMu_noiso() ) && zmet.hyp_type() == 1 ) ||
-			  (( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()                             ) && zmet.hyp_type() == 0 ) ||
-			  (( zmet.HLT_MuEG()        || zmet.HLT_MuEG_noiso()                                 ) && zmet.hyp_type() == 2 )
-			  )           ) continue;
-	  }
-		  
-	  float rawmet_pt = zmet.met_rawPt();
-	  // float rawmet_phi = zmet.met_rawPhi();
 
+		if( !TString(currentFile->GetTitle()).Contains("t5zz") ){
+
+		  if( !((( zmet.HLT_DoubleMu()    || zmet.HLT_DoubleMu_tk()   || zmet.HLT_DoubleMu_noiso() ) && zmet.hyp_type() == 1 ) ||
+				(( zmet.HLT_DoubleEl_DZ() || zmet.HLT_DoubleEl_noiso()                             ) && zmet.hyp_type() == 0 ) ||
+				(( zmet.HLT_MuEG()        || zmet.HLT_MuEG_noiso()                                 ) && zmet.hyp_type() == 2 )
+				)           ) continue;
+		
+		}
+	  }
+	  
 	  fillHist( "event", "mll"    , "passtrig" , zmet.dilmass()  , weight );
 	  if( zmet.njets() > 1 ){
 		if( zmet.hyp_type() == 2 ) nem_2jets += weight;	  
 		fillHist( "event", "metgt1jet" , "inclusive", event_met_pt        , weight );
 	  }
+	 
+	  // // for CRs
+	  // if( zmet.evt_type() != 2 ){
+	  // // if( TString(selection).Contains("CR") && zmet.evt_type() != 2 ){
+	  // 	// cout<<zmet.jet_p4().size()<<" | "<<zmet.jets_p4().size()<<endl;
+	  // 	int njets_cr = 0;
+	  // 	for( int jetind = 0; jetind < zmet.jet_p4().size(); jetind++ ){
+	  // 	  bool foundmatch = false;
+	  // 	  if( zmet.jet_p4().at(jetind).pt() < 35   ) continue;
+	  // 	  if( zmet.jet_p4().at(jetind).eta() > 2.4 ) continue;
+	  // 	  for( int lepind = 0; lepind < zmet.lep_p4().size(); lepind++ ){
+	  // 		if(  sqrt( pow(zmet.jet_p4().at(jetind).eta() - zmet.lep_p4().at(lepind).eta(), 2) + pow(acos(cos(zmet.jet_p4().at(jetind).phi() - zmet.lep_p4().at(lepind).phi())), 2) ) < 0.4 ){ 
+	  // 		  foundmatch = true;
+	  // 		}
+	  // 	  }
+	  // 	  if( !foundmatch ) njets_cr++;
+	  // 	}
+	  // 	fillUnderOverFlow(event_hists.at( "h_ll_event_njtall_passtrig" ), njets_cr, weight );
+	  // 	if( event_met_pt > 50 ) fillUnderOverFlow(event_hists.at( "h_ll_event_njtm50_passtrig" ), njets_cr, weight );
+	  // 	fillUnderOverFlow(event_hists.at( "h_ll_event_metall_passtrig" ), event_met_pt, weight );
+	  // 	if( njets_cr != zmet.njets() ) continue;
+	  // }
 
-	  if( !(TString(selection).Contains("CR") && zmet.evt_type() != 2) ){
+	  if( (event_met_pt > 100) ){
+		fillHist( "event", "mll_fkw", "passtrig", zmet.dilmass()   , weight );	  
+	  }
+
+	  if( (!(TString(selection).Contains("CR") )&& zmet.evt_type() != 2) ){
 		if( !(zmet.dilmass() > 81 && zmet.dilmass() < 101) ) continue; // HT > 100
 	  }
 
@@ -289,28 +585,14 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 		if( zmet.hyp_type() == 2 ) nem_2jets_mll += weight;	  
 	  }
 
-	  // for sync
-	  // if( zmet.hyp_type()==2 && zmet.evt_type()==0 && ((zmet.met_pt() > 150 && zmet.njets() == 2) || (zmet.met_pt() > 100 && zmet.njets() >= 3)) ){
-	  // 	// cout<<zmet.run()<<" | "<< zmet.lumi()<<" | "<<zmet.evt()<<endl;
-	  // 	cout<<zmet.evt()<<" | "<<zmet.rho()<<" | "<<event_met_pt<<" | "<< zmet.met_pt()<<" | "<< zmet.met_T1CHSNoHF_fromCORE_pt()<<" | "<<zmet.jet_pt().at(0)<<" | "<<zmet.jet_pt().at(1)<<endl;
+	  //for Marc 
+	  // if( ((zmet.njets() > 1 && event_met_pt > 150 ) || (zmet.njets() > 2 && event_met_pt > 100 )) && zmet.hyp_type() != 2 ){
+	  // 	cout<<zmet.run()<<"	|	"<<zmet.lumi()<<"	|	"<<zmet.evt()<<"	|	"<<event_met_pt<<"	|	"<<zmet.jet_pt().at(0)<<"	|	"<<zmet.jet_pt().at(1)<<"	|	"<<zmet.njets()<<"	|	"<<zmet.nBJetMedium()<<endl;
 	  // }
-	  
-	  // for CRs
-	  if( TString(selection).Contains("CR") && zmet.evt_type() != 2 ){
-		int njets_cr = 0;
-		for( int jetind = 0; jetind < zmet.jets_p4().size(); jetind++ ){
-		  bool foundmatch = false;
-		  for( int lepind = 0; lepind < zmet.lep_p4().size(); lepind++ ){
-			if(  sqrt( pow(zmet.jets_p4().at(jetind).eta() - zmet.lep_p4().at(lepind).eta(), 2) + pow(acos(cos(zmet.jets_p4().at(jetind).phi() - zmet.lep_p4().at(lepind).phi())), 2) ) < 0.4 ){ 
-			  foundmatch = true;
-			}
-		  }
-		  if( !foundmatch ) njets_cr++;
-		}
-		fillUnderOverFlow(event_hists.at( "h_ll_event_njtall_passtrig" ), njets_cr, weight );
-		if( event_met_pt > 50 ) fillUnderOverFlow(event_hists.at( "h_ll_event_njtm50_passtrig" ), njets_cr, weight );
-		fillUnderOverFlow(event_hists.at( "h_ll_event_metall_passtrig" ), event_met_pt, weight );
-	  }
+
+	  // if( ((zmet.njets() > 3 && event_met_pt > 225 )) && zmet.hyp_type() != 2 ){
+	  // 	cout<<event_met_pt<<"	|	"<<zmet.njets()<<"	|	"<<zmet.nBJetMedium()<<"	|	"<<zmet.jet_mcFlavour().at(0)<<"	|	"<<zmet.jet_mcFlavour().at(1)<<"	|	"<<zmet.jet_mcFlavour().at(2)<<"	|	"<<zmet.jet_mcFlavour().at(3)<<endl;
+	  // }
 
 	  //-~-~-~-~-~-~-~-~-//
 	  //Fill event  hists//
@@ -327,16 +609,37 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  fillHist( "event", "metphi" , "passtrig", event_met_ph        , weight );	  
 	  fillHist( "event", "metphir", "passtrig", zmet.met_rawPhi()   , weight );	  
 
+	  if( zmet.njets() > 0 ) fillHist( "event", "ptj1"   , "passtrig", zmet.jets_p4().at(0).pt() , weight );	  
+	  if( zmet.njets() > 1 ) fillHist( "event", "ptj2"   , "passtrig", zmet.jets_p4().at(1).pt() , weight );	  
+	  if( zmet.njets() > 2 ) fillHist( "event", "ptj3"   , "passtrig", zmet.jets_p4().at(2).pt() , weight );	  
+	  if( zmet.njets() > 3 ) fillHist( "event", "ptj4"   , "passtrig", zmet.jets_p4().at(3).pt() , weight );	  
 
-	  fillHist( "event", "met_mettoolbox"        , "passtrig", zmet.met_T1CHS_pt()          , weight );	  
-	  fillHist( "event", "met_mettoolboxNoHF"    , "passtrig", zmet.met_T1CHSNoHF_pt()      , weight );	  
-	  fillHist( "event", "met_mettoolboxNoHFraw" , "passtrig", zmet.met_rawNoHF_pt()        , weight );	  
+	  if( zmet.njets() > 0 ) fillHist( "event", "csv1"   , "passtrig", zmet.jet_btagCSV().at(0) , weight );	  
+	  if( zmet.njets() > 1 ) fillHist( "event", "csv2"   , "passtrig", zmet.jet_btagCSV().at(1) , weight );	  
+	  if( zmet.njets() > 2 ) fillHist( "event", "csv3"   , "passtrig", zmet.jet_btagCSV().at(2) , weight );	  
+	  if( zmet.njets() > 3 ) fillHist( "event", "csv4"   , "passtrig", zmet.jet_btagCSV().at(3) , weight );	  
+
+	  int bjetind = 0;
+	  int genbjetind = 0;
+	  for( int jetind = 0; jetind < zmet.njets(); jetind++ ){
+		if( zmet.jet_btagCSV().at(jetind) > 0.89 ){
+		  if( bjetind+1 > 4 ) continue;
+		  fillHist( "event", Form("ptb%i", bjetind+1)   , "passtrig", zmet.jets_p4().at(jetind).pt() , weight );
+		  bjetind++;
+		}
+		if( zmet.jet_btagCSV().at(jetind) > 0.89 && !zmet.isData() && abs(zmet.jet_mcFlavour().at(jetind)) == 5 ){
+		  fillHist( "event", Form("pt_matchedbjet%i", genbjetind+1) , "passtrig", zmet.jets_p4().at(jetind).pt() , weight );
+		  genbjetind++;
+		}
+	  }
 	  
-	  fillHist( "event", "met_CORE"      , "passtrig", zmet.met_T1CHS_fromCORE_pt()     , weight );	  
-	  fillHist( "event", "met3p0_CORE"   , "passtrig", zmet.met_T1CHSNoHF_fromCORE_pt() , weight );	  
-	  fillHist( "event", "met3p0_raw"    , "passtrig", zmet.met_rawNoHF_pt()            , weight );	  
-	  fillHist( "event", "met3p0_raw_phi", "passtrig", zmet.met_rawNoHF_phi()           , weight );	  
-
+	  fillHist( "event", "ht_highbin", "passtrig", zmet.ht()        , weight );
+	  if( zmet.njets() == 2 ) fillHist( "event", "ht_highbin_2jets", "passtrig", zmet.ht()        , weight );
+	  if( zmet.njets() == 3 ) fillHist( "event", "ht_highbin_3jets", "passtrig", zmet.ht()        , weight );
+	  
+	  fillHist( "event", "met_T1CHS_miniAOD_CORE_pt"    , "passtrig", zmet.met_T1CHS_miniAOD_CORE_pt()    , weight );	  
+	  fillHist( "event", "met_T1CHS_miniAOD_CORE_up_pt" , "passtrig", zmet.met_T1CHS_miniAOD_CORE_up_pt() , weight );	  
+	  fillHist( "event", "met_T1CHS_miniAOD_CORE_dn_pt" , "passtrig", zmet.met_T1CHS_miniAOD_CORE_dn_pt() , weight );	  
 	  	  
 	  if( event_met_pt < 50 && zmet.hyp_type() == 2 ) nem_2jets += weight;
 		  
@@ -352,12 +655,106 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
 	  if( zmet.njets()                        < 2         ) continue; // require at least 2 good jets
       npass += weight;
 
-	  // if( zmet.ht() > 100.0                                             ) fillHist( "event", "ht_gt1j"       , "passtrig", zmet.ht()           , weight );
-	  // if( zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) > 100.0 ) fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.ht() + zmet.lep_pt().at(0) + zmet.lep_pt().at(1) , weight );
 	  fillHist( "event", "ht_gt1j"       , "passtrig", zmet.dilpt(), weight );
 	  fillHist( "event", "atlas_ht_gt1j" , "passtrig", zmet.dilpt(), weight );
-
 	  fillHist( "event", "met_rawgt1jet" , "passtrig", event_met_pt        , weight );	  
+	  if( TString(currentFile->GetTitle()).Contains("t5zz") && sample == "fullscan" ){
+		// fill full scan hist
+		if( event_met_pt > 100 && event_met_pt <= 150 ){
+		  if( zmet.hyp_type() == 0 ) h_signalyields_met100to150_ee -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() == 1 ) h_signalyields_met100to150_mm -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() != 2 ) h_signalyields_met100to150_ll -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		}
+
+		if( event_met_pt > 150 && event_met_pt <= 225 ){
+		  if( zmet.hyp_type() == 0 ) h_signalyields_met150to225_ee -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() == 1 ) h_signalyields_met150to225_mm -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() != 2 ) h_signalyields_met150to225_ll -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		}
+
+		if( event_met_pt > 225 && event_met_pt <= 300 ){
+		  if( zmet.hyp_type() == 0 ) h_signalyields_met225to300_ee -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() == 1 ) h_signalyields_met225to300_mm -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() != 2 ) h_signalyields_met225to300_ll -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		}
+
+		if( event_met_pt > 225 ){
+		  if( zmet.hyp_type() == 0 ) h_signalyields_met225toinf_ee -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() == 1 ) h_signalyields_met225toinf_mm -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() != 2 ) h_signalyields_met225toinf_ll -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		}
+
+		if( event_met_pt > 300 ){
+		  if( zmet.hyp_type() == 0 ) h_signalyields_met300toinf_ee -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() == 1 ) h_signalyields_met300toinf_mm -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		  if( zmet.hyp_type() != 2 ) h_signalyields_met300toinf_ll -> Fill (zmet.mass_gluino(), zmet.mass_LSP(), weight);
+		}
+
+		if( zmet.mass_gluino() == 1000 && zmet.mass_LSP() == 550 )fillHist( "event", "met_SRATLAS_1000_550"       , "passtrig", event_met_pt, weight );
+		if( zmet.mass_gluino() == 1000 && zmet.mass_LSP() == 600 )fillHist( "event", "met_SRATLAS_1000_600"       , "passtrig", event_met_pt, weight );
+		
+	  }
+	  
+	  if( TString(selection).Contains("tail") ){
+
+		float btagcount = zmet.nBJetMedium();
+	    // btagcount = zmet.nBJetTight();
+		
+		if( !zmet.isData() && btagcount > 0 ) {
+		  bool hasrealb = false;
+		  for( int jetind = 0; jetind < zmet.njets(); jetind++ ){
+			if( abs(zmet.jet_mcFlavour().at(jetind)) == 5 ) hasrealb = true;
+			if( hasrealb ) break;
+		  }		
+		  allmet_nobreq     += weight;
+		  unc_allmet_nobreq += weight*weight;
+
+		  if( hasrealb ){
+			allmet_hasrealb     += weight;
+			unc_allmet_hasrealb += weight*weight;
+		  }
+
+		  if( event_met_pt > 100 ){
+
+			endmet_nobreq     += weight;
+			unc_endmet_nobreq += weight*weight;		
+
+			if( hasrealb ){
+			  endmet_hasrealb     += weight;		
+			  unc_endmet_hasrealb += weight*weight;		
+			}
+
+		  }
+		}
+		
+		if( btagcount == 0 ){
+		  allmet_btag_nobreq     += weight;
+		  unc_allmet_btag_nobreq += weight*weight;
+		}
+		
+		if( btagcount > 0 ){
+		  allmet_btag_hasrealb     += weight;
+		  unc_allmet_btag_hasrealb += weight*weight;
+		}
+		
+		if( event_met_pt > 100 ){
+		  if( btagcount == 0 ){
+			endmet_btag_nobreq     += weight;
+			unc_endmet_btag_nobreq += weight*weight;		
+		  }
+		
+		  if( btagcount > 0 ) endmet_btag_hasrealb     += weight;		
+		  if( btagcount > 0 ) unc_endmet_btag_hasrealb += weight*weight;		
+		}		
+
+	  }
+
+	  
+	  // if( event_met_pt > 1000 ){
+	  // 	cout<<"MET:     "<<event_met_pt<<endl;
+	  // 	cout<<"hyptype: "<<zmet.hyp_type()<<endl;
+	  // 	cout<<zmet.run()<<":"<<zmet.lumi()<<":"<<zmet.evt()<<endl;
+	  // }
 
 	  if( dotemplateprediction || dotemplatepredictionmc ){
 		if( (zmet.hyp_type() == 0 || zmet.hyp_type() == 1 ) ){
@@ -384,12 +781,26 @@ void templateLooper::ScanChain ( TChain * chain , const string iter , const stri
   cout << nmm         << " mm events passing selection" << endl;
   cout << nll         << " ll events passing selection" << endl;
   cout << nem         << " em events passing selection" << endl;
-
+  
   cout<<"nemu 2 jets    : "<<nem_2jets<<endl;
   cout<<"nemu 2 jets mll: "<<nem_2jets_mll<<endl;
   cout<<"emu scale factor: "<<nem_2jets_mll/nem_2jets<<endl;
 
-  // cout << "em events at low MET : "     << nem_2jets*10 << endl;
+  cout<<"nlosplit: "<<nlosplit<<endl;
+  cout<<"nhisplit: "<<nhisplit<<endl;
+  
+  if( TString(selection).Contains("tail") ){
+
+	float unc_endmet_nobreq_binomial   = err_binomial( endmet_nobreq  , allmet_nobreq  , sqrt(unc_endmet_nobreq  ), sqrt(unc_allmet_nobreq  ));
+	float unc_endmet_hasrealb_binomial = err_binomial( endmet_hasrealb, allmet_hasrealb, sqrt(unc_endmet_hasrealb), sqrt(unc_allmet_hasrealb));
+	cout<<"fraction in tail with no b-req: "<< endmet_nobreq  /allmet_nobreq   << " | " << unc_endmet_nobreq_binomial   <<endl;	
+	cout<<"fraction in tail with 1 real b: "<< endmet_hasrealb/allmet_hasrealb << " | " << unc_endmet_hasrealb_binomial <<endl;
+
+	float unc_endmet_btag_nobreq_binomial   = err_binomial( endmet_btag_nobreq  , allmet_btag_nobreq  , sqrt(unc_endmet_btag_nobreq  ), sqrt(unc_allmet_btag_nobreq  ));
+	float unc_endmet_btag_hasrealb_binomial = err_binomial( endmet_btag_hasrealb, allmet_btag_hasrealb, sqrt(unc_endmet_btag_hasrealb), sqrt(unc_allmet_btag_hasrealb));
+	cout<<endl<<"fraction in tail with no b-tags: "<< endmet_btag_nobreq  /allmet_btag_nobreq    << " | " << unc_endmet_btag_nobreq_binomial   <<endl;	
+	cout<<      "fraction in tail with b-tags   : "<< endmet_btag_hasrealb/allmet_btag_hasrealb  << " | " << unc_endmet_btag_hasrealb_binomial <<endl;
+  }
   
   // mettemplates.NormalizeTemplates(mettemplate_hists);
   mettemplates.correctBinUncertainty( mettemplate_hists, event_hists.at("h_templ_met") );
@@ -434,38 +845,49 @@ void templateLooper::bookHistos(){
 
   vector <string> variable;      vector <float> variable_bins;
 
-  variable.push_back("ptl1");    variable_bins.push_back(1000);  
-  variable.push_back("ptl2");    variable_bins.push_back(1000);  
-  variable.push_back("ptdil");   variable_bins.push_back(1000);  
-  variable.push_back("met");     variable_bins.push_back(500 );  
-  variable.push_back("met_raw"); variable_bins.push_back(500 );  
-  variable.push_back("met3p0_raw"); variable_bins.push_back(500 );  
+  variable.push_back("pt_matchedbjet1");          variable_bins.push_back(1000);  
+  variable.push_back("pt_matchedbjet2");          variable_bins.push_back(1000);  
+  variable.push_back("pt_matchedbjet3");          variable_bins.push_back(1000);  
+  variable.push_back("pt_matchedbjet4");          variable_bins.push_back(1000);  
+  
+  variable.push_back("ptb1");          variable_bins.push_back(1000);  
+  variable.push_back("ptb2");          variable_bins.push_back(1000);  
+  variable.push_back("ptb3");          variable_bins.push_back(1000);  
+  variable.push_back("ptb4");          variable_bins.push_back(1000);  
+
+  variable.push_back("ptl1");          variable_bins.push_back(1000);  
+  variable.push_back("ptl2");          variable_bins.push_back(1000);  
+  variable.push_back("ptj1");          variable_bins.push_back(1000);  
+  variable.push_back("ptj2");          variable_bins.push_back(1000);  
+  variable.push_back("ptj3");          variable_bins.push_back(1000);  
+  variable.push_back("ptj4");          variable_bins.push_back(1000);  
+  variable.push_back("ptdil");         variable_bins.push_back(1000);  
+  variable.push_back("met");           variable_bins.push_back(500 );  
+  variable.push_back("met_raw");       variable_bins.push_back(500 );  
   variable.push_back("met_rawgt1jet"); variable_bins.push_back(500 );  
-  variable.push_back("ht");	     variable_bins.push_back(1000);  
+  variable.push_back("ht");	           variable_bins.push_back(1000);  
+  variable.push_back("ht_highbin");    variable_bins.push_back(1500);  
+  variable.push_back("ht_highbin_2jets");    variable_bins.push_back(1500);  
+  variable.push_back("ht_highbin_3jets");    variable_bins.push_back(1500);  
   variable.push_back("ht_gt1j");	   variable_bins.push_back(3000);  
   variable.push_back("atlas_ht_gt1j"); variable_bins.push_back(3000);  
-  variable.push_back("njets");   variable_bins.push_back(20  );  
-  variable.push_back("nbjets");   variable_bins.push_back(20  );  
-  variable.push_back("mll");     variable_bins.push_back(300 );  
-  variable.push_back("nVert");   variable_bins.push_back(50 );  
+  variable.push_back("njets");         variable_bins.push_back(20  );  
+  variable.push_back("nbjets");        variable_bins.push_back(20  );  
+  variable.push_back("mll");           variable_bins.push_back(300 );  
+  variable.push_back("nVert");         variable_bins.push_back(50 );  
+  variable.push_back("mll_fkw");       variable_bins.push_back(400 );  
   
-  variable.push_back("met_CORE"); variable_bins.push_back(500 );  
+  variable.push_back("met_CORE");       variable_bins.push_back(500 );  
   variable.push_back("met_COREgt1jet"); variable_bins.push_back(500 );  
 
-  variable.push_back("met3p0_CORE"); variable_bins.push_back(500 );  
-  variable.push_back("met3p0_COREgt1jet"); variable_bins.push_back(500 );  
+  variable.push_back("met_T1CHS_miniAOD_CORE_pt");       variable_bins.push_back(500 );  
+  variable.push_back("met_T1CHS_miniAOD_CORE_up_pt");    variable_bins.push_back(500 );  
+  variable.push_back("met_T1CHS_miniAOD_CORE_dn_pt");    variable_bins.push_back(500 );  
 
+  variable.push_back("metgt1jet");                   variable_bins.push_back(500 );  
 
-  variable.push_back("met_mettoolbox"); variable_bins.push_back(500 );  
-  variable.push_back("met_mettoolboxgt1jet"); variable_bins.push_back(500 );  
-  
-  variable.push_back("met_mettoolboxNoHF"); variable_bins.push_back(500 );  
-  variable.push_back("met_mettoolboxNoHFgt1jet"); variable_bins.push_back(500 );  
-  
-  variable.push_back("met_mettoolboxNoHFraw"); variable_bins.push_back(500 );  
-  variable.push_back("met_mettoolboxNoHFrawgt1jet"); variable_bins.push_back(500 );  
-  
-  variable.push_back("metgt1jet");variable_bins.push_back(500 );  
+  variable.push_back("met_SRATLAS_1000_550");    variable_bins.push_back(500 );  
+  variable.push_back("met_SRATLAS_1000_600");    variable_bins.push_back(500 );  
   
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -500,7 +922,6 @@ void templateLooper::bookHistos(){
   phivars.push_back("metphi");               axislimits.push_back(3.2);
   phivars.push_back("metphir");				 axislimits.push_back(3.2);
 
-  phivars.push_back( "met3p0_raw_phi"      );axislimits.push_back(3.2); 
 
   for( unsigned int lepind = 0; lepind < leptype.size(); lepind++ ){
 	for( unsigned int objind = 0; objind < object.size(); objind++ ){
@@ -531,10 +952,55 @@ void templateLooper::bookHistos(){
   bookHist("h_mm_event_drll_2jets", "h_mm_event_drll_2jets", 500,0,5);
   bookHist("h_em_event_drll_2jets", "h_em_event_drll_2jets", 500,0,5);
 
+  bookHist("h_ll_event_csv1_passtrig", "h_ll_event_csv1_passtrig", 500,-1,1.5);
+  bookHist("h_ee_event_csv1_passtrig", "h_ee_event_csv1_passtrig", 500,-1,1.5);
+  bookHist("h_mm_event_csv1_passtrig", "h_mm_event_csv1_passtrig", 500,-1,1.5);
+  bookHist("h_em_event_csv1_passtrig", "h_em_event_csv1_passtrig", 500,-1,1.5);
+
+  bookHist("h_ll_event_csv2_passtrig", "h_ll_event_csv2_passtrig", 500,-1,1.5);
+  bookHist("h_ee_event_csv2_passtrig", "h_ee_event_csv2_passtrig", 500,-1,1.5);
+  bookHist("h_mm_event_csv2_passtrig", "h_mm_event_csv2_passtrig", 500,-1,1.5);
+  bookHist("h_em_event_csv2_passtrig", "h_em_event_csv2_passtrig", 500,-1,1.5);
+
+  bookHist("h_ll_event_csv3_passtrig", "h_ll_event_csv3_passtrig", 500,-1,1.5);
+  bookHist("h_ee_event_csv3_passtrig", "h_ee_event_csv3_passtrig", 500,-1,1.5);
+  bookHist("h_mm_event_csv3_passtrig", "h_mm_event_csv3_passtrig", 500,-1,1.5);
+  bookHist("h_em_event_csv3_passtrig", "h_em_event_csv3_passtrig", 500,-1,1.5);
+
+  bookHist("h_ll_event_csv4_passtrig", "h_ll_event_csv4_passtrig", 500,-1,1.5);
+  bookHist("h_ee_event_csv4_passtrig", "h_ee_event_csv4_passtrig", 500,-1,1.5);
+  bookHist("h_mm_event_csv4_passtrig", "h_mm_event_csv4_passtrig", 500,-1,1.5);
+  bookHist("h_em_event_csv4_passtrig", "h_em_event_csv4_passtrig", 500,-1,1.5);
+
+
   bookHist("h_ll_event_njtall_passtrig", "h_ll_event_njtall_passtrig", 10,0,10);
   bookHist("h_ll_event_njtm50_passtrig", "h_ll_event_njtm50_passtrig", 10,0,10);
   bookHist("h_ll_event_metall_passtrig", "h_ll_event_metall_passtrig", 200,0,200);
 
+  h_signalyields_met100to150_ee = new TH2F("h_signalyields_met100to150_ee","h_signalyields_met100to150_ee",(1600-550)/50,575,1625,(1500-50)/50,75,1525);	
+  h_signalyields_met100to150_mm = new TH2F("h_signalyields_met100to150_mm","h_signalyields_met100to150_mm",(1600-550)/50,575,1625,(1500-50)/50,75,1525);	
+  h_signalyields_met100to150_ll = new TH2F("h_signalyields_met100to150_ll","h_signalyields_met100to150_ll",(1600-550)/50,575,1625,(1500-50)/50,75,1525);	
+  h_signalyields_met100to150_ee->Sumw2();
+  h_signalyields_met100to150_mm->Sumw2();
+  h_signalyields_met100to150_ll->Sumw2();
+
+  h_signalyields_met150to225_ee = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met150to225_ee");
+  h_signalyields_met150to225_mm = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met150to225_mm");
+  h_signalyields_met150to225_ll = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met150to225_ll");
+
+  h_signalyields_met225to300_ee = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225to300_ee");
+  h_signalyields_met225to300_mm = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225to300_mm");
+  h_signalyields_met225to300_ll = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225to300_ll");
+
+  h_signalyields_met225toinf_ee = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225toinf_ee");
+  h_signalyields_met225toinf_mm = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225toinf_mm");
+  h_signalyields_met225toinf_ll = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met225toinf_ll");
+
+  h_signalyields_met300toinf_ee = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met300toinf_ee");
+  h_signalyields_met300toinf_mm = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met300toinf_mm");
+  h_signalyields_met300toinf_ll = (TH2F*) h_signalyields_met100to150_ee->Clone("h_signalyields_met300toinf_ll");
+
+  
 }
 
 void templateLooper::bookHist( string name, string title, int nbins, float xmin, float xmax ){

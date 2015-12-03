@@ -4,6 +4,9 @@
 #include "AnalysisSelections.h"
 
 bool passBaselineSelections();
+bool isLoosePhoton( int photonIdx );
+bool isMediumPhoton( int photonIdx );
+bool isTightPhoton( int photonIdx );
 bool passMETFilters();
 bool passSignalRegionSelection( std::string selection );
 bool eventHas2GoodLeps();
@@ -22,4 +25,16 @@ int  getPrescale();
 int getPrescaleNoBins();
 bool highHT_zjinc( std::string samplename );
 
+
+//////////////////////
+// Photon Isolation //
+//////////////////////
+
+// from https://indico.cern.ch/event/369239/contribution/2/attachments/1134693/1623149/spring15_pcb.pdf
+float photon_CHEA03( int photonIdx );
+float photon_NHEA03( int photonIdx );
+float photon_EMEA03( int photonIdx );
+float photonCHIso03EA( int photonIdx );
+float photonNHIso03EA( int photonIdx );
+float photonEMIso03EA( int photonIdx );
 #endif
