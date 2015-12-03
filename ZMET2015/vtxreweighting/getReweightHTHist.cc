@@ -27,28 +27,14 @@ void getReweightHTHist( string signalregion )
   TFile * f_phot = NULL;
 
  
+  // f_data = TFile::Open(Form("../output/V07-04-13_fixedleptons/data_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");			  
+  // f_phot = TFile::Open(Form("../output/V07-04-13_fixedleptons/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
 
-  // // if( TString(signalregion).Contains("withb_SRB") ){
-  // if( TString(signalregion).Contains("SRB") ){
+  f_data = TFile::Open(Form("../output/V07-04-13_fixedleptons_alldata_updatedJECS/data_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");			  
+  f_phot = TFile::Open(Form("../output/V07-04-13_fixedleptons_alldata_updatedJECS/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
 
-  // 	f_data = TFile::Open("../output/V07-04-12/data_rawMET_SRB_novtxweight_hists.root"        , "READ");			  
-  // 	f_phot = TFile::Open("../output/V07-04-12/data_rawMET_SRB_novtxweight_nohtweight_templates.root" , "READ");
-  // }
-  // else if( TString(signalregion).Contains("SRA") ){
-
-  // 	f_data = TFile::Open("../output/V07-04-12/data_rawMET_SRA_novtxweight_hists.root"        , "READ");			  
-  // 	f_phot = TFile::Open("../output/V07-04-12/data_rawMET_SRA_novtxweight_nohtweight_templates.root" , "READ");
-  // }
-
-  // else{
-	f_data = TFile::Open(Form("../output/V07-04-12/data_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");			  
-	f_phot = TFile::Open(Form("../output/V07-04-12/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
-  // }
-  
-  // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/data_%s_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
-
-  // TFile * f_data = TFile::Open(Form("../output/V07-04-10/zjetsmlm_%s_novtxweight_hists.root", signalregion.c_str() )   , "READ");
-  // TFile * f_phot = TFile::Open(Form("../output/V07-04-10/All_MC_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");  
+  // f_data = TFile::Open(Form("../output/V07-04-13_fixedleptons/data_%s_hists.root", signalregion.c_str() )   , "READ");			  
+  // f_phot = TFile::Open(Form("../output/V07-04-13_fixedleptons/data_%s_novtxweight_nohtweight_templates.root", signalregion.c_str() ) , "READ");
 
   TH1F * h_data = NULL;
   TH1F * h_data_em = NULL;
@@ -74,8 +60,6 @@ void getReweightHTHist( string signalregion )
   TH1F * h_phot_120 = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig120")->Clone("h_phot_120");
   TH1F * h_phot_165 = (TH1F*)f_phot->Get("h_ph_event_htgt1jets_passtrig165")->Clone("h_phot_165");
 
-  h_data->Add(h_data_em,-1.);
-  
   vector <double> v_bin;
   getReweightScheme( v_bin, signalregion );
 
@@ -86,8 +70,9 @@ void getReweightHTHist( string signalregion )
   for( size_t bini = 0; bini < v_bin.size(); bini++ ){
 	bins[bini] = v_bin.at(bini);
   }
-  
+
   h_data     = (TH1F*) h_data    ->Rebin(nbins, "h_data_rebinned", bins);
+  h_data_em  = (TH1F*) h_data_em ->Rebin(nbins, "h_data_em_rebinned", bins);
   h_phot     = (TH1F*) h_phot    ->Rebin(nbins, "h_phot_rebinned", bins);
   h_phot_22  = (TH1F*) h_phot_22 ->Rebin(nbins, "h_phot_22_rebinned", bins);
   h_phot_30  = (TH1F*) h_phot_30 ->Rebin(nbins, "h_phot_30_rebinned", bins);
@@ -109,6 +94,10 @@ void getReweightHTHist( string signalregion )
   // h_phot_120->Rebin(25);
   // h_phot_165->Rebin(25);
 
+  h_data->Add(h_data_em,-1.);
+
+  // cout<<"photon events: "<<h_phot->GetSumOfWeights()<<endl;
+  // cout<<"ztoll  events: "<<h_data->GetSumOfWeights()<<endl;
   
   h_phot->Scale(1./h_phot->GetSumOfWeights());
   h_data->Scale(1./h_data->GetSumOfWeights());
@@ -132,7 +121,7 @@ void getReweightHTHist( string signalregion )
   TH1F * h_ht_ratio_120 = (TH1F*) h_data->Clone("h_ht_ratio_120");
   TH1F * h_ht_ratio_165 = (TH1F*) h_data->Clone("h_ht_ratio_165");
 
-  h_ht_ratio->Divide(h_phot);
+  h_ht_ratio    -> Divide(h_phot);  
   h_ht_ratio_22 -> Divide(h_phot_22 );
   h_ht_ratio_30 -> Divide(h_phot_30 );
   h_ht_ratio_36 -> Divide(h_phot_36 );
@@ -182,6 +171,16 @@ void getReweightScheme(vector <double> &binning, string selection )
   if( TString(selection).Contains("SRA") ){
 
 	if( TString(selection).Contains("bveto") ){
+	  // binning.clear();
+	  // binning.push_back(0);
+	  // binning.push_back(33);
+	  // binning.push_back(50);
+	  // binning.push_back(75);
+	  // binning.push_back(90);
+	  // binning.push_back(120);
+	  // binning.push_back(165);
+	  // binning.push_back(3000);
+	  binning.clear();
 	  binning.push_back(0);
 	  binning.push_back(33);
 	  binning.push_back(50);
@@ -189,14 +188,55 @@ void getReweightScheme(vector <double> &binning, string selection )
 	  binning.push_back(90);
 	  binning.push_back(120);
 	  binning.push_back(165);
+	  binning.push_back(200);
+	  binning.push_back(300);
 	  binning.push_back(3000);
 	}
 
-	if( TString(selection).Contains("withb") ){
+	if( TString(selection).Contains("tail") ){
+	  binning.clear();
 	  binning.push_back(0);
 	  binning.push_back(33);
+	  binning.push_back(50);
 	  binning.push_back(75);
-	  binning.push_back(100);
+	  binning.push_back(90);
+	  binning.push_back(120);
+	  binning.push_back(165);
+	  binning.push_back(300);
+	  binning.push_back(3000);
+	  // binning.push_back(0);
+	  // binning.push_back(33);
+	  // binning.push_back(75);
+	  // binning.push_back(100);
+	  // binning.push_back(3000);
+	}
+
+	if( TString(selection).Contains("withb") ){
+	  binning.clear();
+	  binning.push_back(0);
+	  binning.push_back(33);
+	  binning.push_back(50);
+	  binning.push_back(75);
+	  binning.push_back(90);
+	  binning.push_back(120);
+	  binning.push_back(165);
+	  binning.push_back(300);
+	  binning.push_back(3000);
+	  // binning.push_back(0);
+	  // binning.push_back(33);
+	  // binning.push_back(75);
+	  // binning.push_back(100);
+	  // binning.push_back(3000);
+	  binning.clear();
+	  binning.push_back(0);
+	  binning.push_back(33);
+	  binning.push_back(50);
+	  binning.push_back(75);
+	  binning.push_back(90);
+	  binning.push_back(120);
+	  binning.push_back(165);
+	  binning.push_back(200);
+	  binning.push_back(300);
 	  binning.push_back(3000);
 	}
 
@@ -205,28 +245,50 @@ void getReweightScheme(vector <double> &binning, string selection )
   else if( TString(selection).Contains("SRB") ){
 
 	if( TString(selection).Contains("withb") ){
+	  // binning.clear();
+	  // binning.push_back(0);
+	  // binning.push_back(33);
+	  // binning.push_back(50);
+	  // binning.push_back(75);
+	  // binning.push_back(90);
+	  // binning.push_back(120);
+	  // binning.push_back(165);
+	  // binning.push_back(200);
+	  // // binning.push_back(300);
+	  // binning.push_back(3000);
+	  binning.clear();
 	  binning.push_back(0);
-	  // binning.push_back(22);
 	  binning.push_back(33);
-	  binning.push_back(40);
 	  binning.push_back(50);
-	  binning.push_back(60);
-	  binning.push_back(70);
-	  binning.push_back(80);
+	  binning.push_back(75);
 	  binning.push_back(90);
-	  binning.push_back(100);
-	  binning.push_back(100);
 	  binning.push_back(120);
-	  binning.push_back(130);
-	  binning.push_back(140);
-	  binning.push_back(150);
+	  binning.push_back(165);
 	  binning.push_back(200);
-	  // binning.push_back(250);
-	  // binning.push_back(350);
+	  binning.push_back(300);
 	  binning.push_back(3000);
 	}
 
+	if( TString(selection).Contains("tail") ){
+	  binning.clear();
+	  binning.push_back(0);
+	  binning.push_back(33);
+	  binning.push_back(50);
+	  binning.push_back(75);
+	  binning.push_back(90);
+	  binning.push_back(120);
+	  binning.push_back(165);
+	  binning.push_back(300);
+	  binning.push_back(3000);
+	  // binning.push_back(0);
+	  // binning.push_back(33);
+	  // binning.push_back(75);
+	  // binning.push_back(100);
+	  // binning.push_back(3000);
+	}
+
 	if( TString(selection).Contains("bveto") ){
+	  binning.clear();
 	  binning.push_back(0);
 	  binning.push_back(33);
 	  binning.push_back(50);
@@ -241,16 +303,27 @@ void getReweightScheme(vector <double> &binning, string selection )
   }
   
   else if( TString(selection).Contains("SR_ATLAS") ){
-	binning.push_back(0);
-	// binning.push_back(33);
-	binning.push_back(50);
-	// binning.push_back(75);
-	// binning.push_back(90);
-	binning.push_back(120);
-	binning.push_back(165);
-	// binning.push_back(200);
-	// binning.push_back(300);
-  	binning.push_back(3000);
+	  binning.clear();
+	  binning.push_back(0);
+	  binning.push_back(33);
+	  binning.push_back(50);
+	  binning.push_back(75);
+	  binning.push_back(90);
+	  binning.push_back(120);
+	  binning.push_back(165);
+	  binning.push_back(200);
+	  // binning.push_back(300);
+	  binning.push_back(3000);
+	// binning.push_back(0);
+	// // binning.push_back(33);
+	// binning.push_back(50);
+	// // binning.push_back(75);
+	// // binning.push_back(90);
+	// binning.push_back(120);
+	// binning.push_back(165);
+	// // binning.push_back(200);
+	// // binning.push_back(300);
+  	// binning.push_back(3000);
   }
 
 
