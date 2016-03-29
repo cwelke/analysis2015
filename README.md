@@ -3,7 +3,7 @@ This repository is used to produce babies, and analyze babies for the Z+MET anal
 source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1  
 export SCRAM_ARCH=slc6_amd64_gcc493  
 cmsrel CMSSW_7_6_3  
-cd CMSSW_7_6_3/src  
+cd CMSSW_7_6_3  
 cmsenv  
 git clone git@github.com:cwelke/analysis2015.git V07-06-00  
 cd V07-06-00  
