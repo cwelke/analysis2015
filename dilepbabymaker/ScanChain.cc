@@ -137,16 +137,17 @@ void babyMaker::ScanChain(TChain* chain, std::string baby_name){
   TH2F * h_eventcounts  = NULL;
   TFile * f_eventcounts = NULL;
 
-  f_susyxsecs = TFile::Open("xsec_susy_13tev.root","READ");
-  h_susyxsecs = (TH1F*)f_susyxsecs->Get("h_xsec_gluino")->Clone("h_susyxsecs");
-  h_susyxsecs->SetDirectory(rootdir);
-  f_susyxsecs->Close();
+  if (isSMSScan) {
+	f_susyxsecs = TFile::Open("xsec_susy_13tev.root","READ");
+	h_susyxsecs = (TH1F*)f_susyxsecs->Get("h_xsec_gluino")->Clone("h_susyxsecs");
+	h_susyxsecs->SetDirectory(rootdir);
+	f_susyxsecs->Close();
 
-  f_eventcounts = TFile::Open("T5ZZ_entries.root","READ");
-  h_eventcounts = (TH2F*)f_eventcounts->Get("h_entries")->Clone("h_eventcounts");
-  h_eventcounts->SetDirectory(rootdir);
-  f_eventcounts->Close();
-
+	f_eventcounts = TFile::Open("T5ZZ_entries.root","READ");
+	h_eventcounts = (TH2F*)f_eventcounts->Get("h_entries")->Clone("h_eventcounts");
+	h_eventcounts->SetDirectory(rootdir);
+	f_eventcounts->Close();
+  }
   
   // File Loop
   int nDuplicates = 0;

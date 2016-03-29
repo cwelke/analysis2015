@@ -43,4 +43,4 @@ cp ../json/json_270715_golden.txt .
 # ./processBaby test_withnewrho /home/users/cwelke/MCNtupling/CMSSW_7_4_7_patch2_V07-04-08_dev/src/ntuple_postp.root
 
 
-./processBaby test_signal /hadoop/cms/store/group/snt/run2_25ns/SMS-T5ZZ_mGluino-600To700_mLSP-100To500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15FSPremix-MCRUN2_74_V9-v2/V07-04-11_FS/merged_ntuple_1.root 
+./processBaby test_76 /hadoop/cms/store/group/snt/run2_25ns_MiniAODv2/DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1/V07-04-11/merged_ntuple_1.root 
